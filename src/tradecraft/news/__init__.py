@@ -1,0 +1,1 @@
+"""TradeCraft news module."""

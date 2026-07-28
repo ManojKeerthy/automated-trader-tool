@@ -1,0 +1,29 @@
+# ==============================================================================
+# TradeCraft — Docker Compose (Local Development)
+# ==============================================================================
+# Usage: docker compose up
+# Works identically on Windows, macOS, and Linux.
+# ==============================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tradecraft-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tradecraft}
+      POSTGRES_USER: ${POSTGRES_USER:-tradecraft}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tradecraft} -d ${POSTGRES_DB:-tradecraft}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+    driver: local
