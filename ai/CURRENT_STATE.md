@@ -3,7 +3,7 @@
 > **IMPORTANT**: This document must accurately describe what ACTUALLY EXISTS, not what is planned.
 >
 > Last Updated: 2026-07-28
-> Current Milestone: M1 ✅ COMPLETE (Real Ingestion Successfully Validated)
+> Current Milestone: M2 ✅ COMPLETE (Research & Backtesting Foundation Built & Verified)
 
 ## What Exists
 
@@ -43,24 +43,22 @@
   - Instrument sync: Automatically deactivates old/demerged symbols (`LTIM` and `TATAMOTORS`) and maps active ones (`LTM` and `TMPV`).
   - Reporting metrics: Separates Processed Successfully, Already Current, Updated With New Data, and Failed.
 
-### CLI & API Interfaces ✅
-- Command Line Interface in `src/tradecraft/cli.py` exposing:
-  - `python -m tradecraft auth login`: Generates redirect URL.
-  - `python -m tradecraft auth token YOUR_TOKEN`: Exchanges callback code.
-  - `python -m tradecraft data update`: Runs daily updates (supports `--dry-run`, uses `REAL_DATA` mode for Live market data fetch).
-- FastAPI server in `src/tradecraft/api.py` exposing read REST endpoints: `/api/instruments`, `/api/universe/nifty50`, `/api/bars`, `/api/data-quality`, `/api/corporate-actions`.
-- Glassmorphic monitoring dashboard in `src/tradecraft/dashboard/index.html` loading data status, freshness, and quality alerts.
-
-### Verification Suite ✅
-- pytest suite containing unit tests for calendar schedules, timezone math, data quality rules, and integration database ingestion checks (`25 passed`).
-- PostgreSQL integration tests in `tests/integration/test_db_postgres.py` checking unique constraints, database rollbacks, decimal scaling, and timezone retention. It runs the actual Alembic migration scripts dynamically and drops `alembic_version` on setups.
-- Automated database schema parity test (`test_postgres_schema_parity`) verifying models align perfectly with database tables.
-- Automated migration upgrade path test (`test_alembic_migration_upgrade_path`) checking incremental versioning.
-- Deterministic M1 E2E acceptance test in `tests/integration/test_e2e_m1.py` verifying full ingestion logic, quality engine error tracking, and idempotency.
-
-### Documentation ✅
-- 24 policy/design documents in `docs/` (including `docs/KNOWN_LIMITATIONS.md`).
-- 7 AI memory documents in `ai/`.
+### M2 Research & Backtesting Foundation ✅
+- **Deterministic EOD Backtest Engine** (`src/tradecraft/backtesting/engine.py`): Top-level orchestrator enforcing chronological session iteration, point-in-time data portal access, T+1 execution, and research quality gating (`TRUSTWORTHY`, `RESEARCH_ONLY`, `UNVERIFIED`, `BLOCKED`).
+- **Point-in-Time DataPortal** (`src/tradecraft/backtesting/data_portal.py`): Multi-level look-ahead bias protection enforcing date boundary checks on bars, features, universe membership, and benchmark queries. Raises `LookAheadError` on any future data access attempt.
+- **Realistic Execution Simulator** (`src/tradecraft/backtesting/execution.py`): T+1 execution model supporting market/limit/stop orders, gap-through-stop fills at Open, whole-share integer enforcement, and conservative OHLC ambiguity resolution (assumes stop-loss hit first when both stop and target fall in same daily bar).
+- **Verified July 2026 Cost Model & DP Charges** (`src/tradecraft/backtesting/costs.py`): Effective-dated cost schedules implementing verified July 2026 Zerodha/NSE/SEBI rates (STT 0.1%, NSE charges 0.00345%, SEBI 0.0001%, stamp duty 0.015% buy, GST 18% on brokerage+SEBI+exchange charges, DP charges ₹13+GST per ISIN per day on sell). Flags `COST_MODEL_HISTORICAL_ASSUMPTION` for historical periods.
+- **Slippage Models** (`src/tradecraft/backtesting/slippage.py`): `ZeroSlippage` (debug only) and `FixedBasisPointSlippage` (default 5 bps).
+- **Performance Metrics Engine** (`src/tradecraft/backtesting/metrics.py`): Calculates CAGR, annualised volatility, Sharpe (√252 annualisation, versioned GoI 91-day T-Bill risk-free rate ~5.35%), Sortino, Calmar, max drawdown & duration, win/loss rates, profit factor, payoff ratio, expectancy, and transaction costs. Handles zero trades, zero volatility, and prevents NaN/Inf output.
+- **Versioned Risk-Free Rate Model** (`src/tradecraft/research/risk_free_rate.py`): `RiskFreeRateConfig` recording annual rate, RBI/CCIL provenance, observation date, and `CURRENT_RATE_ASSUMPTION` vs `HISTORICAL_POINT_IN_TIME`.
+- **Instrument Identity & Point-in-Time Universe** (`src/tradecraft/instruments/universe.py`): `InstrumentHistory` model tracking symbol changes/mergers and `UniverseMembership` model with `verified_as_of` semantics (no invented effective dates). Queries before verified coverage return `UNVERIFIED`.
+- **Strategy Interface & Registry** (`src/tradecraft/strategy/base.py`, `registry.py`): `Strategy` protocol with immutable versioning (ADR-007). `SignalIntent` specifies order intent without dictating fill price.
+- **Reference Strategies** (`src/tradecraft/strategy/reference_strategies.py`): `BuyAndHoldStrategy` and `SMACrossoverStrategy` created solely for engine validation, with mandatory disclaimer labels.
+- **Auditable Trade Ledger** (`src/tradecraft/backtesting/trade_ledger.py`): `TradeLedger` recording complete trade entry/exit details, fees breakdown, slippage cost, and exit reasons.
+- **Explicit Historical Data Backfill** (`src/tradecraft/market_data/backfill.py`): `data backfill` CLI command supporting chunked, rate-limit aware, resumable, and idempotent population of historical daily bars.
+- **Alembic Research Migration** (`alembic/versions/003_m2_research_schema.py`): Alembic migration `003_m2_research_schema` creating `instrument_history`, `universe_membership`, `strategy_definitions`, `experiments`, `cost_schedules`, `backtest_runs`, `backtest_trades`, `backtest_metrics`. Applied to local PostgreSQL.
+- **CLI & API Research Integration**: CLI commands `data backfill`, `backtest run`, `strategy list` and FastAPI REST endpoints `/api/strategies` and `/api/backtest/run`.
+- **Verification Suite**: 30 passing unit and integration tests (`tests/unit/test_m2_backtest_engine.py`) covering verified July 2026 costs, DataPortal look-ahead prevention, 7 execution timing scenarios, OHLC ambiguity resolution, known-answer accounting, and metrics edge cases.
 
 ---
 
@@ -68,15 +66,12 @@
 
 > ⚠️ None of the following have been implemented. They are documented and designed, but no code exists.
 
-- ❌ **No trading logic** — no strategies, signals, or backtesting code (M2 scope)
-- ❌ **No feature engineering** — no indicators calculated (M2 scope)
-- ❌ **No point-in-time Nifty 50 constituents** — `POINT-IN-TIME NIFTY 50 MEMBERSHIP NOT YET VERIFIED` (M2 scope)
-- ❌ **No risk engine** — risk policy documented but not coded (M3 scope)
-- ❌ **No compliance engine** — compliance policy documented but not coded (M3 scope)
-- ❌ **No order execution** — paper or Zerodha order placement (M4 scope)
-- ❌ **No portfolio tracking** — no positions, no P&L
+- ❌ **No M3 Strategy Framework** — no strategy promotion pipeline or live strategies (M3 scope)
+- ❌ **No M4 Risk Engine** — risk policy documented, basic capital guard in place, full engine in M4
+- ❌ **No M4 Compliance Engine** — compliance policy documented, engine in M4
+- ❌ **No order execution** — paper or Zerodha live order placement (M4 scope)
 - ❌ **No AI integration** — no LLM connections
-- ❌ **No dashboard UI** — React app not yet created (uses static html for status monitoring currently)
+- ❌ **No derivatives / no short selling / no leverage** — out of current scope
 
 ---
 

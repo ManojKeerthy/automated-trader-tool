@@ -245,6 +245,74 @@ def handle_data(args: argparse.Namespace) -> None:
         db_session.close()
 
 
+def handle_backtest(args: argparse.Namespace) -> None:
+    """Handle backtest subcommands."""
+    from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine
+    from tradecraft.strategy.base import Strategy  # noqa: TC001
+    from tradecraft.strategy.reference_strategies import BuyAndHoldStrategy, SMACrossoverStrategy
+
+    db_session = SessionLocal()
+    cal = TradingCalendar()
+
+    if args.backtest_cmd == "run":
+        # Strategy selection
+        strat: Strategy | None = None
+        if args.strategy == "ref_buy_and_hold":
+            strat = BuyAndHoldStrategy()
+        elif args.strategy == "ref_sma_crossover":
+            strat = SMACrossoverStrategy(fast_period=args.fast_sma, slow_period=args.slow_sma)
+        else:
+            print(f"Error: Unknown strategy '{args.strategy}'. Run 'python -m tradecraft strategy list' to see available strategies.")
+            sys.exit(1)
+
+        assert strat is not None
+        config = BacktestConfig(
+            strategy=strat,
+            start_date=date.fromisoformat(args.start),
+            end_date=date.fromisoformat(args.end),
+            initial_capital=Decimal(str(args.capital)),
+        )
+
+        engine = BacktestEngine(db_session=db_session, calendar_instance=cal)
+        res = engine.run(config)
+
+        print("\n" + "=" * 80)
+        print("BACKTEST EXECUTION COMPLETE")
+        print("=" * 80)
+        print(f"Run ID: {res.run_id}")
+        print(f"Strategy: {strat.name} (v{strat.version})")
+        print(f"Research Quality: {res.research_quality}")
+        print(f"Period: {config.start_date} to {config.end_date}")
+        print(f"Initial Capital: INR {config.initial_capital:,.2f}")
+
+        tot_ret = res.metrics.metrics.get("total_return_pct")
+        if tot_ret and tot_ret.value is not None:
+            print(f"Total Return: {tot_ret.value:.2f}%")
+
+        cagr = res.metrics.metrics.get("cagr_pct")
+        if cagr and cagr.value is not None:
+            print(f"CAGR: {cagr.value:.2f}%")
+
+        sharpe = res.metrics.metrics.get("sharpe_ratio")
+        if sharpe and sharpe.value is not None:
+            print(f"Sharpe Ratio: {sharpe.value:.2f}")
+
+        mdd = res.metrics.metrics.get("max_drawdown_pct")
+        if mdd and mdd.value is not None:
+            print(f"Max Drawdown: {mdd.value:.2f}%")
+
+        print(f"Total Trades: {len(res.trades)}")
+
+        if res.warnings:
+            print("\nWarnings:")
+            for w in res.warnings:
+                print(f"  - {w}")
+
+        print("=" * 80 + "\n")
+
+    db_session.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="TradeCraft Platform CLI Interface")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -276,12 +344,44 @@ def main() -> None:
         "--verbose", action="store_true", help="Print detailed quality warnings/alerts"
     )
 
+    backfill_parser = data_sub.add_parser("backfill", help="Run historical market data backfill")
+    backfill_parser.add_argument(
+        "--years", type=int, default=2, help="Number of historical years to fetch (default: 2)"
+    )
+    backfill_parser.add_argument(
+        "--symbol", type=str, help="Specific instrument symbol to backfill (optional)"
+    )
+
+    # Backtest commands
+    bt_parser = subparsers.add_parser("backtest", help="Research and backtesting engine")
+    bt_sub = bt_parser.add_subparsers(dest="backtest_cmd", required=True)
+    bt_run = bt_sub.add_parser("run", help="Run a strategy backtest")
+    bt_run.add_argument(
+        "--strategy", type=str, required=True, help="Strategy identifier (e.g. ref_buy_and_hold, ref_sma_crossover)"
+    )
+    bt_run.add_argument("--start", type=str, default="2026-01-01", help="Start date (YYYY-MM-DD)")
+    bt_run.add_argument("--end", type=str, default="2026-07-28", help="End date (YYYY-MM-DD)")
+    bt_run.add_argument("--capital", type=float, default=50000.00, help="Initial capital in INR")
+    bt_run.add_argument("--fast-sma", type=int, default=5, help="Fast SMA period")
+    bt_run.add_argument("--slow-sma", type=int, default=20, help="Slow SMA period")
+
+    # Strategy commands
+    strat_parser = subparsers.add_parser("strategy", help="Strategy registry management")
+    strat_sub = strat_parser.add_subparsers(dest="strat_cmd", required=True)
+    strat_sub.add_parser("list", help="List registered strategies")
+
     args = parser.parse_args()
 
     if args.command == "auth":
         handle_auth(args)
     elif args.command == "data" and args.data_cmd == "update":
         handle_data(args)
+    elif args.command == "backtest":
+        handle_backtest(args)
+    elif args.command == "strategy" and args.strat_cmd == "list":
+        print("\nRegistered Strategies:")
+        print("  - ref_buy_and_hold (v1.0.0): Reference Buy & Hold [TEST STRATEGY]")
+        print("  - ref_sma_crossover (v1.0.0): Reference Moving Average Crossover [TEST STRATEGY]\n")
 
 
 if __name__ == "__main__":

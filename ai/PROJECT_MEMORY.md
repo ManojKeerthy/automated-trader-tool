@@ -42,12 +42,17 @@ TradeCraft is a personal algorithmic swing trading platform for the Indian marke
 3. **Preflight Validation**: Added a preflight schema verification check in `preflight.py` checking required tables and columns before starting data loops, aborting cleanly with `DATABASE MIGRATION REQUIRED` warning instead of generating 50 duplicate stack traces.
 4. **CLI Wording Rename**: Renamed the CLI market data modes from `LIVE` to `REAL_DATA` to prevent confusion with money-order execution.
 
-### M1 Real Ingestion Validation & Symbol Changes (2026-07-28)
+### M2 — Backtesting & Strategy Research Foundation (2026-07-28)
 
-1. **Cutoff Policy**: Implemented an 18:00 IST (6:00 PM local time) cutoff policy where daily updates executed before 18:00 IST expect the previous trading day's EOD session instead of raising fake `STALE` errors.
-2. **Constituent Symbol Changes**: Mapped the renamed Nifty 50 symbols for **LTIMindtree (`LTM` instead of `LTIM`)** and **Tata Motors Passenger Vehicles (`TMPV` instead of `TATAMOTORS`)** to resolve missing instrument token errors.
-3. **Instrument Deactivation**: Configured `_sync_instruments` to automatically deactivate old/retired symbol definitions (`LTIM` and `TATAMOTORS`) in the database, setting `is_active = False`.
-4. **Detailed Ingestion Reporting**: Differentiated complete update status reports to print: Processed Successfully, Already Current, Updated With New Data, and Failed.
+1. **Deterministic EOD Backtest Engine**: Built engine using `HistoricalClock`, `DataPortal`, `ExecutionSimulator`, `Portfolio`, and `MetricsEngine`.
+2. **Multi-Level Look-Ahead Protection**: `DataPortal` enforces date boundary checks on bars, features, universe membership, and benchmark queries, raising `LookAheadError` on any attempt to query T+1.
+3. **Execution Semantics & OHLC Ambiguity**: Fills at T+1 Open. Gap-through-stop fills at Open. When both stop-loss and profit-target fall inside the same daily bar's H-L range, the simulator deterministically assumes the adverse outcome (stop-loss hit first).
+4. **Verified July 2026 Costs & DP Charges**: Implemented effective-dated `CostSchedule` with verified rates: STT 0.1%, NSE charges 0.00345%, SEBI 0.0001%, stamp duty 0.015% buy, GST 18% on (brokerage + SEBI + exchange charges), and DP charges ₹13 + 18% GST = ₹15.34 per ISIN per day on sell.
+5. **Versioned Risk-Free Rate**: Sourced from Reserve Bank of India / CCIL 91-day Treasury Bill yield (~5.35% per annum), recorded in `RiskFreeRateConfig` with provenance.
+6. **Point-in-Time Universe & Research Quality Gating**: Added `UniverseMembership` with `verified_as_of` semantics. Backtests classify research quality into `TRUSTWORTHY`, `RESEARCH_ONLY`, `UNVERIFIED`, and `BLOCKED`. Unverified universe membership gates backtest promotion.
+7. **SignalIntent Boundary**: Strategies declare order intents without dictating fill prices. `ExecutionSimulator` determines theoretical and actual fill prices.
+8. **Explicit Data Backfill**: Separated incremental EOD `data update` from historical population `data backfill` (resumable, chunked, rate-limit aware, idempotent).
+9. **Schema Parity Migration**: Applied Alembic migration `003_m2_research_schema` creating `instrument_history`, `universe_membership`, `strategy_definitions`, `experiments`, `cost_schedules`, `backtest_runs`, `backtest_trades`, `backtest_metrics`. Verified dialect portability across PostgreSQL and SQLite.
 
 ## What Exists
 

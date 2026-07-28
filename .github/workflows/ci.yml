@@ -33,13 +33,27 @@ jobs:
       run: |
         python -m mypy src/
 
-  test-matrix:
-    name: Test on ${{ matrix.os }}
+  test-postgres-and-matrix:
+    name: Test with PostgreSQL on ${{ matrix.os }}
     needs: lint-and-typecheck
     runs-on: ${{ matrix.os }}
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tradecraft_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v4
 
@@ -54,6 +68,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e .[dev]
 
-    - name: Run unit & integration tests
+    - name: Run unit & integration tests with PostgreSQL
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tradecraft_test
       run: |
         python -m pytest tests/ -v --cov=src --cov-report=xml

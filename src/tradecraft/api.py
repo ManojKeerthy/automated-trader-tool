@@ -254,3 +254,82 @@ def index_dashboard() -> HTMLResponse:
             </html>
             """
         )
+
+
+# ---------------------------------------------------------------------------
+# M2 Research & Strategy Endpoints
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/strategies", response_model=list[dict[str, Any]])
+def list_strategies() -> list[dict[str, Any]]:
+    """List available research and reference strategies."""
+    return [
+        {
+            "id": "ref_buy_and_hold",
+            "name": "Reference Buy & Hold",
+            "version": "1.0.0",
+            "description": "Buy and hold reference strategy (REFERENCE / TEST STRATEGY — NOT APPROVED FOR LIVE TRADING)",
+        },
+        {
+            "id": "ref_sma_crossover",
+            "name": "Reference Moving Average Crossover",
+            "version": "1.0.0",
+            "description": "Moving average crossover test strategy (REFERENCE / TEST STRATEGY — NOT APPROVED FOR LIVE TRADING)",
+        },
+    ]
+
+
+@app.post("/api/backtest/run", response_model=dict[str, Any])
+def run_backtest(
+    strategy_id: str = Query("ref_buy_and_hold", description="Strategy ID"),
+    start_date_str: str = Query("2026-01-01", description="Start date (YYYY-MM-DD)"),
+    end_date_str: str = Query("2026-07-28", description="End date (YYYY-MM-DD)"),
+    capital: float = Query(50000.0, description="Initial capital in INR"),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Run a strategy backtest and return structured results."""
+    from decimal import Decimal
+
+    from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine
+    from tradecraft.strategy.base import Strategy  # noqa: TC001
+    from tradecraft.strategy.reference_strategies import BuyAndHoldStrategy, SMACrossoverStrategy
+
+    cal = TradingCalendar()
+
+    strat: Strategy
+    if strategy_id == "ref_buy_and_hold":
+        strat = BuyAndHoldStrategy()
+    elif strategy_id == "ref_sma_crossover":
+        strat = SMACrossoverStrategy()
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown strategy {strategy_id}")
+
+    config = BacktestConfig(
+        strategy=strat,
+        start_date=date.fromisoformat(start_date_str),
+        end_date=date.fromisoformat(end_date_str),
+        initial_capital=Decimal(str(capital)),
+    )
+
+    engine = BacktestEngine(db_session=db, calendar_instance=cal)
+    res = engine.run(config)
+
+    return {
+        "run_id": str(res.run_id),
+        "strategy": strat.name,
+        "version": strat.version,
+        "research_quality": res.research_quality,
+        "warnings": res.warnings,
+        "metrics": res.metrics.to_dict(),
+        "total_trades": len(res.trades),
+        "equity_curve": [
+            {
+                "date": snap.trading_date.isoformat(),
+                "equity": float(snap.total_equity),
+                "drawdown_pct": float(snap.drawdown_pct),
+            }
+            for snap in res.equity_curve
+        ],
+    }
+
