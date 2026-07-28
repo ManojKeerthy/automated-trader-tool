@@ -49,3 +49,40 @@ def test_calendar_validation_run():
     cal = TradingCalendar()
     # 2026 validation check should pass
     assert cal.run_calendar_validation(year=2026) is True
+
+
+def test_calendar_overrides():
+    from tradecraft.market_data.nse_calendar import NSETradingCalendar
+
+    # Load calendar without data-dir file overrides for clean test
+    cal = NSETradingCalendar(use_overrides=False)
+
+    test_date = date(2026, 6, 1)  # A Monday, normally a trading day
+    assert cal.is_trading_day(test_date) is True
+
+    # Override it as a holiday
+    cal.add_holiday_override(test_date)
+    assert cal.is_trading_day(test_date) is False
+
+    # Overriding weekend as a special session
+    weekend_date = date(2026, 6, 6)  # A Saturday
+    assert cal.is_trading_day(weekend_date) is False
+    cal.add_special_session_override(weekend_date)
+    assert cal.is_trading_day(weekend_date) is True
+
+
+def test_calendar_verification_failure():
+    import pytest
+
+    from tradecraft.core.exceptions import CalendarError
+    from tradecraft.market_data.nse_calendar import NSETradingCalendar
+
+    cal = NSETradingCalendar(use_overrides=False)
+
+    # If we claim a trading day is expected to be a holiday:
+    with pytest.raises(CalendarError) as exc_info:
+        cal.verify_against_manifest(
+            expected_holidays={date(2026, 1, 27)},  # A trading day
+            expected_sessions=set(),
+        )
+    assert "Disagreement" in str(exc_info.value)

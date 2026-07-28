@@ -78,6 +78,7 @@ class MarketBar(Base):
     adjustment_factor: Mapped[Decimal] = mapped_column(
         Numeric(10, 6), nullable=False, default=Decimal("1.000000")
     )
+    transformation_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     # Relationships
     instrument: Mapped["Instrument"] = relationship("Instrument", back_populates="market_bars")

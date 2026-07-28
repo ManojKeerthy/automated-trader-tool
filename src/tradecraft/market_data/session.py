@@ -12,6 +12,15 @@ logger = logging.getLogger(__name__)
 SESSION_FILE = Path(settings.DATA_DIR) / ".kite_session.json"
 
 
+def redact_secrets(text: str) -> str:
+    """Redact sensitive API secret keys from exception strings or messages."""
+    if not text:
+        return text
+    if settings.KITE_API_SECRET:
+        text = text.replace(settings.KITE_API_SECRET, "[REDACTED_API_SECRET]")
+    return text
+
+
 class KiteSessionManager:
     """Manages Zerodha Kite Connect login sessions and caches access tokens."""
 
@@ -79,7 +88,10 @@ class KiteSessionManager:
             logger.info(f"Successfully cached new Zerodha session at {SESSION_FILE}")
             return str(access_token)
         except Exception as e:
-            raise ConfigurationError(f"Failed to generate new session with Zerodha: {e}")
+            sanitized_err = redact_secrets(str(e))
+            raise ConfigurationError(
+                f"Failed to generate new session with Zerodha: {sanitized_err}"
+            )
 
     def clear_session(self) -> None:
         """Clear the cached session file."""

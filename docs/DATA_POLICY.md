@@ -144,3 +144,21 @@ The application must behave correctly when executed from any timezone.
 - Document evidence if free data is inadequate
 - Propose specific provider with cost/benefit analysis
 - Any new paid service requires user approval
+
+## 8. Point-in-Time Nifty 50 Membership Warning
+> [!WARNING]
+> **POINT-IN-TIME NIFTY 50 MEMBERSHIP NOT YET VERIFIED**:
+> The system currently loads and uses the active Nifty 50 constituent list. A historical backtest using today's constituents creates significant **survivorship bias**. Point-in-time membership tracking (e.g. tracking historical additions and deletions) must be completed in Milestone M2 before conducting any Nifty 50 strategy backtests.
+
+## 9. Numeric Precision Specifications
+To guarantee financial correctness, the codebase must enforce the following type mappings:
+- **Decimal / NUMERIC (15, 4)**: All market prices (`open`, `high`, `low`, `close`), corporate action distributions (cash dividends, amounts), and indicator values where precision is required.
+- **Decimal / NUMERIC (10, 6)**: Adjustment factors applied to historical bars.
+- **Integer / BigInteger**: Trading volumes, lot sizes, instrument tokens, and share quantities.
+- **Float**: Floating-point numbers are strictly forbidden for database storage of prices or quantities to avoid representation errors in P&L, position sizing, and stop-loss triggers. They may only be used for raw statistical computations.
+
+## 10. Future Calendar Updates (2027+) Workflow
+To manage new years and mid-year exchange circular announcements without editing core python files, the system uses custom override JSON files stored in the `data/` folder:
+- **Holidays Override** (`data/nse_holidays_override.json`): A list of YYYY-MM-DD date strings that should be treated as exchange holidays.
+- **Special Sessions Override** (`data/nse_special_sessions_override.json`): A list of YYYY-MM-DD date strings that should be treated as trading sessions (e.g. Muhurat trading).
+These overrides are loaded dynamically at runtime by `NSETradingCalendar`. For static tests, regression fixtures are kept in `tests/fixtures/calendar_YYYY_regression.json` for validation.

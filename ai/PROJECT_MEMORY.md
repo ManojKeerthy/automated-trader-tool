@@ -27,15 +27,13 @@ TradeCraft is a personal algorithmic swing trading platform for the Indian marke
 2. **Zerodha Session Caching**: Implemented a local daily cache file `.kite_session.json` in the user's data directory. Avoids repetitive redirects, and automatically expires daily at 6:00 AM.
 3. **Type-Safety Configurations**: Integrated type stubs overrides in `pyproject.toml` to satisfy mypy strict requirements for external untyped packages (pandas, exchange_calendars, and kiteconnect).
 
-### Open Questions Resolved (2026-07-28)
+### M1 Post-Completion Audit (2026-07-28)
 
-1. **Trading calendar**: Layered approach — NSE official data validated against `exchange_calendars` library.
-2. **Market data**: Zerodha Kite Connect historical API (daily OHLCV), stored locally in PostgreSQL.
-3. **Zerodha integration**: API subscription before M1; live trading not until M11.
-4. **AI budget**: ₹2,500/month pooled across providers, Claude preferred.
-5. **Risk parameters**: 0.5% risk/trade (0.75% hard max), 2% portfolio risk, 5 max positions, 10% hard RISK LOCK.
-6. **CI/CD**: GitHub Actions, multi-OS (Windows + Linux required, macOS best effort).
-7. **Corporate actions**: NSE as primary source, provider interface for future alternatives.
+1. **NSE Calendar Overrides**: Decoupled the BSE (`XBOM`) calendar from regulatory truth by implementing a custom `NSETradingCalendar` (`nse_calendar.py`) that overlay data directory overrides (`nse_holidays_override.json` and `nse_special_sessions_override.json`) and run-time validation assertions.
+2. **PostgreSQL Integration Tests**: Implemented specific PostgreSQL integration checks (`test_db_postgres.py`) testing transactions, constraint rollbacks, and numeric precision scaling (with auto-skipping if database is offline).
+3. **Audit Log Secret Redaction**: Added auto-redaction of `KITE_API_SECRET` strings in exception handling and logging blocks within `session.py` to prevent credentials leakage.
+4. **Ingestion Counter Accuracy**: Fixed the incremental reporting counters in `ingestion.py` to only record inserted bars and corporate actions after a successful database `commit()`.
+5. **Point-in-Time Nifty 50 Warning**: Added a prominent warning regarding Nifty 50 survivorship bias, flagging that point-in-time constituent membership is not yet verified.
 
 ## What Exists
 

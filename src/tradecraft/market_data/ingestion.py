@@ -139,6 +139,7 @@ class DataIngestionWorkflow:
                         report["status"] = "INVALID"
                     report["alerts"].append({"symbol": inst.symbol, **alert})
 
+                inst_bars_inserted = 0
                 # Persist new bars
                 for bar_data in new_bars:
                     bar = MarketBar(
@@ -155,9 +156,10 @@ class DataIngestionWorkflow:
                         adjustment_factor=Decimal("1.000000"),
                     )
                     self.db.add(bar)
-                    report["bars_inserted"] += 1
+                    inst_bars_inserted += 1
 
                 # Persist corporate actions
+                inst_actions_found = 0
                 for act_data in new_actions:
                     # Check duplicate action
                     existing_act_stmt = select(CorporateAction).where(
@@ -181,9 +183,11 @@ class DataIngestionWorkflow:
                             verified=act_data.get("verified", False),
                         )
                         self.db.add(act)
-                        report["corporate_actions_found"] += 1
+                        inst_actions_found += 1
 
                 self.db.commit()
+                report["bars_inserted"] += inst_bars_inserted
+                report["corporate_actions_found"] += inst_actions_found
                 report["updated"] += 1
 
             except Exception as e:
