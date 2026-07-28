@@ -118,6 +118,15 @@ def generate_dry_run_mock_bars() -> list[dict[str, Any]]:
 def handle_data(args: argparse.Namespace) -> None:
     """Handle market data update CLI subcommands."""
     db_session = SessionLocal()
+
+    from tradecraft.core.preflight import validate_database_schema
+
+    try:
+        validate_database_schema(db_session)
+    except Exception as e:
+        print(f"\n[PREFLIGHT ERROR]: {e}\n")
+        sys.exit(1)
+
     calendar = TradingCalendar()
 
     # Run calendar validation check
@@ -178,7 +187,7 @@ def handle_data(args: argparse.Namespace) -> None:
         ]
         corporate_provider = TestCorporateActionsProvider(mock_actions)
     else:
-        logger.info("Initializing in LIVE mode using ZerodhaMarketDataProvider...")
+        logger.info("Initializing in REAL_DATA mode using ZerodhaMarketDataProvider...")
         assert settings.KITE_API_KEY is not None
         assert cached_token is not None
         market_provider = ZerodhaMarketDataProvider(settings.KITE_API_KEY, cached_token)
@@ -201,7 +210,9 @@ def handle_data(args: argparse.Namespace) -> None:
         print("\nUPDATE COMPLETE REPORT:")
         print(f"Expected Latest Session: {report['latest_session']}")
         print(f"Total Nifty 50 constituents: {report['total_instruments']}")
-        print(f"Successfully Updated: {report['updated']}")
+        print(f"Processed Successfully: {report['processed_successfully']}")
+        print(f"Already Current: {report['already_current']}")
+        print(f"Updated With New Data: {report['updated_with_new_data']}")
         print(f"Failed Ingestions: {report['failed']}")
         print(f"Bars Inserted: {report['bars_inserted']}")
         print(f"Corporate Actions Ingested: {report['corporate_actions_found']}")

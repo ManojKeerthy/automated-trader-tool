@@ -1,5 +1,5 @@
 import logging
-from datetime import date, timedelta
+from datetime import timedelta
 from decimal import Decimal
 from typing import Any
 
@@ -50,7 +50,9 @@ class DataIngestionWorkflow:
         report: dict[str, Any] = {
             "latest_session": None,
             "total_instruments": len(instruments),
-            "updated": 0,
+            "processed_successfully": 0,
+            "already_current": 0,
+            "updated_with_new_data": 0,
             "failed": 0,
             "bars_inserted": 0,
             "bars_unchanged": 0,
@@ -59,11 +61,21 @@ class DataIngestionWorkflow:
             "status": "READY",
         }
 
-        # Determine expected latest completed session
-        today = date.today()
+        # Determine expected latest completed session based on local time
+        from tradecraft.core.time_utils import now_in_market_tz
+
+        market_now = now_in_market_tz()
+        today = market_now.date()
         latest_session = today
-        if not self.calendar.is_trading_day(latest_session):
+
+        if self.calendar.is_trading_day(latest_session):
+            # If current local time is before 18:00 (6:00 PM) IST, EOD candle is not yet published.
+            # Thus, the expected latest completed session is the previous trading day.
+            if market_now.hour < 18:
+                latest_session = self.calendar.previous_trading_day(latest_session)
+        else:
             latest_session = self.calendar.previous_trading_day(latest_session)
+
         report["latest_session"] = latest_session.isoformat()
 
         # Ingest daily bars for each active instrument
@@ -88,7 +100,8 @@ class DataIngestionWorkflow:
 
                 if start_date > end_date:
                     logger.info(f"Instrument {inst.symbol} is already up to date.")
-                    report["updated"] += 1
+                    report["already_current"] += 1
+                    report["processed_successfully"] += 1
                     continue
 
                 # Ingest bars
@@ -188,7 +201,11 @@ class DataIngestionWorkflow:
                 self.db.commit()
                 report["bars_inserted"] += inst_bars_inserted
                 report["corporate_actions_found"] += inst_actions_found
-                report["updated"] += 1
+                if inst_bars_inserted > 0:
+                    report["updated_with_new_data"] += 1
+                else:
+                    report["already_current"] += 1
+                report["processed_successfully"] += 1
 
             except Exception as e:
                 self.db.rollback()
@@ -203,12 +220,36 @@ class DataIngestionWorkflow:
                         "trading_date": None,
                     }
                 )
-                report["status"] = "INCOMPLETE"
 
-        # Check if the latest session is completely missing for all active instruments
-        if report["bars_inserted"] == 0 and report["updated"] > 0:
-            # Check if we are stale
+        # Determine status based on actual data presence and failure flags
+        is_stale = False
+        for inst in instruments:
+            last_date_stmt = (
+                select(MarketBar.trading_date)
+                .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False))
+                .order_by(MarketBar.trading_date.desc())
+                .limit(1)
+            )
+            last_date = self.db.scalars(last_date_stmt).first()
+            if not last_date or last_date < latest_session:
+                is_stale = True
+                break
+
+        # Check if any validation errors/warnings set the status
+        # If any validation alert is ERROR or CRITICAL, the status becomes INVALID
+        has_invalid = any(
+            a["level"] in ("ERROR", "CRITICAL") and a["category"] != "instrument_mapping"
+            for a in report["alerts"]
+        )
+
+        if has_invalid:
+            report["status"] = "INVALID"
+        elif report["failed"] > 0:
+            report["status"] = "INCOMPLETE"
+        elif is_stale:
             report["status"] = "STALE"
+        else:
+            report["status"] = "READY"
 
         return report
 
@@ -264,6 +305,15 @@ class DataIngestionWorkflow:
                     inst.lot_size = prov_details["lot_size"]
                     inst.instrument_token = prov_details["instrument_token"]
                 inst.is_active = True
+
+        # Mark instruments no longer in current constituents list as inactive
+        const_symbols = {c["symbol"] for c in constituents}
+        all_active_stmt = select(Instrument).where(Instrument.is_active == True)
+        all_active = self.db.scalars(all_active_stmt).all()
+        for active_inst in all_active:
+            if active_inst.symbol not in const_symbols:
+                active_inst.is_active = False
+                logger.info(f"Marked instrument {active_inst.symbol} as inactive.")
 
         self.db.commit()
 

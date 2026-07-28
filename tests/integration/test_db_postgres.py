@@ -31,11 +31,25 @@ def postgres_engine():
 
 @pytest.fixture(scope="module")
 def db_schema(postgres_engine):
-    # Setup: Create tables
-    Base.metadata.create_all(bind=postgres_engine)
-    yield postgres_engine
-    # Teardown: Drop tables to leave database clean
+    from alembic import command
+    from alembic.config import Config
+
+    # 1. Clean the database first (drop all tables and alembic history to make sure we are clean)
     Base.metadata.drop_all(bind=postgres_engine)
+    with postgres_engine.begin() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS alembic_version CASCADE"))
+
+    # 2. Run migrations
+    alembic_cfg = Config("alembic.ini")
+    alembic_cfg.set_main_option("sqlalchemy.url", str(postgres_engine.url))
+    command.upgrade(alembic_cfg, "head")
+
+    yield postgres_engine
+
+    # Teardown: Clean the database
+    Base.metadata.drop_all(bind=postgres_engine)
+    with postgres_engine.begin() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS alembic_version CASCADE"))
 
 
 @pytest.fixture
@@ -216,3 +230,73 @@ def test_postgres_timezone_handling(db_session):
     assert retrieved.retrieved_at.tzinfo is not None
     # We convert retrieved time to UTC to do a direct comparison
     assert retrieved.retrieved_at.astimezone(UTC) == utc_now
+
+
+def test_postgres_schema_parity(postgres_engine):
+    from sqlalchemy import inspect
+
+    # Check that every table and column defined in Base.metadata
+    # is also present in the actual database with identical nullability and close types.
+    inspector = inspect(postgres_engine)
+    db_tables = inspector.get_table_names()
+
+    for model_table in Base.metadata.tables.values():
+        table_name = model_table.name
+        assert table_name in db_tables, f"Table '{table_name}' is missing in the migrated database."
+
+        db_columns = {col["name"]: col for col in inspector.get_columns(table_name)}
+
+        for model_col in model_table.columns:
+            col_name = model_col.name
+            assert col_name in db_columns, (
+                f"Column '{col_name}' in table '{table_name}' is missing in the migrated database."
+            )
+
+            db_col = db_columns[col_name]
+            # Verify nullability match
+            assert db_col["nullable"] == model_col.nullable, (
+                f"Nullability mismatch for column '{col_name}' on table '{table_name}': "
+                f"DB is {db_col['nullable']}, Model is {model_col.nullable}"
+            )
+
+
+def test_alembic_migration_upgrade_path(postgres_engine):
+    from alembic import command
+    from alembic.config import Config
+    from sqlalchemy import inspect
+
+    alembic_cfg = Config("alembic.ini")
+    alembic_cfg.set_main_option("sqlalchemy.url", str(postgres_engine.url))
+
+    # Start clean: drop all tables and alembic history
+    Base.metadata.drop_all(bind=postgres_engine)
+    with postgres_engine.begin() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS alembic_version CASCADE"))
+
+    # 1. Upgrade to 001_initial_schema
+    command.upgrade(alembic_cfg, "001_initial_schema")
+
+    # Check that transformation_version column is NOT there yet
+    inspector = inspect(postgres_engine)
+    cols_001 = [col["name"] for col in inspector.get_columns("market_bars")]
+    assert "transformation_version" not in cols_001
+
+    # 2. Upgrade to head (002_add_transformation_version)
+    command.upgrade(alembic_cfg, "head")
+
+    # Check that transformation_version column IS there now
+    inspector = inspect(postgres_engine)
+    cols_002 = [col["name"] for col in inspector.get_columns("market_bars")]
+    assert "transformation_version" in cols_002
+
+    # 3. Query models using a temporary session to verify queries succeed
+    with Session(bind=postgres_engine) as session:
+        # Query instruments
+        session.scalars(select(Instrument)).all()
+        # Query market bars
+        session.scalars(select(MarketBar)).all()
+
+    # Teardown: Clean the database
+    Base.metadata.drop_all(bind=postgres_engine)
+    with postgres_engine.begin() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS alembic_version CASCADE"))

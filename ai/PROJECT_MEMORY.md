@@ -35,6 +35,20 @@ TradeCraft is a personal algorithmic swing trading platform for the Indian marke
 4. **Ingestion Counter Accuracy**: Fixed the incremental reporting counters in `ingestion.py` to only record inserted bars and corporate actions after a successful database `commit()`.
 5. **Point-in-Time Nifty 50 Warning**: Added a prominent warning regarding Nifty 50 survivorship bias, flagging that point-in-time constituent membership is not yet verified.
 
+### M1 Schema Parity Audit (2026-07-28)
+
+1. **Transformation Version Drift Fix**: Resolved the schema drift by adding the forward Alembic migration `002_add_transformation_version.py` which creates the missing column `transformation_version` on the `market_bars` table.
+2. **Alembic Testing in Integration Suite**: Refactored `db_schema` test fixture in `test_db_postgres.py` to run migrations dynamically using Alembic Config and Command APIs. Added a command dropping the `alembic_version` table on test setup/teardown to ensure database tests run migrations cleanly.
+3. **Preflight Validation**: Added a preflight schema verification check in `preflight.py` checking required tables and columns before starting data loops, aborting cleanly with `DATABASE MIGRATION REQUIRED` warning instead of generating 50 duplicate stack traces.
+4. **CLI Wording Rename**: Renamed the CLI market data modes from `LIVE` to `REAL_DATA` to prevent confusion with money-order execution.
+
+### M1 Real Ingestion Validation & Symbol Changes (2026-07-28)
+
+1. **Cutoff Policy**: Implemented an 18:00 IST (6:00 PM local time) cutoff policy where daily updates executed before 18:00 IST expect the previous trading day's EOD session instead of raising fake `STALE` errors.
+2. **Constituent Symbol Changes**: Mapped the renamed Nifty 50 symbols for **LTIMindtree (`LTM` instead of `LTIM`)** and **Tata Motors Passenger Vehicles (`TMPV` instead of `TATAMOTORS`)** to resolve missing instrument token errors.
+3. **Instrument Deactivation**: Configured `_sync_instruments` to automatically deactivate old/retired symbol definitions (`LTIM` and `TATAMOTORS`) in the database, setting `is_active = False`.
+4. **Detailed Ingestion Reporting**: Differentiated complete update status reports to print: Processed Successfully, Already Current, Updated With New Data, and Failed.
+
 ## What Exists
 
 See [CURRENT_STATE.md](file:///c:/infiligence/automated-trader-tool/ai/CURRENT_STATE.md) for the accurate current state.
