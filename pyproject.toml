@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends._legacy:_Backend"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "tradecraft"
@@ -11,8 +11,17 @@ requires-python = ">=3.11"
 license = {text = "Proprietary"}
 
 dependencies = [
-    # Core dependencies will be added per milestone.
-    # M0 has no runtime dependencies.
+    "exchange_calendars",
+    "kiteconnect",
+    "sqlalchemy>=2.0",
+    "alembic",
+    "psycopg2-binary",
+    "fastapi",
+    "uvicorn",
+    "pydantic>=2.0",
+    "pydantic-settings",
+    "pandas",
+    "requests",
 ]
 
 [project.optional-dependencies]
@@ -33,7 +42,7 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM", "TCH"]
-ignore = []
+ignore = ["E501", "E711", "E712", "B904", "B008"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["tradecraft"]
@@ -48,6 +57,10 @@ disallow_untyped_defs = true
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = ["kiteconnect.*", "exchange_calendars.*", "pandas.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

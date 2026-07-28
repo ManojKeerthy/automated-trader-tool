@@ -1,1 +1,3 @@
-"""TradeCraft config module."""
+from tradecraft.config.config import settings
+
+__all__ = ["settings"]

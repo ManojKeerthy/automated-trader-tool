@@ -21,28 +21,22 @@ TradeCraft is a personal algorithmic swing trading platform for the Indian marke
 9. **Emergency controls**: RISK LOCK at 10% drawdown, KILL SWITCH for emergencies (ADR-009)
 10. **AI providers**: Abstraction layer, pooled ₹2,500/month budget (ADR-010)
 
+### M1 (2026-07-28)
+
+1. **Exchange Calendar Selection**: Used the BSE (`XBOM`) calendar in `exchange_calendars` since `XNSE` was not registered in the installed package. They share identical national holidays and trading sessions.
+2. **Zerodha Session Caching**: Implemented a local daily cache file `.kite_session.json` in the user's data directory. Avoids repetitive redirects, and automatically expires daily at 6:00 AM.
+3. **Type-Safety Configurations**: Integrated type stubs overrides in `pyproject.toml` to satisfy mypy strict requirements for external untyped packages (pandas, exchange_calendars, and kiteconnect).
+
 ### Open Questions Resolved (2026-07-28)
 
-1. **Trading calendar**: Layered approach — NSE official data validated against `exchange_calendars` library
-2. **Market data**: Zerodha Kite Connect historical API (daily OHLCV), stored locally in PostgreSQL
-3. **Zerodha integration**: API subscription before M1; live trading not until M11
-4. **AI budget**: ₹2,500/month pooled across providers, Claude preferred
-5. **Risk parameters**: 0.5% risk/trade (0.75% hard max), 2% portfolio risk, 5 max positions, 10% hard RISK LOCK
-6. **CI/CD**: GitHub Actions, multi-OS (Windows + Linux required, macOS best effort)
-7. **Corporate actions**: NSE as primary source, provider interface for future alternatives
+1. **Trading calendar**: Layered approach — NSE official data validated against `exchange_calendars` library.
+2. **Market data**: Zerodha Kite Connect historical API (daily OHLCV), stored locally in PostgreSQL.
+3. **Zerodha integration**: API subscription before M1; live trading not until M11.
+4. **AI budget**: ₹2,500/month pooled across providers, Claude preferred.
+5. **Risk parameters**: 0.5% risk/trade (0.75% hard max), 2% portfolio risk, 5 max positions, 10% hard RISK LOCK.
+6. **CI/CD**: GitHub Actions, multi-OS (Windows + Linux required, macOS best effort).
+7. **Corporate actions**: NSE as primary source, provider interface for future alternatives.
 
 ## What Exists
 
-See CURRENT_STATE.md for the accurate current state.
-
-## What Does NOT Exist
-
-- No trading logic
-- No market data ingestion
-- No database schema
-- No API endpoints
-- No dashboard UI
-- No broker connections
-- No AI integration
-- No strategies
-- No backtesting engine
+See [CURRENT_STATE.md](file:///c:/infiligence/automated-trader-tool/ai/CURRENT_STATE.md) for the accurate current state.
