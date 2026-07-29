@@ -2,14 +2,26 @@
 
 > **IMPORTANT**: This document must accurately describe what ACTUALLY EXISTS, not what is planned.
 >
-> Last Updated: 2026-07-28
-> Current Milestone: M2 ✅ COMPLETE (Research & Backtesting Foundation Built & Verified)
+> Last Updated: 2026-07-29
+> Current Milestone: M3A ✅ COMPLETE (Research Data & Screening Foundation Built & Verified)
 
 ## What Exists
 
 ### Repository & CI/CD Structure ✅
-- Python package structure: `src/tradecraft/` with all M1 core components fully implemented.
-- GitHub Actions CI workflow in `.github/workflows/ci.yml` verifying linting (Ruff), type safety (Mypy strict), and running pytest on Ubuntu and Windows.
+- Python package structure: `src/tradecraft/` with all M1/M2/M3A core components fully implemented.
+- GitHub Actions CI workflow in `.github/workflows/ci.yml` verifying linting (Ruff), type safety (Mypy strict), and running pytest on Ubuntu and Windows with PostgreSQL service container.
+
+### M3A Research Data & Screening Foundation ✅
+- **Point-in-Time Feature Framework** (`src/tradecraft/features/base.py`): Immutable `FeatureDefinition`, `FeatureValue`, `FeatureSet`, and a versioned registry of 19 technical indicators across 6 families (Trend, Momentum, Volatility, Volume, Breakout, Support/Resistance). Derived features calculated on demand.
+- **6 Indicator Families** (`src/tradecraft/features/indicators.py`): Pure, stateless indicator functions with explicit lookback requirements and point-in-time safety semantics. Includes SMA, EMA, MA Slope, Price-to-MA ratio, Trend Structure, RSI, ROC, Multi-period returns, ATR, ATR%, Rolling Volatility, Volatility Expansion, Average Volume, Average Traded Value, RVOL, Volume Expansion, Donchian Channels, Breakout Distance, Consolidation Range, 52W High Distance, and Pivot High/Low with confirmation delay.
+- **Support & Resistance Look-Ahead Safety**: Pivot highs/lows require `right_bars` future bars to confirm. Pivots are available ONLY at confirmation date ($T + \text{right\_bars}$), preventing look-ahead bias at peak/trough date $T$.
+- **Fundamental & News Interfaces** (`src/tradecraft/research/fundamental_interface.py`, `news_interface.py`): Abstract interfaces enforcing point-in-time availability (`available_from <= query_date`). `NullFundamentalDataProvider` and `NullNewsDataProvider` return unavailable/empty results when no trusted source is configured.
+- **Eligibility & Liquidity Screening** (`src/tradecraft/screening/eligibility.py`): Deterministic eligibility pipeline separating operational exclusions (data quality, minimum history, stale data, low liquidity, unresolved corporate actions, unverified identity) from research quality flags (`UNVERIFIED_UNIVERSE`). Configurable `LiquidityScreenConfig` (default provisional ₹5 Crore 20-session average traded value).
+- **Market Regime Engine** (`src/tradecraft/screening/regime.py`): Versioned `RegimeDefinition` classifying Trend (BULLISH/BEARISH/SIDEWAYS via MA crossover), Volatility (LOW/NORMAL/HIGH/EXTREME via ATR% percentile ranking), and Market Breadth (STRONG/NEUTRAL/WEAK via % above MA). Breadth quality tracks constituent universe verification (`UNVERIFIED_UNIVERSE`).
+- **Strategy-Neutral Screening Engine** (`src/tradecraft/screening/engine.py`): Strategy-neutral orchestrator producing `ScreeningResult` with candidates, regime snapshot, exclusion summary, and full metadata for auditability. Supports zero-candidate output.
+- **Alembic Migration 004** (`alembic/versions/004_m3a_screening_schema.py`): Schema migration creating `feature_definitions`, `market_regime_snapshots`, and `screening_runs` tables.
+- **CLI & REST API Integration**: CLI subcommands and REST endpoints `/api/regime/current` and `/api/screening/run`.
+- **Comprehensive Verification Suite**: 65 passing M3A unit tests (`tests/unit/test_m3a_features.py`, `test_m3a_screening.py`) + 29 M1/M2 tests (94 unit tests total) + PostgreSQL migration upgrade path checks. Clean Ruff and Mypy strict compliance across all 67 source files.
 
 ### Configuration & Credentials Management ✅
 - `.gitignore` — comprehensive exclusions including local cached sessions.

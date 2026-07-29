@@ -39,3 +39,26 @@ Below are the known limitations of the TradeCraft platform identified during the
 ### Historical Universe Membership Gating
 - **Limitation**: Universe membership prior to verified constituent tracking dates carries `UNVERIFIED` confidence.
 - **Impact**: Backtests executed over unverified universe date ranges are automatically classified as `UNVERIFIED` or `RESEARCH_ONLY` research quality and cannot produce `TRUSTWORTHY` classification until historical constituent additions/deletions are verified against authoritative exchange circulars.
+
+## 5. M3A Research & Screening Limitations
+
+### Liquidity Threshold Provisional Default
+- **Limitation**: The ₹5 Crore 20-session average daily traded-value threshold is a provisional research default. It has not been validated as an industry-standard or optimal threshold.
+- **Impact**: Screening results may exclude viable mid-cap opportunities or include illiquid micro-caps under different market regimes.
+- **Resolution**: `LiquidityScreenConfig` makes thresholds configurable and records the threshold version in screening metadata. Sensitivity analysis will be conducted in M3B.
+
+### Fundamental and News Data Source Integration
+- **Limitation**: Fundamental data (`AbstractFundamentalDataProvider`) and News data (`AbstractNewsDataProvider`) interfaces are defined with point-in-time enforcement (`available_from <= query_date`), but default to null providers (`NullFundamentalDataProvider`, `NullNewsDataProvider`).
+- **Impact**: Fundamental metrics and news events return unavailable/empty results. No unreliable web scraping or unverified AI web search is permitted.
+- **Resolution**: Interface schemas preserve point-in-time correctness. Real external provider integrations require explicit data source authorization.
+
+### Pivot Point Confirmation Delay
+- **Limitation**: Pivot highs and lows require `right_bars` future bars to confirm. Pivots are NOT available on the peak/trough date itself ($T$) but only on the confirmation date ($T + \text{right\_bars}$).
+- **Impact**: Pivot-based support/resistance levels lag price movement by `right_bars` sessions. Attempting to access unconfirmed pivots at $T$ is gated as a look-ahead error.
+- **Resolution**: Point-in-time semantics ensure support/resistance features only use confirmed pivots.
+
+### Market Breadth Quality Dependencies
+- **Limitation**: Market breadth calculation (% of constituents above MA) requires verified constituent universe membership.
+- **Impact**: Computing breadth using current constituents for historical dates assigns `UNVERIFIED_UNIVERSE` quality to the breadth component, preventing the overall market regime from achieving `TRUSTWORTHY` classification.
+- **Resolution**: Regime snapshots explicitly track `breadth_quality` and `overall_quality`.
+

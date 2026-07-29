@@ -333,3 +333,159 @@ def run_backtest(
         ],
     }
 
+
+# ---------------------------------------------------------------------------
+# M3A Screening & Regime Endpoints
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/regime/current", response_model=dict[str, Any])
+def get_current_regime(
+    as_of: str | None = Query(None, description="Observation date (YYYY-MM-DD), default latest"),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Get market regime classification as of a specific date."""
+    from tradecraft.screening.regime import MarketRegimeEngine, RegimeDefinition
+
+    query_date = date.fromisoformat(as_of) if as_of else date.today()
+
+    # Query benchmark close prices up to query_date
+    stmt = (
+        select(MarketBar)
+        .where(and_(MarketBar.is_adjusted == False, MarketBar.trading_date <= query_date))  # noqa: E712
+        .order_by(MarketBar.trading_date.asc())
+    )
+    bars = db.scalars(stmt).all()
+
+    if not bars:
+        return {
+            "observation_date": query_date.isoformat(),
+            "trend": "SIDEWAYS",
+            "volatility": "NORMAL",
+            "breadth": "UNAVAILABLE",
+            "overall_quality": "UNAVAILABLE",
+            "message": "No market bars available for regime classification",
+        }
+
+    import pandas as pd
+
+    df = pd.DataFrame(
+        [
+            {
+                "date": b.trading_date,
+                "close": float(b.close),
+                "high": float(b.high),
+                "low": float(b.low),
+            }
+            for b in bars
+        ]
+    )
+    df.set_index("date", inplace=True)
+
+    engine = MarketRegimeEngine(RegimeDefinition())
+    snapshot = engine.classify(
+        observation_date=query_date,
+        benchmark_close=df["close"],
+        benchmark_high=df["high"],
+        benchmark_low=df["low"],
+    )
+
+    return {
+        "observation_date": snapshot.observation_date.isoformat(),
+        "regime_version": snapshot.regime_version,
+        "trend": snapshot.trend,
+        "volatility": snapshot.volatility,
+        "breadth": snapshot.breadth,
+        "trend_quality": snapshot.trend_quality,
+        "volatility_quality": snapshot.volatility_quality,
+        "breadth_quality": snapshot.breadth_quality,
+        "overall_quality": snapshot.overall_quality,
+        "metrics": snapshot.metrics,
+    }
+
+
+@app.post("/api/screening/run", response_model=dict[str, Any])
+def run_screening(
+    screen_date_str: str | None = Query(None, description="Screening date (YYYY-MM-DD)"),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Run strategy-neutral screening on stored instruments."""
+    from tradecraft.screening.eligibility import InstrumentData
+    from tradecraft.screening.engine import ScreeningConfig, ScreeningEngine
+
+    screen_date = date.fromisoformat(screen_date_str) if screen_date_str else date.today()
+
+    # Query active instruments
+    inst_stmt = select(Instrument).where(Instrument.is_active == True)  # noqa: E712
+    instruments = db.scalars(inst_stmt).all()
+
+    if not instruments:
+        return {
+            "screen_date": screen_date.isoformat(),
+            "total_universe": 0,
+            "eligible_count": 0,
+            "candidate_count": 0,
+            "candidates": [],
+        }
+
+    # Load bar metadata per instrument
+    inst_data_list = []
+    for inst in instruments:
+        bars_stmt = (
+            select(MarketBar)
+            .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False))  # noqa: E712
+            .order_by(MarketBar.trading_date.asc())
+        )
+        bars = db.scalars(bars_stmt).all()
+
+        total_bars = len(bars)
+        earliest = bars[0].trading_date if bars else None
+        latest = bars[-1].trading_date if bars else None
+        latest_close = float(bars[-1].close) if bars else None
+
+        # Compute 20-day average traded value
+        avg_tv = None
+        avg_vol = None
+        if len(bars) >= 20:
+            last_20 = bars[-20:]
+            avg_tv = sum(float(b.close) * b.volume for b in last_20) / 20.0
+            avg_vol = sum(b.volume for b in last_20) / 20.0
+
+        inst_data_list.append(
+            InstrumentData(
+                instrument_id=inst.id,
+                symbol=inst.symbol,
+                is_active=inst.is_active,
+                total_bars=total_bars,
+                earliest_date=earliest,
+                latest_date=latest,
+                latest_close=latest_close,
+                avg_traded_value_20=avg_tv,
+                avg_volume_20=avg_vol,
+            )
+        )
+
+    engine = ScreeningEngine(ScreeningConfig())
+    res = engine.run(screen_date=screen_date, instruments=inst_data_list)
+
+    return {
+        "screen_date": res.screen_date.isoformat(),
+        "screening_version": res.screening_version,
+        "eligibility_config_version": res.eligibility_config_version,
+        "liquidity_config_version": res.liquidity_config_version,
+        "regime_definition_version": res.regime_definition_version,
+        "total_universe": res.total_universe,
+        "eligible_count": res.eligible_count,
+        "excluded_count": res.excluded_count,
+        "candidate_count": res.candidate_count,
+        "exclusion_summary": res.exclusion_summary,
+        "candidates": [
+            {
+                "instrument_id": str(c.instrument_id),
+                "symbol": c.symbol,
+                "features": c.features,
+                "research_quality_flags": c.research_quality_flags,
+            }
+            for c in res.candidates
+        ],
+    }

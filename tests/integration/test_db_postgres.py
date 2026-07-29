@@ -281,19 +281,27 @@ def test_alembic_migration_upgrade_path(postgres_engine):
     cols_001 = [col["name"] for col in inspector.get_columns("market_bars")]
     assert "transformation_version" not in cols_001
 
-    # 2. Upgrade to head (002_add_transformation_version)
-    command.upgrade(alembic_cfg, "head")
-
-    # Check that transformation_version column IS there now
+    # 2. Upgrade to 002_add_transformation_version
+    command.upgrade(alembic_cfg, "002_add_transformation_version")
     inspector = inspect(postgres_engine)
     cols_002 = [col["name"] for col in inspector.get_columns("market_bars")]
     assert "transformation_version" in cols_002
 
-    # 3. Query models using a temporary session to verify queries succeed
+    # 3. Upgrade to 003_m2_research_schema
+    command.upgrade(alembic_cfg, "003_m2_research_schema")
+    inspector = inspect(postgres_engine)
+    assert "backtest_runs" in inspector.get_table_names()
+
+    # 4. Upgrade to head (004_m3a_screening_schema)
+    command.upgrade(alembic_cfg, "head")
+    inspector = inspect(postgres_engine)
+    assert "feature_definitions" in inspector.get_table_names()
+    assert "market_regime_snapshots" in inspector.get_table_names()
+    assert "screening_runs" in inspector.get_table_names()
+
+    # 5. Query models using a temporary session to verify queries succeed
     with Session(bind=postgres_engine) as session:
-        # Query instruments
         session.scalars(select(Instrument)).all()
-        # Query market bars
         session.scalars(select(MarketBar)).all()
 
     # Teardown: Clean the database

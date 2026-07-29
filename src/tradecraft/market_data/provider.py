@@ -100,6 +100,7 @@ class ZerodhaMarketDataProvider:
         self.access_token = access_token
         self._kite: Any = None
         self._initialized = False
+        self._token_map: dict[tuple[str, str], int] = {}
 
     def _init_client(self) -> None:
         if self._initialized:
@@ -141,18 +142,20 @@ class ZerodhaMarketDataProvider:
     ) -> list[dict[str, Any]]:
         self._init_client()
         try:
-            # We first need to get the instrument token.
-            # Usually, instruments are cached locally. But for raw API calls,
-            # we need to find it from the instruments list.
-            # To avoid doing this on every single query, we expect the caller
-            # to pass instrument_token in additional context or do mapping.
-            # To support the protocol cleanly, we can lookup, but it is slow.
-            # Instead, we will support passing instrument_token directly
-            # by fetching instruments once and caching, or via custom param.
-            # Let's cache the mapping of (exchange, symbol) -> token.
-            raise NotImplementedError(
-                "Use ZerodhaMarketDataProvider with pre-mapped instrument tokens."
-            )
+            if not hasattr(self, "_token_map") or not self._token_map:
+                all_insts = self.fetch_all_instruments()
+                self._token_map = {
+                    (inst["exchange"], inst["symbol"]): inst["instrument_token"]
+                    for inst in all_insts
+                }
+
+            token = self._token_map.get((exchange, symbol))
+            if token is None:
+                raise ProviderError(f"Instrument token not found for {exchange}:{symbol}")
+
+            return self.get_daily_bars_by_token(token, start_date, end_date)
+        except ProviderError:
+            raise
         except Exception as e:
             raise ProviderError(f"Failed to fetch historical data for {symbol}: {e}")
 

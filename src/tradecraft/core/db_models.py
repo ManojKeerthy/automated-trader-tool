@@ -398,3 +398,95 @@ class BacktestMetric(Base):
     __table_args__ = (
         UniqueConstraint("run_id", "metric_name", name="uq_run_metric"),
     )
+
+
+# ---------------------------------------------------------------------------
+# M3A Models — Screening & Feature Framework
+# ---------------------------------------------------------------------------
+
+
+class FeatureDefinitionModel(Base):
+    """Persistent record of feature definitions used in screening/research.
+
+    Stores the versioned metadata of each feature to ensure reproducibility.
+    """
+
+    __tablename__ = "feature_definitions"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    version: Mapped[str] = mapped_column(String(50), nullable=False)
+    family: Mapped[str] = mapped_column(String(50), nullable=False)
+    parameters: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    required_lookback: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    formula: Mapped[str | None] = mapped_column(Text, nullable=True)
+    input_series: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    availability: Mapped[str] = mapped_column(String(30), nullable=False, default="IMMEDIATE")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.utcnow
+    )
+
+    __table_args__ = (
+        UniqueConstraint("name", "version", name="uq_feature_name_version"),
+    )
+
+
+class MarketRegimeSnapshotModel(Base):
+    """Persistent record of market regime classifications.
+
+    Each row captures the regime classification for a specific date using
+    a specific regime definition version.
+    """
+
+    __tablename__ = "market_regime_snapshots"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    observation_date: Mapped[date] = mapped_column(Date, nullable=False)
+    regime_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    trend: Mapped[str] = mapped_column(String(20), nullable=False)
+    volatility: Mapped[str] = mapped_column(String(20), nullable=False)
+    breadth: Mapped[str] = mapped_column(String(20), nullable=False)
+    trend_quality: Mapped[str] = mapped_column(String(30), nullable=False, default="COMPUTED")
+    volatility_quality: Mapped[str] = mapped_column(String(30), nullable=False, default="COMPUTED")
+    breadth_quality: Mapped[str] = mapped_column(String(30), nullable=False, default="COMPUTED")
+    overall_quality: Mapped[str] = mapped_column(String(30), nullable=False, default="COMPUTED")
+    metrics_json: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.utcnow
+    )
+
+    __table_args__ = (
+        UniqueConstraint("observation_date", "regime_version", name="uq_regime_date_version"),
+    )
+
+
+class ScreeningRunModel(Base):
+    """Persistent record of screening run metadata.
+
+    Captures all configuration, results summary, and quality information
+    for reproducibility and audit.
+    """
+
+    __tablename__ = "screening_runs"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    screen_date: Mapped[date] = mapped_column(Date, nullable=False)
+    screening_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    eligibility_config_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    liquidity_config_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    regime_definition_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    total_universe: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    eligible_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    excluded_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    candidate_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    regime_trend: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    regime_volatility: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    regime_breadth: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    regime_overall_quality: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    exclusion_summary: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    research_quality_warnings: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    feature_versions: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    execution_metadata: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.utcnow
+    )

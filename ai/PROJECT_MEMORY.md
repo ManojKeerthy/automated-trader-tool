@@ -54,6 +54,17 @@ TradeCraft is a personal algorithmic swing trading platform for the Indian marke
 8. **Explicit Data Backfill**: Separated incremental EOD `data update` from historical population `data backfill` (resumable, chunked, rate-limit aware, idempotent).
 9. **Schema Parity Migration**: Applied Alembic migration `003_m2_research_schema` creating `instrument_history`, `universe_membership`, `strategy_definitions`, `experiments`, `cost_schedules`, `backtest_runs`, `backtest_trades`, `backtest_metrics`. Verified dialect portability across PostgreSQL and SQLite.
 
+### M3A — Research Data & Screening Foundation (2026-07-29)
+
+1. **PIT Feature Framework**: Built versioned `FeatureDefinition` registry with 19 indicators across 6 families. Calculation on demand ensures no stale state.
+2. **Pivot Look-Ahead Defenses**: Support/resistance pivot highs/lows require `right_bars` future bars to confirm, placing availability strictly at confirmation date ($T + \text{right\_bars}$) rather than peak date $T$.
+3. **Provisional Configurable Liquidity Screening**: Default ₹5 Crore 20-session average daily traded value threshold configured in `LiquidityScreenConfig` with recorded version and parameters.
+4. **Operational Eligibility vs Research Quality Separation**: Securities excluded by data quality/liquidity cannot be screened; securities passing operational checks but with unverified PIT universe membership carry research quality flags without blocking research-only runs.
+5. **Versioned Market Regime Engine**: `RegimeDefinition` specifies deterministic MA crossover trend, ATR% percentile volatility ranking, and % above MA breadth logic. Breadth tracks universe verification (`UNVERIFIED_UNIVERSE`).
+6. **Strategy-Neutral Screening**: `ScreeningEngine` orchestrates eligibility, features, and regime classification without strategy-specific rules. Zero candidates output is valid and non-error.
+7. **Fundamental & News Abstract Interfaces**: Abstract classes (`AbstractFundamentalDataProvider`, `AbstractNewsDataProvider`) with point-in-time constraints (`available_from <= query_date`). Default null providers return empty/unavailable.
+8. **Alembic Migration 004**: Applied migration `004_m3a_screening_schema.py` creating `feature_definitions`, `market_regime_snapshots`, and `screening_runs`.
+
 ## What Exists
 
 See [CURRENT_STATE.md](file:///c:/infiligence/automated-trader-tool/ai/CURRENT_STATE.md) for the accurate current state.
