@@ -490,3 +490,85 @@ class ScreeningRunModel(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=datetime.utcnow
     )
+
+
+# ---------------------------------------------------------------------------
+# M3B Models — Strategy Research Laboratory
+# ---------------------------------------------------------------------------
+
+
+class StrategyScorecardModel(Base):
+    """Persistent record of 8-dimensional strategy robustness scorecards."""
+
+    __tablename__ = "strategy_scorecards"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    run_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("backtest_runs.id", ondelete="CASCADE"), nullable=False
+    )
+    strategy_id: Mapped[str] = mapped_column(String(100), nullable=False)
+    strategy_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    overall_rating: Mapped[str] = mapped_column(String(20), nullable=False)  # STRONG, ACCEPTABLE, WEAK, FAIL
+    expectancy_r: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
+    sharpe_retention_pct: Mapped[Decimal | None] = mapped_column(Numeric(8, 4), nullable=True)
+    max_drawdown_pct: Mapped[Decimal | None] = mapped_column(Numeric(8, 4), nullable=True)
+    walk_forward_consistency_pct: Mapped[Decimal | None] = mapped_column(Numeric(8, 4), nullable=True)
+    stressed_profit_factor: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
+    total_trades: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    dimensions_json: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.utcnow
+    )
+
+    # Relationships
+    run: Mapped["BacktestRun"] = relationship("BacktestRun")
+
+
+class WalkForwardResultModel(Base):
+    """Persistent record of walk-forward evaluation windows for temporal stability analysis."""
+
+    __tablename__ = "walk_forward_results"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    strategy_id: Mapped[str] = mapped_column(String(100), nullable=False)
+    strategy_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    configuration_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    window_index: Mapped[int] = mapped_column(Integer, nullable=False)
+    train_start: Mapped[date] = mapped_column(Date, nullable=False)
+    train_end: Mapped[date] = mapped_column(Date, nullable=False)
+    test_start: Mapped[date] = mapped_column(Date, nullable=False)
+    test_end: Mapped[date] = mapped_column(Date, nullable=False)
+    train_expectancy_r: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
+    test_expectancy_r: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
+    train_sharpe: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
+    test_sharpe: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
+    test_trades_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    is_positive: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.utcnow
+    )
+
+
+class ResearchGraveyardModel(Base):
+    """Persistent research graveyard tracking rejected strategy configurations and failure evidence."""
+
+    __tablename__ = "research_graveyard"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    strategy_id: Mapped[str] = mapped_column(String(100), nullable=False)
+    strategy_family: Mapped[str] = mapped_column(String(50), nullable=False)
+    strategy_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    configuration_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    parameters_json: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
+    rejection_reason_code: Mapped[str] = mapped_column(String(50), nullable=False)
+    rejection_details: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
+    stage_failed: Mapped[str] = mapped_column(String(30), nullable=False)  # STAGE_1, STAGE_2, VALIDATION, WALK_FORWARD, FINAL_TEST
+    git_commit_hash: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.utcnow
+    )
+
+    __table_args__ = (
+        UniqueConstraint("strategy_id", "configuration_hash", name="uq_graveyard_strategy_config"),
+    )
+

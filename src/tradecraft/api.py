@@ -489,3 +489,52 @@ def run_screening(
             for c in res.candidates
         ],
     }
+
+
+# ---------------------------------------------------------------------------
+# M3B Research Laboratory Endpoints
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/research/graveyard")
+def get_research_graveyard(
+    db: Session = Depends(get_db),
+) -> list[dict[str, Any]]:
+    """Retrieve all rejected strategy configurations stored in the Research Graveyard."""
+    import sqlalchemy as sa
+
+    from tradecraft.core.db_models import ResearchGraveyardModel
+
+    entries = db.scalars(
+        sa.select(ResearchGraveyardModel).order_by(ResearchGraveyardModel.created_at.desc())
+    ).all()
+
+    return [
+        {
+            "id": str(e.id),
+            "strategy_id": e.strategy_id,
+            "strategy_family": e.strategy_family,
+            "strategy_version": e.strategy_version,
+            "configuration_hash": e.configuration_hash,
+            "parameters": e.parameters_json,
+            "rejection_reason_code": e.rejection_reason_code,
+            "rejection_details": e.rejection_details,
+            "stage_failed": e.stage_failed,
+            "created_at": e.created_at.isoformat(),
+        }
+        for e in entries
+    ]
+
+
+@app.post("/api/research/lab/run")
+def run_m3b_research_lab_endpoint(
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Trigger the M3B Strategy Research Laboratory execution."""
+    from tradecraft.market_data.calendar import TradingCalendar
+    from tradecraft.research.lab import M3BResearchLaboratory
+
+    cal = TradingCalendar()
+    lab = M3BResearchLaboratory(db_session=db, calendar=cal)
+    return lab.run_m3b_research_lab()
+

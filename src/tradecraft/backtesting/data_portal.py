@@ -155,6 +155,23 @@ class DataPortal:
         df = df.set_index("trading_date")
         return df
 
+    def get_history(
+        self,
+        instrument_id: uuid.UUID,
+        end_date: date,
+        count: int,
+    ) -> list[dict[str, Any]]:
+        """Get historical bars as a list of bar dicts up to and including end_date.
+
+        Raises LookAheadError if end_date > current clock date.
+        """
+        self._check_date(end_date)
+        all_bars = self._bars_cache.get(instrument_id, [])
+        filtered = [b for b in all_bars if b["trading_date"] <= end_date]
+        if count > 0:
+            filtered = filtered[-count:]
+        return [dict(b) for b in filtered]
+
     def get_close(self, instrument_id: uuid.UUID, query_date: date) -> Decimal | None:
         """Get closing price at a specific date.
 

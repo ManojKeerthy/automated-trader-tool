@@ -13,10 +13,10 @@ Each function documents:
 Functions return NaN for positions with insufficient lookback data.
 """
 
-from __future__ import annotations
-
 import numpy as np
 import pandas as pd
+from decimal import Decimal
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # TREND family
@@ -475,3 +475,40 @@ def nearest_support_distance_atr(
                 result.iloc[i] = (close.iloc[i] - last_pivot_low) / atr_val
 
     return result
+
+
+# ---------------------------------------------------------------------------
+# List-based wrapper functions for strategies
+# ---------------------------------------------------------------------------
+
+
+def calculate_sma(data: list[Any], period: int) -> list[Decimal | None]:
+    s = pd.Series([float(x) for x in data])
+    res = sma(s, period)
+    return [Decimal(str(v)) if not np.isnan(v) else None for v in res]
+
+
+def calculate_rsi(data: list[Any], period: int = 14) -> list[Decimal | None]:
+    s = pd.Series([float(x) for x in data])
+    res = rsi(s, period)
+    return [Decimal(str(v)) if not np.isnan(v) else None for v in res]
+
+
+def calculate_atr(highs: list[Any], lows: list[Any], closes: list[Any], period: int = 14) -> list[Decimal | None]:
+    h = pd.Series([float(x) for x in highs])
+    l = pd.Series([float(x) for x in lows])
+    c = pd.Series([float(x) for x in closes])
+    res = atr(h, l, c, period)
+    return [Decimal(str(v)) if not np.isnan(v) else None for v in res]
+
+
+def calculate_rvol(volumes: list[Any], period: int = 20) -> list[Decimal | None]:
+    v = pd.Series([float(x) for x in volumes])
+    res = relative_volume(v, period)
+    return [Decimal(str(v_val)) if not np.isnan(v_val) else None for v_val in res]
+
+
+def calculate_roc(data: list[Any], period: int = 12) -> list[Decimal | None]:
+    s = pd.Series([float(x) for x in data])
+    res = roc(s, period)
+    return [Decimal(str(v)) if not np.isnan(v) else None for v in res]

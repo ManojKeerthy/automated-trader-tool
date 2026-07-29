@@ -35,6 +35,7 @@ class TradeRecord:
     net_pnl: Decimal
     holding_days: int
     exit_reason: str
+    stop_loss_level: Decimal | None = None
     fees_breakdown: dict[str, str] = field(default_factory=dict)
     metadata_json: dict[str, Any] = field(default_factory=dict)
 
@@ -62,6 +63,7 @@ class TradeLedger:
         exit_costs: CostBreakdown,
         slippage_cost: Decimal,
         exit_reason: str,
+        stop_loss_level: Decimal | None = None,
     ) -> TradeRecord:
         """Create and store a trade audit record."""
         gross_pnl = (exit_price - entry_price) * quantity
@@ -100,6 +102,7 @@ class TradeLedger:
             net_pnl=net_pnl,
             holding_days=holding_days,
             exit_reason=exit_reason,
+            stop_loss_level=stop_loss_level,
             fees_breakdown=combined_fees.to_dict(),
         )
         self.trades.append(record)

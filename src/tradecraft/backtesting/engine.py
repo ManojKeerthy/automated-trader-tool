@@ -252,6 +252,7 @@ class BacktestEngine:
                             exit_costs=exec_res.costs,
                             slippage_cost=exec_res.slippage_cost,
                             exit_reason=exec_res.exit_reason or "PROTECTIVE_EXIT",
+                            stop_loss_level=pos.current_stop,
                         )
                         portfolio.process_exit_fill(exec_res)
                         if exec_res.is_ambiguous_bar:

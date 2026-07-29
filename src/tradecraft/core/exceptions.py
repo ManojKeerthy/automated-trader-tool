@@ -71,3 +71,9 @@ class StrategyError(TradeCraftError):
     """Raised when a strategy encounters an error during evaluation."""
 
     pass
+
+
+class DataBoundaryViolationError(TradeCraftError):
+    """Raised when diagnostic code attempts to access data outside allowed TRAIN date boundaries."""
+
+    pass

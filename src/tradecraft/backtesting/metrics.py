@@ -83,21 +83,22 @@ class MetricsEngine:
             m["total_slippage_cost"] = MetricValue("total_slippage_cost", Decimal("0"))
 
         # 1. Equity curve analysis
-        if not equity_curve:
-            return BacktestMetricsSummary(metrics=m)
+        if equity_curve:
+            final_equity = equity_curve[-1].total_equity
+            net_return_pct = ((final_equity - initial_capital) / initial_capital) * Decimal("100")
+            m["total_return_pct"] = MetricValue("total_return_pct", net_return_pct)
 
-        final_equity = equity_curve[-1].total_equity
-        net_return_pct = ((final_equity - initial_capital) / initial_capital) * Decimal("100")
-        m["total_return_pct"] = MetricValue("total_return_pct", net_return_pct)
+            # Days elapsed
+            days_elapsed = (end_date - start_date).days
+            years_elapsed = days_elapsed / 365.25
 
-        # Days elapsed
-        days_elapsed = (end_date - start_date).days
-        years_elapsed = days_elapsed / 365.25
-
-        if years_elapsed > 0 and final_equity > 0:
-            cagr = ((final_equity / initial_capital) ** Decimal(str(1 / years_elapsed)) - Decimal("1")) * Decimal("100")
-            m["cagr_pct"] = MetricValue("cagr_pct", cagr)
+            if years_elapsed > 0 and final_equity > 0:
+                cagr = ((final_equity / initial_capital) ** Decimal(str(1 / years_elapsed)) - Decimal("1")) * Decimal("100")
+                m["cagr_pct"] = MetricValue("cagr_pct", cagr)
+            else:
+                m["cagr_pct"] = MetricValue("cagr_pct", None, status="N_A")
         else:
+            m["total_return_pct"] = MetricValue("total_return_pct", None, status="INSUFFICIENT_DATA")
             m["cagr_pct"] = MetricValue("cagr_pct", None, status="INSUFFICIENT_DATA")
 
         # Daily returns array for risk / Sharpe
@@ -226,6 +227,25 @@ class MetricsEngine:
         # Expectancy = (Win Rate * Avg Win) - (Loss Rate * Avg Loss)
         expectancy = ((win_rate / Decimal("100")) * avg_win) - ((loss_rate / Decimal("100")) * avg_loss)
         m["expectancy"] = MetricValue("expectancy", expectancy)
+
+        # Expectancy_R (R-normalised trade expectancy)
+        r_multiples: list[Decimal] = []
+        for t in trades:
+            if t.stop_loss_level is not None and t.stop_loss_level > Decimal("0") and t.stop_loss_level != t.entry_price:
+                initial_risk_per_share = abs(t.entry_price - t.stop_loss_level)
+                initial_trade_risk = initial_risk_per_share * Decimal(str(t.quantity))
+                if initial_trade_risk > Decimal("0"):
+                    r_multiples.append(t.net_pnl / initial_trade_risk)
+                else:
+                    r_multiples.append(Decimal("0.0"))
+            else:
+                r_multiples.append(Decimal("0.0"))
+
+        if r_multiples:
+            mean_r = sum(r_multiples) / Decimal(str(len(r_multiples)))
+            m["expectancy_r"] = MetricValue("expectancy_r", mean_r)
+        else:
+            m["expectancy_r"] = MetricValue("expectancy_r", None, status="NO_TRADES")
 
         # Avg Holding Period
         avg_holding = sum(t.holding_days for t in trades) / total_trades
