@@ -1,0 +1,122 @@
+{
+  "strat_trend_pullback_v2": {
+    "strategy_name": "Trend Pullback V2 Strategy",
+    "gate_criteria": {
+      "win_rate": {
+        "value": 10.561056105610561,
+        "threshold": ">= 35.0%",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_HEURISTIC"
+      },
+      "profit_factor": {
+        "value": 0.6408090813799725,
+        "threshold": ">= 1.30",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "expectancy_r": {
+        "value": -1.492274127367174,
+        "threshold": ">= +0.25 R",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "max_drawdown": {
+        "value": 29.634170109391714,
+        "threshold": "<= 25.0%",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_HEURISTIC"
+      }
+    },
+    "overall_gate_result": "FAIL"
+  },
+  "strat_breakout_confirm_v2": {
+    "strategy_name": "Breakout Confirmation V2 Strategy",
+    "gate_criteria": {
+      "win_rate": {
+        "value": 11.182108626198083,
+        "threshold": ">= 35.0%",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_HEURISTIC"
+      },
+      "profit_factor": {
+        "value": 1.0884877222810005,
+        "threshold": ">= 1.30",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "expectancy_r": {
+        "value": -1.129090444785289,
+        "threshold": ">= +0.25 R",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "max_drawdown": {
+        "value": 10.541020669308555,
+        "threshold": "<= 25.0%",
+        "gate_result": "PASS",
+        "provenance": "PREDECLARED_HEURISTIC"
+      }
+    },
+    "overall_gate_result": "FAIL"
+  },
+  "strat_momentum_rs_v2": {
+    "strategy_name": "Momentum Relative Strength V2 Strategy",
+    "gate_criteria": {
+      "win_rate": {
+        "value": 10.0,
+        "threshold": ">= 35.0%",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_HEURISTIC"
+      },
+      "profit_factor": {
+        "value": 0.8944220914942709,
+        "threshold": ">= 1.30",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "expectancy_r": {
+        "value": -0.9612114723113007,
+        "threshold": ">= +0.25 R",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "max_drawdown": {
+        "value": 26.239608592016314,
+        "threshold": "<= 25.0%",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_HEURISTIC"
+      }
+    },
+    "overall_gate_result": "FAIL"
+  },
+  "strat_mean_reversion_v2": {
+    "strategy_name": "Mean Reversion V2 Strategy",
+    "gate_criteria": {
+      "win_rate": {
+        "value": 10.75268817204301,
+        "threshold": ">= 35.0%",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_HEURISTIC"
+      },
+      "profit_factor": {
+        "value": 1.3686116069822047,
+        "threshold": ">= 1.30",
+        "gate_result": "PASS",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "expectancy_r": {
+        "value": -1.4222480282692234,
+        "threshold": ">= +0.25 R",
+        "gate_result": "FAIL",
+        "provenance": "PREDECLARED_AND_JUSTIFIED"
+      },
+      "max_drawdown": {
+        "value": 5.739290900057606,
+        "threshold": "<= 25.0%",
+        "gate_result": "PASS",
+        "provenance": "PREDECLARED_HEURISTIC"
+      }
+    },
+    "overall_gate_result": "FAIL"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "strat_trend_pullback_v2": {
+    "strategy_name": "Trend Pullback V2 Strategy",
+    "sum_instrument_trades": 303,
+    "total_authoritative_trades": 303,
+    "trade_count_conserved": true,
+    "sum_instrument_net_pnl": -199352.749,
+    "total_authoritative_net_pnl": -199352.749,
+    "pnl_conserved": true,
+    "win_share_denominator": "TOTAL_WINNING_TRADE_PNL",
+    "total_winning_trade_pnl": 355652.2321,
+    "top_1_win_share_pct": 42.926107028360754,
+    "top_3_win_share_pct": 68.98229938031648,
+    "top_5_win_share_pct": 78.97459533475539
+  },
+  "strat_breakout_confirm_v2": {
+    "strategy_name": "Breakout Confirmation V2 Strategy",
+    "sum_instrument_trades": 313,
+    "total_authoritative_trades": 313,
+    "trade_count_conserved": true,
+    "sum_instrument_net_pnl": 55450.7828,
+    "total_authoritative_net_pnl": 55450.7828,
+    "pnl_conserved": true,
+    "win_share_denominator": "TOTAL_WINNING_TRADE_PNL",
+    "total_winning_trade_pnl": 682100.2362,
+    "top_1_win_share_pct": 18.72768422008648,
+    "top_3_win_share_pct": 45.13631719513543,
+    "top_5_win_share_pct": 60.94472554589624
+  },
+  "strat_momentum_rs_v2": {
+    "strategy_name": "Momentum Relative Strength V2 Strategy",
+    "sum_instrument_trades": 150,
+    "total_authoritative_trades": 150,
+    "trade_count_conserved": true,
+    "sum_instrument_net_pnl": -45060.6292,
+    "total_authoritative_net_pnl": -45060.6292,
+    "pnl_conserved": true,
+    "win_share_denominator": "TOTAL_WINNING_TRADE_PNL",
+    "total_winning_trade_pnl": 381739.161,
+    "top_1_win_share_pct": 44.81026184264076,
+    "top_3_win_share_pct": 81.87403272466457,
+    "top_5_win_share_pct": 92.0776645705469
+  },
+  "strat_mean_reversion_v2": {
+    "strategy_name": "Mean Reversion V2 Strategy",
+    "sum_instrument_trades": 186,
+    "total_authoritative_trades": 186,
+    "trade_count_conserved": true,
+    "sum_instrument_net_pnl": 113545.4109,
+    "total_authoritative_net_pnl": 113545.4109,
+    "pnl_conserved": true,
+    "win_share_denominator": "TOTAL_WINNING_TRADE_PNL",
+    "total_winning_trade_pnl": 421580.7759,
+    "top_1_win_share_pct": 27.59769060902286,
+    "top_3_win_share_pct": 70.58105850883985,
+    "top_5_win_share_pct": 81.96330884925439
+  }
+}

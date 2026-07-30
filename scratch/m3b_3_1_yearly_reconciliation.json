@@ -1,0 +1,214 @@
+{
+  "strat_trend_pullback_v2": {
+    "strategy_name": "Trend Pullback V2 Strategy",
+    "yearly_breakdown": {
+      "2016": {
+        "trades": 22,
+        "gross_pnl": -67848.0088,
+        "costs": 5042.45,
+        "net_pnl": -72890.4588,
+        "win_rate": 9.090909090909092
+      },
+      "2017": {
+        "trades": 62,
+        "gross_pnl": -74821.8478,
+        "costs": 10850.98,
+        "net_pnl": -85672.8278,
+        "win_rate": 9.67741935483871
+      },
+      "2018": {
+        "trades": 44,
+        "gross_pnl": -78116.1429,
+        "costs": 6348.28,
+        "net_pnl": -84464.4229,
+        "win_rate": 9.090909090909092
+      },
+      "2019": {
+        "trades": 68,
+        "gross_pnl": -97536.3606,
+        "costs": 7029.84,
+        "net_pnl": -104566.2006,
+        "win_rate": 5.88235294117647
+      },
+      "2020": {
+        "trades": 46,
+        "gross_pnl": -61424.3061,
+        "costs": 4784.3,
+        "net_pnl": -66208.6061,
+        "win_rate": 4.3478260869565215
+      },
+      "2021": {
+        "trades": 61,
+        "gross_pnl": 220270.7372,
+        "costs": 5820.97,
+        "net_pnl": 214449.7672,
+        "win_rate": 22.950819672131146
+      }
+    },
+    "sum_yearly_trades": 303,
+    "total_authoritative_trades": 303,
+    "trade_count_conserved": true,
+    "sum_yearly_net_pnl": -199352.749,
+    "total_authoritative_net_pnl": -199352.749,
+    "pnl_conserved": true
+  },
+  "strat_breakout_confirm_v2": {
+    "strategy_name": "Breakout Confirmation V2 Strategy",
+    "yearly_breakdown": {
+      "2016": {
+        "trades": 27,
+        "gross_pnl": -72299.9604,
+        "costs": 6808.9,
+        "net_pnl": -79108.8604,
+        "win_rate": 7.4074074074074066
+      },
+      "2017": {
+        "trades": 50,
+        "gross_pnl": -24558.4765,
+        "costs": 9413.57,
+        "net_pnl": -33972.0465,
+        "win_rate": 8.0
+      },
+      "2018": {
+        "trades": 103,
+        "gross_pnl": -128074.4213,
+        "costs": 19169.46,
+        "net_pnl": -147243.8813,
+        "win_rate": 10.679611650485436
+      },
+      "2019": {
+        "trades": 60,
+        "gross_pnl": -86620.8517,
+        "costs": 8685.75,
+        "net_pnl": -95306.6017,
+        "win_rate": 5.0
+      },
+      "2020": {
+        "trades": 48,
+        "gross_pnl": 3156.9122,
+        "costs": 6819.07,
+        "net_pnl": -3662.1578,
+        "win_rate": 12.5
+      },
+      "2021": {
+        "trades": 25,
+        "gross_pnl": 417300.9205,
+        "costs": 2556.59,
+        "net_pnl": 414744.3305,
+        "win_rate": 36.0
+      }
+    },
+    "sum_yearly_trades": 313,
+    "total_authoritative_trades": 313,
+    "trade_count_conserved": true,
+    "sum_yearly_net_pnl": 55450.7828,
+    "total_authoritative_net_pnl": 55450.7828,
+    "pnl_conserved": true
+  },
+  "strat_momentum_rs_v2": {
+    "strategy_name": "Momentum Relative Strength V2 Strategy",
+    "yearly_breakdown": {
+      "2016": {
+        "trades": 22,
+        "gross_pnl": -126206.4697,
+        "costs": 5867.22,
+        "net_pnl": -132073.6897,
+        "win_rate": 4.545454545454546
+      },
+      "2017": {
+        "trades": 30,
+        "gross_pnl": -60354.5512,
+        "costs": 2812.26,
+        "net_pnl": -63166.8112,
+        "win_rate": 6.666666666666667
+      },
+      "2018": {
+        "trades": 21,
+        "gross_pnl": -39108.5194,
+        "costs": 2993.92,
+        "net_pnl": -42102.4394,
+        "win_rate": 14.285714285714285
+      },
+      "2019": {
+        "trades": 28,
+        "gross_pnl": -49886.1068,
+        "costs": 3306.27,
+        "net_pnl": -53192.3768,
+        "win_rate": 7.142857142857142
+      },
+      "2020": {
+        "trades": 29,
+        "gross_pnl": -60583.0541,
+        "costs": 2505.3,
+        "net_pnl": -63088.3541,
+        "win_rate": 0.0
+      },
+      "2021": {
+        "trades": 20,
+        "gross_pnl": 311660.522,
+        "costs": 3097.48,
+        "net_pnl": 308563.042,
+        "win_rate": 35.0
+      }
+    },
+    "sum_yearly_trades": 150,
+    "total_authoritative_trades": 150,
+    "trade_count_conserved": true,
+    "sum_yearly_net_pnl": -45060.6292,
+    "total_authoritative_net_pnl": -45060.6292,
+    "pnl_conserved": true
+  },
+  "strat_mean_reversion_v2": {
+    "strategy_name": "Mean Reversion V2 Strategy",
+    "yearly_breakdown": {
+      "2016": {
+        "trades": 7,
+        "gross_pnl": -14429.7526,
+        "costs": 968.57,
+        "net_pnl": -15398.3226,
+        "win_rate": 0.0
+      },
+      "2017": {
+        "trades": 57,
+        "gross_pnl": -114031.8264,
+        "costs": 9229.96,
+        "net_pnl": -123261.7864,
+        "win_rate": 5.263157894736842
+      },
+      "2018": {
+        "trades": 26,
+        "gross_pnl": -91953.8699,
+        "costs": 5070.94,
+        "net_pnl": -97024.8099,
+        "win_rate": 0.0
+      },
+      "2019": {
+        "trades": 41,
+        "gross_pnl": -18318.2998,
+        "costs": 3654.59,
+        "net_pnl": -21972.8898,
+        "win_rate": 4.878048780487805
+      },
+      "2020": {
+        "trades": 29,
+        "gross_pnl": 21089.274,
+        "costs": 936.31,
+        "net_pnl": 20152.964,
+        "win_rate": 3.4482758620689653
+      },
+      "2021": {
+        "trades": 26,
+        "gross_pnl": 356190.2356,
+        "costs": 5139.98,
+        "net_pnl": 351050.2556,
+        "win_rate": 53.84615384615385
+      }
+    },
+    "sum_yearly_trades": 186,
+    "total_authoritative_trades": 186,
+    "trade_count_conserved": true,
+    "sum_yearly_net_pnl": 113545.4109,
+    "total_authoritative_net_pnl": 113545.4109,
+    "pnl_conserved": true
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "experiment_id": "daa29484-243e-4018-a072-7d06cc256422",
+    "strategy_id": "strat_trend_pullback_v2",
+    "config_hash": "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523",
+    "phase": "M3B.3_DEVELOPMENT_TRIAGE",
+    "outcome_status": "ABANDON_FAMILY",
+    "rationale": "Structurally negative gross edge prior to execution costs.",
+    "timestamp": "2026-07-30"
+  },
+  {
+    "experiment_id": "9fe06905-eb8e-4f33-bfc1-a02cd5b23336",
+    "strategy_id": "strat_breakout_confirm_v2",
+    "config_hash": "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213",
+    "phase": "M3B.3_DEVELOPMENT_TRIAGE",
+    "outcome_status": "ONE_FINAL_HYPOTHESIS_REVISION_ALLOWED",
+    "rationale": "Edge is positive but outlier-dependent and friction-sensitive. Requires structural hypothesis revision before V3.",
+    "timestamp": "2026-07-30"
+  },
+  {
+    "experiment_id": "7af38685-8f09-47bb-a2f8-f8c94014ad09",
+    "strategy_id": "strat_momentum_rs_v2",
+    "config_hash": "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d",
+    "phase": "M3B.3_DEVELOPMENT_TRIAGE",
+    "outcome_status": "ABANDON_FAMILY",
+    "rationale": "Structurally negative gross edge prior to execution costs.",
+    "timestamp": "2026-07-30"
+  },
+  {
+    "experiment_id": "d598b681-d3d1-4b74-af4b-e6a42b2cfeba",
+    "strategy_id": "strat_mean_reversion_v2",
+    "config_hash": "8bf0965a6c0ed6a234424a66b6324bdaaa3e96b10e9873b63e314bf4bd553b82",
+    "phase": "M3B.3_DEVELOPMENT_TRIAGE",
+    "outcome_status": "ONE_FINAL_HYPOTHESIS_REVISION_ALLOWED",
+    "rationale": "Edge is positive but outlier-dependent and friction-sensitive. Requires structural hypothesis revision before V3.",
+    "timestamp": "2026-07-30"
+  }
+]
