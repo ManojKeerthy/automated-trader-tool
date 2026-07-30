@@ -1,0 +1,98 @@
+{
+  "strat_breakout_confirm_v3": {
+    "strategy_name": "Breakout Confirmation V3 Strategy",
+    "config_hash": "5aea0997a98ec0775d2e5a17cfdc3d982335d57e6c8d240a9e163c1a15e9f9db",
+    "gate_evaluation": {
+      "criteria_evaluations": {
+        "win_rate": {
+          "observed_value": 10.273972602739725,
+          "required_threshold": ">= 35.0%",
+          "operator": ">=",
+          "gate_result": "FAIL",
+          "provenance_quality": "PREDECLARED_HEURISTIC"
+        },
+        "profit_factor": {
+          "observed_value": 1.1953480651180328,
+          "required_threshold": ">= 1.30",
+          "operator": ">=",
+          "gate_result": "FAIL",
+          "provenance_quality": "PREDECLARED_AND_JUSTIFIED"
+        },
+        "expectancy_r": {
+          "observed_value": -0.9257639195182132,
+          "required_threshold": ">= +0.25 R",
+          "operator": ">=",
+          "gate_result": "FAIL",
+          "provenance_quality": "PREDECLARED_AND_JUSTIFIED"
+        },
+        "max_drawdown": {
+          "observed_value": 21.3819054091361,
+          "required_threshold": "<= 25.0%",
+          "operator": "<=",
+          "gate_result": "PASS",
+          "provenance_quality": "PREDECLARED_HEURISTIC"
+        },
+        "semester_concentration": {
+          "observed_value": 20.0,
+          "required_threshold": "<= 40.0%",
+          "operator": "<=",
+          "gate_result": "PASS",
+          "provenance_quality": "PREDECLARED_AND_JUSTIFIED"
+        }
+      },
+      "overall_gate_result": "FAIL",
+      "final_decision": "ABANDON_FAMILY",
+      "validation_status": "BLOCKED"
+    },
+    "final_m3b4_decision": "ABANDON_FAMILY",
+    "validation_status": "BLOCKED"
+  },
+  "strat_mean_reversion_v3": {
+    "strategy_name": "Mean Reversion V3 Strategy",
+    "config_hash": "6614319220e49c05824e88bdbc0ab1f7dbb7b4cd0e129535aa6f9b70cc1a8624",
+    "gate_evaluation": {
+      "criteria_evaluations": {
+        "win_rate": {
+          "observed_value": 12.5,
+          "required_threshold": ">= 35.0%",
+          "operator": ">=",
+          "gate_result": "FAIL",
+          "provenance_quality": "PREDECLARED_HEURISTIC"
+        },
+        "profit_factor": {
+          "observed_value": 1.7762505376219042,
+          "required_threshold": ">= 1.30",
+          "operator": ">=",
+          "gate_result": "PASS",
+          "provenance_quality": "PREDECLARED_AND_JUSTIFIED"
+        },
+        "expectancy_r": {
+          "observed_value": -101.84780186063907,
+          "required_threshold": ">= +0.25 R",
+          "operator": ">=",
+          "gate_result": "FAIL",
+          "provenance_quality": "PREDECLARED_AND_JUSTIFIED"
+        },
+        "max_drawdown": {
+          "observed_value": 15.97481302503125,
+          "required_threshold": "<= 25.0%",
+          "operator": "<=",
+          "gate_result": "PASS",
+          "provenance_quality": "PREDECLARED_HEURISTIC"
+        },
+        "semester_concentration": {
+          "observed_value": 20.0,
+          "required_threshold": "<= 40.0%",
+          "operator": "<=",
+          "gate_result": "PASS",
+          "provenance_quality": "PREDECLARED_AND_JUSTIFIED"
+        }
+      },
+      "overall_gate_result": "FAIL",
+      "final_decision": "ABANDON_FAMILY",
+      "validation_status": "BLOCKED"
+    },
+    "final_m3b4_decision": "ABANDON_FAMILY",
+    "validation_status": "BLOCKED"
+  }
+}

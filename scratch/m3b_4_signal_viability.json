@@ -1,0 +1,16 @@
+{
+  "strat_breakout_confirm_v3": {
+    "strategy_name": "Breakout Confirmation V3 Strategy",
+    "raw_signal_count": 751,
+    "active_instruments": 50,
+    "active_years": 6,
+    "signal_viability_status": "VIABLE"
+  },
+  "strat_mean_reversion_v3": {
+    "strategy_name": "Mean Reversion V3 Strategy",
+    "raw_signal_count": 714,
+    "active_instruments": 50,
+    "active_years": 6,
+    "signal_viability_status": "VIABLE"
+  }
+}
