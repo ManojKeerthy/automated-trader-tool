@@ -140,21 +140,16 @@ class ExecutionSimulator:
         total_required_cash = (actual_fill_price * quantity) + cost_breakdown.total
 
         if total_required_cash > available_cash:
-            # Resize quantity downward to fit cash if possible, or reject
-            max_qty = int(available_cash // actual_fill_price)
-            if max_qty >= 1:
-                # Recalculate with resized quantity
-                quantity = max_qty
-                cost_breakdown = self.cost_model.calculate_buy(
-                    actual_fill_price, quantity, execution_date
-                )
-                total_required_cash = (actual_fill_price * quantity) + cost_breakdown.total
-                if total_required_cash > available_cash and quantity > 1:
-                    quantity -= 1
+            # Resize quantity downward iteratively to fit cash including all costs
+            while total_required_cash > available_cash and quantity >= 1:
+                quantity -= 1
+                if quantity >= 1:
                     cost_breakdown = self.cost_model.calculate_buy(
                         actual_fill_price, quantity, execution_date
                     )
-            else:
+                    total_required_cash = (actual_fill_price * quantity) + cost_breakdown.total
+
+            if quantity < 1:
                 return ExecutionResult(
                     order_intent=order,
                     execution_date=execution_date,

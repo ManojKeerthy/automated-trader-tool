@@ -10,6 +10,7 @@ Enforces:
 - Signal timing (T -> T+1 execution)
 - Deterministic reproducible results
 """
+from enum import Enum
 import logging
 import uuid
 from dataclasses import dataclass, field
@@ -22,7 +23,7 @@ from sqlalchemy.orm import Session
 
 from tradecraft.backtesting.benchmark import Benchmark, BenchmarkResult
 from tradecraft.backtesting.clock import HistoricalClock
-from tradecraft.backtesting.costs import CostModel, IndianEquityDeliveryCostModel
+from tradecraft.backtesting.costs import CostModel, CostBreakdown, IndianEquityDeliveryCostModel
 from tradecraft.backtesting.data_portal import DataPortal
 from tradecraft.backtesting.execution import ExecutionSimulator, OrderIntent
 from tradecraft.backtesting.metrics import BacktestMetricsSummary, MetricsEngine
@@ -32,6 +33,7 @@ from tradecraft.backtesting.slippage import FixedBasisPointSlippage, SlippageMod
 from tradecraft.backtesting.trade_ledger import TradeLedger, TradeRecord
 from tradecraft.instruments.universe import PointInTimeUniverse
 from tradecraft.research.risk_free_rate import RiskFreeRateConfig
+from tradecraft.research.sizing import ResearchSizingCalculator
 from tradecraft.strategy.base import ExitSignal, SignalIntent, Strategy
 
 logger = logging.getLogger(__name__)
@@ -41,6 +43,13 @@ TRUSTWORTHY = "TRUSTWORTHY"
 RESEARCH_ONLY = "RESEARCH_ONLY"
 UNVERIFIED = "UNVERIFIED"
 BLOCKED = "BLOCKED"
+
+
+class EndOfBacktestPolicy(Enum):
+    """Policy for handling open positions when a backtest window reaches end_date."""
+
+    MARK_TO_MARKET = "MARK_TO_MARKET"
+    FORCE_CLOSE = "FORCE_CLOSE"
 
 
 @dataclass
@@ -58,6 +67,7 @@ class BacktestConfig:
     risk_free_config: RiskFreeRateConfig = field(default_factory=RiskFreeRateConfig)
     risk_hook: RiskHook = field(default_factory=BasicCapitalGuard)
     allow_unverified_universe: bool = True  # If True, classifies run as UNVERIFIED/RESEARCH_ONLY
+    end_of_backtest_policy: EndOfBacktestPolicy = EndOfBacktestPolicy.MARK_TO_MARKET
 
 
 @dataclass
@@ -140,10 +150,11 @@ class BacktestEngine:
 
         portal.preload(inst_ids)
 
-        # 3. Setup Portfolio, Simulator, Ledger
+        # 3. Setup Portfolio, Simulator, Ledger & Sizer
         portfolio = Portfolio(initial_capital=config.initial_capital)
         simulator = ExecutionSimulator(config.cost_model, config.slippage_model)
         ledger = TradeLedger(run_id)
+        sizing_calculator = ResearchSizingCalculator(allocation_pct=Decimal("0.10"))
 
         # Queued order intents for session T+1 execution
         pending_entry_orders: list[OrderIntent] = []
@@ -182,9 +193,8 @@ class BacktestEngine:
                         )
                         if exec_res and exec_res.filled:
                             daily_sold_instruments.add((current_date, pos.instrument_id))
-                            em = entry_meta.get(pos.instrument_id, {})
-                            sig_dt = em.get("signal_date", current_date)
-                            entry_costs = em.get("entry_costs", exec_res.costs)
+                            sig_dt = pos.signal_date or pos.entry_date
+                            entry_costs = pos.entry_costs_breakdown or CostBreakdown()
 
                             # Record in ledger
                             ledger.record_trade(
@@ -233,9 +243,8 @@ class BacktestEngine:
                     )
                     if exec_res and exec_res.filled:
                         daily_sold_instruments.add((current_date, pos.instrument_id))
-                        em = entry_meta.get(pos.instrument_id, {})
-                        sig_dt = em.get("signal_date", current_date)
-                        entry_costs = em.get("entry_costs", exec_res.costs)
+                        sig_dt = pos.signal_date or pos.entry_date
+                        entry_costs = pos.entry_costs_breakdown or CostBreakdown()
 
                         ledger.record_trade(
                             instrument_id=pos.instrument_id,
@@ -265,6 +274,15 @@ class BacktestEngine:
             for order in list(pending_entry_orders):
                 bar = portal.get_bar(order.instrument_id, current_date)
                 if bar:
+                    # Resolve unsized orders using approved ResearchSizingCalculator (10% allocation)
+                    if order.quantity_hint is None or order.quantity_hint <= 0:
+                        est_fill = simulator.slippage_model.apply(bar["open"], order.direction, 0)
+                        size_res = sizing_calculator.calculate_quantity(
+                            portfolio.total_equity, portfolio.cash, est_fill
+                        )
+                        if size_res.is_valid and size_res.quantity >= 1:
+                            order.quantity_hint = size_res.quantity
+
                     # Apply risk hook
                     filtered_order = config.risk_hook.filter_order(order, portfolio)
                     if filtered_order:
@@ -274,11 +292,7 @@ class BacktestEngine:
                             filtered_order, bar, current_date, portfolio.cash
                         )
                         if exec_res.filled:
-                            pos = portfolio.process_entry_fill(exec_res, sym)
-                            entry_meta[pos.instrument_id] = {
-                                "signal_date": order.signal_date,
-                                "entry_costs": exec_res.costs,
-                            }
+                            pos = portfolio.process_entry_fill(exec_res, sym, signal_date=order.signal_date)
 
             pending_entry_orders.clear()
 
@@ -318,6 +332,55 @@ class BacktestEngine:
                     )
                 elif isinstance(sig, ExitSignal):
                     pending_exit_signals.append(sig)
+
+        # 4.5. Process EndOfBacktestPolicy.FORCE_CLOSE if configured
+        if config.end_of_backtest_policy == EndOfBacktestPolicy.FORCE_CLOSE and portfolio.positions:
+            final_date = config.end_date
+            for inst_id, pos in list(portfolio.positions.items()):
+                bar = portal.get_bar(inst_id, final_date)
+                if bar:
+                    is_first_sell = (final_date, pos.instrument_id) not in daily_sold_instruments
+                    force_exit_sig = ExitSignal(
+                        instrument_id=pos.instrument_id,
+                        reason="END_OF_BACKTEST",
+                    )
+                    exec_res = simulator.simulate_exit_execution(
+                        position_id=pos.position_id,
+                        strategy_id=pos.strategy_id,
+                        strategy_version=pos.strategy_version,
+                        instrument_id=pos.instrument_id,
+                        quantity=pos.quantity,
+                        stop_loss_level=pos.current_stop,
+                        target_level=pos.current_target,
+                        exit_signal=force_exit_sig,
+                        bar=bar,
+                        execution_date=final_date,
+                        is_first_isin_sell_today=is_first_sell,
+                    )
+                    if exec_res and exec_res.filled:
+                        daily_sold_instruments.add((final_date, pos.instrument_id))
+                        sig_dt = pos.signal_date or pos.entry_date
+                        entry_costs = pos.entry_costs_breakdown or CostBreakdown()
+
+                        ledger.record_trade(
+                            instrument_id=pos.instrument_id,
+                            symbol=pos.symbol,
+                            strategy_name=pos.strategy_id,
+                            strategy_version=pos.strategy_version,
+                            signal_date=sig_dt,
+                            entry_date=pos.entry_date,
+                            entry_price=pos.avg_entry_price,
+                            exit_date=final_date,
+                            exit_price=exec_res.fill_price,  # type: ignore
+                            quantity=exec_res.quantity,
+                            entry_costs=entry_costs,
+                            exit_costs=exec_res.costs,
+                            slippage_cost=exec_res.slippage_cost,
+                            exit_reason="END_OF_BACKTEST",
+                        )
+                        portfolio.process_exit_fill(exec_res)
+            # Re-record final equity snapshot with zero open positions and updated cash
+            portfolio.mark_to_market(final_date, {})
 
         # 5. Compute Validation Metrics
         metrics_engine = MetricsEngine(config.risk_free_config)

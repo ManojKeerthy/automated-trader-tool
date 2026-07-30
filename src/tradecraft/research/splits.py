@@ -15,13 +15,16 @@ class DataSplit:
     is_untouched_final: bool = False
 
 
-# Approved M3B Data Splits
-TRAIN_SPLIT = DataSplit(
-    name="TRAIN",
+# Approved M3B.2 Data Splits
+DEVELOPMENT_SPLIT = DataSplit(
+    name="DEVELOPMENT",
     start_date=date(2016, 8, 1),
     end_date=date(2021, 12, 31),
     is_untouched_final=False,
 )
+
+# Backward compatibility alias
+TRAIN_SPLIT = DEVELOPMENT_SPLIT
 
 VALIDATION_SPLIT = DataSplit(
     name="VALIDATION",

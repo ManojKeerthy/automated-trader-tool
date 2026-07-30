@@ -66,6 +66,12 @@ class TradeLedger:
         stop_loss_level: Decimal | None = None,
     ) -> TradeRecord:
         """Create and store a trade audit record."""
+        if not (signal_date < entry_date <= exit_date):
+            raise ValueError(
+                f"Temporal invariant violation for {symbol}: signal_date ({signal_date}) < "
+                f"entry_date ({entry_date}) <= exit_date ({exit_date}) is required."
+            )
+
         gross_pnl = (exit_price - entry_price) * quantity
         total_fees = entry_costs.total + exit_costs.total
         net_pnl = gross_pnl - total_fees
@@ -104,6 +110,7 @@ class TradeLedger:
             exit_reason=exit_reason,
             stop_loss_level=stop_loss_level,
             fees_breakdown=combined_fees.to_dict(),
+            metadata_json={"entry_costs": entry_costs.to_dict(), "exit_costs": exit_costs.to_dict()},
         )
         self.trades.append(record)
         return record

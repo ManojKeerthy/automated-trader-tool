@@ -33,29 +33,37 @@ from tradecraft.strategy.trend_pullback import TrendPullbackStrategy
 
 logger = logging.getLogger(__name__)
 
-# Mandatory TRAIN boundary cutoff
-MAX_ALLOWED_TRAIN_DATE = date(2021, 12, 31)
-MIN_ALLOWED_TRAIN_DATE = date(2016, 8, 1)
+# Mandatory DEVELOPMENT boundary cutoff
+MAX_ALLOWED_DEVELOPMENT_DATE = date(2021, 12, 31)
+MIN_ALLOWED_DEVELOPMENT_DATE = date(2016, 8, 1)
+
+# Backward compatibility constants
+MAX_ALLOWED_TRAIN_DATE = MAX_ALLOWED_DEVELOPMENT_DATE
+MIN_ALLOWED_TRAIN_DATE = MIN_ALLOWED_DEVELOPMENT_DATE
 
 
-class TrainOnlyGuard:
-    """Hard firewall preventing any diagnostic or query code from accessing post-2021 data."""
+class DevelopmentOnlyGuard:
+    """Hard firewall preventing any diagnostic, search, or evaluation code from accessing post-2021 data."""
 
     @staticmethod
     def validate_date(dt: date) -> None:
-        if dt > MAX_ALLOWED_TRAIN_DATE:
+        if dt > MAX_ALLOWED_DEVELOPMENT_DATE:
             raise DataBoundaryViolationError(
-                f"Data boundary violation! Requested date {dt} exceeds TRAIN cutoff {MAX_ALLOWED_TRAIN_DATE}. "
-                "Validation (2022-01-01..) and Final Test (2024-07-01..) ranges remain STRICTLY PROHIBITED during M3B.1."
+                f"Data boundary violation! Requested date {dt} exceeds DEVELOPMENT cutoff {MAX_ALLOWED_DEVELOPMENT_DATE}. "
+                "Validation (2022-01-01..) and Final Test (2024-07-01..) ranges remain STRICTLY PROHIBITED during M3B.2."
             )
 
     @staticmethod
     def validate_range(start_date: date, end_date: date) -> None:
-        if start_date > MAX_ALLOWED_TRAIN_DATE or end_date > MAX_ALLOWED_TRAIN_DATE:
+        if start_date > MAX_ALLOWED_DEVELOPMENT_DATE or end_date > MAX_ALLOWED_DEVELOPMENT_DATE:
             raise DataBoundaryViolationError(
-                f"Data boundary violation! Range [{start_date} -> {end_date}] overlaps post-TRAIN dates (> {MAX_ALLOWED_TRAIN_DATE}). "
+                f"Data boundary violation! Range [{start_date} -> {end_date}] overlaps post-DEVELOPMENT dates (> {MAX_ALLOWED_DEVELOPMENT_DATE}). "
                 "Validation and Final Test datasets MUST REMAIN 100% UNOBSERVED."
             )
+
+
+# Backward compatibility alias
+TrainOnlyGuard = DevelopmentOnlyGuard
 
 
 @dataclass

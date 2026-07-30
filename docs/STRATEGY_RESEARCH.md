@@ -58,6 +58,15 @@ The "because" is critical. A pattern without a plausible economic or behavioural
 ### Step 7: Out-of-Sample Testing
 - Apply strategy to withheld data period
 - Results must be consistent with in-sample (accounting for variance)
+
+## 8. M3B.2 Revision Governance & Anti-Hallucination Rules
+
+- **Dataset Terminology**: `2016-08-01` to `2021-12-31` is formally named `DEVELOPMENT` (consumed research data).
+- **Out-of-Sample Firewalls**: `VALIDATION` (`2022-01-01` to `2024-06-30`) and `FINAL TEST` (`2024-07-01` to `2026-07-28`) are STRICTLY UNOBSERVED.
+- **Blind Signal Viability**: Signal viability must be judged without calculating or exposing P&L / returns.
+- **Predeclared Robustness**: Parameter perturbation neighbourhoods must be predeclared before P&L exposure. Robustness variants never replace frozen canonical V2.
+- **Immutable Research Ledger**: All evaluated configurations, hashes, and lineages are recorded in `ImmutableResearchLedger`.
+
 - Significant degradation invalidates the strategy
 
 ### Step 8: Walk-Forward Analysis

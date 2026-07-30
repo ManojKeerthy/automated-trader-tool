@@ -1,0 +1,181 @@
+[
+  {
+    "experiment_id": "exp_m3b_2_1_corrected_rerun",
+    "strategy_family": "Trend Pullback V2 Strategy",
+    "strategy_id": "strat_trend_pullback_v2",
+    "parent_strategy_id": "strat_trend_pullback",
+    "config_hash": "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523",
+    "parameters": {
+      "trend_ma": 50,
+      "pullback_ema": 20,
+      "atr_dist_max": 2.0,
+      "atr_stop_mult": 2.0
+    },
+    "hypothesis_statement": "HYPOTHESIS V2: Stocks in established medium-term uptrends (Close > SMA50) that experience orderly pullbacks toward their 20-period EMA baseline and subsequently exhibit a daily price resumption trigger (Close > Previous Day High) offer positive continuation expectancy with deterministic ATR stop placement.",
+    "parameter_origins": [
+      {
+        "param": "trend_ma",
+        "origin": "MARKET_CONVENTION"
+      },
+      {
+        "param": "pullback_ema",
+        "origin": "ECONOMIC_RATIONALE"
+      },
+      {
+        "param": "atr_dist_max",
+        "origin": "SIGNAL_VIABILITY_CALIBRATION"
+      },
+      {
+        "param": "atr_stop_mult",
+        "origin": "PRIOR_CANONICAL"
+      }
+    ],
+    "phase": "PHASE_D_DEVELOPMENT_CORRECTED_RERUN",
+    "timestamp": "2026-07-29",
+    "data_range_accessed": "DEVELOPMENT (2016-08-01 -> 2021-12-31)",
+    "metrics_exposed": [
+      "trades",
+      "net_pnl",
+      "expectancy_r",
+      "win_rate",
+      "profit_factor",
+      "drawdown"
+    ],
+    "outcome_status": "V2_DEVELOPMENT_FAILURE",
+    "rejection_reason": "Net Expectancy_R <= 0 (-9.8684 <= 0.0); Profit Factor <= 1.0 (0.29 <= 1.0)",
+    "next_permitted_state": "RESEARCH_GRAVEYARD"
+  },
+  {
+    "experiment_id": "exp_m3b_2_1_corrected_rerun",
+    "strategy_family": "Breakout Confirmation V2 Strategy",
+    "strategy_id": "strat_breakout_confirm_v2",
+    "parent_strategy_id": "strat_breakout_confirm",
+    "config_hash": "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213",
+    "parameters": {
+      "channel_period": 20,
+      "max_consolidation_pct": 0.2,
+      "rvol_min": 1.2,
+      "atr_stop_mult": 1.5
+    },
+    "hypothesis_statement": "HYPOTHESIS V2: Stocks emerging from a 20-day channel consolidation width <= 20% that achieve a point-in-time Donchian 20-day high breakout with RVOL >= 1.2 exhibit positive continuation momentum.",
+    "parameter_origins": [
+      {
+        "param": "channel_period",
+        "origin": "MARKET_CONVENTION"
+      },
+      {
+        "param": "max_consolidation_pct",
+        "origin": "SIGNAL_VIABILITY_CALIBRATION"
+      },
+      {
+        "param": "rvol_min",
+        "origin": "ECONOMIC_RATIONALE"
+      },
+      {
+        "param": "atr_stop_mult",
+        "origin": "PRIOR_CANONICAL"
+      }
+    ],
+    "phase": "PHASE_D_DEVELOPMENT_CORRECTED_RERUN",
+    "timestamp": "2026-07-29",
+    "data_range_accessed": "DEVELOPMENT (2016-08-01 -> 2021-12-31)",
+    "metrics_exposed": [
+      "trades",
+      "net_pnl",
+      "expectancy_r",
+      "win_rate",
+      "profit_factor",
+      "drawdown"
+    ],
+    "outcome_status": "V2_DEVELOPMENT_FAILURE",
+    "rejection_reason": "Net Expectancy_R <= 0 (-1.8603 <= 0.0); Profit Factor <= 1.0 (0.56 <= 1.0)",
+    "next_permitted_state": "RESEARCH_GRAVEYARD"
+  },
+  {
+    "experiment_id": "exp_m3b_2_1_corrected_rerun",
+    "strategy_family": "Momentum Relative Strength V2 Strategy",
+    "strategy_id": "strat_momentum_rs_v2",
+    "parent_strategy_id": "strat_momentum_rs",
+    "config_hash": "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d",
+    "parameters": {
+      "rs_lookback": 63,
+      "top_percentile_cutoff": 0.25,
+      "atr_stop_mult": 2.5
+    },
+    "hypothesis_statement": "HYPOTHESIS V2: Stocks ranking in the top 25th percentile of 63-day relative strength performance when benchmark trend is bullish exhibit trend continuation edge.",
+    "parameter_origins": [
+      {
+        "param": "rs_lookback",
+        "origin": "MARKET_CONVENTION"
+      },
+      {
+        "param": "top_percentile_cutoff",
+        "origin": "SIGNAL_VIABILITY_CALIBRATION"
+      },
+      {
+        "param": "atr_stop_mult",
+        "origin": "PRIOR_CANONICAL"
+      }
+    ],
+    "phase": "PHASE_D_DEVELOPMENT_CORRECTED_RERUN",
+    "timestamp": "2026-07-29",
+    "data_range_accessed": "DEVELOPMENT (2016-08-01 -> 2021-12-31)",
+    "metrics_exposed": [
+      "trades",
+      "net_pnl",
+      "expectancy_r",
+      "win_rate",
+      "profit_factor",
+      "drawdown"
+    ],
+    "outcome_status": "V2_DEVELOPMENT_FAILURE",
+    "rejection_reason": "Net Expectancy_R <= 0 (-1.3088 <= 0.0); Profit Factor <= 1.0 (0.17 <= 1.0); Single instrument profit share too high (57.96% > 40.0%)",
+    "next_permitted_state": "RESEARCH_GRAVEYARD"
+  },
+  {
+    "experiment_id": "exp_m3b_2_1_corrected_rerun",
+    "strategy_family": "Mean Reversion V2 Strategy",
+    "strategy_id": "strat_mean_reversion_v2",
+    "parent_strategy_id": "strat_mean_reversion",
+    "config_hash": "8bf0965a6c0ed6a234424a66b6324bdaaa3e96b10e9873b63e314bf4bd553b82",
+    "parameters": {
+      "rsi_oversold": 40.0,
+      "displacement_atr": 1.0,
+      "max_holding_days": 5,
+      "atr_stop_mult": 1.5
+    },
+    "hypothesis_statement": "HYPOTHESIS V2: Stocks in long-term structural uptrends (Close > SMA200) experiencing a moderated short-term pullback (RSI(5) <= 40.0) with price displacement >= 1.0 ATR below SMA20 exhibit short-term mean reversion.",
+    "parameter_origins": [
+      {
+        "param": "rsi_oversold",
+        "origin": "SIGNAL_VIABILITY_CALIBRATION"
+      },
+      {
+        "param": "displacement_atr",
+        "origin": "ECONOMIC_RATIONALE"
+      },
+      {
+        "param": "max_holding_days",
+        "origin": "STRUCTURAL_REQUIREMENT"
+      },
+      {
+        "param": "atr_stop_mult",
+        "origin": "PRIOR_CANONICAL"
+      }
+    ],
+    "phase": "PHASE_D_DEVELOPMENT_CORRECTED_RERUN",
+    "timestamp": "2026-07-29",
+    "data_range_accessed": "DEVELOPMENT (2016-08-01 -> 2021-12-31)",
+    "metrics_exposed": [
+      "trades",
+      "net_pnl",
+      "expectancy_r",
+      "win_rate",
+      "profit_factor",
+      "drawdown"
+    ],
+    "outcome_status": "V2_DEVELOPMENT_FAILURE",
+    "rejection_reason": "Net Expectancy_R <= 0 (-2.9358 <= 0.0); Profit Factor <= 1.0 (0.34 <= 1.0); Single instrument profit share too high (94.74% > 40.0%)",
+    "next_permitted_state": "RESEARCH_GRAVEYARD"
+  }
+]

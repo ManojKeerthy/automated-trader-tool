@@ -140,7 +140,7 @@ class Strategy(Protocol):
         self,
         current_date: date,
         data_portal: DataPortal,
-    ) -> list[SignalIntent | ExitSignal]:
+    ) -> Any:
         """Evaluate strategy at current_date and produce signals.
 
         Args:

@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
 
+from tradecraft.backtesting.costs import CostBreakdown
 from tradecraft.backtesting.execution import ExecutionResult
 
 
@@ -27,6 +28,8 @@ class Position:
     avg_entry_price: Decimal
     entry_date: date
     entry_fees: Decimal
+    signal_date: date | None = None
+    entry_costs_breakdown: CostBreakdown | None = None
     current_stop: Decimal | None = None
     current_target: Decimal | None = None
     unrealised_pnl: Decimal = Decimal("0")
@@ -82,8 +85,8 @@ class Portfolio:
             return Decimal("0")
         return ((self.peak_equity - eq) / self.peak_equity) * Decimal("100")
 
-    def process_entry_fill(self, execution: ExecutionResult, symbol: str) -> Position:
-        """Record a successful position entry fill."""
+    def process_entry_fill(self, execution: ExecutionResult, symbol: str, signal_date: date | None = None) -> Position:
+        """Record a successful position entry fill. Returns Position object."""
         assert execution.fill_price is not None
         assert execution.filled
 
@@ -91,13 +94,14 @@ class Portfolio:
 
         if total_cost > self.cash:
             raise ValueError(
-                f"Cannot process fill: cost ₹{total_cost:.2f} exceeds cash ₹{self.cash:.2f}"
+                f"Insufficient cash for entry: required ₹{total_cost:.2f}, available ₹{self.cash:.2f}"
             )
 
         self.cash -= total_cost
         self.total_fees_paid += execution.costs.total
 
         inst_id = execution.order_intent.instrument_id
+        sig_dt = signal_date or execution.order_intent.signal_date
 
         if inst_id in self.positions:
             # Average into existing position
@@ -107,6 +111,19 @@ class Portfolio:
             pos.quantity = total_qty
             pos.avg_entry_price = total_basis / total_qty
             pos.entry_fees += execution.costs.total
+            if pos.entry_costs_breakdown:
+                pos.entry_costs_breakdown = CostBreakdown(
+                    brokerage=pos.entry_costs_breakdown.brokerage + execution.costs.brokerage,
+                    stt=pos.entry_costs_breakdown.stt + execution.costs.stt,
+                    exchange_charges=pos.entry_costs_breakdown.exchange_charges + execution.costs.exchange_charges,
+                    gst=pos.entry_costs_breakdown.gst + execution.costs.gst,
+                    sebi_fee=pos.entry_costs_breakdown.sebi_fee + execution.costs.sebi_fee,
+                    stamp_duty=pos.entry_costs_breakdown.stamp_duty + execution.costs.stamp_duty,
+                    dp_charges=pos.entry_costs_breakdown.dp_charges + execution.costs.dp_charges,
+                    total=pos.entry_costs_breakdown.total + execution.costs.total,
+                )
+            else:
+                pos.entry_costs_breakdown = execution.costs
             pos.current_stop = execution.order_intent.stop_loss_level or pos.current_stop
             pos.current_target = execution.order_intent.target_level or pos.current_target
             return pos
@@ -121,6 +138,8 @@ class Portfolio:
                 avg_entry_price=execution.fill_price,
                 entry_date=execution.execution_date,
                 entry_fees=execution.costs.total,
+                signal_date=sig_dt,
+                entry_costs_breakdown=execution.costs,
                 current_stop=execution.order_intent.stop_loss_level,
                 current_target=execution.order_intent.target_level,
                 current_price=execution.fill_price,
@@ -150,7 +169,7 @@ class Portfolio:
         self.total_fees_paid += execution.costs.total
 
         cost_of_shares_sold = pos.avg_entry_price * execution.quantity
-        net_pnl = net_proceeds - cost_of_shares_sold
+        net_pnl = net_proceeds - (cost_of_shares_sold + pos.entry_fees)
         self.realised_pnl += net_pnl
 
         pos.quantity -= execution.quantity

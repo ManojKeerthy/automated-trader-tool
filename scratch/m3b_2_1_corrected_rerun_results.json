@@ -1,0 +1,100 @@
+[
+  {
+    "strategy_id": "strat_trend_pullback_v2",
+    "strategy_name": "Trend Pullback V2 Strategy",
+    "config_hash": "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523",
+    "scorecard": {
+      "executed_trades": 194,
+      "net_pnl_inr": -404051.2328,
+      "net_expectancy_r": -9.8684,
+      "win_rate_pct": 8.25,
+      "profit_factor": 0.29,
+      "payoff_ratio": 3.26,
+      "cagr_pct": -5.0,
+      "max_drawdown_pct": -25.0,
+      "sharpe_ratio": -0.5,
+      "max_single_instrument_profit_share_pct": 32.67,
+      "max_single_trade_profit_share_pct": 0.0,
+      "gate_pass": false,
+      "outcome_status": "V2_DEVELOPMENT_FAILURE",
+      "rejection_reasons": [
+        "Net Expectancy_R <= 0 (-9.8684 <= 0.0)",
+        "Profit Factor <= 1.0 (0.29 <= 1.0)"
+      ]
+    }
+  },
+  {
+    "strategy_id": "strat_breakout_confirm_v2",
+    "strategy_name": "Breakout Confirmation V2 Strategy",
+    "config_hash": "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213",
+    "scorecard": {
+      "executed_trades": 174,
+      "net_pnl_inr": -228933.3438,
+      "net_expectancy_r": -1.8603,
+      "win_rate_pct": 11.49,
+      "profit_factor": 0.56,
+      "payoff_ratio": 4.29,
+      "cagr_pct": -5.0,
+      "max_drawdown_pct": -25.0,
+      "sharpe_ratio": -0.5,
+      "max_single_instrument_profit_share_pct": 36.48,
+      "max_single_trade_profit_share_pct": 0.0,
+      "gate_pass": false,
+      "outcome_status": "V2_DEVELOPMENT_FAILURE",
+      "rejection_reasons": [
+        "Net Expectancy_R <= 0 (-1.8603 <= 0.0)",
+        "Profit Factor <= 1.0 (0.56 <= 1.0)"
+      ]
+    }
+  },
+  {
+    "strategy_id": "strat_momentum_rs_v2",
+    "strategy_name": "Momentum Relative Strength V2 Strategy",
+    "config_hash": "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d",
+    "scorecard": {
+      "executed_trades": 92,
+      "net_pnl_inr": -460434.6349,
+      "net_expectancy_r": -1.3088,
+      "win_rate_pct": 10.87,
+      "profit_factor": 0.17,
+      "payoff_ratio": 1.37,
+      "cagr_pct": -5.0,
+      "max_drawdown_pct": -25.0,
+      "sharpe_ratio": -0.5,
+      "max_single_instrument_profit_share_pct": 57.96,
+      "max_single_trade_profit_share_pct": 0.0,
+      "gate_pass": false,
+      "outcome_status": "V2_DEVELOPMENT_FAILURE",
+      "rejection_reasons": [
+        "Net Expectancy_R <= 0 (-1.3088 <= 0.0)",
+        "Profit Factor <= 1.0 (0.17 <= 1.0)",
+        "Single instrument profit share too high (57.96% > 40.0%)"
+      ]
+    }
+  },
+  {
+    "strategy_id": "strat_mean_reversion_v2",
+    "strategy_name": "Mean Reversion V2 Strategy",
+    "config_hash": "8bf0965a6c0ed6a234424a66b6324bdaaa3e96b10e9873b63e314bf4bd553b82",
+    "scorecard": {
+      "executed_trades": 56,
+      "net_pnl_inr": -119955.4149,
+      "net_expectancy_r": -2.9358,
+      "win_rate_pct": 10.71,
+      "profit_factor": 0.34,
+      "payoff_ratio": 2.84,
+      "cagr_pct": -5.0,
+      "max_drawdown_pct": -25.0,
+      "sharpe_ratio": -0.5,
+      "max_single_instrument_profit_share_pct": 94.74,
+      "max_single_trade_profit_share_pct": 0.0,
+      "gate_pass": false,
+      "outcome_status": "V2_DEVELOPMENT_FAILURE",
+      "rejection_reasons": [
+        "Net Expectancy_R <= 0 (-2.9358 <= 0.0)",
+        "Profit Factor <= 1.0 (0.34 <= 1.0)",
+        "Single instrument profit share too high (94.74% > 40.0%)"
+      ]
+    }
+  }
+]

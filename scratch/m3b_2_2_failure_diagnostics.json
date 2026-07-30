@@ -1,0 +1,1250 @@
+{
+  "strat_trend_pullback_v2": {
+    "strategy_name": "Trend Pullback V2 Strategy",
+    "config_hash": "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523",
+    "executed_trades": 303,
+    "gross_pnl": -159475.929,
+    "explicit_costs": 39876.82,
+    "slippage_impact": 7878.6615,
+    "net_pnl": -199352.749,
+    "edge_classification": "STRUCTURALLY_NEGATIVE_GROSS_EDGE",
+    "win_rate_pct": 10.56,
+    "payoff_ratio": 5.43,
+    "profit_factor": 0.64,
+    "exit_breakdown": {
+      "STOP_LOSS": {
+        "count": 291,
+        "pct": 96.04,
+        "win_rate_pct": 7.9,
+        "net_pnl": -433659.2711,
+        "avg_holding_days": 60.3
+      },
+      "END_OF_BACKTEST": {
+        "count": 12,
+        "pct": 3.96,
+        "win_rate_pct": 75.0,
+        "net_pnl": 234306.5221,
+        "avg_holding_days": 542.8
+      }
+    },
+    "holding_breakdown": {
+      "1-2": {
+        "count": 17,
+        "win_rate_pct": 0.0,
+        "net_pnl": -30453.8912
+      },
+      "3-5": {
+        "count": 30,
+        "win_rate_pct": 0.0,
+        "net_pnl": -34818.8204
+      },
+      "6-10": {
+        "count": 53,
+        "win_rate_pct": 0.0,
+        "net_pnl": -115261.3356
+      },
+      "11-20": {
+        "count": 45,
+        "win_rate_pct": 4.44,
+        "net_pnl": -55663.6959
+      },
+      ">20": {
+        "count": 158,
+        "win_rate_pct": 18.99,
+        "net_pnl": 36844.9941
+      }
+    },
+    "year_breakdown": {
+      "2016": {
+        "count": 31,
+        "win_rate_pct": 12.9,
+        "net_pnl": -53395.9423
+      },
+      "2017": {
+        "count": 65,
+        "win_rate_pct": 10.77,
+        "net_pnl": -76262.5195
+      },
+      "2018": {
+        "count": 47,
+        "win_rate_pct": 8.51,
+        "net_pnl": -76600.25
+      },
+      "2019": {
+        "count": 66,
+        "win_rate_pct": 9.09,
+        "net_pnl": 63061.2725
+      },
+      "2020": {
+        "count": 45,
+        "win_rate_pct": 15.56,
+        "net_pnl": -22271.3339
+      },
+      "2021": {
+        "count": 49,
+        "win_rate_pct": 8.16,
+        "net_pnl": -33883.9758
+      }
+    },
+    "autopsies": {
+      "best_5": [
+        {
+          "trade_id": "4ca2e39b-bfe6-4cf4-8aa1-52508c122339",
+          "symbol": "ADANIENT",
+          "entry_date": "2019-03-28",
+          "exit_date": "2021-12-31",
+          "holding_days": 1009,
+          "entry_price": 1215.4677170731707,
+          "exit_price": 2460.789,
+          "quantity": 123,
+          "gross_pnl": 153174.5178,
+          "total_fees": 506.86,
+          "net_pnl": 152667.6578,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "7a6d4821-6b91-4cbe-9e46-d20a8b89c904",
+          "symbol": "ICICIBANK",
+          "entry_date": "2017-10-09",
+          "exit_date": "2021-12-31",
+          "holding_days": 1544,
+          "entry_price": 644.252,
+          "exit_price": 1059.7499,
+          "quantity": 149,
+          "gross_pnl": 61909.1871,
+          "total_fees": 293.14,
+          "net_pnl": 61616.0471,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "3c1e16a4-3f9e-4b93-8d26-b7b4930e35f1",
+          "symbol": "SBIN",
+          "entry_date": "2016-08-02",
+          "exit_date": "2017-08-14",
+          "holding_days": 377,
+          "entry_price": 197.62053533980583,
+          "exit_price": 228.2558,
+          "quantity": 1030,
+          "gross_pnl": 31554.3226,
+          "total_fees": 500.94,
+          "net_pnl": 31053.3826,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "85e4ed3e-ff12-458a-9a80-0818b1a19d59",
+          "symbol": "BEL",
+          "entry_date": "2020-08-24",
+          "exit_date": "2021-10-26",
+          "holding_days": 428,
+          "entry_price": 473.23583474801063,
+          "exit_price": 525.9569,
+          "quantity": 377,
+          "gross_pnl": 19875.8416,
+          "total_fees": 432.9,
+          "net_pnl": 19442.9416,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "43e3c321-b7e5-4517-be67-3c676f49e7e9",
+          "symbol": "ICICIBANK",
+          "entry_date": "2016-08-02",
+          "exit_date": "2017-05-17",
+          "holding_days": 288,
+          "entry_price": 566.1689910112359,
+          "exit_price": 658.0308,
+          "quantity": 178,
+          "gross_pnl": 16351.402,
+          "total_fees": 256.52,
+          "net_pnl": 16094.882,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "median_5": [
+        {
+          "trade_id": "3a8ee154-a606-476f-9eba-35287e080c0b",
+          "symbol": "CIPLA",
+          "entry_date": "2021-03-22",
+          "exit_date": "2021-03-25",
+          "holding_days": 3,
+          "entry_price": 172.6863,
+          "exit_price": 163.0884,
+          "quantity": 13,
+          "gross_pnl": -124.7727,
+          "total_fees": 20.2,
+          "net_pnl": -144.9727,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "337d0643-225a-4087-aa9f-3c8e4dac5fd5",
+          "symbol": "ADANIPORTS",
+          "entry_date": "2021-04-12",
+          "exit_date": "2021-04-26",
+          "holding_days": 14,
+          "entry_price": 457.2585,
+          "exit_price": 443.0883,
+          "quantity": 10,
+          "gross_pnl": -141.702,
+          "total_fees": 25.37,
+          "net_pnl": -167.072,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "54c2f4f2-fe73-4ff4-aae7-26c4e53256c0",
+          "symbol": "BAJAJFINSV",
+          "entry_date": "2021-02-08",
+          "exit_date": "2021-03-08",
+          "holding_days": 28,
+          "entry_price": 1536.2277,
+          "exit_price": 1488.1655,
+          "quantity": 3,
+          "gross_pnl": -144.1866,
+          "total_fees": 25.44,
+          "net_pnl": -169.6266,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "73329fab-8e97-4913-bbf3-d94f542620bd",
+          "symbol": "AXISBANK",
+          "entry_date": "2019-09-04",
+          "exit_date": "2019-09-17",
+          "holding_days": 13,
+          "entry_price": 117.72343333333333,
+          "exit_price": 110.3348,
+          "quantity": 24,
+          "gross_pnl": -177.3272,
+          "total_fees": 21.43,
+          "net_pnl": -198.7572,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "9e75c229-74f8-4db7-b203-eaaa84e49fa2",
+          "symbol": "AXISBANK",
+          "entry_date": "2017-11-29",
+          "exit_date": "2017-12-06",
+          "holding_days": 7,
+          "entry_price": 152.7964,
+          "exit_price": 145.0474,
+          "quantity": 23,
+          "gross_pnl": -178.227,
+          "total_fees": 22.97,
+          "net_pnl": -201.197,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "worst_5": [
+        {
+          "trade_id": "92e1ab14-4939-445c-b234-a24a8edfd067",
+          "symbol": "ADANIENT",
+          "entry_date": "2016-08-10",
+          "exit_date": "2018-05-21",
+          "holding_days": 649,
+          "entry_price": 931.8488864077669,
+          "exit_price": 883.0882,
+          "quantity": 206,
+          "gross_pnl": -10044.7014,
+          "total_fees": 432.0,
+          "net_pnl": -10476.7014,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "4af131e3-5cbc-4844-8f5c-66f81a447cbd",
+          "symbol": "APOLLOHOSP",
+          "entry_date": "2017-09-18",
+          "exit_date": "2018-04-23",
+          "holding_days": 217,
+          "entry_price": 863.7761035714286,
+          "exit_price": 816.5015,
+          "quantity": 224,
+          "gross_pnl": -10589.5112,
+          "total_fees": 434.83,
+          "net_pnl": -11024.3412,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "71973940-4b4b-46a9-b582-8f66bd577ca4",
+          "symbol": "BAJAJ-AUTO",
+          "entry_date": "2018-05-23",
+          "exit_date": "2019-05-09",
+          "holding_days": 351,
+          "entry_price": 592.508000913242,
+          "exit_price": 567.6061,
+          "quantity": 438,
+          "gross_pnl": -10907.0326,
+          "total_fees": 581.39,
+          "net_pnl": -11488.4226,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "6a76729b-7e91-4aff-9007-4933f03e8ada",
+          "symbol": "BAJAJ-AUTO",
+          "entry_date": "2017-09-12",
+          "exit_date": "2017-10-09",
+          "holding_days": 27,
+          "entry_price": 644.5857755287009,
+          "exit_price": 609.8449,
+          "quantity": 331,
+          "gross_pnl": -11499.2298,
+          "total_fees": 478.09,
+          "net_pnl": -11977.3198,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "45ef10b0-fcb5-4ca1-8ad2-b040b9eaaf56",
+          "symbol": "BAJAJ-AUTO",
+          "entry_date": "2016-10-14",
+          "exit_date": "2016-11-01",
+          "holding_days": 18,
+          "entry_price": 712.0775855072463,
+          "exit_price": 666.1568,
+          "quantity": 276,
+          "gross_pnl": -12674.1368,
+          "total_fees": 439.44,
+          "net_pnl": -13113.5768,
+          "exit_reason": "STOP_LOSS"
+        }
+      ]
+    },
+    "failure_mechanisms": [
+      "STRUCTURALLY_NEGATIVE_EDGE",
+      "LOW_WIN_PROBABILITY",
+      "EDGE_ERODED_BY_COSTS"
+    ],
+    "family_decision": "ABANDON_FAMILY"
+  },
+  "strat_breakout_confirm_v2": {
+    "strategy_name": "Breakout Confirmation V2 Strategy",
+    "config_hash": "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213",
+    "executed_trades": 313,
+    "gross_pnl": 108904.1228,
+    "explicit_costs": 53453.34,
+    "slippage_impact": 10968.8098,
+    "net_pnl": 55450.7828,
+    "edge_classification": "POSITIVE_GROSS_EDGE_ERODED_BY_FRICTION",
+    "win_rate_pct": 11.18,
+    "payoff_ratio": 8.65,
+    "profit_factor": 1.09,
+    "exit_breakdown": {
+      "STOP_LOSS": {
+        "count": 303,
+        "pct": 96.81,
+        "win_rate_pct": 8.91,
+        "net_pnl": -358928.2975,
+        "avg_holding_days": 41.5
+      },
+      "END_OF_BACKTEST": {
+        "count": 10,
+        "pct": 3.19,
+        "win_rate_pct": 80.0,
+        "net_pnl": 414379.0803,
+        "avg_holding_days": 523.3
+      }
+    },
+    "holding_breakdown": {
+      "1-2": {
+        "count": 52,
+        "win_rate_pct": 0.0,
+        "net_pnl": -75996.1856
+      },
+      "3-5": {
+        "count": 44,
+        "win_rate_pct": 0.0,
+        "net_pnl": -102134.5048
+      },
+      "6-10": {
+        "count": 58,
+        "win_rate_pct": 0.0,
+        "net_pnl": -119221.2462
+      },
+      "11-20": {
+        "count": 39,
+        "win_rate_pct": 7.69,
+        "net_pnl": -94474.4907
+      },
+      ">20": {
+        "count": 120,
+        "win_rate_pct": 26.67,
+        "net_pnl": 447277.2101
+      }
+    },
+    "year_breakdown": {
+      "2016": {
+        "count": 36,
+        "win_rate_pct": 19.44,
+        "net_pnl": 74377.401
+      },
+      "2017": {
+        "count": 52,
+        "win_rate_pct": 9.62,
+        "net_pnl": -62247.3759
+      },
+      "2018": {
+        "count": 101,
+        "win_rate_pct": 7.92,
+        "net_pnl": -143163.2336
+      },
+      "2019": {
+        "count": 58,
+        "win_rate_pct": 6.9,
+        "net_pnl": -90493.9569
+      },
+      "2020": {
+        "count": 49,
+        "win_rate_pct": 16.33,
+        "net_pnl": 190835.1107
+      },
+      "2021": {
+        "count": 17,
+        "win_rate_pct": 17.65,
+        "net_pnl": 86142.8375
+      }
+    },
+    "autopsies": {
+      "best_5": [
+        {
+          "trade_id": "0320adc9-6a5f-43e1-9763-9cc2d6e1ea74",
+          "symbol": "HDFCLIFE",
+          "entry_date": "2020-05-12",
+          "exit_date": "2021-12-31",
+          "holding_days": 598,
+          "entry_price": 585.8171776536312,
+          "exit_price": 1301.5889,
+          "quantity": 179,
+          "gross_pnl": 128123.1383,
+          "total_fees": 381.56,
+          "net_pnl": 127741.5783,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "83646e6d-3609-4649-8a22-b5bf53f77fa0",
+          "symbol": "SUNPHARMA",
+          "entry_date": "2016-08-29",
+          "exit_date": "2021-12-31",
+          "holding_days": 1950,
+          "entry_price": 431.63719484978543,
+          "exit_price": 837.4711,
+          "quantity": 233,
+          "gross_pnl": 94559.2999,
+          "total_fees": 337.19,
+          "net_pnl": 94222.1099,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "5ad33794-a04b-4281-8ef1-4b53c4f85814",
+          "symbol": "TCS",
+          "entry_date": "2020-05-27",
+          "exit_date": "2021-12-31",
+          "holding_days": 583,
+          "entry_price": 936.9883976190476,
+          "exit_price": 1451.0741,
+          "quantity": 168,
+          "gross_pnl": 86366.398,
+          "total_fees": 455.16,
+          "net_pnl": 85911.238,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "7207f3d7-85bb-4f28-aca1-c547e062ad7e",
+          "symbol": "M&M",
+          "entry_date": "2021-01-20",
+          "exit_date": "2021-12-31",
+          "holding_days": 345,
+          "entry_price": 843.1614,
+          "exit_price": 1555.4319,
+          "quantity": 97,
+          "gross_pnl": 69090.2385,
+          "total_fees": 268.98,
+          "net_pnl": 68821.2585,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "68affb08-21f2-400d-ad96-3c5e19087c3f",
+          "symbol": "INFY",
+          "entry_date": "2016-10-26",
+          "exit_date": "2017-04-13",
+          "holding_days": 169,
+          "entry_price": 1224.1547222222223,
+          "exit_price": 1468.0156,
+          "quantity": 162,
+          "gross_pnl": 39505.4622,
+          "total_fees": 497.53,
+          "net_pnl": 39007.9322,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "median_5": [
+        {
+          "trade_id": "da9fbab0-0354-4b48-952d-67361dd9e27e",
+          "symbol": "HINDUNILVR",
+          "entry_date": "2017-12-04",
+          "exit_date": "2018-01-10",
+          "holding_days": 37,
+          "entry_price": 142.95352291970804,
+          "exit_price": 141.6691,
+          "quantity": 685,
+          "gross_pnl": -879.8297,
+          "total_fees": 232.28,
+          "net_pnl": -1112.1097,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "73646db5-1f4c-406d-a6ab-f43315f68039",
+          "symbol": "TITAN",
+          "entry_date": "2020-01-10",
+          "exit_date": "2020-04-08",
+          "holding_days": 89,
+          "entry_price": 200.5172581818182,
+          "exit_price": 194.0629,
+          "quantity": 165,
+          "gross_pnl": -1064.9691,
+          "total_fees": 87.84,
+          "net_pnl": -1152.8091,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "1067c5d7-a6d8-40b2-a717-2da3caed14f0",
+          "symbol": "CIPLA",
+          "entry_date": "2017-07-13",
+          "exit_date": "2017-07-20",
+          "holding_days": 7,
+          "entry_price": 401.5907,
+          "exit_price": 379.1203,
+          "quantity": 50,
+          "gross_pnl": -1123.52,
+          "total_fees": 58.86,
+          "net_pnl": -1182.38,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "3988713a-43a0-4ddb-a6d9-8921f98cc91d",
+          "symbol": "TITAN",
+          "entry_date": "2018-11-14",
+          "exit_date": "2018-12-28",
+          "holding_days": 44,
+          "entry_price": 231.0155,
+          "exit_price": 228.6656,
+          "quantity": 440,
+          "gross_pnl": -1033.956,
+          "total_fees": 240.41,
+          "net_pnl": -1274.366,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "729e6391-40d0-4ae5-b132-007649b845e3",
+          "symbol": "AXISBANK",
+          "entry_date": "2019-07-24",
+          "exit_date": "2019-08-05",
+          "holding_days": 12,
+          "entry_price": 116.3782,
+          "exit_price": 114.6327,
+          "quantity": 638,
+          "gross_pnl": -1113.629,
+          "total_fees": 179.38,
+          "net_pnl": -1293.009,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "worst_5": [
+        {
+          "trade_id": "0de982ae-a1dd-4547-903c-ddc106c8037f",
+          "symbol": "BAJAJFINSV",
+          "entry_date": "2018-10-12",
+          "exit_date": "2018-12-24",
+          "holding_days": 73,
+          "entry_price": 958.399,
+          "exit_price": 894.4625,
+          "quantity": 108,
+          "gross_pnl": -6905.142,
+          "total_fees": 238.47,
+          "net_pnl": -7143.612,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "57fa31a0-0ddc-4492-b832-d91ba7e4cb4f",
+          "symbol": "MARUTI",
+          "entry_date": "2017-10-18",
+          "exit_date": "2017-10-24",
+          "holding_days": 6,
+          "entry_price": 399.0794,
+          "exit_price": 374.7525,
+          "quantity": 287,
+          "gross_pnl": -6981.8203,
+          "total_fees": 262.91,
+          "net_pnl": -7244.7303,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "d090ab28-c48a-42c6-bf2b-7fdb3103f412",
+          "symbol": "ADANIPORTS",
+          "entry_date": "2018-03-08",
+          "exit_date": "2018-03-14",
+          "holding_days": 6,
+          "entry_price": 874.6401635338345,
+          "exit_price": 847.7159,
+          "quantity": 266,
+          "gross_pnl": -7161.8541,
+          "total_fees": 525.54,
+          "net_pnl": -7687.3941,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "bb9868ab-a9cf-4523-a676-c3a2d227b4a0",
+          "symbol": "BHARTIARTL",
+          "entry_date": "2017-10-24",
+          "exit_date": "2017-11-08",
+          "holding_days": 15,
+          "entry_price": 152.91161304901337,
+          "exit_price": 148.2458,
+          "quantity": 1571,
+          "gross_pnl": -7329.9923,
+          "total_fees": 542.18,
+          "net_pnl": -7872.1723,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "c44a9cea-19ed-4fc6-9b0f-0c487e745287",
+          "symbol": "ADANIENT",
+          "entry_date": "2019-01-24",
+          "exit_date": "2019-01-28",
+          "holding_days": 4,
+          "entry_price": 1214.1685719512195,
+          "exit_price": 1168.5654,
+          "quantity": 164,
+          "gross_pnl": -7478.9202,
+          "total_fees": 450.59,
+          "net_pnl": -7929.5102,
+          "exit_reason": "STOP_LOSS"
+        }
+      ]
+    },
+    "failure_mechanisms": [
+      "STRUCTURALLY_NEGATIVE_EDGE",
+      "LOW_WIN_PROBABILITY",
+      "EDGE_ERODED_BY_COSTS"
+    ],
+    "family_decision": "ABANDON_FAMILY"
+  },
+  "strat_momentum_rs_v2": {
+    "strategy_name": "Momentum Relative Strength V2 Strategy",
+    "config_hash": "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d",
+    "executed_trades": 150,
+    "gross_pnl": -24478.1792,
+    "explicit_costs": 20582.45,
+    "slippage_impact": 4104.171,
+    "net_pnl": -45060.6292,
+    "edge_classification": "STRUCTURALLY_NEGATIVE_GROSS_EDGE",
+    "win_rate_pct": 10.0,
+    "payoff_ratio": 8.05,
+    "profit_factor": 0.89,
+    "exit_breakdown": {
+      "STOP_LOSS": {
+        "count": 142,
+        "pct": 94.67,
+        "win_rate_pct": 6.34,
+        "net_pnl": -365894.9338,
+        "avg_holding_days": 97.6
+      },
+      "END_OF_BACKTEST": {
+        "count": 8,
+        "pct": 5.33,
+        "win_rate_pct": 75.0,
+        "net_pnl": 320834.3046,
+        "avg_holding_days": 539.4
+      }
+    },
+    "holding_breakdown": {
+      "1-2": {
+        "count": 1,
+        "win_rate_pct": 0.0,
+        "net_pnl": -35.8958
+      },
+      "3-5": {
+        "count": 8,
+        "win_rate_pct": 0.0,
+        "net_pnl": -24342.3603
+      },
+      "6-10": {
+        "count": 20,
+        "win_rate_pct": 0.0,
+        "net_pnl": -40682.7818
+      },
+      "11-20": {
+        "count": 31,
+        "win_rate_pct": 0.0,
+        "net_pnl": -81843.8065
+      },
+      ">20": {
+        "count": 90,
+        "win_rate_pct": 16.67,
+        "net_pnl": 101844.2152
+      }
+    },
+    "year_breakdown": {
+      "2016": {
+        "count": 34,
+        "win_rate_pct": 11.76,
+        "net_pnl": -10195.8957
+      },
+      "2017": {
+        "count": 26,
+        "win_rate_pct": 3.85,
+        "net_pnl": -60774.1795
+      },
+      "2018": {
+        "count": 23,
+        "win_rate_pct": 17.39,
+        "net_pnl": -8112.5987
+      },
+      "2019": {
+        "count": 24,
+        "win_rate_pct": 4.17,
+        "net_pnl": -78969.065
+      },
+      "2020": {
+        "count": 31,
+        "win_rate_pct": 12.9,
+        "net_pnl": 114575.4082
+      },
+      "2021": {
+        "count": 12,
+        "win_rate_pct": 8.33,
+        "net_pnl": -1584.2985
+      }
+    },
+    "autopsies": {
+      "best_5": [
+        {
+          "trade_id": "8b3c9baa-ce85-4cbc-aa02-03f6a1c2ebac",
+          "symbol": "SUNPHARMA",
+          "entry_date": "2016-09-20",
+          "exit_date": "2021-12-31",
+          "holding_days": 1928,
+          "entry_price": 432.6130396226415,
+          "exit_price": 837.4711,
+          "quantity": 424,
+          "gross_pnl": 171659.8176,
+          "total_fees": 601.5,
+          "net_pnl": 171058.3176,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "a9481d9b-45f5-44c4-bb9b-0c57ed44663d",
+          "symbol": "TCS",
+          "entry_date": "2020-05-07",
+          "exit_date": "2021-12-31",
+          "holding_days": 603,
+          "entry_price": 869.4795189054727,
+          "exit_price": 1451.0741,
+          "quantity": 201,
+          "gross_pnl": 116900.5108,
+          "total_fees": 525.41,
+          "net_pnl": 116375.1008,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "b422c63b-fdb1-4ca3-8412-361ed6a5fc77",
+          "symbol": "DRREDDY",
+          "entry_date": "2020-05-07",
+          "exit_date": "2021-12-31",
+          "holding_days": 603,
+          "entry_price": 963.2414,
+          "exit_price": 1235.8518,
+          "quantity": 93,
+          "gross_pnl": 25352.7672,
+          "total_fees": 240.94,
+          "net_pnl": 25111.8272,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "62ca1310-ccb6-4cf7-96f9-2cb95440a3ad",
+          "symbol": "ICICIBANK",
+          "entry_date": "2018-09-21",
+          "exit_date": "2018-12-18",
+          "holding_days": 88,
+          "entry_price": 868.0145299270073,
+          "exit_price": 1035.7219,
+          "quantity": 137,
+          "gross_pnl": 22975.9097,
+          "total_fees": 303.74,
+          "net_pnl": 22672.1697,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "01d01f55-b9a0-4fad-b33e-11fa782b0749",
+          "symbol": "BPCL",
+          "entry_date": "2018-11-29",
+          "exit_date": "2019-03-15",
+          "holding_days": 106,
+          "entry_price": 1668.3803839622642,
+          "exit_price": 1825.9766,
+          "quantity": 106,
+          "gross_pnl": 16705.1989,
+          "total_fees": 426.11,
+          "net_pnl": 16279.0889,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "median_5": [
+        {
+          "trade_id": "9f687cc8-823e-45a6-9f06-6ed2243336e2",
+          "symbol": "ITC",
+          "entry_date": "2016-08-29",
+          "exit_date": "2016-12-12",
+          "holding_days": 105,
+          "entry_price": 1002.9312,
+          "exit_price": 942.1187,
+          "quantity": 1,
+          "gross_pnl": -60.8125,
+          "total_fees": 17.51,
+          "net_pnl": -78.3225,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "76c89491-586f-43d7-a57b-e3ae80d8f89d",
+          "symbol": "HDFCBANK",
+          "entry_date": "2016-08-02",
+          "exit_date": "2018-10-25",
+          "holding_days": 814,
+          "entry_price": 453.3866,
+          "exit_price": 422.4487,
+          "quantity": 2,
+          "gross_pnl": -61.8758,
+          "total_fees": 17.31,
+          "net_pnl": -79.1858,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "9cfa679f-71eb-485c-b14a-63fbd1a5a062",
+          "symbol": "HINDALCO",
+          "entry_date": "2019-03-06",
+          "exit_date": "2019-03-15",
+          "holding_days": 9,
+          "entry_price": 1000.6201,
+          "exit_price": 936.5815,
+          "quantity": 1,
+          "gross_pnl": -64.0386,
+          "total_fees": 17.51,
+          "net_pnl": -81.5486,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "b8711fb8-7d30-40ac-b39b-3f6e69c313b0",
+          "symbol": "KOTAKBANK",
+          "entry_date": "2017-10-18",
+          "exit_date": "2017-11-01",
+          "holding_days": 14,
+          "entry_price": 1251.2953,
+          "exit_price": 1183.318,
+          "quantity": 1,
+          "gross_pnl": -67.9773,
+          "total_fees": 18.06,
+          "net_pnl": -86.0373,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "d58327e3-d992-4b59-a601-ece4298c1541",
+          "symbol": "POWERGRID",
+          "entry_date": "2018-01-25",
+          "exit_date": "2018-01-31",
+          "holding_days": 6,
+          "entry_price": 407.03676666666667,
+          "exit_price": 382.1288,
+          "quantity": 3,
+          "gross_pnl": -74.7239,
+          "total_fees": 17.99,
+          "net_pnl": -92.7139,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "worst_5": [
+        {
+          "trade_id": "c8fa4db6-040b-4039-ba94-a742d06a968a",
+          "symbol": "BEL",
+          "entry_date": "2016-09-15",
+          "exit_date": "2016-09-30",
+          "holding_days": 15,
+          "entry_price": 716.6694229850747,
+          "exit_price": 678.9404,
+          "quantity": 335,
+          "gross_pnl": -12639.2227,
+          "total_fees": 536.38,
+          "net_pnl": -13175.6027,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "35e7f52e-66dd-4a5b-8eff-a3abcd621d5e",
+          "symbol": "BPCL",
+          "entry_date": "2019-03-15",
+          "exit_date": "2021-10-06",
+          "holding_days": 936,
+          "entry_price": 1910.0903736842106,
+          "exit_price": 1767.0061,
+          "quantity": 95,
+          "gross_pnl": -13593.006,
+          "total_fees": 404.95,
+          "net_pnl": -13997.956,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "6fc44bbb-02d6-4ba9-a371-ac1c9359e7fc",
+          "symbol": "ADANIPORTS",
+          "entry_date": "2018-01-25",
+          "exit_date": "2018-08-07",
+          "holding_days": 194,
+          "entry_price": 842.0116926136363,
+          "exit_price": 760.8794,
+          "quantity": 176,
+          "gross_pnl": -14279.2835,
+          "total_fees": 330.23,
+          "net_pnl": -14609.5135,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "71783493-f43f-4fda-b12c-7b24fe954015",
+          "symbol": "ASIANPAINT",
+          "entry_date": "2016-08-02",
+          "exit_date": "2018-09-21",
+          "holding_days": 780,
+          "entry_price": 1204.761982142857,
+          "exit_price": 1103.2681,
+          "quantity": 224,
+          "gross_pnl": -22734.6296,
+          "total_fees": 592.14,
+          "net_pnl": -23326.7696,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "12b7ad0c-7938-457a-a7d5-55c0e31ff7b0",
+          "symbol": "ASIANPAINT",
+          "entry_date": "2019-04-26",
+          "exit_date": "2020-03-27",
+          "holding_days": 336,
+          "entry_price": 1601.3175236363636,
+          "exit_price": 1411.1841,
+          "quantity": 165,
+          "gross_pnl": -31372.0149,
+          "total_fees": 570.62,
+          "net_pnl": -31942.6349,
+          "exit_reason": "STOP_LOSS"
+        }
+      ]
+    },
+    "failure_mechanisms": [
+      "STRUCTURALLY_NEGATIVE_EDGE",
+      "LOW_WIN_PROBABILITY",
+      "EDGE_ERODED_BY_COSTS"
+    ],
+    "family_decision": "ABANDON_FAMILY"
+  },
+  "strat_mean_reversion_v2": {
+    "strategy_name": "Mean Reversion V2 Strategy",
+    "config_hash": "8bf0965a6c0ed6a234424a66b6324bdaaa3e96b10e9873b63e314bf4bd553b82",
+    "executed_trades": 186,
+    "gross_pnl": 138545.7609,
+    "explicit_costs": 25000.35,
+    "slippage_impact": 5016.8628,
+    "net_pnl": 113545.4109,
+    "edge_classification": "POSITIVE_GROSS_EDGE_ERODED_BY_FRICTION",
+    "win_rate_pct": 10.75,
+    "payoff_ratio": 11.36,
+    "profit_factor": 1.37,
+    "exit_breakdown": {
+      "STOP_LOSS": {
+        "count": 172,
+        "pct": 92.47,
+        "win_rate_pct": 5.81,
+        "net_pnl": -49833.0273,
+        "avg_holding_days": 71.7
+      },
+      "END_OF_BACKTEST": {
+        "count": 14,
+        "pct": 7.53,
+        "win_rate_pct": 71.43,
+        "net_pnl": 163378.4382,
+        "avg_holding_days": 261.6
+      }
+    },
+    "holding_breakdown": {
+      "1-2": {
+        "count": 39,
+        "win_rate_pct": 5.13,
+        "net_pnl": -35167.5292
+      },
+      "3-5": {
+        "count": 26,
+        "win_rate_pct": 3.85,
+        "net_pnl": -40353.4099
+      },
+      "6-10": {
+        "count": 20,
+        "win_rate_pct": 0.0,
+        "net_pnl": -42707.6812
+      },
+      "11-20": {
+        "count": 23,
+        "win_rate_pct": 4.35,
+        "net_pnl": -18703.7791
+      },
+      ">20": {
+        "count": 78,
+        "win_rate_pct": 20.51,
+        "net_pnl": 250477.8103
+      }
+    },
+    "year_breakdown": {
+      "2016": {
+        "count": 15,
+        "win_rate_pct": 0.0,
+        "net_pnl": -73655.6559
+      },
+      "2017": {
+        "count": 55,
+        "win_rate_pct": 5.45,
+        "net_pnl": -116196.7639
+      },
+      "2018": {
+        "count": 26,
+        "win_rate_pct": 19.23,
+        "net_pnl": 111532.9202
+      },
+      "2019": {
+        "count": 43,
+        "win_rate_pct": 4.65,
+        "net_pnl": 144375.0172
+      },
+      "2020": {
+        "count": 31,
+        "win_rate_pct": 16.13,
+        "net_pnl": 23731.328
+      },
+      "2021": {
+        "count": 16,
+        "win_rate_pct": 31.25,
+        "net_pnl": 23758.5653
+      }
+    },
+    "autopsies": {
+      "best_5": [
+        {
+          "trade_id": "c90f599e-5682-4148-badd-16dcb90e98ac",
+          "symbol": "TECHM",
+          "entry_date": "2018-08-09",
+          "exit_date": "2021-12-31",
+          "holding_days": 1240,
+          "entry_price": 1165.974096875,
+          "exit_price": 1775.2519,
+          "quantity": 192,
+          "gross_pnl": 116981.3382,
+          "total_fees": 634.78,
+          "net_pnl": 116346.5582,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "c63b247d-6164-4593-bf4e-14a7437ac987",
+          "symbol": "ADANIENT",
+          "entry_date": "2019-03-19",
+          "exit_date": "2021-12-29",
+          "holding_days": 1016,
+          "entry_price": 1570.9519977272728,
+          "exit_price": 2386.0764,
+          "quantity": 132,
+          "gross_pnl": 107596.4211,
+          "total_fees": 588.29,
+          "net_pnl": 107008.1311,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "a1ad0613-3570-4d5e-96d5-e4ca4faaf371",
+          "symbol": "BAJAJFINSV",
+          "entry_date": "2019-04-12",
+          "exit_date": "2021-12-08",
+          "holding_days": 971,
+          "entry_price": 1165.1835147826087,
+          "exit_price": 1813.8126,
+          "quantity": 115,
+          "gross_pnl": 74592.3448,
+          "total_fees": 390.86,
+          "net_pnl": 74201.4848,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "1ee21af7-a584-46d3-be57-81100f079d1f",
+          "symbol": "BAJAJFINSV",
+          "entry_date": "2021-12-09",
+          "exit_date": "2021-12-31",
+          "holding_days": 22,
+          "entry_price": 1857.0681,
+          "exit_price": 2288.815,
+          "quantity": 61,
+          "gross_pnl": 26336.5609,
+          "total_fees": 294.7,
+          "net_pnl": 26041.8609,
+          "exit_reason": "END_OF_BACKTEST"
+        },
+        {
+          "trade_id": "bd119026-a0e1-406c-bb01-9266ef5dd084",
+          "symbol": "ICICIBANK",
+          "entry_date": "2018-01-18",
+          "exit_date": "2020-11-13",
+          "holding_days": 1030,
+          "entry_price": 732.2461066666667,
+          "exit_price": 825.4671,
+          "quantity": 240,
+          "gross_pnl": 22373.0384,
+          "total_fees": 429.52,
+          "net_pnl": 21943.5184,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "median_5": [
+        {
+          "trade_id": "c777c2b2-baff-4ebf-b635-3012749e4ae1",
+          "symbol": "RELIANCE",
+          "entry_date": "2017-08-21",
+          "exit_date": "2017-09-14",
+          "holding_days": 24,
+          "entry_price": 582.1209,
+          "exit_price": 558.8604,
+          "quantity": 2,
+          "gross_pnl": -46.521,
+          "total_fees": 17.88,
+          "net_pnl": -64.401,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "fa269b01-c032-4236-983c-d7140b7645df",
+          "symbol": "BAJAJFINSV",
+          "entry_date": "2019-03-14",
+          "exit_date": "2019-03-26",
+          "holding_days": 12,
+          "entry_price": 1082.8812,
+          "exit_price": 1057.2111,
+          "quantity": 2,
+          "gross_pnl": -51.3402,
+          "total_fees": 20.09,
+          "net_pnl": -71.4302,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "61e751bb-ec6f-495c-81a4-a6832429c0ed",
+          "symbol": "INFY",
+          "entry_date": "2020-01-16",
+          "exit_date": "2020-01-21",
+          "holding_days": 5,
+          "entry_price": 1152.4559,
+          "exit_price": 1097.3411,
+          "quantity": 1,
+          "gross_pnl": -55.1148,
+          "total_fees": 17.85,
+          "net_pnl": -72.9648,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "7d377b7d-dcac-4f2b-b549-65bdc7a1a7fc",
+          "symbol": "INDUSINDBK",
+          "entry_date": "2019-12-26",
+          "exit_date": "2020-01-17",
+          "holding_days": 22,
+          "entry_price": 388.6842,
+          "exit_price": 366.9564,
+          "quantity": 3,
+          "gross_pnl": -65.1834,
+          "total_fees": 17.87,
+          "net_pnl": -83.0534,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "7aac3a29-4042-4298-9d36-92e8258999e3",
+          "symbol": "BEL",
+          "entry_date": "2019-09-18",
+          "exit_date": "2019-10-29",
+          "holding_days": 41,
+          "entry_price": 683.8418,
+          "exit_price": 647.1063,
+          "quantity": 2,
+          "gross_pnl": -73.471,
+          "total_fees": 18.31,
+          "net_pnl": -91.781,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "worst_5": [
+        {
+          "trade_id": "9cba0fb6-1d55-45a0-81ee-0b39862298fb",
+          "symbol": "NTPC",
+          "entry_date": "2018-08-02",
+          "exit_date": "2018-08-09",
+          "holding_days": 7,
+          "entry_price": 389.0651296950241,
+          "exit_price": 372.5336,
+          "quantity": 623,
+          "gross_pnl": -10299.143,
+          "total_fees": 543.94,
+          "net_pnl": -10843.083,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "4fb4c876-0604-4887-bada-f449122e3732",
+          "symbol": "HDFCBANK",
+          "entry_date": "2016-10-26",
+          "exit_date": "2017-03-07",
+          "holding_days": 132,
+          "entry_price": 476.9233083732057,
+          "exit_price": 450.8645,
+          "quantity": 418,
+          "gross_pnl": -10892.5819,
+          "total_fees": 447.58,
+          "net_pnl": -11340.1619,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "1e7d7630-0eb0-4948-a1e1-29c7d389fe3e",
+          "symbol": "ICICIBANK",
+          "entry_date": "2016-10-26",
+          "exit_date": "2017-08-01",
+          "holding_days": 279,
+          "entry_price": 629.3286826498422,
+          "exit_price": 589.1553,
+          "quantity": 317,
+          "gross_pnl": -12734.9623,
+          "total_fees": 445.98,
+          "net_pnl": -13180.9423,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "c1dc634d-070b-477d-b148-8d1535439b7e",
+          "symbol": "BAJAJFINSV",
+          "entry_date": "2017-12-12",
+          "exit_date": "2018-01-18",
+          "holding_days": 37,
+          "entry_price": 902.3167143442623,
+          "exit_price": 843.3081,
+          "quantity": 244,
+          "gross_pnl": -14398.1019,
+          "total_fees": 490.26,
+          "net_pnl": -14888.3619,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "ef54c6aa-4b81-4e1d-b8eb-c3c2085d6b23",
+          "symbol": "HDFCBANK",
+          "entry_date": "2017-09-01",
+          "exit_date": "2018-07-31",
+          "holding_days": 333,
+          "entry_price": 530.1826104208417,
+          "exit_price": 500.8994,
+          "quantity": 499,
+          "gross_pnl": -14612.322,
+          "total_fees": 588.78,
+          "net_pnl": -15201.102,
+          "exit_reason": "STOP_LOSS"
+        }
+      ]
+    },
+    "failure_mechanisms": [
+      "STRUCTURALLY_NEGATIVE_EDGE",
+      "LOW_WIN_PROBABILITY",
+      "EDGE_ERODED_BY_COSTS"
+    ],
+    "family_decision": "ABANDON_FAMILY"
+  }
+}
