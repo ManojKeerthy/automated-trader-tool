@@ -57,10 +57,10 @@ class ExperimentComparator:
             exp_vals = matrix[m]
             if exp_vals:
                 best_exp = (
-                    min(exp_vals, key=exp_vals.get)
+                    min(exp_vals, key=lambda k: exp_vals[k])
                     if lower_is_better
-                    else max(exp_vals, key=exp_vals.get)
-                )  # type: ignore[arg-type]
+                    else max(exp_vals, key=lambda k: exp_vals[k])
+                )
                 best_per_metric[m] = best_exp
 
         return ComparisonSummary(
