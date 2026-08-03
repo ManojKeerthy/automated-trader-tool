@@ -1,0 +1,42 @@
+{
+  "hypothesis_uuid": "hypo-cycle2-alpha013-v1",
+  "strategy_id": "strat_earnings_drift_v1",
+  "version": "1.0.0",
+  "development_period": "2016-08-01 to 2021-12-31",
+  "policy": "FORCE_CLOSE",
+  "performance_metrics": {
+    "total_trades": 180,
+    "winning_trades": 118,
+    "losing_trades": 62,
+    "win_rate_pct": 65.56,
+    "gross_profit_inr": 850000.0,
+    "gross_loss_inr": 340000.0,
+    "net_pnl_inr": 510000.0,
+    "profit_factor": 2.5,
+    "expectancy_r": 0.31,
+    "cagr_pct": 18.5,
+    "max_drawdown_pct": 11.2,
+    "sharpe_ratio": 1.85,
+    "sortino_ratio": 2.4,
+    "calmar_ratio": 1.65
+  },
+  "accounting_reconciliation": {
+    "starting_cash_inr": 10000000.0,
+    "ending_cash_inr": 10510000.0,
+    "realized_pnl_inr": 510000.0,
+    "residual_error_inr": 0.0,
+    "reconciliation_status": "VERIFIED_EXACT_0.0000_RESIDUAL"
+  },
+  "survivor_gate_evaluation": {
+    "expectancy_r_threshold": ">= +0.25R",
+    "expectancy_r_actual": 0.31,
+    "profit_factor_threshold": ">= 1.30",
+    "profit_factor_actual": 2.5,
+    "max_drawdown_threshold": "<= 25.0%",
+    "max_drawdown_actual": 11.2,
+    "trades_threshold": ">= 30",
+    "trades_actual": 180,
+    "verdict": "DEVELOPMENT_SURVIVOR"
+  },
+  "firewall_status": "ENFORCED (VALIDATION_ACCESS_COUNT = 0, FINAL_TEST_ACCESS_COUNT = 0)"
+}

@@ -497,9 +497,9 @@ def calculate_rsi(data: list[Any], period: int = 14) -> list[Decimal | None]:
 
 def calculate_atr(highs: list[Any], lows: list[Any], closes: list[Any], period: int = 14) -> list[Decimal | None]:
     h = pd.Series([float(x) for x in highs])
-    l = pd.Series([float(x) for x in lows])
+    l_ser = pd.Series([float(x) for x in lows])
     c = pd.Series([float(x) for x in closes])
-    res = atr(h, l, c, period)
+    res = atr(h, l_ser, c, period)
     return [Decimal(str(v)) if not np.isnan(v) else None for v in res]
 
 

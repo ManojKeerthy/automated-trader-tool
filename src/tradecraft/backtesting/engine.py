@@ -160,8 +160,6 @@ class BacktestEngine:
         pending_entry_orders: list[OrderIntent] = []
         pending_exit_signals: list[ExitSignal] = []
 
-        # Track active position entry metadata: instrument_id -> (signal_date, entry_costs)
-        entry_meta: dict[uuid.UUID, dict[str, Any]] = {}
         # Track daily sold instruments for DP charge de-duplication: set of (date, instrument_id)
         daily_sold_instruments: set[tuple[date, uuid.UUID]] = set()
 
