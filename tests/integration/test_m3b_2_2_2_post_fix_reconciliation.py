@@ -3,11 +3,13 @@
 from decimal import Decimal
 
 import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
 from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine, EndOfBacktestPolicy
 from tradecraft.backtesting.slippage import FixedBasisPointSlippage
-from tradecraft.core.db import SessionLocal
+from tradecraft.core.db_models import Base
 from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.research.splits import DEVELOPMENT_SPLIT
 from tradecraft.strategy.v2_strategies import (
@@ -16,12 +18,6 @@ from tradecraft.strategy.v2_strategies import (
     MomentumRSV2Strategy,
     TrendPullbackV2Strategy,
 )
-
-
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from tradecraft.core.db_models import Base
 
 
 @pytest.fixture
