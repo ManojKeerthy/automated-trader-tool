@@ -292,12 +292,15 @@ def test_alembic_migration_upgrade_path(postgres_engine):
     inspector = inspect(postgres_engine)
     assert "backtest_runs" in inspector.get_table_names()
 
-    # 4. Upgrade to head (004_m3a_screening_schema)
+    # 4. Upgrade to head (005_m3b_research_lab_schema)
     command.upgrade(alembic_cfg, "head")
     inspector = inspect(postgres_engine)
     assert "feature_definitions" in inspector.get_table_names()
     assert "market_regime_snapshots" in inspector.get_table_names()
     assert "screening_runs" in inspector.get_table_names()
+    assert "strategy_scorecards" in inspector.get_table_names()
+    assert "walk_forward_results" in inspector.get_table_names()
+    assert "research_graveyard" in inspector.get_table_names()
 
     # 5. Query models using a temporary session to verify queries succeed
     with Session(bind=postgres_engine) as session:
