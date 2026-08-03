@@ -1,0 +1,47 @@
+{
+  "current_research_cycle": "CYCLE_1",
+  "completed_milestone": "M3C.1",
+  "next_authorised_milestone": "M3C.2_PENDING_USER_APPROVAL",
+  "development_range": "2016-08-01 -> 2021-12-31",
+  "validation_range": "2022-01-01 -> 2024-06-30",
+  "final_test_range": "2024-07-01 -> 2026-07-28",
+  "validation_status": "SEALED_UNTOUCHED",
+  "final_test_status": "SEALED_UNTOUCHED",
+  "research_cycle_1_status": "CLOSED_NO_SURVIVOR",
+  "supported_universes": [
+    "NIFTY50",
+    "NIFTY100",
+    "NIFTY200",
+    "NIFTY250",
+    "NIFTY500",
+    "CUSTOM"
+  ],
+  "security_master_version": "1.0.0",
+  "membership_version": "1.0.0",
+  "corporate_actions_version": "1.0.0",
+  "survivorship_protection": "ENFORCED",
+  "point_in_time_status": "VERIFIED",
+  "abandoned_strategy_families": [
+    "strat_trend_pullback",
+    "strat_momentum_rs",
+    "strat_breakout_confirm",
+    "strat_mean_reversion"
+  ],
+  "active_strategy_families": [],
+  "permitted_research_actions": [
+    "DOCUMENTATION_MAINTENANCE",
+    "GOVERNANCE_STATE_VALIDATION",
+    "M3C.2_PLANNING"
+  ],
+  "prohibited_research_actions": [
+    "VALIDATION_ACCESS",
+    "FINAL_TEST_ACCESS",
+    "REVIVE_ABANDONED_LINEAGE",
+    "PARAMETER_OPTIMIZATION",
+    "POST_HOC_GATE_MODIFICATION",
+    "LIVE_ORDER_PLACEMENT"
+  ],
+  "authoritative_backtest_policy": "FORCE_CLOSE",
+  "accounting_integrity_status": "VERIFIED_0.0000_RESIDUAL",
+  "temporal_integrity_status": "VERIFIED_0_VIOLATIONS"
+}

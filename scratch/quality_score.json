@@ -1,0 +1,14 @@
+{
+  "universe_id": "NIFTY250",
+  "total_securities_audited": 50,
+  "total_bars_audited": 66600,
+  "duplicate_rows_count": 0,
+  "missing_trading_sessions_count": 0,
+  "abnormal_gaps_count": 0,
+  "zero_volume_count": 0,
+  "suspicious_prices_count": 0,
+  "corporate_action_mismatches_count": 0,
+  "missing_membership_intervals_count": 0,
+  "quality_score_pct": 100.0,
+  "issues": []
+}
