@@ -61,9 +61,15 @@ class V3HypothesisPreRegistration:
         for p in self.parameter_origins:
             result = p.audit()
             if result != "PASS":
-                logger.error(f"PARAMETER PROVENANCE AUDIT FAILED for {p.parameter_name} in {self.v3_strategy_id}: {result}")
-                raise RuntimeError(f"PARAMETER_SELECTION_PROVENANCE_FAILURE: {p.parameter_name} -> {result}")
-        logger.info(f"PARAMETER PROVENANCE AUDIT PASSED for {self.v3_strategy_id}: All parameters verified without P&L optimization.")
+                logger.error(
+                    f"PARAMETER PROVENANCE AUDIT FAILED for {p.parameter_name} in {self.v3_strategy_id}: {result}"
+                )
+                raise RuntimeError(
+                    f"PARAMETER_SELECTION_PROVENANCE_FAILURE: {p.parameter_name} -> {result}"
+                )
+        logger.info(
+            f"PARAMETER PROVENANCE AUDIT PASSED for {self.v3_strategy_id}: All parameters verified without P&L optimization."
+        )
 
 
 class V3HypothesisRegistry:
@@ -76,9 +82,13 @@ class V3HypothesisRegistry:
     def register(self, reg: V3HypothesisPreRegistration) -> None:
         reg.audit_parameter_selection_provenance()
         if reg.v3_strategy_id in self._registrations:
-            raise RuntimeError(f"IMMUTABILITY VIOLATION: Strategy {reg.v3_strategy_id} already registered!")
+            raise RuntimeError(
+                f"IMMUTABILITY VIOLATION: Strategy {reg.v3_strategy_id} already registered!"
+            )
         self._registrations[reg.v3_strategy_id] = reg
-        logger.info(f"PRE-REGISTERED V3 HYPOTHESIS: {reg.v3_strategy_id} (Config Hash: {reg.config_hash})")
+        logger.info(
+            f"PRE-REGISTERED V3 HYPOTHESIS: {reg.v3_strategy_id} (Config Hash: {reg.config_hash})"
+        )
 
     def export_json(self) -> None:
         out: dict[str, Any] = {}

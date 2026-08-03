@@ -159,10 +159,30 @@ class TrendPullbackV2Strategy(BaseV2Strategy):
     @property
     def parameter_origins(self) -> list[ParameterOrigin]:
         return [
-            ParameterOrigin("trend_ma", self.trend_ma, "MARKET_CONVENTION", "Standard 50-day moving average medium-term trend benchmark."),
-            ParameterOrigin("pullback_ema", self.pullback_ema, "ECONOMIC_RATIONALE", "EMA20 represents fast institutional trend support baseline."),
-            ParameterOrigin("atr_dist_max", self.atr_dist_max, "SIGNAL_VIABILITY_CALIBRATION", "2.0 ATR distance prevents over-filtering during pullback."),
-            ParameterOrigin("atr_stop_mult", self.atr_stop_mult, "PRIOR_CANONICAL", "Preserved 2.0 ATR stop loss placement from canonical V1."),
+            ParameterOrigin(
+                "trend_ma",
+                self.trend_ma,
+                "MARKET_CONVENTION",
+                "Standard 50-day moving average medium-term trend benchmark.",
+            ),
+            ParameterOrigin(
+                "pullback_ema",
+                self.pullback_ema,
+                "ECONOMIC_RATIONALE",
+                "EMA20 represents fast institutional trend support baseline.",
+            ),
+            ParameterOrigin(
+                "atr_dist_max",
+                self.atr_dist_max,
+                "SIGNAL_VIABILITY_CALIBRATION",
+                "2.0 ATR distance prevents over-filtering during pullback.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult",
+                self.atr_stop_mult,
+                "PRIOR_CANONICAL",
+                "Preserved 2.0 ATR stop loss placement from canonical V1.",
+            ),
         ]
 
     @property
@@ -196,7 +216,10 @@ class TrendPullbackV2Strategy(BaseV2Strategy):
                 ema20 = (c * k) + (ema20 * (1.0 - k))
 
             # ATR 14
-            tr_list = [max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1])) for i in range(-14, 0)]
+            tr_list = [
+                max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+                for i in range(-14, 0)
+            ]
             atr14 = sum(tr_list) / 14.0
 
             # State 1: Structural uptrend
@@ -283,10 +306,30 @@ class BreakoutConfirmV2Strategy(BaseV2Strategy):
     @property
     def parameter_origins(self) -> list[ParameterOrigin]:
         return [
-            ParameterOrigin("channel_period", self.channel_period, "MARKET_CONVENTION", "Classic 20-day Donchian channel period."),
-            ParameterOrigin("max_consolidation_pct", self.max_consolidation_pct, "SIGNAL_VIABILITY_CALIBRATION", "20% width accommodates normal Nifty volatility squeezes."),
-            ParameterOrigin("rvol_min", self.rvol_min, "ECONOMIC_RATIONALE", "RVOL >= 1.2 ensures moderate volume expansion without over-filtering."),
-            ParameterOrigin("atr_stop_mult", self.atr_stop_mult, "PRIOR_CANONICAL", "Preserved 1.5 ATR stop loss placement from canonical V1."),
+            ParameterOrigin(
+                "channel_period",
+                self.channel_period,
+                "MARKET_CONVENTION",
+                "Classic 20-day Donchian channel period.",
+            ),
+            ParameterOrigin(
+                "max_consolidation_pct",
+                self.max_consolidation_pct,
+                "SIGNAL_VIABILITY_CALIBRATION",
+                "20% width accommodates normal Nifty volatility squeezes.",
+            ),
+            ParameterOrigin(
+                "rvol_min",
+                self.rvol_min,
+                "ECONOMIC_RATIONALE",
+                "RVOL >= 1.2 ensures moderate volume expansion without over-filtering.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult",
+                self.atr_stop_mult,
+                "PRIOR_CANONICAL",
+                "Preserved 1.5 ATR stop loss placement from canonical V1.",
+            ),
         ]
 
     @property
@@ -313,7 +356,9 @@ class BreakoutConfirmV2Strategy(BaseV2Strategy):
             donchian20_high_prev = max(highs[-21:-1])
             donchian20_low_prev = min(lows[-21:-1])
 
-            consolidation_w = (donchian20_high_prev - donchian20_low_prev) / max(1.0, donchian20_low_prev)
+            consolidation_w = (donchian20_high_prev - donchian20_low_prev) / max(
+                1.0, donchian20_low_prev
+            )
             avg_vol20 = sum(volumes[-21:-1]) / 20.0
             rvol = volumes[-1] / max(1.0, avg_vol20)
 
@@ -323,7 +368,14 @@ class BreakoutConfirmV2Strategy(BaseV2Strategy):
             is_vol = rvol >= self.rvol_min
 
             if is_breakout and is_tight and is_vol:
-                tr_list = [max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1])) for i in range(-14, 0)]
+                tr_list = [
+                    max(
+                        highs[i] - lows[i],
+                        abs(highs[i] - closes[i - 1]),
+                        abs(lows[i] - closes[i - 1]),
+                    )
+                    for i in range(-14, 0)
+                ]
                 atr14 = sum(tr_list) / 14.0
 
                 stop_price = Decimal(str(round(c_curr - (atr14 * self.atr_stop_mult), 2)))
@@ -382,9 +434,7 @@ class MomentumRSV2Strategy(BaseV2Strategy):
 
     @property
     def revision_rationale(self) -> str:
-        return (
-            "V1 10% cutoff was overly restrictive daily. V2 expands RS cutoff to top 25%."
-        )
+        return "V1 10% cutoff was overly restrictive daily. V2 expands RS cutoff to top 25%."
 
     @property
     def parameters(self) -> dict[str, Any]:
@@ -397,9 +447,24 @@ class MomentumRSV2Strategy(BaseV2Strategy):
     @property
     def parameter_origins(self) -> list[ParameterOrigin]:
         return [
-            ParameterOrigin("rs_lookback", self.rs_lookback, "MARKET_CONVENTION", "Standard 3-month (63 trading session) momentum lookback."),
-            ParameterOrigin("top_percentile_cutoff", self.top_percentile_cutoff, "SIGNAL_VIABILITY_CALIBRATION", "Top 25% cutoff provides non-degenerate sample size."),
-            ParameterOrigin("atr_stop_mult", self.atr_stop_mult, "PRIOR_CANONICAL", "Preserved 2.5 ATR stop loss placement from canonical V1."),
+            ParameterOrigin(
+                "rs_lookback",
+                self.rs_lookback,
+                "MARKET_CONVENTION",
+                "Standard 3-month (63 trading session) momentum lookback.",
+            ),
+            ParameterOrigin(
+                "top_percentile_cutoff",
+                self.top_percentile_cutoff,
+                "SIGNAL_VIABILITY_CALIBRATION",
+                "Top 25% cutoff provides non-degenerate sample size.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult",
+                self.atr_stop_mult,
+                "PRIOR_CANONICAL",
+                "Preserved 2.5 ATR stop loss placement from canonical V1.",
+            ),
         ]
 
     @property
@@ -434,7 +499,10 @@ class MomentumRSV2Strategy(BaseV2Strategy):
             lows = [float(b["low"]) for b in bars]
 
             c_curr = closes[-1]
-            tr_list = [max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1])) for i in range(-14, 0)]
+            tr_list = [
+                max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+                for i in range(-14, 0)
+            ]
             atr14 = sum(tr_list) / 14.0
 
             stop_price = Decimal(str(round(c_curr - (atr14 * self.atr_stop_mult), 2)))
@@ -511,10 +579,30 @@ class MeanReversionV2Strategy(BaseV2Strategy):
     @property
     def parameter_origins(self) -> list[ParameterOrigin]:
         return [
-            ParameterOrigin("rsi_oversold", self.rsi_oversold, "SIGNAL_VIABILITY_CALIBRATION", "RSI(5) <= 40.0 captures realistic pullbacks in bull trends."),
-            ParameterOrigin("displacement_atr", self.displacement_atr, "ECONOMIC_RATIONALE", "1.0 ATR displacement ensures non-trivial deviation from mean."),
-            ParameterOrigin("max_holding_days", self.max_holding_days, "STRUCTURAL_REQUIREMENT", "5-session time exit aligns with short-term mean reversion."),
-            ParameterOrigin("atr_stop_mult", self.atr_stop_mult, "PRIOR_CANONICAL", "Preserved 1.5 ATR stop loss placement from canonical V1."),
+            ParameterOrigin(
+                "rsi_oversold",
+                self.rsi_oversold,
+                "SIGNAL_VIABILITY_CALIBRATION",
+                "RSI(5) <= 40.0 captures realistic pullbacks in bull trends.",
+            ),
+            ParameterOrigin(
+                "displacement_atr",
+                self.displacement_atr,
+                "ECONOMIC_RATIONALE",
+                "1.0 ATR displacement ensures non-trivial deviation from mean.",
+            ),
+            ParameterOrigin(
+                "max_holding_days",
+                self.max_holding_days,
+                "STRUCTURAL_REQUIREMENT",
+                "5-session time exit aligns with short-term mean reversion.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult",
+                self.atr_stop_mult,
+                "PRIOR_CANONICAL",
+                "Preserved 1.5 ATR stop loss placement from canonical V1.",
+            ),
         ]
 
     @property
@@ -538,7 +626,10 @@ class MeanReversionV2Strategy(BaseV2Strategy):
             sma200 = sum(closes[-200:]) / 200.0
             sma20 = sum(closes[-20:]) / 20.0
 
-            tr_list = [max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1])) for i in range(-14, 0)]
+            tr_list = [
+                max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+                for i in range(-14, 0)
+            ]
             atr14 = sum(tr_list) / 14.0
 
             # RSI 5

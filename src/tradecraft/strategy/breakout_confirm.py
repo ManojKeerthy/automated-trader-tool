@@ -3,6 +3,7 @@
 Hypothesis: Securities emerging from multi-session consolidation ranges
 demonstrate strong continuation when accompanied by volume and volatility expansion.
 """
+
 import uuid
 from datetime import date
 from decimal import Decimal
@@ -123,7 +124,9 @@ class BreakoutConfirmStrategy:
         stop_level = min(channel_middle, atr_stop_level)
 
         # 6. Family-Specific Setup Quality Score (Breakout Strength * RVOL)
-        breakout_dist = (current_close - channel_high) / c_atr if c_atr > Decimal("0") else Decimal("0.5")
+        breakout_dist = (
+            (current_close - channel_high) / c_atr if c_atr > Decimal("0") else Decimal("0.5")
+        )
         quality_score = breakout_dist * c_rvol
 
         return SignalIntent(

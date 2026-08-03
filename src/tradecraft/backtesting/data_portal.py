@@ -13,6 +13,7 @@ Look-ahead protection is enforced at multiple levels:
 
 Any violation raises LookAheadError.
 """
+
 import logging
 import uuid
 from datetime import date
@@ -104,9 +105,7 @@ class DataPortal:
     def set_current_date(self, dt: date) -> None:
         """Advance the portal clock. Called by the BacktestEngine each session."""
         if self._current_date is not None and dt <= self._current_date:
-            raise ValueError(
-                f"Cannot move clock backwards: {dt} <= {self._current_date}"
-            )
+            raise ValueError(f"Cannot move clock backwards: {dt} <= {self._current_date}")
         self._current_date = dt
 
     def _check_date(self, requested_date: date) -> None:

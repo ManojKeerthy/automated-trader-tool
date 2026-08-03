@@ -262,7 +262,9 @@ def handle_backtest(args: argparse.Namespace) -> None:
         elif args.strategy == "ref_sma_crossover":
             strat = SMACrossoverStrategy(fast_period=args.fast_sma, slow_period=args.slow_sma)
         else:
-            print(f"Error: Unknown strategy '{args.strategy}'. Run 'python -m tradecraft strategy list' to see available strategies.")
+            print(
+                f"Error: Unknown strategy '{args.strategy}'. Run 'python -m tradecraft strategy list' to see available strategies."
+            )
             sys.exit(1)
 
         assert strat is not None
@@ -357,7 +359,10 @@ def main() -> None:
     bt_sub = bt_parser.add_subparsers(dest="backtest_cmd", required=True)
     bt_run = bt_sub.add_parser("run", help="Run a strategy backtest")
     bt_run.add_argument(
-        "--strategy", type=str, required=True, help="Strategy identifier (e.g. ref_buy_and_hold, ref_sma_crossover)"
+        "--strategy",
+        type=str,
+        required=True,
+        help="Strategy identifier (e.g. ref_buy_and_hold, ref_sma_crossover)",
     )
     bt_run.add_argument("--start", type=str, default="2026-01-01", help="Start date (YYYY-MM-DD)")
     bt_run.add_argument("--end", type=str, default="2026-07-28", help="End date (YYYY-MM-DD)")
@@ -381,7 +386,9 @@ def main() -> None:
     elif args.command == "strategy" and args.strat_cmd == "list":
         print("\nRegistered Strategies:")
         print("  - ref_buy_and_hold (v1.0.0): Reference Buy & Hold [TEST STRATEGY]")
-        print("  - ref_sma_crossover (v1.0.0): Reference Moving Average Crossover [TEST STRATEGY]\n")
+        print(
+            "  - ref_sma_crossover (v1.0.0): Reference Moving Average Crossover [TEST STRATEGY]\n"
+        )
 
 
 if __name__ == "__main__":

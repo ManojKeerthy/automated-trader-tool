@@ -8,6 +8,7 @@ Tests per M3A approved amendments:
 5. Deterministic reproducibility
 6. Multi-family indicator correctness
 """
+
 from __future__ import annotations
 
 from datetime import date
@@ -209,9 +210,7 @@ class TestVolatilityFeatures:
 
     def test_atr_percent_normalised(self, uptrend_data: pd.DataFrame):
         """ATR% should be reasonable percentage."""
-        result = atr_percent(
-            uptrend_data["high"], uptrend_data["low"], uptrend_data["close"], 14
-        )
+        result = atr_percent(uptrend_data["high"], uptrend_data["low"], uptrend_data["close"], 14)
         valid = result.dropna()
         assert all(0 < v < 50 for v in valid), "ATR% should be reasonable"
 
@@ -280,7 +279,7 @@ class TestBreakoutFeatures:
         low = pd.Series([8, 9, 10, 9, 7] * 4, dtype=float)
         upper, middle, lower = donchian_channel(high, low, 5)
         assert upper.iloc[4] == pytest.approx(14.0)  # max of first 5 highs
-        assert lower.iloc[4] == pytest.approx(7.0)   # min of first 5 lows
+        assert lower.iloc[4] == pytest.approx(7.0)  # min of first 5 lows
         assert middle.iloc[4] == pytest.approx(10.5)  # (14 + 7) / 2
 
     def test_breakout_distance_at_high(self):
@@ -295,9 +294,7 @@ class TestBreakoutFeatures:
 
     def test_distance_from_52w_high(self, uptrend_data: pd.DataFrame):
         """Distance from 52w high should be <= 0."""
-        result = distance_from_high(
-            uptrend_data["close"], uptrend_data["high"], 252
-        )
+        result = distance_from_high(uptrend_data["close"], uptrend_data["high"], 252)
         valid = result.dropna()
         assert all(v <= 0.001 for v in valid), "Distance should be <= 0 (below or at high)"
 
@@ -324,8 +321,7 @@ class TestSupportResistanceFeatures:
         result = find_pivot_highs(pivot_data["high"], left_bars=5, right_bars=5)
         # The actual peak is at index 10. It should NOT be at index 10.
         assert np.isnan(result.iloc[10]), (
-            "Pivot high must NOT be available at the peak date — "
-            "this would be look-ahead bias!"
+            "Pivot high must NOT be available at the peak date — this would be look-ahead bias!"
         )
 
     def test_pivot_high_at_confirmation_date(self, pivot_data: pd.DataFrame):
@@ -344,8 +340,7 @@ class TestSupportResistanceFeatures:
         # Trough is around index 20
         trough_idx = pivot_data["low"].iloc[15:25].idxmin()
         assert np.isnan(result.iloc[trough_idx]), (
-            "Pivot low must NOT be available at the trough date — "
-            "this would be look-ahead bias!"
+            "Pivot low must NOT be available at the trough date — this would be look-ahead bias!"
         )
 
     def test_pivot_confirmation_delay_semantics(self):
@@ -359,20 +354,23 @@ class TestSupportResistanceFeatures:
 
     def test_nearest_support_uses_confirmed_pivots(self, uptrend_data: pd.DataFrame):
         """ATR distance to support uses only confirmed pivot lows."""
-        atr_val = atr(
-            uptrend_data["high"], uptrend_data["low"],
-            uptrend_data["close"], 14
-        )
+        atr_val = atr(uptrend_data["high"], uptrend_data["low"], uptrend_data["close"], 14)
         result = nearest_support_distance_atr(
-            uptrend_data["close"], uptrend_data["low"],
-            uptrend_data["high"], atr_val, left_bars=5, right_bars=5,
+            uptrend_data["close"],
+            uptrend_data["low"],
+            uptrend_data["high"],
+            atr_val,
+            left_bars=5,
+            right_bars=5,
         )
         # Should have NaN at the start where no confirmed pivots exist
         assert np.isnan(result.iloc[0])
         # Eventually should have valid values
         valid = result.dropna()
         if len(valid) > 0:
-            assert all(v > 0 for v in valid if not np.isnan(v)), "Support distance should be positive in uptrend"
+            assert all(v > 0 for v in valid if not np.isnan(v)), (
+                "Support distance should be positive in uptrend"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -397,7 +395,14 @@ class TestFeatureFramework:
 
     def test_all_features_have_family(self):
         """All features must belong to a family."""
-        valid_families = {"TREND", "MOMENTUM", "VOLATILITY", "VOLUME", "BREAKOUT", "SUPPORT_RESISTANCE"}
+        valid_families = {
+            "TREND",
+            "MOMENTUM",
+            "VOLATILITY",
+            "VOLUME",
+            "BREAKOUT",
+            "SUPPORT_RESISTANCE",
+        }
         for fid, fdef in ALL_FEATURES.items():
             assert fdef.family in valid_families, f"Feature {fid} has invalid family {fdef.family}"
 

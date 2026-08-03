@@ -3,6 +3,7 @@
 Evaluates 8 dimensions with aligned 3-zone system (ACCEPTABLE, WEAK, FAIL)
 and outputs an overall rating: STRONG, ACCEPTABLE, WEAK, or FAIL.
 """
+
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any
@@ -37,10 +38,18 @@ class StrategyScorecard:
             "configuration_hash": self.configuration_hash,
             "overall_rating": self.overall_rating,
             "expectancy_r": float(self.expectancy_r) if self.expectancy_r is not None else None,
-            "sharpe_retention_pct": float(self.sharpe_retention_pct) if self.sharpe_retention_pct is not None else None,
-            "max_drawdown_pct": float(self.max_drawdown_pct) if self.max_drawdown_pct is not None else None,
-            "walk_forward_consistency_pct": float(self.walk_forward_consistency_pct) if self.walk_forward_consistency_pct is not None else None,
-            "stressed_profit_factor": float(self.stressed_profit_factor) if self.stressed_profit_factor is not None else None,
+            "sharpe_retention_pct": float(self.sharpe_retention_pct)
+            if self.sharpe_retention_pct is not None
+            else None,
+            "max_drawdown_pct": float(self.max_drawdown_pct)
+            if self.max_drawdown_pct is not None
+            else None,
+            "walk_forward_consistency_pct": float(self.walk_forward_consistency_pct)
+            if self.walk_forward_consistency_pct is not None
+            else None,
+            "stressed_profit_factor": float(self.stressed_profit_factor)
+            if self.stressed_profit_factor is not None
+            else None,
             "total_trades": self.total_trades,
             "dimensions": [
                 {
@@ -120,7 +129,9 @@ class ScorecardEvaluator:
             weak_count += 1
 
         # 3. Walk-Forward Consistency
-        wf_pct_float = float(walk_forward_positive_pct) if walk_forward_positive_pct is not None else 0.0
+        wf_pct_float = (
+            float(walk_forward_positive_pct) if walk_forward_positive_pct is not None else 0.0
+        )
         if wf_pct_float >= 80.0:
             wf_status = "ACCEPTABLE"
         elif wf_pct_float >= 60.0:

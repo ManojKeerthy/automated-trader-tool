@@ -3,6 +3,7 @@
 Implements the two-stage research process, overfitting controls, evaluation-run accounting,
 finalist selection, and final test consumption persistence per approved M3B specification.
 """
+
 import logging
 import uuid
 from dataclasses import dataclass
@@ -91,7 +92,10 @@ class M3BResearchLaboratory:
             name="M3B Master Strategy Research Run",
             description="Sequential 4-family research laboratory evaluation with two-stage overfitting rejection.",
             status="RUNNING",
-            metadata_json={"research_quality": "UNVERIFIED_UNIVERSE", "total_unique_configs_limit": 100},
+            metadata_json={
+                "research_quality": "UNVERIFIED_UNIVERSE",
+                "total_unique_configs_limit": 100,
+            },
         )
         self.db.add(exp)
         self.db.commit()
@@ -136,7 +140,11 @@ class M3BResearchLaboratory:
                 "name": "Breakout Confirmation",
                 "id": "strat_breakout_confirm",
                 "default_cls": BreakoutConfirmStrategy,
-                "canonical_params": {"channel_period": 20, "rvol_min": 1.5, "max_consolidation_pct": 0.12},
+                "canonical_params": {
+                    "channel_period": 20,
+                    "rvol_min": 1.5,
+                    "max_consolidation_pct": 0.12,
+                },
                 "grid": [
                     {"channel_period": 20, "rvol_min": 1.3, "max_consolidation_pct": 0.10},
                     {"channel_period": 20, "rvol_min": 1.5, "max_consolidation_pct": 0.12},
@@ -153,7 +161,11 @@ class M3BResearchLaboratory:
                 "name": "Momentum Relative Strength",
                 "id": "strat_momentum_rs",
                 "default_cls": MomentumRSStrategy,
-                "canonical_params": {"rs_lookback": 63, "top_percentile": 0.10, "atr_stop_mult": 2.5},
+                "canonical_params": {
+                    "rs_lookback": 63,
+                    "top_percentile": 0.10,
+                    "atr_stop_mult": 2.5,
+                },
                 "grid": [
                     {"rs_lookback": 21, "top_percentile": 0.05, "atr_stop_mult": 2.0},
                     {"rs_lookback": 21, "top_percentile": 0.10, "atr_stop_mult": 2.5},
@@ -170,7 +182,11 @@ class M3BResearchLaboratory:
                 "name": "Mean Reversion",
                 "id": "strat_mean_reversion",
                 "default_cls": MeanReversionStrategy,
-                "canonical_params": {"rsi_oversold": 30.0, "displacement_atr": 2.0, "max_holding_days": 8},
+                "canonical_params": {
+                    "rsi_oversold": 30.0,
+                    "displacement_atr": 2.0,
+                    "max_holding_days": 8,
+                },
                 "grid": [
                     {"rsi_oversold": 25.0, "displacement_atr": 1.5, "max_holding_days": 5},
                     {"rsi_oversold": 25.0, "displacement_atr": 2.0, "max_holding_days": 8},
@@ -244,22 +260,33 @@ class M3BResearchLaboratory:
                     strategy_family=f_name,
                     strategy_version=canon_strat.version,
                     parameters=f_canon,
-                    rejection_reason_code="NEGATIVE_EXPECTANCY" if exp_r_float <= 0.0 else "EXCESSIVE_DRAWDOWN",
-                    rejection_details={"expectancy_r": exp_r_float, "max_drawdown_pct": max_dd_float},
+                    rejection_reason_code="NEGATIVE_EXPECTANCY"
+                    if exp_r_float <= 0.0
+                    else "EXCESSIVE_DRAWDOWN",
+                    rejection_details={
+                        "expectancy_r": exp_r_float,
+                        "max_drawdown_pct": max_dd_float,
+                    },
                     stage_failed="STAGE_1",
                 )
-                logger.info(f"Family {f_name} FAILED Stage 1 Canonical Test. Skipping parameter grid search.")
+                logger.info(
+                    f"Family {f_name} FAILED Stage 1 Canonical Test. Skipping parameter grid search."
+                )
                 summaries.append(summary)
                 continue
 
             summary.stage_1_passed = True
-            logger.info(f"Family {f_name} PASSED Stage 1 Canonical Test (Expectancy_R: {exp_r_float:.3f}, Max DD: {max_dd_float:.1f}%).")
+            logger.info(
+                f"Family {f_name} PASSED Stage 1 Canonical Test (Expectancy_R: {exp_r_float:.3f}, Max DD: {max_dd_float:.1f}%)."
+            )
 
             # --- STAGE 2: Limited Parameter Robustness Search on TRAIN ---
             stage_2_results = []
             for p_set in f_grid:
                 if total_unique_configs >= 100:
-                    logger.warning("Reached maximum overall unique configurations limit (100). Stopping grid search.")
+                    logger.warning(
+                        "Reached maximum overall unique configurations limit (100). Stopping grid search."
+                    )
                     break
 
                 summary.unique_configs_searched += 1
@@ -286,17 +313,23 @@ class M3BResearchLaboratory:
                 t_trades_m = t_m.get("trade_count")
 
                 t_exp = float(t_exp_m.value) if t_exp_m and t_exp_m.value is not None else 0.0
-                t_sharpe = float(t_sharpe_m.value) if t_sharpe_m and t_sharpe_m.value is not None else 0.0
-                t_trades = int(t_trades_m.value) if t_trades_m and t_trades_m.value is not None else 0
+                t_sharpe = (
+                    float(t_sharpe_m.value) if t_sharpe_m and t_sharpe_m.value is not None else 0.0
+                )
+                t_trades = (
+                    int(t_trades_m.value) if t_trades_m and t_trades_m.value is not None else 0
+                )
 
-                stage_2_results.append({
-                    "params": p_set,
-                    "strat": grid_strat,
-                    "train_res": t_res,
-                    "train_exp_r": t_exp,
-                    "train_sharpe": t_sharpe,
-                    "train_trades": t_trades,
-                })
+                stage_2_results.append(
+                    {
+                        "params": p_set,
+                        "strat": grid_strat,
+                        "train_res": t_res,
+                        "train_exp_r": t_exp,
+                        "train_sharpe": t_sharpe,
+                        "train_trades": t_trades,
+                    }
+                )
 
             # Sort Stage 2 candidates by Expectancy_R on TRAIN
             stage_2_results.sort(key=lambda x: x["train_exp_r"], reverse=True)
@@ -362,7 +395,9 @@ class M3BResearchLaboratory:
             total_evaluation_runs += 1
 
             stress_pf_m = stress_res.metrics.metrics.get("profit_factor")
-            stress_pf = float(stress_pf_m.value) if stress_pf_m and stress_pf_m.value is not None else 1.0
+            stress_pf = (
+                float(stress_pf_m.value) if stress_pf_m and stress_pf_m.value is not None else 1.0
+            )
 
             # Evaluate Scorecard BEFORE Final Test
             val_m = val_res.metrics.metrics
@@ -371,9 +406,21 @@ class M3BResearchLaboratory:
             v_dd_m = val_m.get("max_drawdown_pct")
             v_trades_m = val_m.get("trade_count")
 
-            val_exp_r = Decimal(str(v_exp_m.value)) if v_exp_m and v_exp_m.value is not None else Decimal("0.0")
-            val_sharpe = Decimal(str(v_sharpe_m.value)) if v_sharpe_m and v_sharpe_m.value is not None else Decimal("0.0")
-            val_dd = Decimal(str(v_dd_m.value)) if v_dd_m and v_dd_m.value is not None else Decimal("0.0")
+            val_exp_r = (
+                Decimal(str(v_exp_m.value))
+                if v_exp_m and v_exp_m.value is not None
+                else Decimal("0.0")
+            )
+            val_sharpe = (
+                Decimal(str(v_sharpe_m.value))
+                if v_sharpe_m and v_sharpe_m.value is not None
+                else Decimal("0.0")
+            )
+            val_dd = (
+                Decimal(str(v_dd_m.value))
+                if v_dd_m and v_dd_m.value is not None
+                else Decimal("0.0")
+            )
             val_trades = int(v_trades_m.value) if v_trades_m and v_trades_m.value is not None else 0
 
             scorecard = self.scorecard_evaluator.evaluate(
@@ -395,7 +442,9 @@ class M3BResearchLaboratory:
                 summary.finalist_config = best_candidate["params"]
                 summary.finalist_scorecard = scorecard
 
-                logger.info(f"Selected FINALIST for {f_name}: Scorecard Rating = {scorecard.overall_rating}")
+                logger.info(
+                    f"Selected FINALIST for {f_name}: Scorecard Rating = {scorecard.overall_rating}"
+                )
 
                 # --- FINAL TEST EVALUATION (Accessed ONLY by selected finalist) ---
                 config_final = BacktestConfig(
@@ -413,11 +462,17 @@ class M3BResearchLaboratory:
 
                 final_m = final_res.metrics.metrics
                 final_exp_m = final_m.get("expectancy_r")
-                final_exp_r = float(final_exp_m.value) if final_exp_m and final_exp_m.value is not None else 0.0
+                final_exp_r = (
+                    float(final_exp_m.value)
+                    if final_exp_m and final_exp_m.value is not None
+                    else 0.0
+                )
 
                 if final_exp_r > 0.0:
                     summary.final_test_status = "ACCESSED_PASSED"
-                    logger.info(f"FINAL TEST PASSED for {f_name}! (Final Expectancy_R: {final_exp_r:.3f})")
+                    logger.info(
+                        f"FINAL TEST PASSED for {f_name}! (Final Expectancy_R: {final_exp_r:.3f})"
+                    )
                 else:
                     summary.final_test_status = "ACCESSED_FAILED"
                     summary.rejection_reason = "FINAL_TEST_FAILURE"
@@ -430,7 +485,9 @@ class M3BResearchLaboratory:
                         rejection_details={"final_test_expectancy_r": final_exp_r},
                         stage_failed="FINAL_TEST",
                     )
-                    logger.info(f"FINAL TEST FAILED for {f_name}. Recorded in Graveyard. No retuning permitted.")
+                    logger.info(
+                        f"FINAL TEST FAILED for {f_name}. Recorded in Graveyard. No retuning permitted."
+                    )
             else:
                 summary.rejection_reason = f"SCORECARD_REJECTED_{scorecard.overall_rating}"
                 self.graveyard.record_rejection(
@@ -442,7 +499,9 @@ class M3BResearchLaboratory:
                     rejection_details={"scorecard": scorecard.to_dict()},
                     stage_failed="VALIDATION",
                 )
-                logger.info(f"Family {f_name} candidate REJECTED by Scorecard ({scorecard.overall_rating}). Did NOT access Final Test.")
+                logger.info(
+                    f"Family {f_name} candidate REJECTED by Scorecard ({scorecard.overall_rating}). Did NOT access Final Test."
+                )
 
             summaries.append(summary)
 
@@ -457,7 +516,9 @@ class M3BResearchLaboratory:
         self.db.commit()
 
         logger.info("\n=== M3B STRATEGY RESEARCH LABORATORY COMPLETED ===")
-        logger.info(f"Total Unique Strategy Configurations Searched: {total_unique_configs} / 100 max")
+        logger.info(
+            f"Total Unique Strategy Configurations Searched: {total_unique_configs} / 100 max"
+        )
         logger.info(f"Total Evaluation Runs Executed: {total_evaluation_runs}")
 
         return {

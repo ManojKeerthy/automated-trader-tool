@@ -5,6 +5,7 @@ RESEARCH SIZING ASSUMPTION — NOT M4 RISK POLICY.
 This sizing module implements a deterministic 10% equal-capital allocation
 to evaluate and compare strategies fairly during research.
 """
+
 import math
 from dataclasses import dataclass
 from decimal import Decimal

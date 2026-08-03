@@ -10,6 +10,7 @@ from datetime import date
 @dataclass
 class SymbolHistoryRecord:
     """Historical symbol change record for a security."""
+
     effective_from: date
     effective_to: date | None
     old_symbol: str | None
@@ -20,6 +21,7 @@ class SymbolHistoryRecord:
 @dataclass
 class Security:
     """Immutable security entity with symbol history and ISIN mapping."""
+
     security_uuid: str
     current_symbol: str
     name: str
@@ -41,7 +43,9 @@ class Security:
             return self.current_symbol
 
         for rec in sorted(self.symbol_history, key=lambda x: x.effective_from, reverse=True):
-            if rec.effective_from <= query_date and (rec.effective_to is None or query_date <= rec.effective_to):
+            if rec.effective_from <= query_date and (
+                rec.effective_to is None or query_date <= rec.effective_to
+            ):
                 return rec.new_symbol
         return self.current_symbol
 
@@ -85,7 +89,16 @@ class SecurityMaster:
         # Search symbol history records
         for sec in self._securities.values():
             for rec in sec.symbol_history:
-                if (rec.new_symbol.upper() == symbol_upper or (rec.old_symbol and rec.old_symbol.upper() == symbol_upper)) and (query_date is None or (rec.effective_from <= query_date and (rec.effective_to is None or query_date <= rec.effective_to))):
+                if (
+                    rec.new_symbol.upper() == symbol_upper
+                    or (rec.old_symbol and rec.old_symbol.upper() == symbol_upper)
+                ) and (
+                    query_date is None
+                    or (
+                        rec.effective_from <= query_date
+                        and (rec.effective_to is None or query_date <= rec.effective_to)
+                    )
+                ):
                     return sec
         return None
 

@@ -11,6 +11,7 @@ Edge cases:
 - Handle zero trades, single trade, zero volatility, all winners, all losers gracefully
 - Never return NaN or Infinity; use `None` with a semantic `metric_status`
 """
+
 import math
 from dataclasses import dataclass, field
 from datetime import date
@@ -78,7 +79,9 @@ class MetricsEngine:
             m["profit_factor"] = MetricValue("profit_factor", None, status="NO_TRADES")
             m["payoff_ratio"] = MetricValue("payoff_ratio", None, status="NO_TRADES")
             m["expectancy"] = MetricValue("expectancy", None, status="NO_TRADES")
-            m["avg_holding_period_days"] = MetricValue("avg_holding_period_days", None, status="NO_TRADES")
+            m["avg_holding_period_days"] = MetricValue(
+                "avg_holding_period_days", None, status="NO_TRADES"
+            )
             m["total_transaction_costs"] = MetricValue("total_transaction_costs", Decimal("0"))
             m["total_slippage_cost"] = MetricValue("total_slippage_cost", Decimal("0"))
 
@@ -93,12 +96,17 @@ class MetricsEngine:
             years_elapsed = days_elapsed / 365.25
 
             if years_elapsed > 0 and final_equity > 0:
-                cagr = ((final_equity / initial_capital) ** Decimal(str(1 / years_elapsed)) - Decimal("1")) * Decimal("100")
+                cagr = (
+                    (final_equity / initial_capital) ** Decimal(str(1 / years_elapsed))
+                    - Decimal("1")
+                ) * Decimal("100")
                 m["cagr_pct"] = MetricValue("cagr_pct", cagr)
             else:
                 m["cagr_pct"] = MetricValue("cagr_pct", None, status="N_A")
         else:
-            m["total_return_pct"] = MetricValue("total_return_pct", None, status="INSUFFICIENT_DATA")
+            m["total_return_pct"] = MetricValue(
+                "total_return_pct", None, status="INSUFFICIENT_DATA"
+            )
             m["cagr_pct"] = MetricValue("cagr_pct", None, status="INSUFFICIENT_DATA")
 
         # Daily returns array for risk / Sharpe
@@ -131,9 +139,7 @@ class MetricsEngine:
                     },
                 )
             else:
-                m["sharpe_ratio"] = MetricValue(
-                    "sharpe_ratio", None, status="ZERO_VOLATILITY"
-                )
+                m["sharpe_ratio"] = MetricValue("sharpe_ratio", None, status="ZERO_VOLATILITY")
 
             # Sortino Ratio (downside risk)
             downside_returns = daily_returns[daily_returns < rf_daily] - rf_daily
@@ -141,15 +147,19 @@ class MetricsEngine:
                 downside_std = float(np.sqrt(np.mean(downside_returns**2)))
                 if downside_std > 1e-9:
                     sortino = (mean_excess / downside_std) * math.sqrt(252)
-                    m["sortino_ratio"] = MetricValue(
-                        "sortino_ratio", Decimal(f"{sortino:.4f}")
-                    )
+                    m["sortino_ratio"] = MetricValue("sortino_ratio", Decimal(f"{sortino:.4f}"))
                 else:
-                    m["sortino_ratio"] = MetricValue("sortino_ratio", None, status="ZERO_VOLATILITY")
+                    m["sortino_ratio"] = MetricValue(
+                        "sortino_ratio", None, status="ZERO_VOLATILITY"
+                    )
             else:
-                m["sortino_ratio"] = MetricValue("sortino_ratio", None, status="NO_DOWNSIDE_VOLATILITY")
+                m["sortino_ratio"] = MetricValue(
+                    "sortino_ratio", None, status="NO_DOWNSIDE_VOLATILITY"
+                )
         else:
-            m["annualised_volatility_pct"] = MetricValue("annualised_volatility_pct", None, status="INSUFFICIENT_DATA")
+            m["annualised_volatility_pct"] = MetricValue(
+                "annualised_volatility_pct", None, status="INSUFFICIENT_DATA"
+            )
             m["sharpe_ratio"] = MetricValue("sharpe_ratio", None, status="INSUFFICIENT_DATA")
             m["sortino_ratio"] = MetricValue("sortino_ratio", None, status="INSUFFICIENT_DATA")
 
@@ -188,7 +198,9 @@ class MetricsEngine:
             m["profit_factor"] = MetricValue("profit_factor", None, status="NO_TRADES")
             m["payoff_ratio"] = MetricValue("payoff_ratio", None, status="NO_TRADES")
             m["expectancy"] = MetricValue("expectancy", None, status="NO_TRADES")
-            m["avg_holding_period_days"] = MetricValue("avg_holding_period_days", None, status="NO_TRADES")
+            m["avg_holding_period_days"] = MetricValue(
+                "avg_holding_period_days", None, status="NO_TRADES"
+            )
             return BacktestMetricsSummary(metrics=m)
 
         winners = [t for t in trades if t.net_pnl > 0]
@@ -225,13 +237,19 @@ class MetricsEngine:
             m["payoff_ratio"] = MetricValue("payoff_ratio", None, status="N_A")
 
         # Expectancy = (Win Rate * Avg Win) - (Loss Rate * Avg Loss)
-        expectancy = ((win_rate / Decimal("100")) * avg_win) - ((loss_rate / Decimal("100")) * avg_loss)
+        expectancy = ((win_rate / Decimal("100")) * avg_win) - (
+            (loss_rate / Decimal("100")) * avg_loss
+        )
         m["expectancy"] = MetricValue("expectancy", expectancy)
 
         # Expectancy_R (R-normalised trade expectancy)
         r_multiples: list[Decimal] = []
         for t in trades:
-            if t.stop_loss_level is not None and t.stop_loss_level > Decimal("0") and t.stop_loss_level != t.entry_price:
+            if (
+                t.stop_loss_level is not None
+                and t.stop_loss_level > Decimal("0")
+                and t.stop_loss_level != t.entry_price
+            ):
                 initial_risk_per_share = abs(t.entry_price - t.stop_loss_level)
                 initial_trade_risk = initial_risk_per_share * Decimal(str(t.quantity))
                 if initial_trade_risk > Decimal("0"):
@@ -249,7 +267,9 @@ class MetricsEngine:
 
         # Avg Holding Period
         avg_holding = sum(t.holding_days for t in trades) / total_trades
-        m["avg_holding_period_days"] = MetricValue("avg_holding_period_days", Decimal(f"{avg_holding:.2f}"))
+        m["avg_holding_period_days"] = MetricValue(
+            "avg_holding_period_days", Decimal(f"{avg_holding:.2f}")
+        )
 
         # Total transaction costs & slippage
         total_costs = sum((t.total_fees for t in trades), Decimal("0"))

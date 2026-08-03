@@ -62,11 +62,25 @@ def test_gate_provenance_audit_classifications():
     audits = GateProvenanceAuditor.audit_all()
     audit_dict = {a.metric_name: a for a in audits}
 
-    assert audit_dict["win_rate"].classification == GateProvenanceClassification.PREDECLARED_HEURISTIC
-    assert audit_dict["profit_factor"].classification == GateProvenanceClassification.PREDECLARED_AND_JUSTIFIED
-    assert audit_dict["expectancy_r"].classification == GateProvenanceClassification.PREDECLARED_AND_JUSTIFIED
-    assert audit_dict["semester_concentration"].classification == GateProvenanceClassification.PREDECLARED_AND_JUSTIFIED
-    assert audit_dict["max_drawdown"].classification == GateProvenanceClassification.PREDECLARED_HEURISTIC
+    assert (
+        audit_dict["win_rate"].classification == GateProvenanceClassification.PREDECLARED_HEURISTIC
+    )
+    assert (
+        audit_dict["profit_factor"].classification
+        == GateProvenanceClassification.PREDECLARED_AND_JUSTIFIED
+    )
+    assert (
+        audit_dict["expectancy_r"].classification
+        == GateProvenanceClassification.PREDECLARED_AND_JUSTIFIED
+    )
+    assert (
+        audit_dict["semester_concentration"].classification
+        == GateProvenanceClassification.PREDECLARED_AND_JUSTIFIED
+    )
+    assert (
+        audit_dict["max_drawdown"].classification
+        == GateProvenanceClassification.PREDECLARED_HEURISTIC
+    )
 
 
 def test_m3b3_decision_policy_deterministic_rules():

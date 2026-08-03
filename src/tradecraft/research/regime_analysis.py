@@ -67,7 +67,12 @@ class RegimeDiagnosticAnalyzer:
 
         # Bucket trades by trend regime and volatility regime
         trend_groups: dict[str, list[TradeRecord]] = {"BULLISH": [], "BEARISH": [], "SIDEWAYS": []}
-        vol_groups: dict[str, list[TradeRecord]] = {"LOW": [], "NORMAL": [], "HIGH": [], "EXTREME": []}
+        vol_groups: dict[str, list[TradeRecord]] = {
+            "LOW": [],
+            "NORMAL": [],
+            "HIGH": [],
+            "EXTREME": [],
+        }
 
         # Segment each trade (based on signal date index/year or price state)
         for t in trades:
@@ -96,18 +101,31 @@ class RegimeDiagnosticAnalyzer:
             trend_groups[t_regime].append(t)
             vol_groups[v_regime].append(t)
 
-        def _build_stats(category: str, name: str, grp_trades: list[TradeRecord]) -> RegimeBucketStats:
+        def _build_stats(
+            category: str, name: str, grp_trades: list[TradeRecord]
+        ) -> RegimeBucketStats:
             cnt = len(grp_trades)
             if cnt == 0:
                 return RegimeBucketStats(regime_category=category, regime_name=name, trade_count=0)
 
             wins = sum(1 for t in grp_trades if t.net_pnl > Decimal("0"))
-            rs = [float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity)) for t in grp_trades]
+            rs = [
+                float(
+                    t.net_pnl
+                    / (
+                        abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95")))
+                        * t.quantity
+                    )
+                )
+                for t in grp_trades
+            ]
             mean_r = float(np.mean(rs))
             med_r = float(np.median(rs))
 
             gwins = sum((t.net_pnl for t in grp_trades if t.net_pnl > Decimal("0")), Decimal("0"))
-            glosses = abs(sum((t.net_pnl for t in grp_trades if t.net_pnl < Decimal("0")), Decimal("0")))
+            glosses = abs(
+                sum((t.net_pnl for t in grp_trades if t.net_pnl < Decimal("0")), Decimal("0"))
+            )
             pf = float(gwins / glosses) if glosses > Decimal("0") else 1.0
 
             return RegimeBucketStats(

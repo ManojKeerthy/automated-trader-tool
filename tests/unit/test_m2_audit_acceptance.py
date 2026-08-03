@@ -32,6 +32,7 @@ Verifies:
 9. Real-Money Order Execution Isolation:
    - Confirms engine and simulator contain ZERO real order placement calls
 """
+
 import uuid
 from datetime import date
 from decimal import Decimal
@@ -94,7 +95,9 @@ def test_dp_charge_per_isin_per_day_semantics():
     # 1. Default DP profile produces ₹15.34 (₹13 base + 18% GST = ₹15.34)
     model_default = IndianEquityDeliveryCostModel(profile=ZERODHA_STANDARD_PROFILE)
     assert ZERODHA_STANDARD_PROFILE.raw_dp_charge == Decimal("15.34")
-    sell_default = model_default.calculate_sell(Decimal("500.00"), 10, trade_date, is_new_isin_today=True)
+    sell_default = model_default.calculate_sell(
+        Decimal("500.00"), 10, trade_date, is_new_isin_today=True
+    )
     assert sell_default.dp_charges == Decimal("15.34")
 
     # 2. Alternative ₹12.75 base profile produces ₹15.045 before rounding (rounded to ₹15.05)
@@ -111,7 +114,9 @@ def test_dp_charge_per_isin_per_day_semantics():
     assert sell2.dp_charges == Decimal("0.00")
 
     # 4. Different ISINs incur separate charges
-    sell_isin_b = model_default.calculate_sell(Decimal("200.00"), 20, trade_date, is_new_isin_today=True)
+    sell_isin_b = model_default.calculate_sell(
+        Decimal("200.00"), 20, trade_date, is_new_isin_today=True
+    )
     assert sell_isin_b.dp_charges == Decimal("15.34")
 
 
@@ -249,7 +254,12 @@ def test_portfolio_accounting_expansion():
         signal_date=trade_date,
         quantity_hint=50,
     )
-    bar_entry = {"open": Decimal("100.00"), "high": Decimal("105.00"), "low": Decimal("98.00"), "close": Decimal("102.00")}
+    bar_entry = {
+        "open": Decimal("100.00"),
+        "high": Decimal("105.00"),
+        "low": Decimal("98.00"),
+        "close": Decimal("102.00"),
+    }
 
     # Fill Buy: 50 shares @ ₹100.00 = ₹5,000 + ₹5.94 costs
     res_entry = simulator.simulate_entry_execution(order, bar_entry, trade_date, portfolio.cash)
@@ -260,7 +270,12 @@ def test_portfolio_accounting_expansion():
     assert pos.quantity == 50
 
     # Fill Exit (Profitable): 50 shares @ ₹120.00 = ₹6,000
-    bar_exit = {"open": Decimal("120.00"), "high": Decimal("125.00"), "low": Decimal("118.00"), "close": Decimal("122.00")}
+    bar_exit = {
+        "open": Decimal("120.00"),
+        "high": Decimal("125.00"),
+        "low": Decimal("118.00"),
+        "close": Decimal("122.00"),
+    }
     res_exit = simulator.simulate_exit_execution(
         position_id=pos.position_id,
         strategy_id=pos.strategy_id,
@@ -269,7 +284,9 @@ def test_portfolio_accounting_expansion():
         quantity=50,
         stop_loss_level=None,
         target_level=None,
-        exit_signal=ExitSignal(instrument_id=inst_id, exit_type="MARKET", reason="TEST_TAKE_PROFIT"),
+        exit_signal=ExitSignal(
+            instrument_id=inst_id, exit_type="MARKET", reason="TEST_TAKE_PROFIT"
+        ),
         bar=bar_exit,
         execution_date=trade_date,
     )

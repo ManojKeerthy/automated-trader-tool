@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class UniverseDefinition:
     """Explicit definition and versioning metadata for an equity universe."""
+
     universe_id: str  # e.g., "NIFTY50", "NIFTY100", "NIFTY200", "NIFTY250", "NIFTY500", "CUSTOM"
     name: str
     version: str = "1.0.0"
@@ -24,7 +25,9 @@ class UniverseDefinition:
     @property
     def checksum(self) -> str:
         """Compute SHA256 cryptographic checksum of universe metadata for reproducibility."""
-        payload = f"{self.universe_id}:{self.version}:{self.dataset_version}:{self.membership_version}"
+        payload = (
+            f"{self.universe_id}:{self.version}:{self.dataset_version}:{self.membership_version}"
+        )
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
     def to_dict(self) -> dict[str, Any]:

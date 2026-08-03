@@ -25,10 +25,22 @@ def test_development_firewall_blocks_validation_dates():
 def test_frozen_v2_hashes_match():
     """Verify exact SHA256 hashes of the four frozen canonical V2 strategy configurations."""
     strats = [
-        (TrendPullbackV2Strategy(), "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523"),
-        (BreakoutConfirmV2Strategy(), "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213"),
-        (MomentumRSV2Strategy(), "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d"),
-        (MeanReversionV2Strategy(), "8bf0965a6c0ed6a234424a66b6324bdaaa3e96b10e9873b63e314bf4bd553b82"),
+        (
+            TrendPullbackV2Strategy(),
+            "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523",
+        ),
+        (
+            BreakoutConfirmV2Strategy(),
+            "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213",
+        ),
+        (
+            MomentumRSV2Strategy(),
+            "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d",
+        ),
+        (
+            MeanReversionV2Strategy(),
+            "8bf0965a6c0ed6a234424a66b6324bdaaa3e96b10e9873b63e314bf4bd553b82",
+        ),
     ]
     for strat, expected_hash in strats:
         assert strat.config_hash == expected_hash
@@ -100,4 +112,3 @@ def test_slippage_4_step_reconciliation():
 
     assert counterfactual_pnl - slippage_impact == exec_gross_pnl
     assert exec_gross_pnl - explicit_costs == net_pnl
-

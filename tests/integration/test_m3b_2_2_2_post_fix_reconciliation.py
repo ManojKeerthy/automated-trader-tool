@@ -1,4 +1,5 @@
 """Integration tests for M3B.2.2.2 post-fix accounting and temporal reconciliation on PostgreSQL."""
+
 from decimal import Decimal
 
 import pytest
@@ -25,9 +26,11 @@ def db_session():
     finally:
         session.close()
 
+
 @pytest.fixture
 def calendar():
     return TradingCalendar()
+
 
 @pytest.mark.parametrize(
     "strategy_cls",
@@ -61,9 +64,7 @@ def test_post_fix_accounting_and_temporal_invariants(db_session, calendar, strat
     assert final_snapshot.open_positions == 0
 
     # Invariant 2: Temporal Execution Invariant signal_date < entry_date <= exit_date
-    temporal_violations = [
-        t for t in trades if not (t.signal_date < t.entry_date <= t.exit_date)
-    ]
+    temporal_violations = [t for t in trades if not (t.signal_date < t.entry_date <= t.exit_date)]
     assert len(temporal_violations) == 0
 
     # Invariant 3: Accounting Discrepancy == 0.0000 INR

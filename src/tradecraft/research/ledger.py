@@ -46,7 +46,9 @@ class ImmutableResearchLedger:
     def record_entry(self, entry: ResearchLedgerEntry) -> None:
         """Add entry to ledger."""
         self.entries.append(entry)
-        logger.info(f"Ledger recorded entry for {entry.strategy_id} ({entry.config_hash[:12]}...) under phase {entry.phase}: {entry.outcome_status}")
+        logger.info(
+            f"Ledger recorded entry for {entry.strategy_id} ({entry.config_hash[:12]}...) under phase {entry.phase}: {entry.outcome_status}"
+        )
 
     def export_json(self, file_path: str) -> None:
         """Export ledger entries to JSON file."""

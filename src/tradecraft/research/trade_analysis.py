@@ -105,7 +105,9 @@ class TradeDistributionAnalyzer:
     def __init__(self, db_session: Session):
         self.db = db_session
 
-    def analyze(self, strategy_id: str, trades: list[TradeRecord], start_date: date, end_date: date) -> TradeAnalysisReport:
+    def analyze(
+        self, strategy_id: str, trades: list[TradeRecord], start_date: date, end_date: date
+    ) -> TradeAnalysisReport:
         """Run comprehensive trade analysis."""
         TrainOnlyGuard.validate_range(start_date, end_date)
 
@@ -131,8 +133,16 @@ class TradeDistributionAnalyzer:
         max_loss_streak = 0
 
         for t in trades:
-            init_risk = abs(t.entry_price - t.stop_loss_level) if t.stop_loss_level else (t.entry_price * Decimal("0.05"))
-            r_val = float(t.net_pnl / (init_risk * t.quantity)) if init_risk > Decimal("0") and t.quantity > 0 else 0.0
+            init_risk = (
+                abs(t.entry_price - t.stop_loss_level)
+                if t.stop_loss_level
+                else (t.entry_price * Decimal("0.05"))
+            )
+            r_val = (
+                float(t.net_pnl / (init_risk * t.quantity))
+                if init_risk > Decimal("0") and t.quantity > 0
+                else 0.0
+            )
             r_multiples.append(r_val)
 
             if t.net_pnl > Decimal("0"):
@@ -157,13 +167,15 @@ class TradeDistributionAnalyzer:
         p75 = float(np.percentile(r_arr, 75))
         p90 = float(np.percentile(r_arr, 90))
 
-        win_rate = (winners_count / total_trades * 100.0)
+        win_rate = winners_count / total_trades * 100.0
         avg_win_r = float(np.mean(winning_rs)) if winning_rs else 0.0
         avg_loss_r = abs(float(np.mean(losing_rs))) if losing_rs else 1.0
         payoff = avg_win_r / avg_loss_r if avg_loss_r > 0 else 0.0
 
         gross_wins = sum((t.net_pnl for t in trades if t.net_pnl > Decimal("0")), Decimal("0"))
-        gross_losses = abs(sum((t.net_pnl for t in trades if t.net_pnl < Decimal("0")), Decimal("0")))
+        gross_losses = abs(
+            sum((t.net_pnl for t in trades if t.net_pnl < Decimal("0")), Decimal("0"))
+        )
         pf = float(gross_wins / gross_losses) if gross_losses > Decimal("0") else 1.0
 
         r_stats = RMultipleStats(
@@ -189,7 +201,11 @@ class TradeDistributionAnalyzer:
         stopped_after_mfe = 0
 
         for t in trades:
-            init_risk_dec = abs(t.entry_price - t.stop_loss_level) if t.stop_loss_level else (t.entry_price * Decimal("0.05"))
+            init_risk_dec = (
+                abs(t.entry_price - t.stop_loss_level)
+                if t.stop_loss_level
+                else (t.entry_price * Decimal("0.05"))
+            )
             init_risk_flt: float = float(init_risk_dec)
             if init_risk_flt <= 0.0:
                 init_risk_flt = float(t.entry_price) * 0.05
@@ -254,9 +270,18 @@ class TradeDistributionAnalyzer:
         exit_reports: list[ExitReasonGroupStats] = []
         for reason, grp in exit_groups.items():
             grp_cnt = len(grp)
-            grp_pct = (grp_cnt / total_trades * 100.0)
+            grp_pct = grp_cnt / total_trades * 100.0
             grp_wins = sum(1 for t in grp if t.net_pnl > Decimal("0"))
-            grp_rs = [float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity)) for t in grp]
+            grp_rs = [
+                float(
+                    t.net_pnl
+                    / (
+                        abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95")))
+                        * t.quantity
+                    )
+                )
+                for t in grp
+            ]
             exit_reports.append(
                 ExitReasonGroupStats(
                     exit_reason=reason,
@@ -283,7 +308,19 @@ class TradeDistributionAnalyzer:
             b_cnt = len(b_trades)
             if b_cnt > 0:
                 b_wins = sum(1 for t in b_trades if t.net_pnl > Decimal("0"))
-                b_rs = [float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity)) for t in b_trades]
+                b_rs = [
+                    float(
+                        t.net_pnl
+                        / (
+                            abs(
+                                t.entry_price
+                                - (t.stop_loss_level or t.entry_price * Decimal("0.95"))
+                            )
+                            * t.quantity
+                        )
+                    )
+                    for t in b_trades
+                ]
                 b_net_pnl = sum((t.net_pnl for t in b_trades), Decimal("0"))
                 holding_reports.append(
                     HoldingPeriodBucketStats(

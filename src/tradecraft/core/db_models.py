@@ -179,9 +179,7 @@ class InstrumentHistory(Base):
     )
 
     # Relationships
-    instrument: Mapped["Instrument"] = relationship(
-        "Instrument", back_populates="history_records"
-    )
+    instrument: Mapped["Instrument"] = relationship("Instrument", back_populates="history_records")
 
 
 class UniverseMembership(Base):
@@ -240,9 +238,7 @@ class StrategyDefinition(Base):
     promoted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     promoted_by: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
-    __table_args__ = (
-        UniqueConstraint("name", "version", name="uq_strategy_name_version"),
-    )
+    __table_args__ = (UniqueConstraint("name", "version", name="uq_strategy_name_version"),)
 
     def __repr__(self) -> str:
         return f"<StrategyDefinition(name={self.name}, version={self.version}, stage={self.lifecycle_stage})>"
@@ -395,9 +391,7 @@ class BacktestMetric(Base):
     # Relationships
     run: Mapped["BacktestRun"] = relationship("BacktestRun", back_populates="metrics")
 
-    __table_args__ = (
-        UniqueConstraint("run_id", "metric_name", name="uq_run_metric"),
-    )
+    __table_args__ = (UniqueConstraint("run_id", "metric_name", name="uq_run_metric"),)
 
 
 # ---------------------------------------------------------------------------
@@ -426,9 +420,7 @@ class FeatureDefinitionModel(Base):
         DateTime(timezone=True), nullable=False, default=datetime.utcnow
     )
 
-    __table_args__ = (
-        UniqueConstraint("name", "version", name="uq_feature_name_version"),
-    )
+    __table_args__ = (UniqueConstraint("name", "version", name="uq_feature_name_version"),)
 
 
 class MarketRegimeSnapshotModel(Base):
@@ -484,7 +476,9 @@ class ScreeningRunModel(Base):
     regime_breadth: Mapped[str | None] = mapped_column(String(20), nullable=True)
     regime_overall_quality: Mapped[str | None] = mapped_column(String(30), nullable=True)
     exclusion_summary: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
-    research_quality_warnings: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
+    research_quality_warnings: Mapped[dict[str, Any] | None] = mapped_column(
+        JSON_TYPE, nullable=True
+    )
     feature_versions: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
     execution_metadata: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -508,11 +502,15 @@ class StrategyScorecardModel(Base):
     )
     strategy_id: Mapped[str] = mapped_column(String(100), nullable=False)
     strategy_version: Mapped[str] = mapped_column(String(50), nullable=False)
-    overall_rating: Mapped[str] = mapped_column(String(20), nullable=False)  # STRONG, ACCEPTABLE, WEAK, FAIL
+    overall_rating: Mapped[str] = mapped_column(
+        String(20), nullable=False
+    )  # STRONG, ACCEPTABLE, WEAK, FAIL
     expectancy_r: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
     sharpe_retention_pct: Mapped[Decimal | None] = mapped_column(Numeric(8, 4), nullable=True)
     max_drawdown_pct: Mapped[Decimal | None] = mapped_column(Numeric(8, 4), nullable=True)
-    walk_forward_consistency_pct: Mapped[Decimal | None] = mapped_column(Numeric(8, 4), nullable=True)
+    walk_forward_consistency_pct: Mapped[Decimal | None] = mapped_column(
+        Numeric(8, 4), nullable=True
+    )
     stressed_profit_factor: Mapped[Decimal | None] = mapped_column(Numeric(10, 4), nullable=True)
     total_trades: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     dimensions_json: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
@@ -562,7 +560,9 @@ class ResearchGraveyardModel(Base):
     parameters_json: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
     rejection_reason_code: Mapped[str] = mapped_column(String(50), nullable=False)
     rejection_details: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
-    stage_failed: Mapped[str] = mapped_column(String(30), nullable=False)  # STAGE_1, STAGE_2, VALIDATION, WALK_FORWARD, FINAL_TEST
+    stage_failed: Mapped[str] = mapped_column(
+        String(30), nullable=False
+    )  # STAGE_1, STAGE_2, VALIDATION, WALK_FORWARD, FINAL_TEST
     git_commit_hash: Mapped[str | None] = mapped_column(String(40), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=datetime.utcnow
@@ -571,4 +571,3 @@ class ResearchGraveyardModel(Base):
     __table_args__ = (
         UniqueConstraint("strategy_id", "configuration_hash", name="uq_graveyard_strategy_config"),
     )
-

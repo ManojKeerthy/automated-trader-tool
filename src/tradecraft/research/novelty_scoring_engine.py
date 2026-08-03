@@ -28,10 +28,42 @@ class NoveltyScoringEngine:
     """Quantitative similarity engine protecting against recycled Graveyard strategies."""
 
     GRAVEYARD_LINEAGES = {
-        "strat_trend_pullback": {"trend", "pullback", "ema", "rsi", "continuation", "bounce", "dip"},
-        "strat_momentum_rs": {"momentum", "relative", "strength", "nifty", "rank", "outperformance", "rs"},
-        "strat_breakout_confirm": {"breakout", "donchian", "consolidation", "atr", "resistance", "high", "confirmation"},
-        "strat_mean_reversion": {"mean", "reversion", "oversold", "rsi", "stretch", "reversal", "oscillator"},
+        "strat_trend_pullback": {
+            "trend",
+            "pullback",
+            "ema",
+            "rsi",
+            "continuation",
+            "bounce",
+            "dip",
+        },
+        "strat_momentum_rs": {
+            "momentum",
+            "relative",
+            "strength",
+            "nifty",
+            "rank",
+            "outperformance",
+            "rs",
+        },
+        "strat_breakout_confirm": {
+            "breakout",
+            "donchian",
+            "consolidation",
+            "atr",
+            "resistance",
+            "high",
+            "confirmation",
+        },
+        "strat_mean_reversion": {
+            "mean",
+            "reversion",
+            "oversold",
+            "rsi",
+            "stretch",
+            "reversal",
+            "oscillator",
+        },
     }
 
     def evaluate_novelty(self, hypothesis: HypothesisRecord) -> NoveltyReport:

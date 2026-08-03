@@ -27,9 +27,9 @@ class ResearchReportGenerator:
 
 - **Experiment ID**: `{exp_id}`
 - **Hypothesis UUID**: `{hypo_uuid}`
-- **Dataset Version**: `{experiment_data.get('dataset_version', 'v1')}`
-- **Universe Version**: `{experiment_data.get('universe_version', 'NIFTY50')}`
-- **Execution Timestamp**: `{experiment_data.get('execution_timestamp', '')}`
+- **Dataset Version**: `{experiment_data.get("dataset_version", "v1")}`
+- **Universe Version**: `{experiment_data.get("universe_version", "NIFTY50")}`
+- **Execution Timestamp**: `{experiment_data.get("execution_timestamp", "")}`
 
 ## Audit Verifications:
 - **Dataset Firewall**: `PASSED` (0 Validation / Final-Test accesses)

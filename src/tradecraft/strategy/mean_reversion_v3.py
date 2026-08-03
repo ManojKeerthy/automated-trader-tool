@@ -142,7 +142,10 @@ class MeanReversionV3Strategy(BaseV2Strategy):
             sma200 = sum(closes[-200:]) / 200.0
             sma20 = sum(closes[-20:]) / 20.0
 
-            tr_list = [max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1])) for i in range(-14, 0)]
+            tr_list = [
+                max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+                for i in range(-14, 0)
+            ]
             atr14 = sum(tr_list) / 14.0
 
             # RSI 5

@@ -3,6 +3,7 @@
 Hypothesis: Equities in long-term structural uptrends experiencing extreme,
 short-term selling exhaustion will revert toward their medium-term moving average.
 """
+
 import uuid
 from datetime import date
 from decimal import Decimal
@@ -91,12 +92,7 @@ class MeanReversionStrategy:
         atr_14 = indicators.calculate_atr(highs, lows, closes, 14)
         rsi_14 = indicators.calculate_rsi(closes, 14)
 
-        if (
-            sma_20[-1] is None
-            or sma_200[-1] is None
-            or atr_14[-1] is None
-            or rsi_14[-1] is None
-        ):
+        if sma_20[-1] is None or sma_200[-1] is None or atr_14[-1] is None or rsi_14[-1] is None:
             return None
 
         c_sma20 = sma_20[-1]
@@ -104,7 +100,9 @@ class MeanReversionStrategy:
         c_atr = atr_14[-1]
         c_rsi = rsi_14[-1]
 
-        assert c_sma20 is not None and c_sma200 is not None and c_atr is not None and c_rsi is not None
+        assert (
+            c_sma20 is not None and c_sma200 is not None and c_atr is not None and c_rsi is not None
+        )
 
         # 1. Structural Uptrend Anchor
         if current_close <= c_sma200:

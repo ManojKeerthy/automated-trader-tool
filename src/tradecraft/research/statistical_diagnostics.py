@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class DistributionMetrics:
     """Distribution analysis statistics for trade R-multiples or returns."""
+
     sample_size: int
     mean: float
     std_dev: float
@@ -38,7 +39,11 @@ class StatisticalDiagnostics:
 
         # Median
         sorted_vals = sorted(sample_values)
-        median_val = sorted_vals[n // 2] if n % 2 != 0 else (sorted_vals[n // 2 - 1] + sorted_vals[n // 2]) / 2.0
+        median_val = (
+            sorted_vals[n // 2]
+            if n % 2 != 0
+            else (sorted_vals[n // 2 - 1] + sorted_vals[n // 2]) / 2.0
+        )
 
         return DistributionMetrics(
             sample_size=n,
@@ -52,7 +57,9 @@ class StatisticalDiagnostics:
         )
 
     @staticmethod
-    def bootstrap_expectancy(sample_values: list[float], iterations: int = 1000) -> tuple[float, float]:
+    def bootstrap_expectancy(
+        sample_values: list[float], iterations: int = 1000
+    ) -> tuple[float, float]:
         """Simple bootstrap percentile interval for mean expectancy."""
         if not sample_values:
             return (0.0, 0.0)

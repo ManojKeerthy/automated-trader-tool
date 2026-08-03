@@ -11,6 +11,7 @@ Backfill characteristics:
 - Observable & Recoverable
 - Computes per-instrument data coverage
 """
+
 import logging
 import time
 from dataclasses import dataclass
@@ -102,16 +103,18 @@ class HistoricalBackfillWorkflow:
 
                 # Determine missing historical range
                 needed_start = target_start_date
-                needed_end = coverage.earliest_date - timedelta(days=1) if coverage.earliest_date else end_date
+                needed_end = (
+                    coverage.earliest_date - timedelta(days=1)
+                    if coverage.earliest_date
+                    else end_date
+                )
 
                 if needed_start > needed_end:
                     logger.info(f"Instrument {inst.symbol} already has required historical depth.")
                     report["instrument_coverages"].append(coverage)
                     continue
 
-                logger.info(
-                    f"Backfilling {inst.symbol} from {needed_start} to {needed_end}..."
-                )
+                logger.info(f"Backfilling {inst.symbol} from {needed_start} to {needed_end}...")
 
                 # Process in chunks to respect provider limits
                 curr_start = needed_start
@@ -170,7 +173,9 @@ class HistoricalBackfillWorkflow:
 
         return report
 
-    def _get_coverage(self, inst: Instrument, target_start: date, target_end: date) -> InstrumentCoverage:
+    def _get_coverage(
+        self, inst: Instrument, target_start: date, target_end: date
+    ) -> InstrumentCoverage:
         """Inspect stored bars to build coverage metrics."""
         stmt = (
             select(MarketBar)

@@ -537,4 +537,3 @@ def run_m3b_research_lab_endpoint(
     cal = TradingCalendar()
     lab = M3BResearchLaboratory(db_session=db, calendar=cal)
     return lab.run_m3b_research_lab()
-

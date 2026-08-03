@@ -95,7 +95,9 @@ class M3B1DiagnosticEngine:
         self.slippage_model = FixedBasisPointSlippage(bps=5)
 
         # Enforce date boundary on initialization
-        TrainOnlyGuard.validate_range(self.splitter.train_split.start_date, self.splitter.train_split.end_date)
+        TrainOnlyGuard.validate_range(
+            self.splitter.train_split.start_date, self.splitter.train_split.end_date
+        )
 
     def load_graveyard_records(self) -> list[ResearchGraveyardModel]:
         """Load persisted canonical graveyard records from PostgreSQL."""
@@ -137,7 +139,9 @@ class M3B1DiagnosticEngine:
         else:
             raise ValueError(f"Unknown strategy_id in graveyard: {strat_id}")
 
-    def reproduce_stage_1(self, record: ResearchGraveyardModel) -> tuple[Stage1ReproductionResult, BacktestResult]:
+    def reproduce_stage_1(
+        self, record: ResearchGraveyardModel
+    ) -> tuple[Stage1ReproductionResult, BacktestResult]:
         """Hard gate Stage-1 reproduction against original M3B run."""
         # Enforce date guard
         TrainOnlyGuard.validate_range(TRAIN_SPLIT.start_date, TRAIN_SPLIT.end_date)
@@ -159,7 +163,11 @@ class M3B1DiagnosticEngine:
         # Retrieve reproduced values
         repro_trades = len(res.trades)
         exp_r_metric = res.metrics.metrics.get("expectancy_r")
-        repro_exp_r = float(exp_r_metric.value) if isinstance(exp_r_metric, MetricValue) and exp_r_metric.value is not None else 0.0
+        repro_exp_r = (
+            float(exp_r_metric.value)
+            if isinstance(exp_r_metric, MetricValue) and exp_r_metric.value is not None
+            else 0.0
+        )
 
         # Retrieve expected graveyard details
         rej_details = record.rejection_details or {}
@@ -167,11 +175,19 @@ class M3B1DiagnosticEngine:
         exp_expectancy_r = float(rej_details.get("train_expectancy_r", repro_exp_r))
 
         # Check exact and tolerance match
-        trade_count_match = (repro_trades == exp_trades)
+        trade_count_match = repro_trades == exp_trades
         exp_r_diff = abs(repro_exp_r - exp_expectancy_r)
         is_exact = trade_count_match and (exp_r_diff < 1e-4)
 
-        status = "EXACT_MATCH" if is_exact else ("TOLERANCE_MATCH" if trade_count_match and exp_r_diff < 0.05 else "DISCREPANCY_FOUND")
+        status = (
+            "EXACT_MATCH"
+            if is_exact
+            else (
+                "TOLERANCE_MATCH"
+                if trade_count_match and exp_r_diff < 0.05
+                else "DISCREPANCY_FOUND"
+            )
+        )
 
         discrepancy_msg = None
         if status == "DISCREPANCY_FOUND":

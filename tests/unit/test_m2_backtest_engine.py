@@ -15,6 +15,7 @@ Tests:
 5. Survivorship-bias universe gating test
 6. Metrics edge case tests (zero trades, zero volatility, NaN/Inf prevention)
 """
+
 import uuid
 from datetime import date
 from decimal import Decimal
@@ -105,7 +106,12 @@ def test_execution_simulator_scenarios():
     trade_date = date(2026, 7, 28)
 
     # Scenario 1: Gap below stop -> Fills at Open (not at stop_loss level!)
-    bar_gap_down = {"open": Decimal("900.00"), "high": Decimal("940.00"), "low": Decimal("890.00"), "close": Decimal("910.00")}
+    bar_gap_down = {
+        "open": Decimal("900.00"),
+        "high": Decimal("940.00"),
+        "low": Decimal("890.00"),
+        "close": Decimal("910.00"),
+    }
     res_gap_down = simulator.simulate_exit_execution(
         position_id=uuid.uuid4(),
         strategy_id="test",
@@ -124,7 +130,12 @@ def test_execution_simulator_scenarios():
     assert res_gap_down.exit_reason == "STOP_LOSS"
 
     # Scenario 2: Gap above target -> Fills at Open
-    bar_gap_up = {"open": Decimal("1200.00"), "high": Decimal("1250.00"), "low": Decimal("1180.00"), "close": Decimal("1220.00")}
+    bar_gap_up = {
+        "open": Decimal("1200.00"),
+        "high": Decimal("1250.00"),
+        "low": Decimal("1180.00"),
+        "close": Decimal("1220.00"),
+    }
     res_gap_up = simulator.simulate_exit_execution(
         position_id=uuid.uuid4(),
         strategy_id="test",
@@ -143,7 +154,12 @@ def test_execution_simulator_scenarios():
     assert res_gap_up.exit_reason == "PROFIT_TARGET"
 
     # Scenario 3: Intraday stop touch -> Fills at stop_loss level
-    bar_normal = {"open": Decimal("1000.00"), "high": Decimal("1020.00"), "low": Decimal("940.00"), "close": Decimal("980.00")}
+    bar_normal = {
+        "open": Decimal("1000.00"),
+        "high": Decimal("1020.00"),
+        "low": Decimal("940.00"),
+        "close": Decimal("980.00"),
+    }
     res_stop = simulator.simulate_exit_execution(
         position_id=uuid.uuid4(),
         strategy_id="test",
@@ -177,7 +193,12 @@ def test_execution_simulator_scenarios():
 
     # Scenario 5: Both stop AND target touched in same bar -> Conservative OHLC Ambiguity
     # Bar range [900, 1100], Stop = 950, Target = 1050
-    bar_ambiguous = {"open": Decimal("1000.00"), "high": Decimal("1100.00"), "low": Decimal("900.00"), "close": Decimal("980.00")}
+    bar_ambiguous = {
+        "open": Decimal("1000.00"),
+        "high": Decimal("1100.00"),
+        "low": Decimal("900.00"),
+        "close": Decimal("980.00"),
+    }
     res_ambig = simulator.simulate_exit_execution(
         position_id=uuid.uuid4(),
         strategy_id="test",
@@ -265,16 +286,44 @@ def test_metrics_engine_edge_cases():
     engine = MetricsEngine(RiskFreeRateConfig())
 
     # Edge case 1: Zero trades
-    summary_empty = engine.calculate([], [], Decimal("50000.00"), date(2026, 1, 1), date(2026, 7, 28))
+    summary_empty = engine.calculate(
+        [], [], Decimal("50000.00"), date(2026, 1, 1), date(2026, 7, 28)
+    )
     assert summary_empty.metrics["trade_count"].value == Decimal("0")
     assert summary_empty.metrics["win_rate_pct"].status == "NO_TRADES"
 
     # Edge case 2: Zero volatility (flat equity curve)
     snaps = [
-        EquitySnapshot(date(2026, 7, 20), Decimal("50000"), Decimal("0"), Decimal("50000"), Decimal("50000"), Decimal("0"), 0),
-        EquitySnapshot(date(2026, 7, 21), Decimal("50000"), Decimal("0"), Decimal("50000"), Decimal("50000"), Decimal("0"), 0),
-        EquitySnapshot(date(2026, 7, 22), Decimal("50000"), Decimal("0"), Decimal("50000"), Decimal("50000"), Decimal("0"), 0),
+        EquitySnapshot(
+            date(2026, 7, 20),
+            Decimal("50000"),
+            Decimal("0"),
+            Decimal("50000"),
+            Decimal("50000"),
+            Decimal("0"),
+            0,
+        ),
+        EquitySnapshot(
+            date(2026, 7, 21),
+            Decimal("50000"),
+            Decimal("0"),
+            Decimal("50000"),
+            Decimal("50000"),
+            Decimal("0"),
+            0,
+        ),
+        EquitySnapshot(
+            date(2026, 7, 22),
+            Decimal("50000"),
+            Decimal("0"),
+            Decimal("50000"),
+            Decimal("50000"),
+            Decimal("0"),
+            0,
+        ),
     ]
-    summary_flat = engine.calculate(snaps, [], Decimal("50000.00"), date(2026, 7, 20), date(2026, 7, 22))
+    summary_flat = engine.calculate(
+        snaps, [], Decimal("50000.00"), date(2026, 7, 20), date(2026, 7, 22)
+    )
     assert summary_flat.metrics["sharpe_ratio"].status == "ZERO_VOLATILITY"
     assert summary_flat.metrics["sharpe_ratio"].value is None

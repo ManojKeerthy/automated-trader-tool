@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 class ResearchGovernanceError(Exception):
     """Raised when a research governance or graveyard rule is violated."""
+
     pass
 
 
@@ -33,7 +34,9 @@ class ResearchGovernanceManager:
         assert self.state["final_test_status"] == "SEALED_UNTOUCHED"
         assert len(self.state["abandoned_strategy_families"]) == 4
         assert len(self.state["active_strategy_families"]) == 0
-        logger.info("RESEARCH GOVERNANCE STATE VALIDATED: Cycle 1 CLOSED_NO_SURVIVOR, Validation SEALED.")
+        logger.info(
+            "RESEARCH GOVERNANCE STATE VALIDATED: Cycle 1 CLOSED_NO_SURVIVOR, Validation SEALED."
+        )
         return True
 
 
@@ -68,7 +71,9 @@ class LineageCollisionDetector:
     ]
 
     @classmethod
-    def inspect_proposed_hypothesis(cls, strategy_id: str, parameters: dict[str, Any], rule_summary: str) -> bool:
+    def inspect_proposed_hypothesis(
+        cls, strategy_id: str, parameters: dict[str, Any], rule_summary: str
+    ) -> bool:
         # Check strategy ID prefix first
         try:
             GraveyardEnforcementGuard.check_strategy_id(strategy_id)

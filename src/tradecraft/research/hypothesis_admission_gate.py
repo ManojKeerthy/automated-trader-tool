@@ -75,7 +75,10 @@ class HypothesisAdmissionGate:
         passed.append("SUITABLE_FOR_INDIAN_EQUITIES")
 
         # 8. Explicit Falsification Criteria
-        if hypothesis.falsification_criteria and len(hypothesis.falsification_criteria.strip()) >= 10:
+        if (
+            hypothesis.falsification_criteria
+            and len(hypothesis.falsification_criteria.strip()) >= 10
+        ):
             passed.append("EXPLICIT_FALSIFICATION_CRITERIA_SET")
         else:
             failed.append("EXPLICIT_FALSIFICATION_CRITERIA_SET")

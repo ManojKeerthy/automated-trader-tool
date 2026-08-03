@@ -7,6 +7,7 @@ from tradecraft.research.splits import DEVELOPMENT_SPLIT, FINAL_TEST_SPLIT, VALI
 
 class DataBoundaryViolationError(Exception):
     """Raised when an operation attempts to access data outside DEVELOPMENT boundary."""
+
     pass
 
 

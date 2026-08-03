@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class FeatureLineage:
     """Explicit dependency graph lineage for a feature."""
+
     depends_on: list[str] = field(default_factory=list)  # Feature names or raw series
     raw_features: list[str] = field(default_factory=list)  # e.g. ["Close", "Volume"]
     dataset_version: str = "v1"
@@ -28,6 +29,7 @@ class FeatureLineage:
 @dataclass
 class FeatureDefinition:
     """Immutable, versioned feature record."""
+
     feature_uuid: str
     feature_name: str
     description: str
@@ -67,8 +69,18 @@ class FeatureRegistry:
     """Central registry maintaining pre-registered core technical & regime features."""
 
     CORE_FEATURES = [
-        "RSI", "ATR", "EMA", "SMA", "ADX", "MACD", "ROC",
-        "Relative Strength", "Volatility", "Liquidity", "Sector Strength", "Market Regime"
+        "RSI",
+        "ATR",
+        "EMA",
+        "SMA",
+        "ADX",
+        "MACD",
+        "ROC",
+        "Relative Strength",
+        "Volatility",
+        "Liquidity",
+        "Sector Strength",
+        "Market Regime",
     ]
 
     def __init__(self) -> None:

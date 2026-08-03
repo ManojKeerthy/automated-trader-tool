@@ -10,6 +10,7 @@ Models:
 
 Production-quality strategy evaluation MUST NOT rely solely on zero-slippage results.
 """
+
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Protocol
 
@@ -69,9 +70,7 @@ class FixedBasisPointSlippage:
         return f"fixed_{self._bps}bps"
 
     def apply(self, price: Decimal, side: str, quantity: int) -> Decimal:
-        slippage_amount = (price * self._factor).quantize(
-            Decimal("0.0001"), rounding=ROUND_HALF_UP
-        )
+        slippage_amount = (price * self._factor).quantize(Decimal("0.0001"), rounding=ROUND_HALF_UP)
         if side == "BUY":
             return price + slippage_amount
         elif side == "SELL":

@@ -19,7 +19,8 @@ class ResearchCycleBudget:
             "max_development_experiments": self.max_development_experiments,
             "current_hypothesis_families_count": self.current_hypothesis_families_count,
             "current_experiments_count": self.current_experiments_count,
-            "remaining_experiments": self.max_development_experiments - self.current_experiments_count,
+            "remaining_experiments": self.max_development_experiments
+            - self.current_experiments_count,
         }
 
 
@@ -36,5 +37,7 @@ class ExperimentBudgetManager:
     def consume_experiment_quota(self) -> None:
         """Record an experiment execution against the cycle budget."""
         if not self.check_experiment_quota():
-            raise RuntimeError("RESEARCH CYCLE BUDGET EXCEEDED: Cannot execute more DEVELOPMENT experiments!")
+            raise RuntimeError(
+                "RESEARCH CYCLE BUDGET EXCEEDED: Cannot execute more DEVELOPMENT experiments!"
+            )
         self.budget.current_experiments_count += 1

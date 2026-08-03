@@ -3,6 +3,7 @@
 Hypothesis: Securities demonstrating persistent strength relative to the benchmark
 continue to outperform over swing horizons due to institutional inflows.
 """
+
 import uuid
 from datetime import date
 from decimal import Decimal

@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class CatalogAsset:
     """Institutional asset metadata record with dependency lineage."""
+
     uuid: str
     name: str
     asset_type: str  # UNIVERSE, DATASET, CORPORATE_ACTIONS, MEMBERSHIP, FEATURES, BACKTESTS, EXPERIMENTS, REPORTS

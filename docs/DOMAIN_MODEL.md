@@ -235,14 +235,17 @@ class Exchange(Enum):
     NSE = "NSE"
     BSE = "BSE"
 
+
 class TradeSide(Enum):
     BUY = "BUY"
+
 
 class OrderType(Enum):
     MARKET = "MARKET"
     LIMIT = "LIMIT"
-    SL = "SL"           # Stop-loss limit
-    SL_M = "SL_M"       # Stop-loss market
+    SL = "SL"  # Stop-loss limit
+    SL_M = "SL_M"  # Stop-loss market
+
 
 class OrderStatus(Enum):
     CREATED = "CREATED"
@@ -259,9 +262,11 @@ class OrderStatus(Enum):
     FAILED = "FAILED"
     EXPIRED = "EXPIRED"
 
+
 class BrokerMode(Enum):
     PAPER = "PAPER"
     LIVE = "LIVE"
+
 
 class StrategyLifecycle(Enum):
     IDEA = "IDEA"
@@ -280,6 +285,7 @@ class StrategyLifecycle(Enum):
     DEPRECATED = "DEPRECATED"
     RETIRED = "RETIRED"
 
+
 class MarketRegime(Enum):
     BULLISH = "BULLISH"
     BEARISH = "BEARISH"
@@ -288,11 +294,13 @@ class MarketRegime(Enum):
     LOW_VOLATILITY = "LOW_VOLATILITY"
     UNKNOWN = "UNKNOWN"
 
+
 class RiskLevel(Enum):
     NORMAL = "NORMAL"
-    ELEVATED = "ELEVATED"      # 5% drawdown warning
+    ELEVATED = "ELEVATED"  # 5% drawdown warning
     RISK_REDUCTION = "RISK_REDUCTION"  # 8% drawdown
-    RISK_LOCK = "RISK_LOCK"    # 10% drawdown, hard lock
+    RISK_LOCK = "RISK_LOCK"  # 10% drawdown, hard lock
+
 
 class ProposalStatus(Enum):
     PENDING = "PENDING"
@@ -300,10 +308,12 @@ class ProposalStatus(Enum):
     REJECTED = "REJECTED"
     EXPIRED = "EXPIRED"
 
+
 class PositionStatus(Enum):
     OPEN = "OPEN"
     CLOSED = "CLOSED"
     PARTIALLY_CLOSED = "PARTIALLY_CLOSED"
+
 
 class CorporateActionType(Enum):
     SPLIT = "SPLIT"

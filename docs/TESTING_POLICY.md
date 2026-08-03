@@ -59,23 +59,30 @@ Automated tests are mandatory. Financial/risk invariants deserve especially stro
 # A rejected trade cannot reach execution
 def test_rejected_trade_cannot_execute(): ...
 
+
 # A trade exceeding risk limits cannot reach execution
 def test_risk_limit_breach_blocks_execution(): ...
+
 
 # Paper mode cannot submit a live order
 def test_paper_mode_cannot_submit_live_order(): ...
 
+
 # RISK LOCK prevents new exposure
 def test_risk_lock_blocks_new_positions(): ...
+
 
 # Stale data prevents affected trading decisions
 def test_stale_data_blocks_trading(): ...
 
+
 # An LLM cannot bypass deterministic risk/compliance controls
 def test_ai_cannot_bypass_risk_controls(): ...
 
+
 # Absent mode configuration defaults to PAPER
 def test_default_mode_is_paper(): ...
+
 
 # Kill switch cancels all pending orders
 def test_kill_switch_cancels_orders(): ...

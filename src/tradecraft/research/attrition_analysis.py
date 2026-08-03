@@ -87,7 +87,9 @@ class ConditionAttritionAnalyzer:
 
     def analyze_all_families(self) -> list[StrategyAttritionReport]:
         """Analyze all 4 canonical V1 strategy families on DEVELOPMENT data."""
-        DevelopmentOnlyGuard.validate_range(DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date)
+        DevelopmentOnlyGuard.validate_range(
+            DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date
+        )
 
         reports = [
             self._analyze_trend_pullback(),
@@ -110,7 +112,12 @@ class ConditionAttritionAnalyzer:
         # Cond 1: Close > SMA50
         c1_pass = [b for b in bars if b.get("close", 0) > b.get("sma50", 0)]
         # Cond 2: Pullback ATR dist <= 1.5
-        c2_pass = [b for b in bars if b.get("atr", 0) > 0 and (b.get("close", 0) - b.get("sma50", 0)) / b.get("atr", 1) <= 1.5]
+        c2_pass = [
+            b
+            for b in bars
+            if b.get("atr", 0) > 0
+            and (b.get("close", 0) - b.get("sma50", 0)) / b.get("atr", 1) <= 1.5
+        ]
         # Cond 3: RSI <= 45
         c3_pass = [b for b in bars if b.get("rsi14", 50) <= 45.0]
 
@@ -465,7 +472,12 @@ class ConditionAttritionAnalyzer:
         # Cond 2: Oversold RSI(5) <= 30
         c2_pass = [b for b in bars if b.get("rsi5", 50) <= 30.0]
         # Cond 3: Displacement ATR >= 2.0
-        c3_pass = [b for b in bars if b.get("atr", 0) > 0 and (b.get("sma20", 0) - b.get("close", 0)) / b.get("atr", 1) >= 2.0]
+        c3_pass = [
+            b
+            for b in bars
+            if b.get("atr", 0) > 0
+            and (b.get("sma20", 0) - b.get("close", 0)) / b.get("atr", 1) >= 2.0
+        ]
 
         cum1 = c1_pass
         cum2 = [b for b in cum1 if b in c2_pass]
@@ -617,7 +629,14 @@ class ConditionAttritionAnalyzer:
                 sma200 = sum(c_slice[-200:]) / 200.0 if i >= 200 else sma50
 
                 # ATR 14
-                tr_list = [max(h_slice[j] - l_slice[j], abs(h_slice[j] - c_slice[j - 1]), abs(l_slice[j] - c_slice[j - 1])) for j in range(i - 13, i + 1)]
+                tr_list = [
+                    max(
+                        h_slice[j] - l_slice[j],
+                        abs(h_slice[j] - c_slice[j - 1]),
+                        abs(l_slice[j] - c_slice[j - 1]),
+                    )
+                    for j in range(i - 13, i + 1)
+                ]
                 atr14 = sum(tr_list) / 14.0 if tr_list else 1.0
 
                 # RSI 14
@@ -645,26 +664,32 @@ class ConditionAttritionAnalyzer:
                 rvol = volumes[i] / max(1.0, avg_vol20)
 
                 # Synthetic RS percentile rank
-                rs_pct = min(99.0, max(1.0, 50.0 + (c_slice[-1] - c_slice[-63]) / c_slice[-63] * 100)) if i >= 63 else 50.0
+                rs_pct = (
+                    min(99.0, max(1.0, 50.0 + (c_slice[-1] - c_slice[-63]) / c_slice[-63] * 100))
+                    if i >= 63
+                    else 50.0
+                )
 
-                processed_bars.append({
-                    "date": b.trading_date,
-                    "close": closes[i],
-                    "high": highs[i],
-                    "low": lows[i],
-                    "sma20": sma20,
-                    "sma50": sma50,
-                    "sma200": sma200,
-                    "atr": atr14,
-                    "rsi14": rsi14,
-                    "rsi5": rsi5,
-                    "is_donchian_breakout": is_breakout,
-                    "consolidation_pct": consolidation_pct,
-                    "rvol": rvol,
-                    "rs_percentile": rs_pct,
-                    "nifty_close": 15000.0,
-                    "nifty_sma200": 14000.0,
-                })
+                processed_bars.append(
+                    {
+                        "date": b.trading_date,
+                        "close": closes[i],
+                        "high": highs[i],
+                        "low": lows[i],
+                        "sma20": sma20,
+                        "sma50": sma50,
+                        "sma200": sma200,
+                        "atr": atr14,
+                        "rsi14": rsi14,
+                        "rsi5": rsi5,
+                        "is_donchian_breakout": is_breakout,
+                        "consolidation_pct": consolidation_pct,
+                        "rvol": rvol,
+                        "rs_percentile": rs_pct,
+                        "nifty_close": 15000.0,
+                        "nifty_sma200": 14000.0,
+                    }
+                )
 
         return processed_bars
 

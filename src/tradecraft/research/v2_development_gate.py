@@ -104,9 +104,13 @@ class V2DevelopmentGateEvaluator:
         self.db = db_session
         self.engine = BacktestEngine(db_session, TradingCalendar())
 
-    def evaluate_frozen_v2(self, frozen_record: FrozenV2CanonicalRecord, strategy_instance: BaseV2Strategy) -> tuple[V2DevelopmentScorecard, list[TradeRecord]]:
+    def evaluate_frozen_v2(
+        self, frozen_record: FrozenV2CanonicalRecord, strategy_instance: BaseV2Strategy
+    ) -> tuple[V2DevelopmentScorecard, list[TradeRecord]]:
         """Run DEVELOPMENT backtest on frozen V2 strategy and evaluate gate criteria."""
-        DevelopmentOnlyGuard.validate_range(DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date)
+        DevelopmentOnlyGuard.validate_range(
+            DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date
+        )
 
         config = BacktestConfig(
             strategy=strategy_instance,
@@ -144,26 +148,46 @@ class V2DevelopmentGateEvaluator:
         # Risk per trade = abs(entry - stop_loss) * qty
         r_multiples: list[float] = []
         for t in trades:
-            init_risk = abs(t.entry_price - (t.stop_loss_level or (t.entry_price * Decimal("0.95")))) * Decimal(str(t.quantity))
+            init_risk = abs(
+                t.entry_price - (t.stop_loss_level or (t.entry_price * Decimal("0.95")))
+            ) * Decimal(str(t.quantity))
             if init_risk > Decimal("0"):
                 r_multiples.append(float(t.net_pnl / init_risk))
             else:
                 r_multiples.append(0.0)
 
-        net_exp_r = round(sum(r_multiples) / max(1, executed_count), 4) if executed_count > 0 else 0.0
-        gross_exp_r = round(net_exp_r + float(friction_cost / max(Decimal("1.0"), net_pnl)), 4) if executed_count > 0 else 0.0
+        net_exp_r = (
+            round(sum(r_multiples) / max(1, executed_count), 4) if executed_count > 0 else 0.0
+        )
+        gross_exp_r = (
+            round(net_exp_r + float(friction_cost / max(Decimal("1.0"), net_pnl)), 4)
+            if executed_count > 0
+            else 0.0
+        )
 
         # Concentration & Single-Trade Outlier checks
         inst_profits: dict[Any, Decimal] = {}
         for t in trades:
-            inst_profits[t.instrument_id] = inst_profits.get(t.instrument_id, Decimal("0")) + t.net_pnl
+            inst_profits[t.instrument_id] = (
+                inst_profits.get(t.instrument_id, Decimal("0")) + t.net_pnl
+            )
 
         tot_pos_profit = sum((p for p in inst_profits.values() if p > Decimal("0")), Decimal("0"))
         max_inst_profit = max(inst_profits.values()) if inst_profits else Decimal("0")
-        max_inst_share = round(float((max_inst_profit / tot_pos_profit) * 100) if tot_pos_profit > Decimal("0") else 0.0, 2)
+        max_inst_share = round(
+            float((max_inst_profit / tot_pos_profit) * 100)
+            if tot_pos_profit > Decimal("0")
+            else 0.0,
+            2,
+        )
 
         max_trade_win = max((t.gross_pnl for t in wins), default=Decimal("0"))
-        max_trade_share = round(float((max_trade_win / max(Decimal("1.0"), gross_pnl)) * 100) if gross_pnl > Decimal("0") else 0.0, 2)
+        max_trade_share = round(
+            float((max_trade_win / max(Decimal("1.0"), gross_pnl)) * 100)
+            if gross_pnl > Decimal("0")
+            else 0.0,
+            2,
+        )
 
         avg_holding = round(sum(t.holding_days for t in trades) / max(1, executed_count), 1)
 
@@ -172,22 +196,32 @@ class V2DevelopmentGateEvaluator:
         review_flags: list[str] = []
 
         if executed_count < MIN_DEVELOPMENT_TRADES:
-            rejection_reasons.append(f"Insufficient executed trades ({executed_count} < {MIN_DEVELOPMENT_TRADES})")
+            rejection_reasons.append(
+                f"Insufficient executed trades ({executed_count} < {MIN_DEVELOPMENT_TRADES})"
+            )
 
         if net_exp_r <= MIN_NET_EXPECTANCY_R:
-            rejection_reasons.append(f"Net Expectancy_R <= 0 ({net_exp_r:.4f} <= {MIN_NET_EXPECTANCY_R})")
+            rejection_reasons.append(
+                f"Net Expectancy_R <= 0 ({net_exp_r:.4f} <= {MIN_NET_EXPECTANCY_R})"
+            )
 
         if pf <= MIN_PROFIT_FACTOR:
             rejection_reasons.append(f"Profit Factor <= 1.0 ({pf} <= {MIN_PROFIT_FACTOR})")
 
         if max_inst_share > MAX_INSTRUMENT_PROFIT_SHARE_PCT:
-            rejection_reasons.append(f"Single instrument profit share too high ({max_inst_share}% > {MAX_INSTRUMENT_PROFIT_SHARE_PCT}%)")
+            rejection_reasons.append(
+                f"Single instrument profit share too high ({max_inst_share}% > {MAX_INSTRUMENT_PROFIT_SHARE_PCT}%)"
+            )
 
         if max_trade_share > MAX_SINGLE_TRADE_PROFIT_SHARE_PCT:
-            rejection_reasons.append(f"Single trade profit share too high ({max_trade_share}% > {MAX_SINGLE_TRADE_PROFIT_SHARE_PCT}%)")
+            rejection_reasons.append(
+                f"Single trade profit share too high ({max_trade_share}% > {MAX_SINGLE_TRADE_PROFIT_SHARE_PCT}%)"
+            )
 
         if payoff < MIN_PAYOFF_RATIO:
-            review_flags.append(f"REVIEW_REQUIRED: Payoff ratio below target baseline ({payoff} < {MIN_PAYOFF_RATIO})")
+            review_flags.append(
+                f"REVIEW_REQUIRED: Payoff ratio below target baseline ({payoff} < {MIN_PAYOFF_RATIO})"
+            )
 
         gate_pass = len(rejection_reasons) == 0
         outcome = "V2_DEVELOPMENT_SURVIVOR" if gate_pass else "V2_DEVELOPMENT_FAILURE"

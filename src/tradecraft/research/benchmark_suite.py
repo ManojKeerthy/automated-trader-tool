@@ -7,9 +7,12 @@ from typing import Any
 @dataclass
 class BenchmarkDefinition:
     """Versioned benchmark definition."""
+
     benchmark_id: str
     name: str
-    benchmark_type: str  # BUY_AND_HOLD, EQUAL_WEIGHT, RANDOM_ENTRY, COIN_FLIP, SMA200_TREND, PREVIOUS_BEST
+    benchmark_type: (
+        str  # BUY_AND_HOLD, EQUAL_WEIGHT, RANDOM_ENTRY, COIN_FLIP, SMA200_TREND, PREVIOUS_BEST
+    )
     version: str = "1.0.0"
     description: str = ""
 

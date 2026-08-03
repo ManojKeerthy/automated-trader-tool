@@ -126,12 +126,28 @@ class FailureDiagnosticAnalyzer:
                 active_years += 1
                 net_pnl = sum((t.net_pnl for t in yr_trades), Decimal("0"))
                 wins = sum(1 for t in yr_trades if t.net_pnl > Decimal("0"))
-                rs = [float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity)) for t in yr_trades]
+                rs = [
+                    float(
+                        t.net_pnl
+                        / (
+                            abs(
+                                t.entry_price
+                                - (t.stop_loss_level or t.entry_price * Decimal("0.95"))
+                            )
+                            * t.quantity
+                        )
+                    )
+                    for t in yr_trades
+                ]
                 mean_r = float(np.mean(rs))
                 med_r = float(np.median(rs))
 
-                gwins = sum((t.net_pnl for t in yr_trades if t.net_pnl > Decimal("0")), Decimal("0"))
-                glosses = abs(sum((t.net_pnl for t in yr_trades if t.net_pnl < Decimal("0")), Decimal("0")))
+                gwins = sum(
+                    (t.net_pnl for t in yr_trades if t.net_pnl > Decimal("0")), Decimal("0")
+                )
+                glosses = abs(
+                    sum((t.net_pnl for t in yr_trades if t.net_pnl < Decimal("0")), Decimal("0"))
+                )
                 pf = float(gwins / glosses) if glosses > Decimal("0") else 1.0
 
                 if net_pnl <= Decimal("0"):
@@ -160,7 +176,16 @@ class FailureDiagnosticAnalyzer:
 
         # 2. Outlier Dependence Analysis
         sorted_trades = sorted(trades, key=lambda t: t.net_pnl, reverse=True)
-        rs_all = [float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity)) for t in trades]
+        rs_all = [
+            float(
+                t.net_pnl
+                / (
+                    abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95")))
+                    * t.quantity
+                )
+            )
+            for t in trades
+        ]
 
         top1_excl_r = float(np.mean(rs_all[1:])) if total_trades > 1 else 0.0
 
@@ -172,7 +197,13 @@ class FailureDiagnosticAnalyzer:
             # Top 5 winners
             top5 = sorted_trades[: min(5, total_trades)]
             for t in top5:
-                r_val = float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity))
+                r_val = float(
+                    t.net_pnl
+                    / (
+                        abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95")))
+                        * t.quantity
+                    )
+                )
                 autopsies.append(
                     TradeAutopsyEntry(
                         category="TOP_WINNER",
@@ -191,9 +222,15 @@ class FailureDiagnosticAnalyzer:
                 )
 
             # Worst 5 losers
-            worst5 = sorted_trades[-min(5, total_trades):]
+            worst5 = sorted_trades[-min(5, total_trades) :]
             for t in worst5:
-                r_val = float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity))
+                r_val = float(
+                    t.net_pnl
+                    / (
+                        abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95")))
+                        * t.quantity
+                    )
+                )
                 autopsies.append(
                     TradeAutopsyEntry(
                         category="WORST_LOSER",
@@ -215,7 +252,13 @@ class FailureDiagnosticAnalyzer:
             mid_idx = total_trades // 2
             med_sample = sorted_trades[max(0, mid_idx - 2) : min(total_trades, mid_idx + 3)]
             for t in med_sample:
-                r_val = float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity))
+                r_val = float(
+                    t.net_pnl
+                    / (
+                        abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95")))
+                        * t.quantity
+                    )
+                )
                 autopsies.append(
                     TradeAutopsyEntry(
                         category="MEDIAN_REPRESENTATIVE",
@@ -270,23 +313,45 @@ class FailureDiagnosticAnalyzer:
         if friction_report.failure_classification == "POSITIVE_GROSS_EDGE_ERODED_BY_FRICTION":
             classification = "REVISION_MAY_BE_JUSTIFIED"
             dom_failures = ["FRICTION_DOMINATED", "POOR_PROFIT_CAPTURE"]
-            supp_ev.append(f"Gross Expectancy_R is positive (+{friction_report.gross_expectancy_r:.3f}R), proving raw price edge exists before transaction friction.")
-            supp_ev.append(f"Total friction drag of ₹{float(friction_report.total_friction_drag_inr):,.2f} converted positive gross P&L to net loss.")
-            counter_ev.append(f"Net Expectancy_R remains negative (-{friction_report.net_expectancy_r:.3f}R) under realistic Nifty 50 delivery costs.")
-            limits.append("Counterfactual gross run assumes zero slippage and zero transaction fees.")
-        elif friction_report.gross_expectancy_r <= -0.15 and trade_report.r_stats.win_rate_pct < 35.0:
+            supp_ev.append(
+                f"Gross Expectancy_R is positive (+{friction_report.gross_expectancy_r:.3f}R), proving raw price edge exists before transaction friction."
+            )
+            supp_ev.append(
+                f"Total friction drag of ₹{float(friction_report.total_friction_drag_inr):,.2f} converted positive gross P&L to net loss."
+            )
+            counter_ev.append(
+                f"Net Expectancy_R remains negative (-{friction_report.net_expectancy_r:.3f}R) under realistic Nifty 50 delivery costs."
+            )
+            limits.append(
+                "Counterfactual gross run assumes zero slippage and zero transaction fees."
+            )
+        elif (
+            friction_report.gross_expectancy_r <= -0.15 and trade_report.r_stats.win_rate_pct < 35.0
+        ):
             classification = "NOT_WORTH_REVISING"
             dom_failures = ["STRUCTURALLY_NEGATIVE_GROSS_EDGE", "LOW_WIN_RATE"]
-            supp_ev.append(f"Gross Expectancy_R is negative (-{friction_report.gross_expectancy_r:.3f}R) even under zero-cost/zero-slippage counterfactual execution.")
-            supp_ev.append(f"Low win rate ({trade_report.r_stats.win_rate_pct:.1f}%) and negative expectancy across 80%+ of TRAIN years.")
-            counter_ev.append("Strategy exhibited brief profitability during strong bullish trend regimes.")
+            supp_ev.append(
+                f"Gross Expectancy_R is negative (-{friction_report.gross_expectancy_r:.3f}R) even under zero-cost/zero-slippage counterfactual execution."
+            )
+            supp_ev.append(
+                f"Low win rate ({trade_report.r_stats.win_rate_pct:.1f}%) and negative expectancy across 80%+ of TRAIN years."
+            )
+            counter_ev.append(
+                "Strategy exhibited brief profitability during strong bullish trend regimes."
+            )
             limits.append("Single canonical parameter set evaluated in Stage 1.")
         else:
             classification = "REVISION_MAY_BE_JUSTIFIED"
             dom_failures = ["PREMATURE_ENTRY", "REGIME_DEPENDENT_FAILURE"]
-            supp_ev.append("Exhibited positive performance in strong bullish trend regimes (2017, 2021).")
-            supp_ev.append(f"Mean MFE (+{trade_report.excursion_stats.mean_mfe_r:.2f}R) indicates substantial uncaptured favorable movement prior to exit.")
-            counter_ev.append(f"Overall TRAIN Net Expectancy_R is negative (-{friction_report.net_expectancy_r:.3f}R).")
+            supp_ev.append(
+                "Exhibited positive performance in strong bullish trend regimes (2017, 2021)."
+            )
+            supp_ev.append(
+                f"Mean MFE (+{trade_report.excursion_stats.mean_mfe_r:.2f}R) indicates substantial uncaptured favorable movement prior to exit."
+            )
+            counter_ev.append(
+                f"Overall TRAIN Net Expectancy_R is negative (-{friction_report.net_expectancy_r:.3f}R)."
+            )
             limits.append("Daily OHLC resolution limits exact intraday excursion tracking.")
 
         class_result = CrossFamilyClassificationResult(

@@ -7,6 +7,7 @@ Provides hooks/interfaces for future M4 risk engine logic to:
 
 Includes a BasicCapitalGuard for M2 research.
 """
+
 from decimal import Decimal
 from typing import Protocol
 

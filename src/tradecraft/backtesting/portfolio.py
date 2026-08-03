@@ -6,6 +6,7 @@ Enforces:
 - Cash availability verification (no negative cash / no leverage)
 - Equity curve tracking & drawdown tracking
 """
+
 import uuid
 from dataclasses import dataclass
 from datetime import date
@@ -85,7 +86,9 @@ class Portfolio:
             return Decimal("0")
         return ((self.peak_equity - eq) / self.peak_equity) * Decimal("100")
 
-    def process_entry_fill(self, execution: ExecutionResult, symbol: str, signal_date: date | None = None) -> Position:
+    def process_entry_fill(
+        self, execution: ExecutionResult, symbol: str, signal_date: date | None = None
+    ) -> Position:
         """Record a successful position entry fill. Returns Position object."""
         assert execution.fill_price is not None
         assert execution.filled
@@ -115,7 +118,8 @@ class Portfolio:
                 pos.entry_costs_breakdown = CostBreakdown(
                     brokerage=pos.entry_costs_breakdown.brokerage + execution.costs.brokerage,
                     stt=pos.entry_costs_breakdown.stt + execution.costs.stt,
-                    exchange_charges=pos.entry_costs_breakdown.exchange_charges + execution.costs.exchange_charges,
+                    exchange_charges=pos.entry_costs_breakdown.exchange_charges
+                    + execution.costs.exchange_charges,
                     gst=pos.entry_costs_breakdown.gst + execution.costs.gst,
                     sebi_fee=pos.entry_costs_breakdown.sebi_fee + execution.costs.sebi_fee,
                     stamp_duty=pos.entry_costs_breakdown.stamp_duty + execution.costs.stamp_duty,
@@ -178,7 +182,9 @@ class Portfolio:
 
         return net_pnl
 
-    def mark_to_market(self, trading_date: date, prices: dict[uuid.UUID, Decimal]) -> EquitySnapshot:
+    def mark_to_market(
+        self, trading_date: date, prices: dict[uuid.UUID, Decimal]
+    ) -> EquitySnapshot:
         """Update open position mark-to-market prices and record equity snapshot."""
         invested = Decimal("0")
         for inst_id, pos in self.positions.items():

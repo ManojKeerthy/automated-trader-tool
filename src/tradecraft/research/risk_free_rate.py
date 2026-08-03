@@ -11,6 +11,7 @@ Every backtest must record:
 - retrieval date where applicable
 - whether the value is HISTORICAL_POINT_IN_TIME or CURRENT_RATE_ASSUMPTION
 """
+
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
@@ -24,7 +25,9 @@ class RiskFreeRateConfig:
     source: str = "RBI / CCIL 91-day Treasury Bill Yield"
     observation_date: date = date(2026, 7, 27)
     retrieval_date: date = date(2026, 7, 28)
-    rate_type: str = "CURRENT_RATE_ASSUMPTION"  # HISTORICAL_POINT_IN_TIME or CURRENT_RATE_ASSUMPTION
+    rate_type: str = (
+        "CURRENT_RATE_ASSUMPTION"  # HISTORICAL_POINT_IN_TIME or CURRENT_RATE_ASSUMPTION
+    )
 
     def to_dict(self) -> dict[str, str]:
         return {

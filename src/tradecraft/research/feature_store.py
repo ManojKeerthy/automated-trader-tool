@@ -8,6 +8,7 @@ from datetime import datetime
 @dataclass
 class CachedFeatureRecord:
     """Record container for calculated and cached feature values."""
+
     feature_name: str
     feature_version: str
     universe_version: str
@@ -33,7 +34,9 @@ class FeatureStore:
         feature_version: str = "1.0.0",
         dataset_version: str = "v1",
     ) -> str:
-        payload = f"{feature_name}:{feature_version}:{dataset_version}:{security_uuid}:{observation_date}"
+        payload = (
+            f"{feature_name}:{feature_version}:{dataset_version}:{security_uuid}:{observation_date}"
+        )
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
     def get_feature_value(
@@ -45,7 +48,9 @@ class FeatureStore:
         dataset_version: str = "v1",
     ) -> float | None:
         """Fetch cached feature value if available."""
-        key = self.get_cache_key(feature_name, security_uuid, observation_date, feature_version, dataset_version)
+        key = self.get_cache_key(
+            feature_name, security_uuid, observation_date, feature_version, dataset_version
+        )
         record = self._cache.get(key)
         return record.value if record else None
 
@@ -60,7 +65,9 @@ class FeatureStore:
         dataset_version: str = "v1",
     ) -> str:
         """Store computed feature value in cache."""
-        key = self.get_cache_key(feature_name, security_uuid, observation_date, feature_version, dataset_version)
+        key = self.get_cache_key(
+            feature_name, security_uuid, observation_date, feature_version, dataset_version
+        )
         record = CachedFeatureRecord(
             feature_name=feature_name,
             feature_version=feature_version,

@@ -19,4 +19,6 @@ class ExperimentExplorer:
 
     def find_by_universe(self, universe_version: str) -> list[ExperimentRecord]:
         """Find experiment records executed on a specific universe_version."""
-        return [e for e in self.registry.list_experiments() if e.universe_version == universe_version]
+        return [
+            e for e in self.registry.list_experiments() if e.universe_version == universe_version
+        ]

@@ -4,6 +4,7 @@ The clock iterates through trading calendar sessions one at a time,
 enforcing chronological progression. No random access to dates is
 permitted — the backtest must travel through history sequentially.
 """
+
 from datetime import date
 
 from tradecraft.market_data.calendar import TradingCalendar

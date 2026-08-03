@@ -7,6 +7,7 @@ from tradecraft.universe.security_master import Security, SecurityMaster
 
 class SurvivorshipBiasError(Exception):
     """Raised when a query violates survivorship or listing date boundaries."""
+
     pass
 
 
@@ -20,7 +21,9 @@ class SurvivorshipGuard:
         """Validate that security_uuid was active/listed on query_date."""
         security = self.security_master.get_by_uuid(security_uuid)
         if not security:
-            raise SurvivorshipBiasError(f"SURVIVORSHIP VIOLATION: Security UUID '{security_uuid}' not found in Security Master!")
+            raise SurvivorshipBiasError(
+                f"SURVIVORSHIP VIOLATION: Security UUID '{security_uuid}' not found in Security Master!"
+            )
 
         if security.listing_date and query_date < security.listing_date:
             raise SurvivorshipBiasError(

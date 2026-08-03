@@ -1,4 +1,5 @@
 """Strategy registry for managing immutable strategy versions (ADR-007)."""
+
 import logging
 
 from tradecraft.core.exceptions import StrategyError

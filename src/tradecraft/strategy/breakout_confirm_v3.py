@@ -147,19 +147,30 @@ class BreakoutConfirmV3Strategy(BaseV2Strategy):
             donchian20_high_prev = max(highs[-22:-2])
             donchian20_low_prev = min(lows[-22:-2])
 
-            consolidation_w = (donchian20_high_prev - donchian20_low_prev) / max(1.0, donchian20_low_prev)
+            consolidation_w = (donchian20_high_prev - donchian20_low_prev) / max(
+                1.0, donchian20_low_prev
+            )
             avg_vol20 = sum(volumes[-22:-2]) / 20.0
             rvol = volumes[-1] / max(1.0, avg_vol20)
 
             # Rule 1: Consolidation width <= 15%
             is_tight = consolidation_w <= self.max_consolidation_pct
             # Rule 2: 2-session Close confirmation above previous Donchian high
-            is_confirmed_breakout = (c_curr >= donchian20_high_prev) and (c_prev >= donchian20_high_prev)
+            is_confirmed_breakout = (c_curr >= donchian20_high_prev) and (
+                c_prev >= donchian20_high_prev
+            )
             # Rule 3: Volume expansion
             is_vol = rvol >= self.rvol_min
 
             if is_tight and is_confirmed_breakout and is_vol:
-                tr_list = [max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1])) for i in range(-14, 0)]
+                tr_list = [
+                    max(
+                        highs[i] - lows[i],
+                        abs(highs[i] - closes[i - 1]),
+                        abs(lows[i] - closes[i - 1]),
+                    )
+                    for i in range(-14, 0)
+                ]
                 atr14 = sum(tr_list) / 14.0
 
                 stop_price = Decimal(str(round(c_curr - (atr14 * self.atr_stop_mult), 2)))

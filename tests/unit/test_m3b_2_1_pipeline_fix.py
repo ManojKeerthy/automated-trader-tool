@@ -23,7 +23,12 @@ def test_unsized_order_intent_rejected_without_sizer():
         signal_date=date(2020, 1, 1),
         quantity_hint=None,
     )
-    bar = {"open": Decimal("100.00"), "high": Decimal("105.00"), "low": Decimal("99.00"), "close": Decimal("104.00")}
+    bar = {
+        "open": Decimal("100.00"),
+        "high": Decimal("105.00"),
+        "low": Decimal("99.00"),
+        "close": Decimal("104.00"),
+    }
     res = sim.simulate_entry_execution(order, bar, date(2020, 1, 2), Decimal("100000.00"))
 
     assert not res.filled

@@ -8,9 +8,12 @@ from decimal import Decimal
 @dataclass
 class CorporateActionRecord:
     """Timestamped corporate action affecting price adjustments or corporate status."""
+
     action_id: str
     security_uuid: str
-    action_type: str  # SPLIT, BONUS, MERGER, DEMERGER, SYMBOL_CHANGE, NAME_CHANGE, DELISTING, RELISTING
+    action_type: (
+        str  # SPLIT, BONUS, MERGER, DEMERGER, SYMBOL_CHANGE, NAME_CHANGE, DELISTING, RELISTING
+    )
     effective_date: date
     record_date: date | None = None
     ratio_from: int | None = None

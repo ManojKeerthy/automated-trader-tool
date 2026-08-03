@@ -10,6 +10,7 @@ Enforces:
 - Signal timing (T -> T+1 execution)
 - Deterministic reproducible results
 """
+
 import logging
 import uuid
 from dataclasses import dataclass, field
@@ -175,7 +176,10 @@ class BacktestEngine:
                     pos = portfolio.positions[exit_sig.instrument_id]
                     bar = portal.get_bar(pos.instrument_id, current_date)
                     if bar:
-                        is_first_sell = (current_date, pos.instrument_id) not in daily_sold_instruments
+                        is_first_sell = (
+                            current_date,
+                            pos.instrument_id,
+                        ) not in daily_sold_instruments
                         exec_res = simulator.simulate_exit_execution(
                             position_id=pos.position_id,
                             strategy_id=pos.strategy_id,
@@ -290,7 +294,9 @@ class BacktestEngine:
                             filtered_order, bar, current_date, portfolio.cash
                         )
                         if exec_res.filled:
-                            pos = portfolio.process_entry_fill(exec_res, sym, signal_date=order.signal_date)
+                            pos = portfolio.process_entry_fill(
+                                exec_res, sym, signal_date=order.signal_date
+                            )
 
             pending_entry_orders.clear()
 

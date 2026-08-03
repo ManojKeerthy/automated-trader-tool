@@ -5,6 +5,7 @@ All reference strategies are created SOLELY to validate the backtest
 engine mechanics (signal timing, execution, accounting, metrics, costs).
 They are NOT approved for live trading or production use.
 """
+
 import uuid
 from datetime import date
 from decimal import Decimal
@@ -54,7 +55,9 @@ class BuyAndHoldStrategy:
     def required_history(self) -> int:
         return 1
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent | ExitSignal]:
+    def evaluate(
+        self, current_date: date, data_portal: DataPortal
+    ) -> list[SignalIntent | ExitSignal]:
         if self._bought:
             return []
 
@@ -125,7 +128,9 @@ class SMACrossoverStrategy:
     def required_history(self) -> int:
         return self.slow_period + 1
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent | ExitSignal]:
+    def evaluate(
+        self, current_date: date, data_portal: DataPortal
+    ) -> list[SignalIntent | ExitSignal]:
         signals: list[SignalIntent | ExitSignal] = []
         members = data_portal.get_universe_members(current_date)
 

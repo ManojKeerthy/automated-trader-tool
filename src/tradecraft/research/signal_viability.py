@@ -86,7 +86,9 @@ class SignalViabilityEvaluator:
 
     def evaluate_viability(self, strategy: BaseV2Strategy) -> SignalViabilityReport:
         """Evaluate strategy signal viability across DEVELOPMENT without exposing P&L."""
-        DevelopmentOnlyGuard.validate_range(DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date)
+        DevelopmentOnlyGuard.validate_range(
+            DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date
+        )
 
         # Reset data portal clock for fresh strategy run
         self.data_portal._current_date = None
@@ -96,7 +98,9 @@ class SignalViabilityEvaluator:
         univ_members = [d["instrument"] for d in univ_member_dicts]
         self.data_portal.preload([inst.id for inst in univ_members])
 
-        trading_days = self.calendar.sessions_between(DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date)
+        trading_days = self.calendar.sessions_between(
+            DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date
+        )
         all_signals: list[SignalIntent] = []
         raw_setups_count = 0
 
@@ -111,7 +115,9 @@ class SignalViabilityEvaluator:
 
         # 1. Active Calendar Years & Dates
         sig_dates = [
-            date.fromisoformat(str(s.metadata["signal_date"])) if "signal_date" in s.metadata else DEVELOPMENT_SPLIT.start_date
+            date.fromisoformat(str(s.metadata["signal_date"]))
+            if "signal_date" in s.metadata
+            else DEVELOPMENT_SPLIT.start_date
             for s in all_signals
         ]
         years = {d.year for d in sig_dates}
@@ -123,8 +129,12 @@ class SignalViabilityEvaluator:
             inst_counts[s.instrument_id] = inst_counts.get(s.instrument_id, 0) + 1
 
         active_inst_cnt = len(inst_counts)
-        max_inst_conc = round((max(inst_counts.values()) / total_signals * 100) if total_signals > 0 else 0.0, 2)
-        med_signals_inst = float(sorted(inst_counts.values())[len(inst_counts) // 2]) if inst_counts else 0.0
+        max_inst_conc = round(
+            (max(inst_counts.values()) / total_signals * 100) if total_signals > 0 else 0.0, 2
+        )
+        med_signals_inst = (
+            float(sorted(inst_counts.values())[len(inst_counts) // 2]) if inst_counts else 0.0
+        )
 
         # Universe representation
         universe_members = self.data_portal.get_universe_members(DEVELOPMENT_SPLIT.end_date)
@@ -160,19 +170,29 @@ class SignalViabilityEvaluator:
         rejection_reasons: list[str] = []
 
         if total_signals < MIN_CONFIRMED_SIGNALS:
-            rejection_reasons.append(f"Insufficient total confirmed signals ({total_signals} < {MIN_CONFIRMED_SIGNALS})")
+            rejection_reasons.append(
+                f"Insufficient total confirmed signals ({total_signals} < {MIN_CONFIRMED_SIGNALS})"
+            )
 
         if years_cnt < MIN_CALENDAR_YEARS:
-            rejection_reasons.append(f"Insufficient active calendar years ({years_cnt} < {MIN_CALENDAR_YEARS})")
+            rejection_reasons.append(
+                f"Insufficient active calendar years ({years_cnt} < {MIN_CALENDAR_YEARS})"
+            )
 
         if active_inst_cnt < MIN_ACTIVE_INSTRUMENTS:
-            rejection_reasons.append(f"Insufficient active instruments ({active_inst_cnt} < {MIN_ACTIVE_INSTRUMENTS})")
+            rejection_reasons.append(
+                f"Insufficient active instruments ({active_inst_cnt} < {MIN_ACTIVE_INSTRUMENTS})"
+            )
 
         if max_inst_conc > MAX_SINGLE_INSTRUMENT_CONCENTRATION_PCT:
-            rejection_reasons.append(f"Single instrument concentration too high ({max_inst_conc}% > {MAX_SINGLE_INSTRUMENT_CONCENTRATION_PCT}%)")
+            rejection_reasons.append(
+                f"Single instrument concentration too high ({max_inst_conc}% > {MAX_SINGLE_INSTRUMENT_CONCENTRATION_PCT}%)"
+            )
 
         if max_sem_conc > MAX_SINGLE_SEMESTER_CONCENTRATION_PCT:
-            rejection_reasons.append(f"Single semester episode concentration too high ({max_sem_conc}% > {MAX_SINGLE_SEMESTER_CONCENTRATION_PCT}%)")
+            rejection_reasons.append(
+                f"Single semester episode concentration too high ({max_sem_conc}% > {MAX_SINGLE_SEMESTER_CONCENTRATION_PCT}%)"
+            )
 
         policy_pass = len(rejection_reasons) == 0
 

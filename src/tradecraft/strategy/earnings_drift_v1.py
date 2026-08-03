@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class EarningsDriftV1Config:
     """Frozen parameters for EarningsDriftV1Strategy matching pre-registration."""
+
     holding_period_max_sessions: int = 30
     atr_stop_multiplier: Decimal = Decimal("2.0")
     min_volume_expansion_ratio: Decimal = Decimal("1.5")
@@ -105,11 +106,16 @@ class EarningsDriftV1Strategy:
             # 2. Institutional Volume Expansion Condition
             avg_volume = sum(Decimal(str(b["volume"])) for b in history[-20:-1]) / Decimal("19.0")
             latest_volume = Decimal(str(latest_bar["volume"]))
-            if avg_volume == Decimal("0") or (latest_volume / avg_volume) < self.config.min_volume_expansion_ratio:
+            if (
+                avg_volume == Decimal("0")
+                or (latest_volume / avg_volume) < self.config.min_volume_expansion_ratio
+            ):
                 continue
 
             # Calculate ATR protective stop level
-            recent_ranges = [Decimal(str(b["high"])) - Decimal(str(b["low"])) for b in history[-14:]]
+            recent_ranges = [
+                Decimal(str(b["high"])) - Decimal(str(b["low"])) for b in history[-14:]
+            ]
             avg_atr = sum(recent_ranges) / Decimal(len(recent_ranges))
             stop_loss = close_price - (self.config.atr_stop_multiplier * avg_atr)
 

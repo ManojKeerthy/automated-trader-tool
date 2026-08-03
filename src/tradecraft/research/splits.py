@@ -3,6 +3,7 @@
 Defines the non-overlapping train, validation, and untouched final test windows,
 along with rolling walk-forward window generators.
 """
+
 from dataclasses import dataclass
 from datetime import date
 

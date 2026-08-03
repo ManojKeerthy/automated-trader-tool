@@ -15,6 +15,7 @@ Cost Model Assumptions:
 IMPORTANT: When historical rates are unavailable, backtests MUST flag
 the assumption as COST_MODEL_HISTORICAL_ASSUMPTION.
 """
+
 from dataclasses import dataclass
 from datetime import date
 from decimal import ROUND_HALF_UP, Decimal

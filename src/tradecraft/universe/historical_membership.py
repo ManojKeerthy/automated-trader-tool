@@ -7,6 +7,7 @@ from datetime import date
 @dataclass
 class MembershipRecord:
     """Effective-dated index membership record for a security."""
+
     security_uuid: str
     universe_id: str
     effective_from: date
@@ -31,7 +32,11 @@ class HistoricalMembershipEngine:
         constituents: set[str] = set()
 
         for rec in self._records:
-            if rec.universe_id.upper() == universe_id_upper and rec.effective_from <= query_date and (rec.effective_to is None or query_date <= rec.effective_to):
+            if (
+                rec.universe_id.upper() == universe_id_upper
+                and rec.effective_from <= query_date
+                and (rec.effective_to is None or query_date <= rec.effective_to)
+            ):
                 constituents.add(rec.security_uuid)
         return sorted(list(constituents))
 

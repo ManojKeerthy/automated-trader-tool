@@ -10,6 +10,7 @@ Design decisions per approved amendments:
 - Every strategy has a unique identifier, version, and parameters.
   Future changes produce a new version (ADR-007: immutable versions).
 """
+
 from __future__ import annotations
 
 import uuid  # noqa: TC003
@@ -62,7 +63,9 @@ class SignalIntent:
 
     def __post_init__(self) -> None:
         if self.direction != "BUY":
-            raise ValueError(f"Only BUY direction supported in current scope, got: {self.direction}")
+            raise ValueError(
+                f"Only BUY direction supported in current scope, got: {self.direction}"
+            )
         if self.order_type == "LIMIT" and self.limit_price is None:
             raise ValueError("LIMIT orders require limit_price")
         if self.order_type == "STOP" and self.stop_trigger is None:

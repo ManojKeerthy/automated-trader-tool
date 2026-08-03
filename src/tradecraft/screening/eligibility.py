@@ -233,14 +233,14 @@ class EligibilityScreen:
             and inst.avg_traded_value_20 < liq.min_avg_traded_value
         ):
             return ExclusionRecord(
-                    instrument_id=inst.instrument_id,
-                    symbol=inst.symbol,
-                    reason_code=LOW_LIQUIDITY,
-                    detail=(
-                        f"Avg traded value ₹{inst.avg_traded_value_20:,.0f} "
-                        f"< threshold ₹{liq.min_avg_traded_value:,.0f}"
-                    ),
-                )
+                instrument_id=inst.instrument_id,
+                symbol=inst.symbol,
+                reason_code=LOW_LIQUIDITY,
+                detail=(
+                    f"Avg traded value ₹{inst.avg_traded_value_20:,.0f} "
+                    f"< threshold ₹{liq.min_avg_traded_value:,.0f}"
+                ),
+            )
 
         # 6. Corporate actions
         if inst.has_unresolved_corporate_actions:

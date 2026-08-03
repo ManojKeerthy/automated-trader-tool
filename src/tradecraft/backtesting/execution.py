@@ -14,6 +14,7 @@ Models execution semantics per approved specification and amendments:
 - Fractional shares: Strictly prohibited. Enforces integer share quantities.
 - Capital constraints: Rejects order if required capital exceeds available cash.
 """
+
 import logging
 import uuid
 from dataclasses import dataclass, field

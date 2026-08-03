@@ -72,7 +72,11 @@ class FrictionDecomposer:
 
         # Retrieve Net Expectancy_R
         net_exp_r_metric = net_res.metrics.metrics.get("expectancy_r")
-        net_exp_r = float(net_exp_r_metric.value) if isinstance(net_exp_r_metric, MetricValue) and net_exp_r_metric.value is not None else 0.0
+        net_exp_r = (
+            float(net_exp_r_metric.value)
+            if isinstance(net_exp_r_metric, MetricValue) and net_exp_r_metric.value is not None
+            else 0.0
+        )
 
         # Run POST-HOC FAILURE DIAGNOSTIC counterfactual zero-friction evaluation
         engine = BacktestEngine(db_session=self.db, calendar_instance=self.cal)
@@ -88,12 +92,24 @@ class FrictionDecomposer:
 
         gross_pnl = sum((t.net_pnl for t in gross_res.trades), Decimal("0"))
         gross_exp_r_metric = gross_res.metrics.metrics.get("expectancy_r")
-        gross_exp_r = float(gross_exp_r_metric.value) if isinstance(gross_exp_r_metric, MetricValue) and gross_exp_r_metric.value is not None else 0.0
+        gross_exp_r = (
+            float(gross_exp_r_metric.value)
+            if isinstance(gross_exp_r_metric, MetricValue) and gross_exp_r_metric.value is not None
+            else 0.0
+        )
 
         # Cost drag metrics
-        cost_drag_per_trade = (total_friction / Decimal(str(total_trades))) if total_trades > 0 else Decimal("0")
-        cost_drag_bps = (float(total_friction) / float(net_res.config.initial_capital) * 10000.0 / total_trades) if total_trades > 0 else 0.0
-        friction_pct_gross = (float(total_friction) / float(gross_pnl) * 100.0) if gross_pnl > Decimal("0") else 0.0
+        cost_drag_per_trade = (
+            (total_friction / Decimal(str(total_trades))) if total_trades > 0 else Decimal("0")
+        )
+        cost_drag_bps = (
+            (float(total_friction) / float(net_res.config.initial_capital) * 10000.0 / total_trades)
+            if total_trades > 0
+            else 0.0
+        )
+        friction_pct_gross = (
+            (float(total_friction) / float(gross_pnl) * 100.0) if gross_pnl > Decimal("0") else 0.0
+        )
 
         # Assign Failure Classification
         if total_trades < 5:

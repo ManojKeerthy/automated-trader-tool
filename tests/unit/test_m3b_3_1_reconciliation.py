@@ -48,7 +48,9 @@ def test_mean_reversion_expectancy_r_fails_threshold():
     threshold_required = 0.25
     gate_result = "PASS" if mean_reversion_expectancy_r >= threshold_required else "FAIL"
 
-    assert gate_result == "FAIL", "Mean Reversion V2 +0.18R MUST evaluate as FAIL against +0.25R requirement!"
+    assert gate_result == "FAIL", (
+        "Mean Reversion V2 +0.18R MUST evaluate as FAIL against +0.25R requirement!"
+    )
 
 
 def test_m3b_3_1_json_artifacts_and_conservation():
@@ -74,7 +76,12 @@ def test_m3b_3_1_json_artifacts_and_conservation():
     with open(attrition_file) as f:
         attrition_data = json.load(f)
 
-    for strat_id in ["strat_trend_pullback_v2", "strat_breakout_confirm_v2", "strat_momentum_rs_v2", "strat_mean_reversion_v2"]:
+    for strat_id in [
+        "strat_trend_pullback_v2",
+        "strat_breakout_confirm_v2",
+        "strat_momentum_rs_v2",
+        "strat_mean_reversion_v2",
+    ]:
         # 1. Yearly conservation
         y = yearly_data[strat_id]
         assert y["trade_count_conserved"] is True

@@ -7,6 +7,7 @@ Per approved amendments:
   - ETF PROXY (e.g. NIFTYBEES)
 - If an ETF proxy is used, it must be explicitly labeled as ETF PROXY.
 """
+
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal

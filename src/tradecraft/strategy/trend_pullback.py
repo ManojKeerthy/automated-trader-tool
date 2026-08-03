@@ -3,6 +3,7 @@
 Hypothesis: Securities in established uptrends offer favorable swing continuation
 after a controlled pullback to dynamic support once buying strength resumes.
 """
+
 import uuid
 from datetime import date
 from decimal import Decimal
@@ -152,7 +153,9 @@ class TrendPullbackStrategy:
         stop_level = min(low_pullback, atr_stop_level)
 
         # 8. Family-Specific Setup Quality Score
-        quality_score = (current_close - current_low) / c_atr_14 if c_atr_14 > Decimal("0") else Decimal("0.5")
+        quality_score = (
+            (current_close - current_low) / c_atr_14 if c_atr_14 > Decimal("0") else Decimal("0.5")
+        )
 
         return SignalIntent(
             instrument_id=instrument_id,

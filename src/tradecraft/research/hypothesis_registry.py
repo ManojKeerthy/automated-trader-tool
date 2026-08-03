@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class HypothesisRecord:
     """Immutable pre-registered research hypothesis record."""
+
     hypothesis_uuid: str
     hypothesis_name: str
     parent_hypothesis_uuid: str | None

@@ -44,17 +44,23 @@ def test_m3c_0_graveyard_enforcement_guard():
 
 def test_m3c_0_lineage_collision_detector():
     """Verify that LineageCollisionDetector flags suspect rule patterns matching abandoned lineages."""
-    assert LineageCollisionDetector.inspect_proposed_hypothesis(
-        strategy_id="strat_new_concept",
-        parameters={},
-        rule_summary="A strategy based on RSI oversold and Donchian breakout.",
-    ) is True
+    assert (
+        LineageCollisionDetector.inspect_proposed_hypothesis(
+            strategy_id="strat_new_concept",
+            parameters={},
+            rule_summary="A strategy based on RSI oversold and Donchian breakout.",
+        )
+        is True
+    )
 
-    assert LineageCollisionDetector.inspect_proposed_hypothesis(
-        strategy_id="strat_novel_market_breadth",
-        parameters={},
-        rule_summary="A cross-sectional market breadth divergence model.",
-    ) is False
+    assert (
+        LineageCollisionDetector.inspect_proposed_hypothesis(
+            strategy_id="strat_novel_market_breadth",
+            parameters={},
+            rule_summary="A cross-sectional market breadth divergence model.",
+        )
+        is False
+    )
 
 
 def test_m3c_0_research_governance_state_json():

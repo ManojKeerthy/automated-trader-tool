@@ -75,14 +75,18 @@ class LimitedRobustnessAnalyzer:
         canonical_scorecard: V2DevelopmentScorecard,
     ) -> StrategyRobustnessReport:
         """Evaluate pre-declared 5-config parameter neighbourhood around canonical V2."""
-        DevelopmentOnlyGuard.validate_range(DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date)
+        DevelopmentOnlyGuard.validate_range(
+            DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date
+        )
 
         neighbourhood = frozen_record.robustness_neighbourhood
         strat_id = frozen_record.strategy_id
         canonical_exp_r = canonical_scorecard.net_expectancy_r
 
         # Instantiate variant strategies according to predeclared delta map
-        variants: list[BaseV2Strategy] = self._generate_predeclared_variants(strat_id, frozen_record.parameters, neighbourhood.delta_map)
+        variants: list[BaseV2Strategy] = self._generate_predeclared_variants(
+            strat_id, frozen_record.parameters, neighbourhood.delta_map
+        )
 
         variant_results: list[RobustnessVariantResult] = []
         cliff_flagged = False
@@ -106,7 +110,9 @@ class LimitedRobustnessAnalyzer:
             # Calculate Expectancy_R
             r_mults: list[float] = []
             for t in trades:
-                init_risk = abs(t.entry_price - (t.stop_loss_level or (t.entry_price * Decimal("0.95")))) * Decimal(str(t.quantity))
+                init_risk = abs(
+                    t.entry_price - (t.stop_loss_level or (t.entry_price * Decimal("0.95")))
+                ) * Decimal(str(t.quantity))
                 if init_risk > Decimal("0"):
                     r_mults.append(float(t.net_pnl / init_risk))
                 else:
@@ -120,7 +126,9 @@ class LimitedRobustnessAnalyzer:
             tot_loss = abs(sum((t.net_pnl for t in losses), Decimal("0")))
             v_pf = round(float(tot_win / max(Decimal("0.01"), tot_loss)), 2)
 
-            delta_pct = round(((v_exp_r - canonical_exp_r) / max(0.01, abs(canonical_exp_r))) * 100, 2)
+            delta_pct = round(
+                ((v_exp_r - canonical_exp_r) / max(0.01, abs(canonical_exp_r))) * 100, 2
+            )
 
             # Parameter Cliff check (if net expectancy drops below 0 or deteriorates by > 50%)
             if v_exp_r < 0.0 or delta_pct < -50.0:
@@ -171,32 +179,62 @@ class LimitedRobustnessAnalyzer:
             atr_dists = delta_map.get("atr_dist_max", [1.8, 2.2])
             stops = delta_map.get("atr_stop_mult", [1.8, 2.2])
             for d in atr_dists:
-                variants.append(TrendPullbackV2Strategy(trend_ma=50, pullback_ema=20, atr_dist_max=d, atr_stop_mult=2.0))
+                variants.append(
+                    TrendPullbackV2Strategy(
+                        trend_ma=50, pullback_ema=20, atr_dist_max=d, atr_stop_mult=2.0
+                    )
+                )
             for s in stops:
-                variants.append(TrendPullbackV2Strategy(trend_ma=50, pullback_ema=20, atr_dist_max=2.0, atr_stop_mult=s))
+                variants.append(
+                    TrendPullbackV2Strategy(
+                        trend_ma=50, pullback_ema=20, atr_dist_max=2.0, atr_stop_mult=s
+                    )
+                )
 
         elif strategy_id == "strat_breakout_confirm_v2":
             widths = delta_map.get("max_consolidation_pct", [0.18, 0.22])
             rvols = delta_map.get("rvol_min", [1.1, 1.3])
             for w in widths:
-                variants.append(BreakoutConfirmV2Strategy(channel_period=20, max_consolidation_pct=w, rvol_min=1.2, atr_stop_mult=1.5))
+                variants.append(
+                    BreakoutConfirmV2Strategy(
+                        channel_period=20, max_consolidation_pct=w, rvol_min=1.2, atr_stop_mult=1.5
+                    )
+                )
             for r in rvols:
-                variants.append(BreakoutConfirmV2Strategy(channel_period=20, max_consolidation_pct=0.20, rvol_min=r, atr_stop_mult=1.5))
+                variants.append(
+                    BreakoutConfirmV2Strategy(
+                        channel_period=20, max_consolidation_pct=0.20, rvol_min=r, atr_stop_mult=1.5
+                    )
+                )
 
         elif strategy_id == "strat_momentum_rs_v2":
             cutoffs = delta_map.get("top_percentile_cutoff", [0.20, 0.30])
             stops = delta_map.get("atr_stop_mult", [2.2, 2.8])
             for c in cutoffs:
-                variants.append(MomentumRSV2Strategy(rs_lookback=63, top_percentile_cutoff=c, atr_stop_mult=2.5))
+                variants.append(
+                    MomentumRSV2Strategy(rs_lookback=63, top_percentile_cutoff=c, atr_stop_mult=2.5)
+                )
             for s in stops:
-                variants.append(MomentumRSV2Strategy(rs_lookback=63, top_percentile_cutoff=0.25, atr_stop_mult=s))
+                variants.append(
+                    MomentumRSV2Strategy(
+                        rs_lookback=63, top_percentile_cutoff=0.25, atr_stop_mult=s
+                    )
+                )
 
         elif strategy_id == "strat_mean_reversion_v2":
             rsis = delta_map.get("rsi_oversold", [35.0, 45.0])
             disps = delta_map.get("displacement_atr", [0.8, 1.2])
             for r in rsis:
-                variants.append(MeanReversionV2Strategy(rsi_oversold=r, displacement_atr=1.0, max_holding_days=5, atr_stop_mult=1.5))
+                variants.append(
+                    MeanReversionV2Strategy(
+                        rsi_oversold=r, displacement_atr=1.0, max_holding_days=5, atr_stop_mult=1.5
+                    )
+                )
             for d in disps:
-                variants.append(MeanReversionV2Strategy(rsi_oversold=40.0, displacement_atr=d, max_holding_days=5, atr_stop_mult=1.5))
+                variants.append(
+                    MeanReversionV2Strategy(
+                        rsi_oversold=40.0, displacement_atr=d, max_holding_days=5, atr_stop_mult=1.5
+                    )
+                )
 
         return variants

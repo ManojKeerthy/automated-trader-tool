@@ -89,7 +89,9 @@ class M3B3DecisionPolicy:
 
         # 1. Check Gross Edge
         if pkg.gross_pnl <= Decimal("0"):
-            reasons.append(f"Gross P&L is negative (-₹{abs(pkg.gross_pnl):,.2f}), proving lack of underlying structural edge.")
+            reasons.append(
+                f"Gross P&L is negative (-₹{abs(pkg.gross_pnl):,.2f}), proving lack of underlying structural edge."
+            )
             return (
                 DecisionStatus.ABANDON_FAMILY,
                 "Structurally negative gross edge prior to execution costs.",
@@ -98,7 +100,9 @@ class M3B3DecisionPolicy:
 
         # 2. Check Net Edge under Observed Model (Scenario A)
         if pkg.net_pnl <= Decimal("0"):
-            reasons.append(f"Gross edge (+₹{pkg.gross_pnl:,.2f}) is entirely consumed by friction (costs ₹{pkg.explicit_costs:,.2f}), resulting in net loss (-₹{abs(pkg.net_pnl):,.2f}).")
+            reasons.append(
+                f"Gross edge (+₹{pkg.gross_pnl:,.2f}) is entirely consumed by friction (costs ₹{pkg.explicit_costs:,.2f}), resulting in net loss (-₹{abs(pkg.net_pnl):,.2f})."
+            )
             return (
                 DecisionStatus.ABANDON_FAMILY,
                 "Positive gross edge completely eroded by transaction friction.",
@@ -106,12 +110,19 @@ class M3B3DecisionPolicy:
             )
 
         # 3. Check Outlier Dependence
-        if pkg.outlier_classification == OutlierDependenceClassification.OUTLIER_DEPENDENT or pkg.net_pnl_ex_top3 <= Decimal("0"):
-            reasons.append(f"Net profit (+₹{pkg.net_pnl:,.2f}) is dependent on top 3 outlier trades; net P&L excluding top 3 is non-positive (₹{pkg.net_pnl_ex_top3:,.2f}).")
+        if (
+            pkg.outlier_classification == OutlierDependenceClassification.OUTLIER_DEPENDENT
+            or pkg.net_pnl_ex_top3 <= Decimal("0")
+        ):
+            reasons.append(
+                f"Net profit (+₹{pkg.net_pnl:,.2f}) is dependent on top 3 outlier trades; net P&L excluding top 3 is non-positive (₹{pkg.net_pnl_ex_top3:,.2f})."
+            )
 
             # Evaluate if one final hypothesis revision is justified or abandon
             if pkg.scenario_b_net_pnl > Decimal("0") and pkg.gross_pnl > Decimal("50000"):
-                reasons.append(f"Gross edge (+₹{pkg.gross_pnl:,.2f}) demonstrates potential signal value under zero-friction, but entry/exit rules are structurally incomplete.")
+                reasons.append(
+                    f"Gross edge (+₹{pkg.gross_pnl:,.2f}) demonstrates potential signal value under zero-friction, but entry/exit rules are structurally incomplete."
+                )
                 return (
                     DecisionStatus.ONE_FINAL_HYPOTHESIS_REVISION_ALLOWED,
                     "Edge is positive but outlier-dependent and friction-sensitive. Requires structural hypothesis revision before V3.",
@@ -131,7 +142,9 @@ class M3B3DecisionPolicy:
             and pkg.net_pnl_ex_top3 > Decimal("0")
             and pkg.yearly_classification != YearlyStabilityClassification.SINGLE_PERIOD_DOMINATED
         ):
-            reasons.append(f"Strategy maintains positive net P&L under +10 bps stress (+₹{pkg.scenario_c_net_pnl:,.2f}), PF={pkg.profit_factor:.2f}, and non-outlier edge.")
+            reasons.append(
+                f"Strategy maintains positive net P&L under +10 bps stress (+₹{pkg.scenario_c_net_pnl:,.2f}), PF={pkg.profit_factor:.2f}, and non-outlier edge."
+            )
             return (
                 DecisionStatus.DEVELOPMENT_SURVIVOR,
                 "Demonstrates robust, stable net edge under realistic friction and non-outlier distribution.",
@@ -140,7 +153,9 @@ class M3B3DecisionPolicy:
 
         # 5. Weak Positive Edge (e.g. Breakout V2: +5.55% return, PF 1.09, friction erodes 49% of gross profits)
         if pkg.profit_factor < 1.30 or pkg.scenario_c_net_pnl <= Decimal("0"):
-            reasons.append(f"Net return (+{pkg.total_return_pct:.2f}%) and Profit Factor ({pkg.profit_factor:.2f}) fail the V2 gate (PF >= 1.30), and friction erodes over 45% of gross profits.")
+            reasons.append(
+                f"Net return (+{pkg.total_return_pct:.2f}%) and Profit Factor ({pkg.profit_factor:.2f}) fail the V2 gate (PF >= 1.30), and friction erodes over 45% of gross profits."
+            )
 
             # Check if hypothesis revision is justified
             if pkg.gross_pnl > Decimal("0") and pkg.scenario_a_net_pnl > Decimal("0"):

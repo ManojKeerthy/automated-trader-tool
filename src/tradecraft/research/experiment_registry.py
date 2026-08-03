@@ -11,6 +11,7 @@ from typing import Any
 @dataclass
 class EnvironmentMetadata:
     """Full environment reproducibility metadata container."""
+
     python_version: str = field(default_factory=lambda: sys.version.split()[0])
     os_system: str = field(default_factory=lambda: platform.system())
     os_release: str = field(default_factory=lambda: platform.release())
@@ -32,6 +33,7 @@ class EnvironmentMetadata:
 @dataclass
 class ExperimentRecord:
     """Immutable experiment record container for 100% reproducibility."""
+
     experiment_id: str
     hypothesis_uuid: str
     strategy_version: str

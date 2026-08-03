@@ -41,7 +41,9 @@ class ResearchClient:
         self.security_master = SecurityMaster()
         self.universe_registry = UniverseRegistry()
         self.membership_engine = HistoricalMembershipEngine()
-        self.universe_api = UniverseAPI(self.security_master, self.universe_registry, self.membership_engine)
+        self.universe_api = UniverseAPI(
+            self.security_master, self.universe_registry, self.membership_engine
+        )
 
     def list_alpha_sources(self) -> list[AlphaSourceRecord]:
         """List all 20 pre-registered institutional alpha sources."""
@@ -68,7 +70,9 @@ class ResearchClient:
         # Enforce admission check & novelty check before registration
         admission = self.validate_hypothesis_admission(record)
         if not admission.is_admitted:
-            raise ValueError(f"HYPOTHESIS ADMISSION REJECTED: {', '.join(admission.rejection_reasons)}")
+            raise ValueError(
+                f"HYPOTHESIS ADMISSION REJECTED: {', '.join(admission.rejection_reasons)}"
+            )
 
         novelty = self.check_hypothesis_novelty(record)
         if not novelty.is_sufficiently_novel:
@@ -96,4 +100,5 @@ class ResearchClient:
 
 class TradeCraftSDK(ResearchClient):
     """Alias for ResearchClient."""
+
     pass

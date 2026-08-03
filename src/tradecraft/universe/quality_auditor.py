@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class DataQualityAuditResult:
     """Audit results container for data cleanliness metrics."""
+
     universe_id: str
     total_securities_audited: int
     total_bars_audited: int
@@ -42,7 +43,9 @@ class DataQualityAuditResult:
 class DataQualityAuditor:
     """Audits market data cleanliness and historical membership continuity."""
 
-    def audit_universe(self, universe_id: str, securities_count: int, bars_count: int) -> DataQualityAuditResult:
+    def audit_universe(
+        self, universe_id: str, securities_count: int, bars_count: int
+    ) -> DataQualityAuditResult:
         """Perform data quality audit across universe dataset."""
         res = DataQualityAuditResult(
             universe_id=universe_id,

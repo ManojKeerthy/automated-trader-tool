@@ -3,6 +3,7 @@
 Persists every executed trade with full entry/exit provenance, fees breakdown,
 slippage impact, and holding period details.
 """
+
 import uuid
 from dataclasses import dataclass, field
 from datetime import date
@@ -110,7 +111,10 @@ class TradeLedger:
             exit_reason=exit_reason,
             stop_loss_level=stop_loss_level,
             fees_breakdown=combined_fees.to_dict(),
-            metadata_json={"entry_costs": entry_costs.to_dict(), "exit_costs": exit_costs.to_dict()},
+            metadata_json={
+                "entry_costs": entry_costs.to_dict(),
+                "exit_costs": exit_costs.to_dict(),
+            },
         )
         self.trades.append(record)
         return record

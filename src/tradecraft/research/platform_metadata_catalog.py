@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class PlatformAssetNode:
     """Dependency graph node representing a research asset."""
+
     node_id: str
     name: str
     asset_type: str  # UNIVERSE, DATASET, FEATURE, HYPOTHESIS, EXPERIMENT, STRATEGY, REPORT, ARTIFACT, DECISION

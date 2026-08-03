@@ -10,6 +10,7 @@ Design decisions:
 - Historical queries before verified coverage return UNVERIFIED/UNKNOWN
 - No arbitrary `effective_from` dates are invented
 """
+
 import logging
 import uuid
 from datetime import date, datetime
@@ -70,11 +71,13 @@ class PointInTimeUniverse:
 
         results = []
         for m in memberships:
-            results.append({
-                "instrument": m.instrument,
-                "confidence": m.confidence,
-                "membership": m,
-            })
+            results.append(
+                {
+                    "instrument": m.instrument,
+                    "confidence": m.confidence,
+                    "membership": m,
+                }
+            )
         return results
 
     def member_instruments(self, query_date: date) -> list[Instrument]:

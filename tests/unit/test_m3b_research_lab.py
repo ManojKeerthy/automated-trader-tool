@@ -14,6 +14,7 @@ Verifies all mandatory corrections and correctness rules:
 11. Final-test consumption persistence with git commit & config hash.
 12. Unavailable historical event data cannot enter signals.
 """
+
 import uuid
 from datetime import date, timedelta
 from decimal import Decimal

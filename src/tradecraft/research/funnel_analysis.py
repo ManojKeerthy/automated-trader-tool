@@ -82,8 +82,16 @@ class SignalFunnelAnalyzer:
 
         # Instrument concentration
         sorted_inst_trades = sorted(trades_per_inst.values(), reverse=True)
-        top1_pct = (sorted_inst_trades[0] / completed_count * 100.0) if completed_count > 0 and sorted_inst_trades else 0.0
-        top3_pct = (sum(sorted_inst_trades[:3]) / completed_count * 100.0) if completed_count > 0 and sorted_inst_trades else 0.0
+        top1_pct = (
+            (sorted_inst_trades[0] / completed_count * 100.0)
+            if completed_count > 0 and sorted_inst_trades
+            else 0.0
+        )
+        top3_pct = (
+            (sum(sorted_inst_trades[:3]) / completed_count * 100.0)
+            if completed_count > 0 and sorted_inst_trades
+            else 0.0
+        )
 
         # Construct funnel counts (approximate raw setup/signal totals based on executed trades and trade density)
         confirmed_signals = executed_count  # Baseline confirmed signals
@@ -98,9 +106,15 @@ class SignalFunnelAnalyzer:
             executed_trades=executed_count,
             completed_trades=completed_count,
             setup_to_signal_pct=(confirmed_signals / raw_setups * 100.0) if raw_setups > 0 else 0.0,
-            signal_to_intent_pct=(order_intents / confirmed_signals * 100.0) if confirmed_signals > 0 else 0.0,
-            intent_to_execution_pct=(executed_count / order_intents * 100.0) if order_intents > 0 else 0.0,
-            execution_to_completion_pct=(completed_count / executed_count * 100.0) if executed_count > 0 else 0.0,
+            signal_to_intent_pct=(order_intents / confirmed_signals * 100.0)
+            if confirmed_signals > 0
+            else 0.0,
+            intent_to_execution_pct=(executed_count / order_intents * 100.0)
+            if order_intents > 0
+            else 0.0,
+            execution_to_completion_pct=(completed_count / executed_count * 100.0)
+            if executed_count > 0
+            else 0.0,
         )
 
         return SignalFunnelReport(

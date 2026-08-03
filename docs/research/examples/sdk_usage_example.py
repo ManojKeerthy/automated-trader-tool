@@ -27,5 +27,6 @@ def main():
     client.register_hypothesis(hypo)
     print(f"Registered hypothesis: {hypo.hypothesis_name}")
 
+
 if __name__ == "__main__":
     main()
