@@ -18,9 +18,26 @@ from tradecraft.strategy.v2_strategies import (
 )
 
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from tradecraft.core.db_models import Base
+
+
 @pytest.fixture
 def db_session():
-    session = SessionLocal()
+    engine = create_engine("sqlite:///:memory:")
+    from sqlalchemy import event
+
+    @event.listens_for(engine, "connect")
+    def set_sqlite_pragma(dbapi_connection, connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
+    Base.metadata.create_all(engine)
+    session_cls = sessionmaker(bind=engine)
+    session = session_cls()
     try:
         yield session
     finally:
