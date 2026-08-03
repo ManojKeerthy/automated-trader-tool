@@ -3,7 +3,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -20,10 +20,10 @@ class ResearchGovernanceManager:
         self.config_path = config_path
         self.state = self.load_state()
 
-    def load_state(self) -> Dict[str, Any]:
+    def load_state(self) -> dict[str, Any]:
         if not self.config_path.exists():
             raise FileNotFoundError(f"Governance state file not found at {self.config_path}")
-        with open(self.config_path, "r") as f:
+        with open(self.config_path) as f:
             data = json.load(f)
         return dict(data)
 
@@ -68,7 +68,7 @@ class LineageCollisionDetector:
     ]
 
     @classmethod
-    def inspect_proposed_hypothesis(cls, strategy_id: str, parameters: Dict[str, Any], rule_summary: str) -> bool:
+    def inspect_proposed_hypothesis(cls, strategy_id: str, parameters: dict[str, Any], rule_summary: str) -> bool:
         # Check strategy ID prefix first
         try:
             GraveyardEnforcementGuard.check_strategy_id(strategy_id)

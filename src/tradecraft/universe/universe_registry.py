@@ -1,10 +1,9 @@
 """Universe Registry & Dataset Versioning for Point-in-Time Research Architecture."""
 
+import hashlib
 from dataclasses import dataclass, field
 from datetime import datetime
-import hashlib
-import json
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
@@ -28,7 +27,7 @@ class UniverseDefinition:
         payload = f"{self.universe_id}:{self.version}:{self.dataset_version}:{self.membership_version}"
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "universe_id": self.universe_id,
             "name": self.name,
@@ -51,7 +50,7 @@ class UniverseRegistry:
     SUPPORTED_UNIVERSES = ["NIFTY50", "NIFTY100", "NIFTY200", "NIFTY250", "NIFTY500", "CUSTOM"]
 
     def __init__(self) -> None:
-        self._universes: Dict[str, UniverseDefinition] = {}
+        self._universes: dict[str, UniverseDefinition] = {}
         self._initialize_canonical_universes()
 
     def _initialize_canonical_universes(self) -> None:
@@ -69,10 +68,10 @@ class UniverseRegistry:
         """Register or update a universe definition."""
         self._universes[definition.universe_id] = definition
 
-    def get_universe(self, universe_id: str) -> Optional[UniverseDefinition]:
+    def get_universe(self, universe_id: str) -> UniverseDefinition | None:
         """Retrieve universe definition by universe_id."""
         return self._universes.get(universe_id.upper())
 
-    def list_universes(self) -> List[UniverseDefinition]:
+    def list_universes(self) -> list[UniverseDefinition]:
         """List all registered universe definitions."""
         return list(self._universes.values())

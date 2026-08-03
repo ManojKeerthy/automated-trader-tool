@@ -5,16 +5,14 @@ Decouples strategy logic from ticker symbols by enforcing immutable security_uui
 
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Any, Dict, List, Optional
-import uuid
 
 
 @dataclass
 class SymbolHistoryRecord:
     """Historical symbol change record for a security."""
     effective_from: date
-    effective_to: Optional[date]
-    old_symbol: Optional[str]
+    effective_to: date | None
+    old_symbol: str | None
     new_symbol: str
     change_reason: str = "RENAME"
 
@@ -25,17 +23,17 @@ class Security:
     security_uuid: str
     current_symbol: str
     name: str
-    isin: Optional[str] = None
+    isin: str | None = None
     exchange: str = "NSE"
     segment: str = "EQ"
-    sector: Optional[str] = None
-    industry: Optional[str] = None
-    listing_date: Optional[date] = None
-    delisting_date: Optional[date] = None
+    sector: str | None = None
+    industry: str | None = None
+    listing_date: date | None = None
+    delisting_date: date | None = None
     is_active: bool = True
-    aliases: List[str] = field(default_factory=list)
-    symbol_history: List[SymbolHistoryRecord] = field(default_factory=list)
-    bse_symbol_history: List[SymbolHistoryRecord] = field(default_factory=list)
+    aliases: list[str] = field(default_factory=list)
+    symbol_history: list[SymbolHistoryRecord] = field(default_factory=list)
+    bse_symbol_history: list[SymbolHistoryRecord] = field(default_factory=list)
 
     def get_symbol_on(self, query_date: date) -> str:
         """Return the active NSE symbol for this security on a specific historical date."""
@@ -43,27 +41,24 @@ class Security:
             return self.current_symbol
 
         for rec in sorted(self.symbol_history, key=lambda x: x.effective_from, reverse=True):
-            if rec.effective_from <= query_date:
-                if rec.effective_to is None or query_date <= rec.effective_to:
-                    return rec.new_symbol
+            if rec.effective_from <= query_date and (rec.effective_to is None or query_date <= rec.effective_to):
+                return rec.new_symbol
         return self.current_symbol
 
     def is_listed_on(self, query_date: date) -> bool:
         """Check if security was active/listed on query_date."""
         if self.listing_date and query_date < self.listing_date:
             return False
-        if self.delisting_date and query_date > self.delisting_date:
-            return False
-        return True
+        return not (self.delisting_date and query_date > self.delisting_date)
 
 
 class SecurityMaster:
     """Primary Security Master catalog mapping symbols & ISINs to security_uuid."""
 
     def __init__(self) -> None:
-        self._securities: Dict[str, Security] = {}  # security_uuid -> Security
-        self._symbol_map: Dict[str, str] = {}  # current_symbol -> security_uuid
-        self._isin_map: Dict[str, str] = {}  # ISIN -> security_uuid
+        self._securities: dict[str, Security] = {}  # security_uuid -> Security
+        self._symbol_map: dict[str, str] = {}  # current_symbol -> security_uuid
+        self._isin_map: dict[str, str] = {}  # ISIN -> security_uuid
 
     def register_security(self, security: Security) -> str:
         """Register a security entity into the Security Master."""
@@ -73,11 +68,11 @@ class SecurityMaster:
             self._isin_map[security.isin.upper()] = security.security_uuid
         return security.security_uuid
 
-    def get_by_uuid(self, security_uuid: str) -> Optional[Security]:
+    def get_by_uuid(self, security_uuid: str) -> Security | None:
         """Retrieve Security entity by security_uuid."""
         return self._securities.get(security_uuid)
 
-    def get_by_symbol(self, symbol: str, query_date: Optional[date] = None) -> Optional[Security]:
+    def get_by_symbol(self, symbol: str, query_date: date | None = None) -> Security | None:
         """Retrieve Security entity by symbol, optionally resolving historical symbol changes."""
         symbol_upper = symbol.upper()
 
@@ -90,16 +85,15 @@ class SecurityMaster:
         # Search symbol history records
         for sec in self._securities.values():
             for rec in sec.symbol_history:
-                if rec.new_symbol.upper() == symbol_upper or (rec.old_symbol and rec.old_symbol.upper() == symbol_upper):
-                    if query_date is None or (rec.effective_from <= query_date and (rec.effective_to is None or query_date <= rec.effective_to)):
-                        return sec
+                if (rec.new_symbol.upper() == symbol_upper or (rec.old_symbol and rec.old_symbol.upper() == symbol_upper)) and (query_date is None or (rec.effective_from <= query_date and (rec.effective_to is None or query_date <= rec.effective_to))):
+                    return sec
         return None
 
-    def get_by_isin(self, isin: str) -> Optional[Security]:
+    def get_by_isin(self, isin: str) -> Security | None:
         """Retrieve Security entity by ISIN."""
         sec_uuid = self._isin_map.get(isin.upper())
         return self._securities.get(sec_uuid) if sec_uuid else None
 
-    def all_securities(self) -> List[Security]:
+    def all_securities(self) -> list[Security]:
         """Return all registered Security entities."""
         return list(self._securities.values())

@@ -1,10 +1,9 @@
 """Metadata Catalog for Institutional Data Platform Asset Management."""
 
+import hashlib
 from dataclasses import dataclass, field
 from datetime import datetime
-import hashlib
-from typing import Any, Dict, List, Optional
-import uuid
+from typing import Any
 
 
 @dataclass
@@ -16,7 +15,7 @@ class CatalogAsset:
     version: str = "1.0.0"
     source: str = "TradeCraft Research Pipeline"
     owner: str = "TradeCraft Research Governance"
-    dependencies: List[str] = field(default_factory=list)  # UUIDs of parent assets
+    dependencies: list[str] = field(default_factory=list)  # UUIDs of parent assets
     created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
     @property
@@ -25,7 +24,7 @@ class CatalogAsset:
         payload = f"{self.uuid}:{self.name}:{self.version}:{self.asset_type}:{','.join(self.dependencies)}"
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "uuid": self.uuid,
             "name": self.name,
@@ -43,18 +42,18 @@ class MetadataCatalog:
     """Catalog managing asset metadata records and dependency trees."""
 
     def __init__(self) -> None:
-        self._assets: Dict[str, CatalogAsset] = {}
+        self._assets: dict[str, CatalogAsset] = {}
 
     def register_asset(self, asset: CatalogAsset) -> str:
         """Register an asset into the Metadata Catalog."""
         self._assets[asset.uuid] = asset
         return asset.uuid
 
-    def get_asset(self, asset_uuid: str) -> Optional[CatalogAsset]:
+    def get_asset(self, asset_uuid: str) -> CatalogAsset | None:
         """Retrieve an asset by UUID."""
         return self._assets.get(asset_uuid)
 
-    def list_assets(self, asset_type: Optional[str] = None) -> List[CatalogAsset]:
+    def list_assets(self, asset_type: str | None = None) -> list[CatalogAsset]:
         """List registered assets, optionally filtered by asset_type."""
         if asset_type:
             return [a for a in self._assets.values() if a.asset_type.upper() == asset_type.upper()]

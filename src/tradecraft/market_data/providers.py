@@ -6,9 +6,7 @@ and storage from specific data vendors (Zerodha, NSE, Polygon, AlphaVantage, CSV
 
 from abc import ABC, abstractmethod
 from datetime import date
-from decimal import Decimal
-from typing import Any, Dict, List, Optional
-import uuid
+from typing import Any
 
 
 class DataProvider(ABC):
@@ -26,17 +24,17 @@ class DataProvider(ABC):
         security_uuid: str,
         start_date: date,
         end_date: date,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Fetch daily OHLCV bars for a security within date range."""
         pass
 
     @abstractmethod
-    def fetch_instrument_metadata(self, security_uuid: str) -> Optional[Dict[str, Any]]:
+    def fetch_instrument_metadata(self, security_uuid: str) -> dict[str, Any] | None:
         """Fetch instrument metadata (symbol, name, listing date, sector, ISIN)."""
         pass
 
     @abstractmethod
-    def fetch_corporate_actions(self, security_uuid: str) -> List[Dict[str, Any]]:
+    def fetch_corporate_actions(self, security_uuid: str) -> list[dict[str, Any]]:
         """Fetch corporate action records for a security."""
         pass
 
@@ -56,14 +54,14 @@ class LocalProvider(DataProvider):
         security_uuid: str,
         start_date: date,
         end_date: date,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         # Mock/Interface implementation for local data
         return []
 
-    def fetch_instrument_metadata(self, security_uuid: str) -> Optional[Dict[str, Any]]:
+    def fetch_instrument_metadata(self, security_uuid: str) -> dict[str, Any] | None:
         return {"security_uuid": security_uuid, "provider": self.provider_name}
 
-    def fetch_corporate_actions(self, security_uuid: str) -> List[Dict[str, Any]]:
+    def fetch_corporate_actions(self, security_uuid: str) -> list[dict[str, Any]]:
         return []
 
 

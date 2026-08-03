@@ -1,0 +1,362 @@
+[
+  {
+    "feature_uuid": "feat-rsi-v1",
+    "feature_name": "RSI",
+    "description": "Standard quantitative feature calculation for RSI",
+    "mathematical_definition": "Formula for RSI",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "7a75f4fcc3717edd9edf0ee194db0f7759b2b589396a5c5941df4af8514c214b",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-atr-v1",
+    "feature_name": "ATR",
+    "description": "Standard quantitative feature calculation for ATR",
+    "mathematical_definition": "Formula for ATR",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "8b59b5bc6172e25b1d04afa3df1584ae37eceee5ae3458f43a98888402b957cd",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-ema-v1",
+    "feature_name": "EMA",
+    "description": "Standard quantitative feature calculation for EMA",
+    "mathematical_definition": "Formula for EMA",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "cb498663e7519a9b17faec997e0c1d89f7b45f437402e156a545e5b196890e11",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-sma-v1",
+    "feature_name": "SMA",
+    "description": "Standard quantitative feature calculation for SMA",
+    "mathematical_definition": "Formula for SMA",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "bf92535ff7723b9b1dd75f290efc61d0c1ab0d24e7a96ded96ccebd548ef015a",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-adx-v1",
+    "feature_name": "ADX",
+    "description": "Standard quantitative feature calculation for ADX",
+    "mathematical_definition": "Formula for ADX",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "ec2978fc5095a2b256f82e5f212f3eb31698a129af7a5604031c9444348d0ba2",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-macd-v1",
+    "feature_name": "MACD",
+    "description": "Standard quantitative feature calculation for MACD",
+    "mathematical_definition": "Formula for MACD",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "5e48f1efc53ee38b8e2d45d9626b6a01da4965aa43f7643cd5c00045a8338506",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-roc-v1",
+    "feature_name": "ROC",
+    "description": "Standard quantitative feature calculation for ROC",
+    "mathematical_definition": "Formula for ROC",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "e0ea1cc1d7b8943d85ce83a8d96c1c4a1f84d03dacae50d129a3dc4d44d9a66f",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-relative-strength-v1",
+    "feature_name": "Relative Strength",
+    "description": "Standard quantitative feature calculation for Relative Strength",
+    "mathematical_definition": "Formula for Relative Strength",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "9f3bf73069736e2dbbcd4f04a25752488979aa128cb34fd19c20ce863d50f5db",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-volatility-v1",
+    "feature_name": "Volatility",
+    "description": "Standard quantitative feature calculation for Volatility",
+    "mathematical_definition": "Formula for Volatility",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "d0f32d0eb448e5e91d8fa826d36920cdbac9a823c8d6e4c769a92571e85d1395",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-liquidity-v1",
+    "feature_name": "Liquidity",
+    "description": "Standard quantitative feature calculation for Liquidity",
+    "mathematical_definition": "Formula for Liquidity",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "8807111a233de462457950613f253fe5f598cb8b950202f6146e63ff99ba6926",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-sector-strength-v1",
+    "feature_name": "Sector Strength",
+    "description": "Standard quantitative feature calculation for Sector Strength",
+    "mathematical_definition": "Formula for Sector Strength",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "f5b1e84db8ec428cbbcaa0cf03c44188984bbfdf8d935e115a2af4a85e315985",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  },
+  {
+    "feature_uuid": "feat-market-regime-v1",
+    "feature_name": "Market Regime",
+    "description": "Standard quantitative feature calculation for Market Regime",
+    "mathematical_definition": "Formula for Market Regime",
+    "required_inputs": [
+      "Close",
+      "Volume"
+    ],
+    "lookback_period": 20,
+    "warmup_period": 50,
+    "implementation_version": "1.0.0",
+    "checksum": "f2e4c7f7d6ed2d71d9dd76230687f3c38c1b0e9508cd3b63a0d00a7a87d3abe2",
+    "lineage": {
+      "depends_on": [
+        "OHLCV"
+      ],
+      "raw_features": [
+        "Close",
+        "High",
+        "Low",
+        "Volume"
+      ],
+      "dataset_version": "v1",
+      "corporate_action_version": "1.0.0",
+      "membership_version": "1.0.0"
+    },
+    "author": "TradeCraft Quant Team",
+    "created_at": "2026-08-03T07:24:17.128265"
+  }
+]

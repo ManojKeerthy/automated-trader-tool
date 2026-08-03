@@ -16,16 +16,18 @@ Performs:
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING
 
 import numpy as np
 
-from tradecraft.backtesting.trade_ledger import TradeRecord
 from tradecraft.research.diagnostics import TrainOnlyGuard
-from tradecraft.research.friction_decomposition import FrictionDecompositionReport
-from tradecraft.research.trade_analysis import TradeAnalysisReport
+
+if TYPE_CHECKING:
+    from tradecraft.backtesting.trade_ledger import TradeRecord
+    from tradecraft.research.friction_decomposition import FrictionDecompositionReport
+    from tradecraft.research.trade_analysis import TradeAnalysisReport
 
 logger = logging.getLogger(__name__)
 
@@ -160,15 +162,9 @@ class FailureDiagnosticAnalyzer:
         sorted_trades = sorted(trades, key=lambda t: t.net_pnl, reverse=True)
         rs_all = [float(t.net_pnl / (abs(t.entry_price - (t.stop_loss_level or t.entry_price * Decimal("0.95"))) * t.quantity)) for t in trades]
 
-        if total_trades > 1:
-            top1_excl_r = float(np.mean(rs_all[1:]))
-        else:
-            top1_excl_r = 0.0
+        top1_excl_r = float(np.mean(rs_all[1:])) if total_trades > 1 else 0.0
 
-        if total_trades > 3:
-            top3_excl_r = float(np.mean(rs_all[3:]))
-        else:
-            top3_excl_r = 0.0
+        top3_excl_r = float(np.mean(rs_all[3:])) if total_trades > 3 else 0.0
 
         # 3. Deterministic Autopsies (Top 5, Median 5, Worst 5)
         autopsies: list[TradeAutopsyEntry] = []

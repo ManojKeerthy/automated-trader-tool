@@ -6,13 +6,13 @@ evaluated phases, metrics exposed, outcomes, rejection reasons, and next permitt
 
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
-from datetime import datetime
 import json
 import logging
-from typing import Any
+from dataclasses import asdict, dataclass
+from typing import TYPE_CHECKING, Any
 
-from sqlalchemy.orm import Session
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 

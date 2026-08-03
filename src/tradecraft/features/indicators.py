@@ -13,10 +13,11 @@ Each function documents:
 Functions return NaN for positions with insufficient lookback data.
 """
 
-import numpy as np
-import pandas as pd
 from decimal import Decimal
 from typing import Any
+
+import numpy as np
+import pandas as pd
 
 # ---------------------------------------------------------------------------
 # TREND family

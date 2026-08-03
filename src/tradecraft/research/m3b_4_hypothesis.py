@@ -1,13 +1,10 @@
 """Pre-registration framework and parameter selection provenance audit for M3B.4 V3 hypotheses."""
 
-from dataclasses import dataclass, field
-from datetime import date
-from decimal import Decimal
-import hashlib
 import json
 import logging
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -51,9 +48,9 @@ class V3HypothesisPreRegistration:
     behavioural_rationale: str
     diagnosed_v2_failure: str
     post_hoc_evidence_used: str
-    rule_changes: List[Dict[str, Any]]
-    parameters: Dict[str, Any]
-    parameter_origins: List[V3ParameterOrigin]
+    rule_changes: list[dict[str, Any]]
+    parameters: dict[str, Any]
+    parameter_origins: list[V3ParameterOrigin]
     expected_effect: str
     falsification_condition: str
     registered_at: str
@@ -74,7 +71,7 @@ class V3HypothesisRegistry:
 
     def __init__(self, registry_file: Path = Path("scratch/m3b_4_v3_hypothesis_registry.json")):
         self.registry_file = registry_file
-        self._registrations: Dict[str, V3HypothesisPreRegistration] = {}
+        self._registrations: dict[str, V3HypothesisPreRegistration] = {}
 
     def register(self, reg: V3HypothesisPreRegistration) -> None:
         reg.audit_parameter_selection_provenance()
@@ -84,7 +81,7 @@ class V3HypothesisRegistry:
         logger.info(f"PRE-REGISTERED V3 HYPOTHESIS: {reg.v3_strategy_id} (Config Hash: {reg.config_hash})")
 
     def export_json(self) -> None:
-        out: Dict[str, Any] = {}
+        out: dict[str, Any] = {}
         for k, reg in self._registrations.items():
             out[k] = {
                 "strategy_family": reg.strategy_family,

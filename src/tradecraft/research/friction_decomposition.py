@@ -12,16 +12,19 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import Session
-
-from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel, ZeroCostModel
+from tradecraft.backtesting.costs import ZeroCostModel
 from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine, BacktestResult
 from tradecraft.backtesting.metrics import MetricValue
-from tradecraft.backtesting.slippage import FixedBasisPointSlippage, ZeroSlippage
-from tradecraft.market_data.calendar import TradingCalendar
+from tradecraft.backtesting.slippage import ZeroSlippage
 from tradecraft.research.diagnostics import TrainOnlyGuard
 from tradecraft.research.splits import TRAIN_SPLIT
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
+    from tradecraft.market_data.calendar import TradingCalendar
 
 logger = logging.getLogger(__name__)
 

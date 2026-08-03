@@ -13,10 +13,9 @@ import logging
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import sqlalchemy as sa
-from sqlalchemy.orm import Session
 
 from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
 from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine, BacktestResult
@@ -24,12 +23,16 @@ from tradecraft.backtesting.metrics import MetricValue
 from tradecraft.backtesting.slippage import FixedBasisPointSlippage
 from tradecraft.core.db_models import ResearchGraveyardModel
 from tradecraft.core.exceptions import DataBoundaryViolationError
-from tradecraft.market_data.calendar import TradingCalendar
-from tradecraft.research.splits import ChronologicalDataSplitter, TRAIN_SPLIT
+from tradecraft.research.splits import TRAIN_SPLIT, ChronologicalDataSplitter
 from tradecraft.strategy.breakout_confirm import BreakoutConfirmStrategy
 from tradecraft.strategy.mean_reversion import MeanReversionStrategy
 from tradecraft.strategy.momentum_rs import MomentumRSStrategy
 from tradecraft.strategy.trend_pullback import TrendPullbackStrategy
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
+    from tradecraft.market_data.calendar import TradingCalendar
 
 logger = logging.getLogger(__name__)
 

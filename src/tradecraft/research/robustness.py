@@ -8,12 +8,10 @@ Enforces:
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from decimal import Decimal
-import logging
-from typing import Any
-
-from sqlalchemy.orm import Session
+from typing import TYPE_CHECKING, Any
 
 from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
 from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine
@@ -21,8 +19,21 @@ from tradecraft.backtesting.slippage import FixedBasisPointSlippage
 from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
 from tradecraft.research.splits import DEVELOPMENT_SPLIT
-from tradecraft.research.v2_development_gate import FrozenV2CanonicalRecord, V2DevelopmentScorecard
-from tradecraft.strategy.v2_strategies import BaseV2Strategy, TrendPullbackV2Strategy, BreakoutConfirmV2Strategy, MomentumRSV2Strategy, MeanReversionV2Strategy
+from tradecraft.strategy.v2_strategies import (
+    BaseV2Strategy,
+    BreakoutConfirmV2Strategy,
+    MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
+)
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
+    from tradecraft.research.v2_development_gate import (
+        FrozenV2CanonicalRecord,
+        V2DevelopmentScorecard,
+    )
 
 logger = logging.getLogger(__name__)
 

@@ -1,11 +1,11 @@
 """Point-in-Time Universe API for TradeCraft Research Platform."""
 
 from datetime import date
-from typing import Dict, List, Optional
-from tradecraft.universe.security_master import Security, SecurityMaster
-from tradecraft.universe.universe_registry import UniverseDefinition, UniverseRegistry
+
 from tradecraft.universe.historical_membership import HistoricalMembershipEngine, MembershipRecord
-from tradecraft.universe.survivorship_guard import SurvivorshipGuard, SurvivorshipBiasError
+from tradecraft.universe.security_master import Security, SecurityMaster
+from tradecraft.universe.survivorship_guard import SurvivorshipGuard
+from tradecraft.universe.universe_registry import UniverseRegistry
 
 
 class UniverseAPI:
@@ -22,10 +22,10 @@ class UniverseAPI:
         self.membership_engine = membership_engine
         self.survivorship_guard = SurvivorshipGuard(security_master)
 
-    def get_constituents(self, universe_id: str, query_date: date) -> List[Security]:
+    def get_constituents(self, universe_id: str, query_date: date) -> list[Security]:
         """Return Security objects belonging to universe_id on query_date."""
         sec_uuids = self.membership_engine.get_constituents(query_date, universe_id)
-        securities: List[Security] = []
+        securities: list[Security] = []
 
         for uuid_str in sec_uuids:
             # Enforce survivorship boundary check
@@ -40,11 +40,11 @@ class UniverseAPI:
         self.survivorship_guard.validate_security_access(security_uuid, query_date)
         return self.membership_engine.is_member(security_uuid, universe_id, query_date)
 
-    def security_history(self, security_uuid: str) -> List[MembershipRecord]:
+    def security_history(self, security_uuid: str) -> list[MembershipRecord]:
         """Fetch historical universe membership records for a security."""
         return self.membership_engine.security_history(security_uuid)
 
-    def universe_history(self, universe_id: str) -> List[MembershipRecord]:
+    def universe_history(self, universe_id: str) -> list[MembershipRecord]:
         """Fetch historical membership records for a universe."""
         return self.membership_engine.universe_history(universe_id)
 

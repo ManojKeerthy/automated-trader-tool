@@ -10,7 +10,7 @@ from typing import Any
 
 from tradecraft.backtesting.data_portal import DataPortal
 from tradecraft.features import indicators
-from tradecraft.strategy.base import ExitSignal, SignalIntent
+from tradecraft.strategy.base import SignalIntent
 
 
 class TrendPullbackStrategy:

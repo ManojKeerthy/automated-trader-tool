@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import date
 from decimal import Decimal
-import logging
-from typing import Any, List
+from typing import Any
 
 from tradecraft.backtesting.data_portal import DataPortal
+from tradecraft.research.m3b_4_hypothesis import V3ParameterOrigin
 from tradecraft.strategy.base import SignalIntent
 from tradecraft.strategy.v2_strategies import BaseV2Strategy
-from tradecraft.research.m3b_4_hypothesis import V3ParameterOrigin
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ class MeanReversionV3Strategy(BaseV2Strategy):
         }
 
     @property
-    def v3_parameter_origins(self) -> List[V3ParameterOrigin]:
+    def v3_parameter_origins(self) -> list[V3ParameterOrigin]:
         return [
             V3ParameterOrigin(
                 parameter_name="rsi_oversold",

@@ -9,11 +9,12 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from datetime import date
-from typing import Any
+from typing import TYPE_CHECKING
 
-from tradecraft.backtesting.engine import BacktestResult
 from tradecraft.research.diagnostics import TrainOnlyGuard
+
+if TYPE_CHECKING:
+    from tradecraft.backtesting.engine import BacktestResult
 
 logger = logging.getLogger(__name__)
 

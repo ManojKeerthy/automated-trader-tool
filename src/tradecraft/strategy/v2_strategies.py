@@ -6,16 +6,16 @@ SHA256 configuration hashes, plain-language hypotheses, and parameter origin tra
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import date
-from decimal import Decimal
 import hashlib
 import json
 import logging
+from dataclasses import dataclass
+from datetime import date
+from decimal import Decimal
 from typing import Any
 
 from tradecraft.backtesting.data_portal import DataPortal
-from tradecraft.strategy.base import SignalIntent, ExitSignal
+from tradecraft.strategy.base import SignalIntent
 
 logger = logging.getLogger(__name__)
 

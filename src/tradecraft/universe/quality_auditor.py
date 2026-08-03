@@ -1,11 +1,9 @@
 """Data Quality Audit Engine for Point-in-Time Data Architecture."""
 
-from dataclasses import dataclass, field
-from datetime import date
-from decimal import Decimal
 import json
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
@@ -22,9 +20,9 @@ class DataQualityAuditResult:
     corporate_action_mismatches_count: int = 0
     missing_membership_intervals_count: int = 0
     quality_score_pct: float = 100.0
-    issues: List[str] = field(default_factory=list)
+    issues: list[str] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "universe_id": self.universe_id,
             "total_securities_audited": self.total_securities_audited,

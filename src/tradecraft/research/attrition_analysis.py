@@ -15,21 +15,20 @@ Calculates:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import date
-from decimal import Decimal
 import logging
-from typing import Any
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import select, and_
-from sqlalchemy.orm import Session
+from sqlalchemy import and_, select
 
 from tradecraft.backtesting.data_portal import DataPortal
-from tradecraft.core.db_models import MarketBar, Instrument
+from tradecraft.core.db_models import MarketBar
 from tradecraft.instruments.universe import PointInTimeUniverse
-from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
 from tradecraft.research.splits import DEVELOPMENT_SPLIT
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
@@ -597,7 +596,7 @@ class ConditionAttritionAnalyzer:
 
         processed_bars: list[dict[str, Any]] = []
 
-        for inst_id, bars_list in inst_bars.items():
+        for _inst_id, bars_list in inst_bars.items():
             if len(bars_list) < 60:
                 continue
 

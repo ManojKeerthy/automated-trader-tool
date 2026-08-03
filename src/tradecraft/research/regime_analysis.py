@@ -11,14 +11,17 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING
 
 import numpy as np
-from sqlalchemy.orm import Session
 
-from tradecraft.backtesting.trade_ledger import TradeRecord
 from tradecraft.research.diagnostics import TrainOnlyGuard
-from tradecraft.screening.regime import DEFAULT_REGIME_DEFINITION, RegimeDefinition
+from tradecraft.screening.regime import DEFAULT_REGIME_DEFINITION
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
+    from tradecraft.backtesting.trade_ledger import TradeRecord
 
 logger = logging.getLogger(__name__)
 

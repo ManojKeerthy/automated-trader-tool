@@ -1,10 +1,10 @@
 """Historical Gate Provenance Audit for V2DevelopmentGate v1.0."""
 
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 
 
-class GateProvenanceClassification(str, Enum):
+class GateProvenanceClassification(StrEnum):
     PREDECLARED_AND_JUSTIFIED = "PREDECLARED_AND_JUSTIFIED"
     PREDECLARED_HEURISTIC = "PREDECLARED_HEURISTIC"
     POST_HOC_ORIGIN_UNCLEAR = "POST_HOC_ORIGIN_UNCLEAR"

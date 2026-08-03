@@ -1,7 +1,7 @@
 """Survivorship & Lookahead Bias Protection Guard."""
 
 from datetime import date
-from typing import Optional
+
 from tradecraft.universe.security_master import Security, SecurityMaster
 
 

@@ -1,9 +1,8 @@
 """Authoritative Development Survivor Gate implementation for Milestone M3B.4."""
 
-from dataclasses import dataclass
-from decimal import Decimal
 import logging
-from typing import Any, Dict, List
+from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +27,8 @@ class DevelopmentSurvivorGateEvaluator:
         expectancy_r: float,
         max_drawdown_pct: float,
         semester_concentration_pct: float,
-    ) -> Dict[str, Any]:
-        
+    ) -> dict[str, Any]:
+
         criteria = [
             GateCriterionResult(
                 criterion_name="win_rate",

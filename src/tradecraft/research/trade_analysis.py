@@ -10,20 +10,23 @@ Calculates:
 from __future__ import annotations
 
 import logging
-import math
 from dataclasses import dataclass, field
-from datetime import date
 from decimal import Decimal
-from typing import Any, Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 from sqlalchemy import and_, select
-from sqlalchemy.orm import Session
 
-from tradecraft.backtesting.trade_ledger import TradeRecord
 from tradecraft.core.db_models import MarketBar
 from tradecraft.research.diagnostics import TrainOnlyGuard
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from datetime import date
+
+    from sqlalchemy.orm import Session
+
+    from tradecraft.backtesting.trade_ledger import TradeRecord
 
 logger = logging.getLogger(__name__)
 

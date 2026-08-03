@@ -14,25 +14,24 @@ Enforces:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import date
-from decimal import Decimal
 import logging
-from typing import Any
-
-from sqlalchemy.orm import Session
+from dataclasses import dataclass
+from decimal import Decimal
+from typing import TYPE_CHECKING, Any
 
 from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
 from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine, BacktestResult
 from tradecraft.backtesting.slippage import FixedBasisPointSlippage
-from tradecraft.core.exceptions import DataBoundaryViolationError
-from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
-from tradecraft.research.signal_viability import SignalViabilityReport
 from tradecraft.research.splits import DEVELOPMENT_SPLIT
-from tradecraft.strategy.v2_strategies import BaseV2Strategy
-from tradecraft.backtesting.trade_ledger import TradeRecord
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
+    from tradecraft.backtesting.trade_ledger import TradeRecord
+    from tradecraft.research.signal_viability import SignalViabilityReport
+    from tradecraft.strategy.v2_strategies import BaseV2Strategy
 
 logger = logging.getLogger(__name__)
 

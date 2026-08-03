@@ -2,36 +2,35 @@
 
 from dataclasses import dataclass
 from decimal import Decimal
-from enum import Enum
-from typing import Any
+from enum import StrEnum
 
 
-class DecisionStatus(str, Enum):
+class DecisionStatus(StrEnum):
     ABANDON_FAMILY = "ABANDON_FAMILY"
     ONE_FINAL_HYPOTHESIS_REVISION_ALLOWED = "ONE_FINAL_HYPOTHESIS_REVISION_ALLOWED"
     DEVELOPMENT_SURVIVOR = "DEVELOPMENT_SURVIVOR"
 
 
-class EdgeClassification(str, Enum):
+class EdgeClassification(StrEnum):
     STRUCTURALLY_NEGATIVE_GROSS_EDGE = "STRUCTURALLY_NEGATIVE_GROSS_EDGE"
     POSITIVE_GROSS_EDGE_ERODED_BY_FRICTION = "POSITIVE_GROSS_EDGE_ERODED_BY_FRICTION"
     ROBUST_POSITIVE_NET_EDGE = "ROBUST_POSITIVE_NET_EDGE"
 
 
-class OutlierDependenceClassification(str, Enum):
+class OutlierDependenceClassification(StrEnum):
     DISTRIBUTED_EDGE = "DISTRIBUTED_EDGE"
     MODERATELY_CONCENTRATED = "MODERATELY_CONCENTRATED"
     OUTLIER_DEPENDENT = "OUTLIER_DEPENDENT"
 
 
-class YearlyStabilityClassification(str, Enum):
+class YearlyStabilityClassification(StrEnum):
     BROADLY_STABLE = "BROADLY_STABLE"
     PERIOD_DEPENDENT = "PERIOD_DEPENDENT"
     SINGLE_PERIOD_DOMINATED = "SINGLE_PERIOD_DOMINATED"
     CONSISTENTLY_NEGATIVE = "CONSISTENTLY_NEGATIVE"
 
 
-class CostRobustnessClassification(str, Enum):
+class CostRobustnessClassification(StrEnum):
     ROBUST_TO_REASONABLE_FRICTION = "ROBUST_TO_REASONABLE_FRICTION"
     FRICTION_SENSITIVE = "FRICTION_SENSITIVE"
     ONLY_PROFITABLE_WITH_UNREALISTIC_FRICTION = "ONLY_PROFITABLE_WITH_UNREALISTIC_FRICTION"
@@ -53,7 +52,7 @@ class StrategyEvidencePackage:
     profit_factor: float
     win_rate: float
     expectancy_r: float
-    
+
     # Yearly breakdown
     positive_years_count: int
     total_years_count: int
@@ -82,7 +81,7 @@ class M3B3DecisionPolicy:
     @classmethod
     def evaluate(cls, pkg: StrategyEvidencePackage) -> tuple[DecisionStatus, str, list[str]]:
         """Evaluate strategy evidence against frozen v1.0 triage rules.
-        
+
         Returns:
             (DecisionStatus, rationale_summary, list_of_supporting_evidence_statements)
         """
@@ -109,7 +108,7 @@ class M3B3DecisionPolicy:
         # 3. Check Outlier Dependence
         if pkg.outlier_classification == OutlierDependenceClassification.OUTLIER_DEPENDENT or pkg.net_pnl_ex_top3 <= Decimal("0"):
             reasons.append(f"Net profit (+₹{pkg.net_pnl:,.2f}) is dependent on top 3 outlier trades; net P&L excluding top 3 is non-positive (₹{pkg.net_pnl_ex_top3:,.2f}).")
-            
+
             # Evaluate if one final hypothesis revision is justified or abandon
             if pkg.scenario_b_net_pnl > Decimal("0") and pkg.gross_pnl > Decimal("50000"):
                 reasons.append(f"Gross edge (+₹{pkg.gross_pnl:,.2f}) demonstrates potential signal value under zero-friction, but entry/exit rules are structurally incomplete.")
@@ -142,7 +141,7 @@ class M3B3DecisionPolicy:
         # 5. Weak Positive Edge (e.g. Breakout V2: +5.55% return, PF 1.09, friction erodes 49% of gross profits)
         if pkg.profit_factor < 1.30 or pkg.scenario_c_net_pnl <= Decimal("0"):
             reasons.append(f"Net return (+{pkg.total_return_pct:.2f}%) and Profit Factor ({pkg.profit_factor:.2f}) fail the V2 gate (PF >= 1.30), and friction erodes over 45% of gross profits.")
-            
+
             # Check if hypothesis revision is justified
             if pkg.gross_pnl > Decimal("0") and pkg.scenario_a_net_pnl > Decimal("0"):
                 return (

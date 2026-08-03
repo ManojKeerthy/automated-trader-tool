@@ -1,7 +1,8 @@
 """Data Firewall for M3B.3 preventing unauthorized access to VALIDATION and FINAL_TEST datasets."""
 
 from datetime import date
-from tradecraft.research.splits import DEVELOPMENT_SPLIT, VALIDATION_SPLIT, FINAL_TEST_SPLIT
+
+from tradecraft.research.splits import DEVELOPMENT_SPLIT, FINAL_TEST_SPLIT, VALIDATION_SPLIT
 
 
 class DataBoundaryViolationError(Exception):

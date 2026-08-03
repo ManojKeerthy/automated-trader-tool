@@ -12,7 +12,6 @@ from typing import Any, Protocol, runtime_checkable
 from sqlalchemy.orm import Session
 
 from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
-from tradecraft.backtesting.data_portal import DataPortal
 from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine
 from tradecraft.backtesting.metrics import MetricValue
 from tradecraft.backtesting.slippage import FixedBasisPointSlippage
