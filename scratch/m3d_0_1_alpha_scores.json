@@ -1,0 +1,202 @@
+[
+  {
+    "alpha_id": "ALPHA-001",
+    "alpha_name": "Trend Following",
+    "category": "TREND",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-002",
+    "alpha_name": "Cross-Sectional Momentum",
+    "category": "MOMENTUM",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "cost_sensitivity": "MEDIUM"
+  },
+  {
+    "alpha_id": "ALPHA-003",
+    "alpha_name": "Time-Series Momentum",
+    "category": "MOMENTUM",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "cost_sensitivity": "MEDIUM"
+  },
+  {
+    "alpha_id": "ALPHA-004",
+    "alpha_name": "Relative Strength",
+    "category": "MOMENTUM",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_DAY",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "cost_sensitivity": "MEDIUM"
+  },
+  {
+    "alpha_id": "ALPHA-005",
+    "alpha_name": "Breakout",
+    "category": "PATTERN",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_DAY",
+    "turnover": "HIGH",
+    "capacity": "MEDIUM",
+    "cost_sensitivity": "HIGH"
+  },
+  {
+    "alpha_id": "ALPHA-006",
+    "alpha_name": "Volatility Compression",
+    "category": "PATTERN",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_DAY",
+    "turnover": "MEDIUM",
+    "capacity": "MEDIUM",
+    "cost_sensitivity": "MEDIUM"
+  },
+  {
+    "alpha_id": "ALPHA-007",
+    "alpha_name": "Mean Reversion",
+    "category": "REVERSION",
+    "complexity": "MEDIUM",
+    "holding_period": "SWING",
+    "turnover": "HIGH",
+    "capacity": "MEDIUM",
+    "cost_sensitivity": "HIGH"
+  },
+  {
+    "alpha_id": "ALPHA-008",
+    "alpha_name": "Gap Continuation",
+    "category": "EVENT",
+    "complexity": "MEDIUM",
+    "holding_period": "DAILY",
+    "turnover": "HIGH",
+    "capacity": "LOW",
+    "cost_sensitivity": "HIGH"
+  },
+  {
+    "alpha_id": "ALPHA-009",
+    "alpha_name": "Gap Reversal",
+    "category": "REVERSION",
+    "complexity": "MEDIUM",
+    "holding_period": "DAILY",
+    "turnover": "HIGH",
+    "capacity": "LOW",
+    "cost_sensitivity": "HIGH"
+  },
+  {
+    "alpha_id": "ALPHA-010",
+    "alpha_name": "Sector Rotation",
+    "category": "BREADTH",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-011",
+    "alpha_name": "Market Breadth",
+    "category": "BREADTH",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-012",
+    "alpha_name": "Liquidity Expansion",
+    "category": "PATTERN",
+    "complexity": "MEDIUM",
+    "holding_period": "SWING",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "cost_sensitivity": "MEDIUM"
+  },
+  {
+    "alpha_id": "ALPHA-013",
+    "alpha_name": "Earnings Drift",
+    "category": "EVENT",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-014",
+    "alpha_name": "52-Week High Effect",
+    "category": "MOMENTUM",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "cost_sensitivity": "MEDIUM"
+  },
+  {
+    "alpha_id": "ALPHA-015",
+    "alpha_name": "Factor Investing",
+    "category": "FACTOR",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-016",
+    "alpha_name": "Quality",
+    "category": "FACTOR",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-017",
+    "alpha_name": "Value",
+    "category": "FACTOR",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-018",
+    "alpha_name": "Low Volatility",
+    "category": "FACTOR",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  },
+  {
+    "alpha_id": "ALPHA-019",
+    "alpha_name": "Small Cap",
+    "category": "FACTOR",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "MEDIUM",
+    "cost_sensitivity": "MEDIUM"
+  },
+  {
+    "alpha_id": "ALPHA-020",
+    "alpha_name": "Risk Premia",
+    "category": "FACTOR",
+    "complexity": "MEDIUM",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "cost_sensitivity": "LOW"
+  }
+]

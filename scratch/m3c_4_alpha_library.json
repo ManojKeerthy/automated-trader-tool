@@ -1,0 +1,725 @@
+[
+  {
+    "alpha_id": "ALPHA-001",
+    "alpha_name": "Trend Following",
+    "category": "TREND",
+    "economic_rationale": "Capitalizes on persistent medium-to-long term structural trends driven by capital flows.",
+    "behavioural_rationale": "Anchoring bias, slow institutional capital re-allocation.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "RANGING",
+      "HIGH_VOLATILITY"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Trend Following"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Trend Following"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Trend Following"
+    ],
+    "checksum": "482e1fc08bd3e9db495adf8717202f90881351422f0fadd4c0fa61d9d06b210b",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-002",
+    "alpha_name": "Cross-Sectional Momentum",
+    "category": "MOMENTUM",
+    "economic_rationale": "Long top-performing assets and short/avoid bottom-performing assets relative to peer universe.",
+    "behavioural_rationale": "Under-reaction to news, herding behavior.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "MEDIUM",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "VOLATILE_REVERSAL"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Cross-Sectional Momentum"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Cross-Sectional Momentum"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Cross-Sectional Momentum"
+    ],
+    "checksum": "8dbe5f4d22817be7c5a13e12e98847e99e80f973707f62d3ad5b66dc20ff80db",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-003",
+    "alpha_name": "Time-Series Momentum",
+    "category": "MOMENTUM",
+    "economic_rationale": "Asset's own past return predicts its future return trajectory over a 1-12 month horizon.",
+    "behavioural_rationale": "Disposition effect, delayed market pricing.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "MEDIUM",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "CHOPPY_SIDEWAYS"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Time-Series Momentum"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Time-Series Momentum"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Time-Series Momentum"
+    ],
+    "checksum": "7f31fad140028457b9fa7d3d2d2f97b3b669ab02260b4e4bbb373d9f899884d1",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-004",
+    "alpha_name": "Relative Strength",
+    "category": "MOMENTUM",
+    "economic_rationale": "Stock performance relative to a benchmark index like NIFTY 50 or sector index.",
+    "behavioural_rationale": "Institutional rotation toward outperforming leaders.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_DAY",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "MEDIUM",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "HIGH_VOLATILITY"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Relative Strength"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Relative Strength"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Relative Strength"
+    ],
+    "checksum": "102edf27a42d4344f52369bcecc96225361c79586286e922697ed086e9ba8ca1",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-005",
+    "alpha_name": "Breakout",
+    "category": "PATTERN",
+    "economic_rationale": "Price expansion beyond historical support or resistance levels.",
+    "behavioural_rationale": "Stop-loss hunting, breakout buyers triggering liquidity.",
+    "historical_evidence_strength": "MODERATE",
+    "holding_period": "MULTI_DAY",
+    "turnover": "HIGH",
+    "capacity": "MEDIUM",
+    "transaction_cost_sensitivity": "HIGH",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "FALSE_BREAKOUT_RANGING"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Breakout"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Breakout"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Breakout"
+    ],
+    "checksum": "75e036114daf49a74281d5e52e1e0cd924928cb10b0822bf97a59025f6e159bb",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-006",
+    "alpha_name": "Volatility Compression",
+    "category": "PATTERN",
+    "economic_rationale": "Periods of abnormally low volatility (squeeze) precede explosive directional expansion.",
+    "behavioural_rationale": "Mean reversion of volatility metrics.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_DAY",
+    "turnover": "MEDIUM",
+    "capacity": "MEDIUM",
+    "transaction_cost_sensitivity": "MEDIUM",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "LOW_VOLATILITY_DRIFT"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Volatility Compression"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Volatility Compression"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Volatility Compression"
+    ],
+    "checksum": "010be2a8a9f1a5503dfb06432d419021fe69601d8e3ace1eff9c48a37fe6cf83",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-007",
+    "alpha_name": "Mean Reversion",
+    "category": "REVERSION",
+    "economic_rationale": "Prices temporarily deviate from intrinsic moving average fair value before returning.",
+    "behavioural_rationale": "Overreaction to transient noise or temporary illiquidity.",
+    "historical_evidence_strength": "MODERATE",
+    "holding_period": "SWING",
+    "turnover": "HIGH",
+    "capacity": "MEDIUM",
+    "transaction_cost_sensitivity": "HIGH",
+    "market_dependency": "RANGING",
+    "failure_regimes": [
+      "STRONG_TRENDING"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Mean Reversion"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Mean Reversion"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Mean Reversion"
+    ],
+    "checksum": "0a0e4705bd75d5b9152f7298c6701a8746e371976467ede3cb08f67e6cf5d92a",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-008",
+    "alpha_name": "Gap Continuation",
+    "category": "EVENT",
+    "economic_rationale": "Overnight gaps caused by news drift further in the direction of the gap.",
+    "behavioural_rationale": "Post-earnings announcement drift (PEAD).",
+    "historical_evidence_strength": "MODERATE",
+    "holding_period": "DAILY",
+    "turnover": "HIGH",
+    "capacity": "LOW",
+    "transaction_cost_sensitivity": "HIGH",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "GAP_FADE"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Gap Continuation"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Gap Continuation"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Gap Continuation"
+    ],
+    "checksum": "762f8c9ecba8de40088730fd063258732635df50e32f03e2bae139f4da6e2d86",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-009",
+    "alpha_name": "Gap Reversal",
+    "category": "REVERSION",
+    "economic_rationale": "Extreme overnight gaps fade as short-term liquidity returns.",
+    "behavioural_rationale": "Panic selling or euphoric buying at market open.",
+    "historical_evidence_strength": "MODERATE",
+    "holding_period": "DAILY",
+    "turnover": "HIGH",
+    "capacity": "LOW",
+    "transaction_cost_sensitivity": "HIGH",
+    "market_dependency": "RANGING",
+    "failure_regimes": [
+      "STRONG_CATALYST"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Gap Reversal"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Gap Reversal"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Gap Reversal"
+    ],
+    "checksum": "5e749aa8acf50280bbea225644858184f69acbc2743d22748898ee9b650011c5",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-010",
+    "alpha_name": "Sector Rotation",
+    "category": "BREADTH",
+    "economic_rationale": "Capital shifts across industry sectors based on macroeconomic cycle phase.",
+    "behavioural_rationale": "Institutional sector asset re-allocation.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "SECTOR_DISPERSION_COLLAPSE"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Sector Rotation"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Sector Rotation"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Sector Rotation"
+    ],
+    "checksum": "841e59937e86434015075367816afa545f59e6bd401beac0d197ade3dddbb29d",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-011",
+    "alpha_name": "Market Breadth",
+    "category": "BREADTH",
+    "economic_rationale": "Aggregated advance-decline lines or percentage of stocks above SMA indicate true market health.",
+    "behavioural_rationale": "Divergence between index heavyweights and broader market.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "NARROW_INDEX_RALLY"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Market Breadth"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Market Breadth"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Market Breadth"
+    ],
+    "checksum": "5d26ab555d3d47bc3bae19d3d4ac34f8241ebecafc95be469ed7c5ec261bb1cd",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-012",
+    "alpha_name": "Liquidity Expansion",
+    "category": "PATTERN",
+    "economic_rationale": "Surge in daily trading volume signals institutional accumulation prior to price movement.",
+    "behavioural_rationale": "Institutional footprint detection.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "SWING",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "MEDIUM",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "LOW_VOLUME_ILLIQUIDITY"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Liquidity Expansion"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Liquidity Expansion"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Liquidity Expansion"
+    ],
+    "checksum": "567afe29fdc6a6b4bb882d737b3c5e3831812a2481467c9202947f0d0059e4a2",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-013",
+    "alpha_name": "Earnings Drift",
+    "category": "EVENT",
+    "economic_rationale": "Post-earnings announcement price drift continues for weeks after surprise beat.",
+    "behavioural_rationale": "Analyst earnings estimate revision inertia.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "EARNINGS_REVERSAL"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Earnings Drift"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Earnings Drift"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Earnings Drift"
+    ],
+    "checksum": "d0cf9f07dbddf12f17c42feb46703600f838c5a2711bb1c454564677a2382656",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-014",
+    "alpha_name": "52-Week High Effect",
+    "category": "MOMENTUM",
+    "economic_rationale": "Stocks approaching 52-week high face psychological resistance, then accelerate upon breakout.",
+    "behavioural_rationale": "Anchoring to 52-week high price point.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "MEDIUM",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "MEDIUM",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "MARKET_TOP"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for 52-Week High Effect"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of 52-Week High Effect"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in 52-Week High Effect"
+    ],
+    "checksum": "ac9a7dd6fdd54782521f5156057839922fa41ec6655a4681c8bd13bef777b673",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-015",
+    "alpha_name": "Factor Investing",
+    "category": "FACTOR",
+    "economic_rationale": "Systematic exposure to persistent risk factors (Momentum, Value, Quality, Low Vol).",
+    "behavioural_rationale": "Compensation for non-diversifiable risk or structural market constraints.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "FACTOR_CROWDING"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Factor Investing"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Factor Investing"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Factor Investing"
+    ],
+    "checksum": "325f9eddd0ec6ad628a6df844f33b6313b1486f2c2ccf6583497565db60c64b0",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-016",
+    "alpha_name": "Quality",
+    "category": "FACTOR",
+    "economic_rationale": "High profitability, low debt, and stable earnings outperform low-quality speculative stocks.",
+    "behavioural_rationale": "Investor preference for lottery-like high beta stocks.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "SPECULATIVE_BUBBLE"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Quality"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Quality"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Quality"
+    ],
+    "checksum": "f1ed131d16704ab46676a1b1c9a7dfe3632db4a5b4a5d4e1ba0c3b4d0c30426f",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-017",
+    "alpha_name": "Value",
+    "category": "FACTOR",
+    "economic_rationale": "Low price-to-earnings or price-to-book assets revert to intrinsic fundamental valuation.",
+    "behavioural_rationale": "Value trap, loss aversion, analyst over-extrapolation.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "VALUE_TRAP_REGIME"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Value"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Value"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Value"
+    ],
+    "checksum": "d2db2897f012aefc2b06da7e6653b03ca2ec696d4e49e11839a65c622b47cf24",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-018",
+    "alpha_name": "Low Volatility",
+    "category": "FACTOR",
+    "economic_rationale": "Low beta / low variance stocks deliver superior risk-adjusted returns than high beta stocks.",
+    "behavioural_rationale": "Leverage constraints and benchmark-tracking mandate incentives.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "HIGH_BETA_RALLY"
+    ],
+    "suitable_universes": [
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Low Volatility"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Low Volatility"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Low Volatility"
+    ],
+    "checksum": "4245907dab2d0dcfb988d538b95539e4ffb70565fe8aa5b83fb833f9cf304472",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-019",
+    "alpha_name": "Small Cap",
+    "category": "FACTOR",
+    "economic_rationale": "Small cap equities command a liquidity and information asymmetry risk premium.",
+    "behavioural_rationale": "Higher illiquidity and coverage gap.",
+    "historical_evidence_strength": "MODERATE",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "MEDIUM",
+    "transaction_cost_sensitivity": "MEDIUM",
+    "market_dependency": "TRENDING",
+    "failure_regimes": [
+      "LIQUIDITY_CRUNCH"
+    ],
+    "suitable_universes": [
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Small Cap"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Small Cap"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Small Cap"
+    ],
+    "checksum": "69b50ff275b31f04c27de5b7dfb0c27ddd5dd6d67c1e2d69364df7ebb4bdc3f9",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  },
+  {
+    "alpha_id": "ALPHA-020",
+    "alpha_name": "Risk Premia",
+    "category": "FACTOR",
+    "economic_rationale": "Systematic capture of structural market premiums (variance premium, term structure).",
+    "behavioural_rationale": "Compensation for bearing tail risk during market crashes.",
+    "historical_evidence_strength": "STRONG",
+    "holding_period": "MULTI_WEEK",
+    "turnover": "LOW",
+    "capacity": "HIGH",
+    "transaction_cost_sensitivity": "LOW",
+    "market_dependency": "ALL_REGIMES",
+    "failure_regimes": [
+      "TAIL_RISK_EVENT"
+    ],
+    "suitable_universes": [
+      "NIFTY50",
+      "NIFTY100",
+      "NIFTY200",
+      "NIFTY250",
+      "NIFTY500"
+    ],
+    "implementation_complexity": "MEDIUM",
+    "confidence_score": 0.85,
+    "references": [
+      "Literature reference for Risk Premia"
+    ],
+    "academic_reading_list": [
+      "Academic Paper: Foundations of Risk Premia"
+    ],
+    "common_pitfalls": [
+      "Over-fitting parameters in Risk Premia"
+    ],
+    "checksum": "46c69fd981d4d4220b389e722812dc59f79716d34a789fa74065f05141e1fb1b",
+    "version": "1.0.0",
+    "created_at": "2026-08-03T09:13:21.635857"
+  }
+]

@@ -1,8 +1,12 @@
 {
-  "current_research_cycle": "CYCLE_1",
-  "completed_milestone": "M3C.3",
-  "next_authorised_milestone": "M3D_PENDING_USER_APPROVAL",
-  "platform_status": "RESEARCH_PLATFORM_OPERATIONAL",
+  "current_research_cycle": "CYCLE_2",
+  "completed_milestone": "M3D.2",
+  "next_authorised_milestone": "M3D.3_PENDING_USER_APPROVAL",
+  "platform_status": "STRATEGY_IMPLEMENTED",
+  "active_hypothesis_uuid": "hypo-cycle2-alpha013-v1",
+  "active_alpha_source_id": "ALPHA-013",
+  "active_strategy_class": "EarningsDriftV1Strategy",
+  "alpha_library_status": "ACTIVE_20_SOURCES",
   "supported_universes": [
     "NIFTY50",
     "NIFTY100",
@@ -11,26 +15,23 @@
     "NIFTY500",
     "CUSTOM"
   ],
+  "registered_alpha_sources_count": 20,
   "registered_features_count": 12,
-  "registered_hypotheses_count": 2,
-  "benchmark_suite_version": "1.0.0",
-  "security_master_version": "1.0.0",
-  "membership_version": "1.0.0",
-  "corporate_actions_version": "1.0.0",
-  "survivorship_protection": "ENFORCED",
-  "point_in_time_status": "VERIFIED",
   "sdk_status": "PUBLIC_SDK_ACTIVE",
+  "graveyard_lineage_protection": "ENFORCED_SIMILARITY_MAX_0.35",
   "abandoned_strategy_families": [
     "strat_trend_pullback",
     "strat_momentum_rs",
     "strat_breakout_confirm",
     "strat_mean_reversion"
   ],
-  "active_strategy_families": [],
+  "active_strategy_families": [
+    "strat_earnings_drift_v1"
+  ],
   "permitted_research_actions": [
     "DOCUMENTATION_MAINTENANCE",
     "GOVERNANCE_STATE_VALIDATION",
-    "M3D_PLANNING"
+    "M3D_3_PLANNING"
   ],
   "prohibited_research_actions": [
     "VALIDATION_ACCESS",

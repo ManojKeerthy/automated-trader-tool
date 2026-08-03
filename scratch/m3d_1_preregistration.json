@@ -1,0 +1,18 @@
+{
+  "hypothesis_uuid": "hypo-cycle2-alpha013-v1",
+  "hypothesis_name": "Post-Earnings Announcement Drift (PEAD) in Indian Equities",
+  "parent_hypothesis_uuid": null,
+  "economic_rationale": "Quarterly earnings surprises create persistent price momentum as institutional investors gradually re-allocate capital following analyst earnings estimate revisions. Under-reaction to fundamental disclosures allows post-announcement price drift.",
+  "behavioural_rationale": "Investors exhibit anchoring bias to pre-earnings valuation models and conservatism bias when processing new financial disclosures, causing delayed price adjustment.",
+  "expected_market_behaviour": "Outperformance of stocks exhibiting strong positive earnings surprise over 10-60 session holding horizon.",
+  "falsification_criteria": "Expectancy R < 0.25R or Profit Factor < 1.30 on DEVELOPMENT dataset under FORCE_CLOSE policy.",
+  "supporting_literature": [
+    "Bernard & Thomas (1989) - Post-Earnings-Announcement Drift: Delayed Price Response or Risk Premium?",
+    "Ball & Brown (1968) - An Empirical Evaluation of Accounting Income Numbers",
+    "Rendleman, Jones, & Latan\u00e9 (1982) - Empirical Anomaly or Inefficient Markets?"
+  ],
+  "status": "REGISTERED",
+  "checksum": "7aceca94855252263108f3c773b41dde743f9a52582f1a575ea123d5382e4409",
+  "author": "TradeCraft Research Team",
+  "created_at": "2026-08-03T09:39:08.332918"
+}
