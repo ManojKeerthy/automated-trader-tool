@@ -1,6 +1,5 @@
 """Unit tests for Public Research SDK."""
 
-import pytest
 from tradecraft.sdk import ResearchClient, TradeCraftSDK
 
 

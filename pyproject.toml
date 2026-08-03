@@ -39,10 +39,11 @@ where = ["src"]
 target-version = "py311"
 line-length = 100
 src = ["src", "tests"]
+exclude = ["scratch"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM", "TCH"]
-ignore = ["E501", "E711", "E712", "B904", "B008"]
+ignore = ["E501", "E711", "E712", "B904", "B008", "TC001", "TC003", "E402"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["tradecraft"]

@@ -1,9 +1,11 @@
 """Unit tests for SurvivorshipGuard."""
 
 from datetime import date
+
 import pytest
+
 from tradecraft.universe.security_master import Security, SecurityMaster
-from tradecraft.universe.survivorship_guard import SurvivorshipGuard, SurvivorshipBiasError
+from tradecraft.universe.survivorship_guard import SurvivorshipBiasError, SurvivorshipGuard
 
 
 def test_survivorship_guard_boundary_checks():

@@ -2,18 +2,16 @@
 
 import json
 from datetime import date
-from decimal import Decimal
 from pathlib import Path
+
 import pytest
 
-from tradecraft.research.splits import DEVELOPMENT_SPLIT, VALIDATION_SPLIT, FINAL_TEST_SPLIT
-from tradecraft.research.firewall import DevelopmentDataFirewall, DataBoundaryViolationError
-from tradecraft.research.gate_audit import GateProvenanceAuditor, GateProvenanceClassification
+from tradecraft.research.firewall import DataBoundaryViolationError, DevelopmentDataFirewall
 from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
     BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
     MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
 )
 
 
@@ -49,7 +47,7 @@ def test_mean_reversion_expectancy_r_fails_threshold():
     mean_reversion_expectancy_r = 0.18
     threshold_required = 0.25
     gate_result = "PASS" if mean_reversion_expectancy_r >= threshold_required else "FAIL"
-    
+
     assert gate_result == "FAIL", "Mean Reversion V2 +0.18R MUST evaluate as FAIL against +0.25R requirement!"
 
 
@@ -67,13 +65,13 @@ def test_m3b_3_1_json_artifacts_and_conservation():
     assert concentration_file.exists(), "concentration_reconciliation JSON must exist"
     assert attrition_file.exists(), "attrition_reconciliation JSON must exist"
 
-    with open(yearly_file, "r") as f:
+    with open(yearly_file) as f:
         yearly_data = json.load(f)
-    with open(regime_file, "r") as f:
+    with open(regime_file) as f:
         regime_data = json.load(f)
-    with open(concentration_file, "r") as f:
+    with open(concentration_file) as f:
         concentration_data = json.load(f)
-    with open(attrition_file, "r") as f:
+    with open(attrition_file) as f:
         attrition_data = json.load(f)
 
     for strat_id in ["strat_trend_pullback_v2", "strat_breakout_confirm_v2", "strat_momentum_rs_v2", "strat_mean_reversion_v2"]:

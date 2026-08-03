@@ -1,6 +1,5 @@
 """Unit tests for StatisticalDiagnostics."""
 
-import pytest
 from tradecraft.research.statistical_diagnostics import StatisticalDiagnostics
 
 

@@ -1,38 +1,34 @@
 """M3B.2.2 Master Execution Script: Accounting Integrity Audit (Phase A) & Strategy Failure Autopsy (Phase B)."""
 
 import json
+import logging
 import math
 import sys
-import logging
-from dataclasses import dataclass, asdict
-from datetime import date, datetime
+from dataclasses import asdict
+from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
+from tradecraft.backtesting.engine import (
+    BacktestConfig,
+    BacktestEngine,
+    EndOfBacktestPolicy,
+)
+from tradecraft.backtesting.slippage import FixedBasisPointSlippage
+from tradecraft.backtesting.trade_ledger import TradeRecord
 from tradecraft.core.db import SessionLocal
-from tradecraft.core.db_models import Instrument, MarketBar
+from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
+from tradecraft.research.ledger import ImmutableResearchLedger, ResearchLedgerEntry
 from tradecraft.research.splits import DEVELOPMENT_SPLIT
 from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
-    BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
-    MeanReversionV2Strategy,
     BaseV2Strategy,
+    BreakoutConfirmV2Strategy,
+    MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
 )
-from tradecraft.backtesting.engine import BacktestEngine, BacktestConfig, BacktestResult, EndOfBacktestPolicy
-from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
-from tradecraft.backtesting.slippage import FixedBasisPointSlippage
-from tradecraft.backtesting.portfolio import Portfolio, EquitySnapshot
-from tradecraft.backtesting.trade_ledger import TradeRecord
-from tradecraft.market_data.calendar import TradingCalendar
-from tradecraft.research.ledger import ImmutableResearchLedger, ResearchLedgerEntry
-from tradecraft.research.v2_development_gate import (
-    V2DevelopmentGateEvaluator,
-    FrozenV2CanonicalRecord,
-    PredeclaredRobustnessNeighbourhood,
-)
-from tradecraft.research.signal_viability import SignalViabilityEvaluator
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("m3b_2_2_audit")

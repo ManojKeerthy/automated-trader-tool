@@ -1,12 +1,8 @@
 """Unit tests for EarningsDriftV1Strategy."""
 
-from datetime import date
 from decimal import Decimal
-import uuid
-import pytest
 
 from tradecraft.strategy.earnings_drift_v1 import EarningsDriftV1Config, EarningsDriftV1Strategy
-from tradecraft.sdk.research_client import ResearchClient
 
 
 def test_earnings_drift_v1_initialization():

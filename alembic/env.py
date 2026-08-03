@@ -1,18 +1,15 @@
-from logging.config import fileConfig
 import sys
+from logging.config import fileConfig
 from pathlib import Path
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # Add project root to sys.path so we can import tradecraft modules
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from tradecraft.config import settings
 from tradecraft.core.db import Base
-from tradecraft.core import db_models  # Load models to register metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -64,7 +61,7 @@ def run_migrations_online() -> None:
     """
     configuration = config.get_section(config.config_ini_section) or {}
     configuration["sqlalchemy.url"] = get_url()
-    
+
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",

@@ -1,6 +1,5 @@
 """Unit tests for HypothesisRegistry."""
 
-import pytest
 from tradecraft.research.hypothesis_registry import HypothesisRecord, HypothesisRegistry
 
 

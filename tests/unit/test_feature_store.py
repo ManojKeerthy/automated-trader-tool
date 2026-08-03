@@ -1,6 +1,5 @@
 """Unit tests for FeatureStore."""
 
-import pytest
 from tradecraft.research.feature_store import FeatureStore
 
 

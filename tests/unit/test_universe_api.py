@@ -1,11 +1,11 @@
 """Unit tests for UniverseAPI."""
 
 from datetime import date
-import pytest
-from tradecraft.universe.security_master import Security, SecurityMaster
-from tradecraft.universe.universe_registry import UniverseRegistry
+
 from tradecraft.universe.historical_membership import HistoricalMembershipEngine, MembershipRecord
+from tradecraft.universe.security_master import Security, SecurityMaster
 from tradecraft.universe.universe_api import UniverseAPI
+from tradecraft.universe.universe_registry import UniverseRegistry
 
 
 def test_universe_api_get_constituents():

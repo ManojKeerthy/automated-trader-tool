@@ -1,13 +1,12 @@
 """Unit tests for HypothesisAdmissionGate."""
 
-import pytest
 from tradecraft.research.hypothesis_admission_gate import HypothesisAdmissionGate
 from tradecraft.research.hypothesis_registry import HypothesisRecord
 
 
 def test_hypothesis_admission_gate_evaluation():
     gate = HypothesisAdmissionGate()
-    
+
     valid_hypo = HypothesisRecord(
         hypothesis_uuid="hypo-val-1",
         hypothesis_name="Valid Test Hypothesis",

@@ -7,37 +7,36 @@ Orchestrates the 4 sequential phases:
 - Phase D: Frozen V2 DEVELOPMENT Backtest + Predeclared Robustness Analysis
 """
 
-from datetime import date
-from decimal import Decimal
-import json
 import logging
 import os
-import sys
+from datetime import date
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("m3b_2_pipeline")
 
 from tradecraft.core.db import SessionLocal
-from tradecraft.research.diagnostics import DevelopmentOnlyGuard
-from tradecraft.research.splits import DEVELOPMENT_SPLIT, VALIDATION_SPLIT, FINAL_TEST_SPLIT
-from tradecraft.research.attrition_analysis import ConditionAttritionAnalyzer, StrategyAttritionReport
-from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
-    BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
-    MeanReversionV2Strategy,
-    BaseV2Strategy,
+from tradecraft.research.attrition_analysis import (
+    ConditionAttritionAnalyzer,
+    StrategyAttritionReport,
 )
+from tradecraft.research.diagnostics import DevelopmentOnlyGuard
+from tradecraft.research.ledger import ImmutableResearchLedger, ResearchLedgerEntry
+from tradecraft.research.robustness import LimitedRobustnessAnalyzer, StrategyRobustnessReport
 from tradecraft.research.signal_viability import SignalViabilityEvaluator, SignalViabilityReport
+from tradecraft.research.splits import DEVELOPMENT_SPLIT
 from tradecraft.research.v2_development_gate import (
-    V2DevelopmentGateEvaluator,
     FrozenV2CanonicalRecord,
     PredeclaredRobustnessNeighbourhood,
-    V2DevelopmentScorecard,
+    V2DevelopmentGateEvaluator,
 )
-from tradecraft.research.robustness import LimitedRobustnessAnalyzer, StrategyRobustnessReport
-from tradecraft.research.ledger import ImmutableResearchLedger, ResearchLedgerEntry
+from tradecraft.strategy.v2_strategies import (
+    BaseV2Strategy,
+    BreakoutConfirmV2Strategy,
+    MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
+)
 
 
 def main() -> None:

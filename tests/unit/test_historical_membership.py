@@ -1,7 +1,7 @@
 """Unit tests for HistoricalMembershipEngine."""
 
 from datetime import date
-import pytest
+
 from tradecraft.universe.historical_membership import HistoricalMembershipEngine, MembershipRecord
 
 

@@ -1,33 +1,32 @@
 """M3B.2.1 Step 2: 12-Stage Pipeline Funnel & Representative Signal Tracing Audit."""
 
-import logging
 import json
-from dataclasses import dataclass, asdict
-from datetime import date
+import logging
+from dataclasses import asdict, dataclass
 from decimal import Decimal
 from typing import Any
 
-from tradecraft.core.db import SessionLocal
-from tradecraft.core.db_models import Instrument
-from tradecraft.research.diagnostics import DevelopmentOnlyGuard
-from tradecraft.research.splits import DEVELOPMENT_SPLIT
-from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
-    BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
-    MeanReversionV2Strategy,
-    BaseV2Strategy,
-)
-from tradecraft.backtesting.data_portal import DataPortal
 from tradecraft.backtesting.clock import HistoricalClock
+from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
+from tradecraft.backtesting.data_portal import DataPortal
 from tradecraft.backtesting.execution import ExecutionSimulator, OrderIntent
 from tradecraft.backtesting.portfolio import Portfolio
 from tradecraft.backtesting.risk_hooks import BasicCapitalGuard
-from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
 from tradecraft.backtesting.slippage import FixedBasisPointSlippage
+from tradecraft.core.db import SessionLocal
+from tradecraft.core.db_models import Instrument
 from tradecraft.instruments.universe import PointInTimeUniverse
 from tradecraft.market_data.calendar import TradingCalendar
-from tradecraft.strategy.base import SignalIntent, ExitSignal
+from tradecraft.research.diagnostics import DevelopmentOnlyGuard
+from tradecraft.research.splits import DEVELOPMENT_SPLIT
+from tradecraft.strategy.base import ExitSignal, SignalIntent
+from tradecraft.strategy.v2_strategies import (
+    BaseV2Strategy,
+    BreakoutConfirmV2Strategy,
+    MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("m3b_2_1_audit")

@@ -1,7 +1,11 @@
 """Unit tests for ExperimentBudgetManager."""
 
 import pytest
-from tradecraft.research.experiment_budget_manager import ExperimentBudgetManager, ResearchCycleBudget
+
+from tradecraft.research.experiment_budget_manager import (
+    ExperimentBudgetManager,
+    ResearchCycleBudget,
+)
 
 
 def test_experiment_budget_manager():

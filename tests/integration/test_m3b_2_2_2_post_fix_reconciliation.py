@@ -1,18 +1,21 @@
 """Integration tests for M3B.2.2.2 post-fix accounting and temporal reconciliation on PostgreSQL."""
 from decimal import Decimal
+
 import pytest
+
+from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
+from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine, EndOfBacktestPolicy
+from tradecraft.backtesting.slippage import FixedBasisPointSlippage
 from tradecraft.core.db import SessionLocal
 from tradecraft.market_data.calendar import TradingCalendar
-from tradecraft.backtesting.engine import BacktestEngine, BacktestConfig, EndOfBacktestPolicy
-from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
-from tradecraft.backtesting.slippage import FixedBasisPointSlippage
 from tradecraft.research.splits import DEVELOPMENT_SPLIT
 from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
     BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
     MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
 )
+
 
 @pytest.fixture
 def db_session():

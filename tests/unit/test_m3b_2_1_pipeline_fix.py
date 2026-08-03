@@ -1,15 +1,12 @@
 """Unit tests for M3B.2.1 Signal-to-Execution Pipeline Defect & Fix Verification."""
 
-from decimal import Decimal
-from datetime import date
 import uuid
+from datetime import date
+from decimal import Decimal
 
-import pytest
-
-from tradecraft.backtesting.execution import ExecutionSimulator, OrderIntent
 from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
+from tradecraft.backtesting.execution import ExecutionSimulator, OrderIntent
 from tradecraft.backtesting.slippage import FixedBasisPointSlippage
-from tradecraft.backtesting.portfolio import Portfolio
 from tradecraft.research.sizing import ResearchSizingCalculator
 
 

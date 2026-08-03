@@ -1,6 +1,5 @@
 """Unit tests for BenchmarkSuite."""
 
-import pytest
 from tradecraft.research.benchmark_suite import BenchmarkSuite
 
 

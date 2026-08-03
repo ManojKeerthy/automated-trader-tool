@@ -4,19 +4,19 @@ import logging
 import sys
 from decimal import Decimal
 
+from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
+from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine
+from tradecraft.backtesting.slippage import FixedBasisPointSlippage
 from tradecraft.core.db import SessionLocal
+from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
 from tradecraft.research.splits import DEVELOPMENT_SPLIT
 from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
     BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
     MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
 )
-from tradecraft.backtesting.engine import BacktestEngine, BacktestConfig
-from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
-from tradecraft.backtesting.slippage import FixedBasisPointSlippage
-from tradecraft.market_data.calendar import TradingCalendar
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("m3b_2_1_repro")

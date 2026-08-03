@@ -1,7 +1,6 @@
 """Unit tests for FeatureRegistry and FeatureDefinition."""
 
-import pytest
-from tradecraft.research.feature_registry import FeatureDefinition, FeatureRegistry, FeatureLineage
+from tradecraft.research.feature_registry import FeatureDefinition, FeatureLineage, FeatureRegistry
 
 
 def test_feature_registry_initialization():

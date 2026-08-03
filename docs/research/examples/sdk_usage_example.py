@@ -1,8 +1,8 @@
 """Example: Using the Public Research SDK to query registered features and hypotheses."""
 
-from datetime import date
-from tradecraft.sdk import ResearchClient
 from tradecraft.research.hypothesis_registry import HypothesisRecord
+from tradecraft.sdk import ResearchClient
+
 
 def main():
     client = ResearchClient()

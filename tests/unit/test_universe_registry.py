@@ -1,6 +1,5 @@
 """Unit tests for UniverseRegistry and UniverseDefinition."""
 
-import pytest
 from tradecraft.universe.universe_registry import UniverseDefinition, UniverseRegistry
 
 

@@ -1,6 +1,5 @@
 """Unit tests for PlatformMetadataCatalog."""
 
-import pytest
 from tradecraft.research.platform_metadata_catalog import PlatformAssetNode, PlatformMetadataCatalog
 
 

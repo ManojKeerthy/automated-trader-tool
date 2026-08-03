@@ -1,21 +1,18 @@
 """Unit tests for Milestone M3B.4 Final Hypothesis Revision & Development Survivor Gate."""
 
-import json
 from datetime import date
 from pathlib import Path
+
 import pytest
 
-from tradecraft.research.splits import DEVELOPMENT_SPLIT, VALIDATION_SPLIT, FINAL_TEST_SPLIT
-from tradecraft.research.firewall import DevelopmentDataFirewall, DataBoundaryViolationError
+from tradecraft.research.firewall import DataBoundaryViolationError, DevelopmentDataFirewall
+from tradecraft.research.m3b_4_gate import DevelopmentSurvivorGateEvaluator
 from tradecraft.research.m3b_4_hypothesis import (
     V3ParameterOrigin,
-    V3HypothesisPreRegistration,
-    V3HypothesisRegistry,
 )
-from tradecraft.research.m3b_4_gate import DevelopmentSurvivorGateEvaluator
-from tradecraft.strategy.v2_strategies import TrendPullbackV2Strategy, MomentumRSV2Strategy
 from tradecraft.strategy.breakout_confirm_v3 import BreakoutConfirmV3Strategy
 from tradecraft.strategy.mean_reversion_v3 import MeanReversionV3Strategy
+from tradecraft.strategy.v2_strategies import MomentumRSV2Strategy, TrendPullbackV2Strategy
 
 
 def test_v2_parent_hashes_and_graveyard_locking():

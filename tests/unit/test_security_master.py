@@ -1,7 +1,7 @@
 """Unit tests for SecurityMaster and Security dataclass."""
 
 from datetime import date
-import pytest
+
 from tradecraft.universe.security_master import Security, SecurityMaster, SymbolHistoryRecord
 
 

@@ -1,8 +1,7 @@
 """Unit tests for NoveltyScoringEngine."""
 
-import pytest
-from tradecraft.research.novelty_scoring_engine import NoveltyScoringEngine
 from tradecraft.research.hypothesis_registry import HypothesisRecord
+from tradecraft.research.novelty_scoring_engine import NoveltyScoringEngine
 
 
 def test_novelty_scoring_engine():

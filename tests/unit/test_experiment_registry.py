@@ -1,7 +1,10 @@
 """Unit tests for ExperimentRegistry."""
 
-import pytest
-from tradecraft.research.experiment_registry import EnvironmentMetadata, ExperimentRecord, ExperimentRegistry
+from tradecraft.research.experiment_registry import (
+    EnvironmentMetadata,
+    ExperimentRecord,
+    ExperimentRegistry,
+)
 
 
 def test_experiment_registry_and_reproducibility():

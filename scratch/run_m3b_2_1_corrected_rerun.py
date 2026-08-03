@@ -1,29 +1,27 @@
 """M3B.2.1 Step 4: Corrected Exact-Config DEVELOPMENT Phase D Rerun & Ledger Update."""
 
-import logging
 import json
+import logging
 from dataclasses import asdict
 from datetime import date
-from decimal import Decimal
 
 from tradecraft.core.db import SessionLocal
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
-from tradecraft.research.splits import DEVELOPMENT_SPLIT
+from tradecraft.research.ledger import ImmutableResearchLedger, ResearchLedgerEntry
 from tradecraft.research.signal_viability import SignalViabilityEvaluator
-from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
-    BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
-    MeanReversionV2Strategy,
-    BaseV2Strategy,
-)
+from tradecraft.research.splits import DEVELOPMENT_SPLIT
 from tradecraft.research.v2_development_gate import (
-    V2DevelopmentGateEvaluator,
     FrozenV2CanonicalRecord,
     PredeclaredRobustnessNeighbourhood,
-    V2DevelopmentScorecard,
+    V2DevelopmentGateEvaluator,
 )
-from tradecraft.research.ledger import ImmutableResearchLedger, ResearchLedgerEntry
+from tradecraft.strategy.v2_strategies import (
+    BaseV2Strategy,
+    BreakoutConfirmV2Strategy,
+    MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("m3b_2_1_rerun")

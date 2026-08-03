@@ -9,18 +9,17 @@ Creates tables for:
 - market_regime_snapshots: Point-in-time regime classifications
 - screening_runs: Screening run metadata and audit trail
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects import postgresql
-
 
 # revision identifiers, used by Alembic.
 revision: str = '004_m3a_screening_schema'
-down_revision: Union[str, None] = '003_m2_research_schema'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | None = '003_m2_research_schema'
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def _json_type() -> sa.types.TypeEngine:

@@ -3,7 +3,6 @@
 import json
 from decimal import Decimal
 from pathlib import Path
-import pytest
 
 
 def test_pre_fix_accounting_residuals_and_temporal_violations_captured():
@@ -11,7 +10,7 @@ def test_pre_fix_accounting_residuals_and_temporal_violations_captured():
     evidence_path = Path("scratch/m3b_2_2_2_pre_fix_forensic_evidence.json")
     assert evidence_path.exists(), "Pre-fix forensic evidence JSON must exist!"
 
-    with open(evidence_path, "r") as f:
+    with open(evidence_path) as f:
         data = json.load(f)
 
     # 1. Trend Pullback V2

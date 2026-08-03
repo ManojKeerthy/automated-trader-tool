@@ -1,20 +1,19 @@
 """Unit tests for M3B.2.2 Accounting Integrity & Metrics Verification."""
 
-from decimal import Decimal
 from datetime import date
+from decimal import Decimal
+
 import pytest
 
+from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
 from tradecraft.core.exceptions import DataBoundaryViolationError
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
 from tradecraft.strategy.v2_strategies import (
-    TrendPullbackV2Strategy,
     BreakoutConfirmV2Strategy,
-    MomentumRSV2Strategy,
     MeanReversionV2Strategy,
+    MomentumRSV2Strategy,
+    TrendPullbackV2Strategy,
 )
-from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
-from tradecraft.backtesting.portfolio import Portfolio, EquitySnapshot
-from tradecraft.backtesting.trade_ledger import TradeRecord
 
 
 def test_development_firewall_blocks_validation_dates():
@@ -60,10 +59,8 @@ def test_max_trade_profit_share_semantic_definition():
     """Verify max trade profit share evaluates largest_win / sum_all_wins even when strategy P&L is negative."""
     win_1 = Decimal("1000.00")
     win_2 = Decimal("500.00")
-    loss_1 = Decimal("-5000.00")
 
     tot_win_inr = win_1 + win_2  # 1500
-    net_pnl = win_1 + win_2 + loss_1  # -3500 (overall loss)
 
     max_trade_win = max([win_1, win_2])  # 1000
 
