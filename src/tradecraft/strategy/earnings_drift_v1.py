@@ -14,7 +14,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from tradecraft.sdk.research_client import ResearchClient
-from tradecraft.strategy.base import SignalIntent
+from tradecraft.strategy.base import ExitSignal, SignalIntent
 
 if TYPE_CHECKING:
     from tradecraft.backtesting.data_portal import DataPortal
@@ -57,17 +57,22 @@ class EarningsDriftV1Strategy:
         self._entry_dates: dict[uuid.UUID, date] = {}
         self._bars_held: dict[uuid.UUID, int] = {}
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
-        return self.generate_signals(current_date, data_portal)
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent | ExitSignal]:
+        return self.generate_signals(current_date, data_portal, active_positions=active_positions)
 
     def generate_signals(
         self,
         current_date: date,
         data_portal: DataPortal,
         active_positions: list[uuid.UUID] | None = None,
-    ) -> list[SignalIntent]:
+    ) -> list[SignalIntent | ExitSignal]:
         """Generate entry and exit signals for active universe securities on current_date."""
-        signals: list[SignalIntent] = []
+        signals: list[SignalIntent | ExitSignal] = []
         active_positions_set = set(active_positions or [])
 
         # Query Point-in-Time constituents from SDK, or fallback to active securities in DataPortal
@@ -89,13 +94,13 @@ class EarningsDriftV1Strategy:
                 # Check Time-Based Exit (30 sessions max)
                 if self._bars_held[sec_uuid] >= self.config.holding_period_max_sessions:
                     signals.append(
-                        SignalIntent(
+                        ExitSignal(
                             instrument_id=sec_uuid,
-                            direction="SELL",
-                            order_type="MARKET",
-                            rationale=f"PEAD time exit triggered ({self._bars_held[sec_uuid]} sessions held).",
+                            exit_type="MARKET",
+                            reason="MAX_HOLDING_PERIOD",
                         )
                     )
+                    del self._bars_held[sec_uuid]
                 continue
 
             # Signal Generation Logic for non-active positions

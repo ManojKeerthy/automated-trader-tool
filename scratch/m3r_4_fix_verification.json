@@ -1,0 +1,21 @@
+{
+  "milestone": "M3R.4",
+  "status": "ENGINEERING_FIX_VERIFIED",
+  "remediation_type": "MINIMAL_INTERFACE_CONTRACT_REPAIR",
+  "automated_tests_passed": 6,
+  "test_suite": "tests/test_m3r_4_exit_logic_remediation.py",
+  "verified_behaviors": [
+    "Holding counter _bars_held increments exactly once per active trading session",
+    "Time exit (MAX_HOLDING_PERIOD) triggers on session 30",
+    "Holding counter resets upon exit and re-entry starts from zero",
+    "Stop-loss exits function independently",
+    "FORCE_CLOSE policy only acts at backtest end_date boundary",
+    "Look-ahead bias protection remains strictly enforced"
+  ],
+  "code_checks": {
+    "ruff_check": "PASS",
+    "mypy_check": "PASS",
+    "pytest_suite": "PASS_6_OF_6"
+  },
+  "hard_stop_enforced": true
+}

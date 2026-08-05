@@ -143,6 +143,8 @@ class Strategy(Protocol):
         self,
         current_date: date,
         data_portal: DataPortal,
+        *args: Any,
+        **kwargs: Any,
     ) -> Any:
         """Evaluate strategy at current_date and produce signals.
 

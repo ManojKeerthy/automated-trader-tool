@@ -312,7 +312,10 @@ class BacktestEngine:
 
             # C. Strategy Evaluation at session T Close
             # -----------------------------------------
-            signals = config.strategy.evaluate(current_date, portal)
+            active_position_uuids = list(portfolio.positions.keys())
+            signals = config.strategy.evaluate(
+                current_date, portal, active_positions=active_position_uuids
+            )
 
             for sig in signals:
                 if isinstance(sig, SignalIntent):

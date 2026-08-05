@@ -1,0 +1,26 @@
+{
+  "milestone": "M3R.4",
+  "status": "INTERFACE_CONTRACT_REMEDIATION_COMPLETED",
+  "previous_interface": {
+    "Strategy_protocol_evaluate": "def evaluate(self, current_date: date, data_portal: DataPortal) -> Any",
+    "EarningsDriftV1Strategy_evaluate": "def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]",
+    "BacktestEngine_call": "signals = config.strategy.evaluate(current_date, portal)"
+  },
+  "corrected_interface": {
+    "Strategy_protocol_evaluate": "def evaluate(self, current_date: date, data_portal: DataPortal, active_positions: list[uuid.UUID] | None = None) -> Any",
+    "EarningsDriftV1Strategy_evaluate": "def evaluate(self, current_date: date, data_portal: DataPortal, active_positions: list[uuid.UUID] | None = None) -> list[SignalIntent]",
+    "BacktestEngine_call": "active_position_uuids = list(portfolio.positions.keys())\nsignals = config.strategy.evaluate(current_date, portal, active_positions=active_position_uuids)"
+  },
+  "affected_files": [
+    "src/tradecraft/strategy/base.py",
+    "src/tradecraft/strategy/earnings_drift_v1.py",
+    "src/tradecraft/backtesting/engine.py"
+  ],
+  "affected_methods": [
+    "Strategy.evaluate()",
+    "EarningsDriftV1Strategy.evaluate()",
+    "BacktestEngine.run()"
+  ],
+  "backward_compatibility_assessment": "100% Backward Compatible. The active_positions parameter defaults to None in Strategy protocol and strategy classes, ensuring existing strategies and tests execute without modification while allowing active-position aware strategies to track holding session counters.",
+  "remediation_verdict": "INTERFACE_CONTRACT_REPAIRED_AND_VERIFIED"
+}
