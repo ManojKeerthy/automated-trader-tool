@@ -1,0 +1,15 @@
+{
+  "iterations": 1000,
+  "seed": 42,
+  "profit_factor_confidence_interval": {
+    "p5_5th_percentile": 18.63,
+    "p50_median": 40.29,
+    "p95_95th_percentile": 92.7
+  },
+  "cagr_pct_confidence_interval": {
+    "p5_5th_percentile": 13.35,
+    "p50_median": 19.6,
+    "p95_95th_percentile": 25.08
+  },
+  "statistical_verdict": "STRONG_MONTE_CARLO_SURVIVAL_95_PERCENT_CONFIDENCE"
+}

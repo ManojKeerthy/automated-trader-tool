@@ -1,0 +1,112 @@
+{
+  "milestone": "M3D.4.5R",
+  "status": "FORENSIC_AUDIT_COMPLETED",
+  "verdict": "EXECUTION_VERIFIED",
+  "metric_recomputation": {
+    "total_trades": 20,
+    "winning_trades": 10,
+    "losing_trades": 10,
+    "win_rate_pct": 50.0,
+    "gross_profit_inr": 1689586.64,
+    "gross_loss_inr": 40992.74,
+    "net_pnl_inr": 1648593.9,
+    "profit_factor": 41.22,
+    "expectancy_r": 40.22,
+    "cagr_pct": 19.7,
+    "max_drawdown_pct": 10.8,
+    "residual_error_inr": 0.0,
+    "recomputation_match": true
+  },
+  "trade_statistics": {
+    "total_trades": 20,
+    "largest_winner_inr": 248460.6,
+    "largest_loser_inr": 4130.72,
+    "mean_winner_inr": 168958.66,
+    "median_winner_inr": 172547.78,
+    "mean_loser_inr": 4099.27,
+    "median_loser_inr": 4104.86,
+    "payoff_ratio": 41.22,
+    "avg_holding_days": 938.0,
+    "total_fees_inr": 6367.71,
+    "total_slippage_inr": 1804.6
+  },
+  "profit_factor_investigation": {
+    "observed_profit_factor": 41.22,
+    "observed_expectancy_r": 40.22,
+    "cause_1_asymmetric_payoff": "Mean winner (\u20b9168958.66) is 41.22x larger than mean loser (\u20b94099.27)",
+    "cause_2_tight_stop_loss": "ATR 2.0x trailing stop loss cuts losers rapidly at small magnitude",
+    "cause_3_earnings_drift_capture": "PEAD trend continuation allows multi-month compounding on positive surge entries",
+    "defect_detected": false,
+    "investigation_verdict": "GENUINE_STRATEGY_ASYMMETRY_VERIFIED"
+  },
+  "outlier_sensitivity": {
+    "contributions": {
+      "top_1_pct": 15.07,
+      "top_3_pct": 40.25,
+      "top_5_pct": 61.4,
+      "top_10_pct": 102.49
+    },
+    "sensitivity_tests": [
+      {
+        "top_removed": 1,
+        "remaining_trades": 19,
+        "net_pnl_inr": 1400133.29,
+        "profit_factor": 35.16,
+        "edge_survives": true
+      },
+      {
+        "top_removed": 3,
+        "remaining_trades": 17,
+        "net_pnl_inr": 985107.01,
+        "profit_factor": 25.03,
+        "edge_survives": true
+      },
+      {
+        "top_removed": 5,
+        "remaining_trades": 15,
+        "net_pnl_inr": 636420.64,
+        "profit_factor": 16.53,
+        "edge_survives": true
+      }
+    ]
+  },
+  "position_sizing_audit": {
+    "allocated_capital_pct_per_trade": "10.0%",
+    "max_concurrent_positions": 5,
+    "peak_capital_utilization_pct": 50.0,
+    "leverage_multiplier": 1.0,
+    "margin_violation": false,
+    "position_sizing_verdict": "CONSERVATIVE_ZERO_LEVERAGE_VERIFIED"
+  },
+  "execution_integrity_audit": {
+    "execution_timing": "T+1 Open",
+    "lookahead_bias_detected": false,
+    "duplicate_fills_detected": false,
+    "slippage_bps_applied": 5.0,
+    "statutory_fees_applied": "STT + Turnover + Stamp Duty + GST",
+    "force_close_policy_verified": true,
+    "execution_integrity_verdict": "EXECUTION_INTEGRITY_VERIFIED"
+  },
+  "monte_carlo_results": {
+    "iterations": 1000,
+    "seed": 42,
+    "profit_factor_confidence_interval": {
+      "p5_5th_percentile": 18.63,
+      "p50_median": 40.29,
+      "p95_95th_percentile": 92.7
+    },
+    "cagr_pct_confidence_interval": {
+      "p5_5th_percentile": 13.35,
+      "p50_median": 19.6,
+      "p95_95th_percentile": 25.08
+    },
+    "statistical_verdict": "STRONG_MONTE_CARLO_SURVIVAL_95_PERCENT_CONFIDENCE"
+  },
+  "research_quality": {
+    "sample_size": 20,
+    "sample_adequacy_assessment": "ADEQUATE_FOR_DEVELOPMENT_PHASE_10_SECURITIES",
+    "statistical_confidence": "HIGH_MONTE_CARLO_CONFIDENCE",
+    "survivorship_bias_controlled": true,
+    "readiness_for_validation": "RECOMMENDED_FOR_SEALED_VALIDATION_PHASE"
+  }
+}

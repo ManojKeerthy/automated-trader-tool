@@ -1,0 +1,66 @@
+{
+  "milestone": "M3D.4R",
+  "status": "AUTHORITATIVE_DEVELOPMENT_BACKTEST_COMPLETED",
+  "execution_source": "EXECUTION_DERIVED_FROM_BACKTEST_ENGINE",
+  "verdict": "ABANDON_FAMILY",
+  "hypothesis_uuid": "hypo-cycle2-alpha013-v1",
+  "strategy_id": "strat_earnings_drift_v1",
+  "version": "1.0.0",
+  "development_period": "2016-08-01 to 2021-12-31",
+  "policy": "FORCE_CLOSE",
+  "performance_metrics": {
+    "total_trades": 20,
+    "winning_trades": 10,
+    "losing_trades": 10,
+    "win_rate_pct": 50.0,
+    "gross_profit_inr": 1689586.64,
+    "gross_loss_inr": 40992.74457142857,
+    "net_pnl_inr": 1648593.8954285714,
+    "profit_factor": 41.22,
+    "expectancy_r": 40.22,
+    "max_drawdown_pct": 10.8,
+    "sharpe_ratio": 0.6,
+    "sortino_ratio": 0.61,
+    "calmar_ratio": 1.83,
+    "cagr_pct": 19.71,
+    "avg_holding_days": 938.0
+  },
+  "gate_evaluations": {
+    "expectancy_r": {
+      "threshold": ">= +0.25R",
+      "actual": 40.22,
+      "passed": true
+    },
+    "profit_factor": {
+      "threshold": ">= 1.30",
+      "actual": 41.22,
+      "passed": true
+    },
+    "max_drawdown_pct": {
+      "threshold": "<= 25.0%",
+      "actual": 10.8,
+      "passed": true
+    },
+    "total_trades": {
+      "threshold": ">= 30",
+      "actual": 20,
+      "passed": false
+    },
+    "residual_error_inr": {
+      "threshold": "= 0.0000 INR",
+      "actual": 0.0,
+      "passed": true
+    }
+  },
+  "reproducibility": {
+    "database_sha256": "6d336dcdf1e1a0454ca53a56861ada387f24e70c9aa476b74081c8014c81f28f",
+    "strategy_sha256": "c3f19080926cf203ea7e82ab254215a30190d9b86efee2b0db41b4cd277d3521",
+    "engine_sha256": "d098affd9b5fb98a5274659688fdd62ef42e96404282606db43c7de06dcd551c",
+    "python_version": "3.11.9",
+    "sqlite_version": "3.45.1",
+    "operating_system": "Windows-10",
+    "execution_start_timestamp": "2026-08-05T14:27:58.114172+00:00",
+    "execution_end_timestamp": "2026-08-05T14:28:00.038912+00:00",
+    "duration_seconds": 1.92
+  }
+}
