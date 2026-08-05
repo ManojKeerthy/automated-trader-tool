@@ -1,0 +1,5 @@
+{
+  "data_source": "tradecraft.db market_bars table",
+  "execution_engine": "BacktestEngine.run(config)",
+  "result_object": "BacktestResult"
+}

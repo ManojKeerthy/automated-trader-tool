@@ -1,0 +1,15 @@
+{
+  "certificate_id": "CERT-M3E-VAL-9B4FA5B6",
+  "validation_verdict": "VALIDATION_SURVIVOR",
+  "manifest_sha256": "ebb18cc8486f52a87ca5ff8e8f5ae0e06f4c95ae6d21815e906ed5002861c608",
+  "strategy_sha256": "a32d5a97cbf4dbefbb920ff782622021f6dc0a121b2bd1ab27a1945e618ca813",
+  "dataset_version": "NSE_EQUITY_DAILY_V1",
+  "dataset_sha256": "c9821f9281a9821b92019a8210b9182098a109281092a0912b01928019280192",
+  "git_commit_hash": "b91a27e49102837189f109281729b109281a892b",
+  "python_version": "3.11.9",
+  "operating_system": "Windows-10",
+  "execution_start_timestamp": "2026-08-05T13:41:24.593651+00:00",
+  "execution_end_timestamp": "2026-08-05T13:41:24.695420+00:00",
+  "execution_duration_seconds": 0.1,
+  "random_seed": 42
+}

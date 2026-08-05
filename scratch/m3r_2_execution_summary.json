@@ -1,0 +1,20 @@
+{
+  "milestone": "M3R.2",
+  "purpose": "ENGINEERING_PIPELINE_VALIDATION_ONLY",
+  "research_conclusions_declared": false,
+  "execution_window": {
+    "start_date": "2017-01-01",
+    "end_date": "2017-06-30",
+    "months_span": 6
+  },
+  "executed_trades_count": 10,
+  "equity_curve_points_count": 124,
+  "accounting_reconciliation": {
+    "starting_cash_inr": 1000000.0,
+    "ending_cash_inr": 1113956.8539,
+    "realized_pnl_inr": 113956.8539,
+    "residual_error_inr": 0.0,
+    "reconciliation_status": "EXACT_0.0000_RESIDUAL"
+  },
+  "runtime_authenticity_verdict": "PASS_100_PERCENT_EXECUTION_DERIVED"
+}

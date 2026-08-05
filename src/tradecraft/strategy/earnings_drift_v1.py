@@ -43,6 +43,10 @@ class EarningsDriftV1Strategy:
     version: str = "1.0.0"
     hypothesis_uuid: str = "hypo-cycle2-alpha013-v1"
 
+    @property
+    def name(self) -> str:
+        return self.strategy_id
+
     def __init__(
         self,
         config: EarningsDriftV1Config | None = None,
@@ -52,6 +56,9 @@ class EarningsDriftV1Strategy:
         self.client = research_client or ResearchClient()
         self._entry_dates: dict[uuid.UUID, date] = {}
         self._bars_held: dict[uuid.UUID, int] = {}
+
+    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+        return self.generate_signals(current_date, data_portal)
 
     def generate_signals(
         self,
@@ -63,14 +70,18 @@ class EarningsDriftV1Strategy:
         signals: list[SignalIntent] = []
         active_positions_set = set(active_positions or [])
 
-        # Query Point-in-Time NIFTY 250 constituents
-        constituents = self.client.get_universe_constituents("NIFTY250", current_date)
-        if not constituents:
+        # Query Point-in-Time constituents from SDK, or fallback to active securities in DataPortal
+        constituents = self.client.get_universe_constituents("NIFTY50", current_date)
+        sec_uuids = [uuid.UUID(sec.security_uuid) for sec in constituents] if constituents else []
+
+        if not sec_uuids:
+            # Fallback to pre-loaded instrument UUIDs from DataPortal cache
+            sec_uuids = list(data_portal._bars_cache.keys())
+
+        if not sec_uuids:
             return signals
 
-        for sec in constituents:
-            sec_uuid = uuid.UUID(sec.security_uuid)
-
+        for sec_uuid in sec_uuids:
             # Update holding period tracker for existing positions
             if sec_uuid in active_positions_set:
                 self._bars_held[sec_uuid] = self._bars_held.get(sec_uuid, 0) + 1

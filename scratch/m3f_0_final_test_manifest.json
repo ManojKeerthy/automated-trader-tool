@@ -1,0 +1,53 @@
+{
+  "milestone": "M3F.0",
+  "status": "FINAL_TEST_GOVERNANCE_LOCKED",
+  "contract_type": "IMMUTABLE_FINAL_TEST_EXECUTION_CONTRACT",
+  "active_hypothesis_uuid": "hypo-cycle2-alpha013-v1",
+  "active_strategy_class": "EarningsDriftV1Strategy",
+  "final_test_split": {
+    "start_date": "2024-07-01",
+    "end_date": "2026-07-28",
+    "policy": "FORCE_CLOSE"
+  },
+  "frozen_parameters": {
+    "holding_period_bars": 30,
+    "min_surge_pct": 0.015,
+    "volume_expansion_ratio": 1.5,
+    "stop_loss_atr_mult": 2.0
+  },
+  "frozen_checksums": {
+    "strategy_sha256": "a32d5a97cbf4dbefbb920ff782622021f6dc0a121b2bd1ab27a1945e618ca813",
+    "backtest_engine_sha256": "d098affd9b5fb98a5274659688fdd62ef42e96404282606db43c7de06dcd551c",
+    "research_sdk_sha256": "adafb41c4923d8bac01fbc2ba7c4b7defab81aae8f3a9845636230a6426095df",
+    "feature_store_sha256": "b5fcb96a8e1df5cccce25fdbf986322ae17894e5058859b6e255953bb777c375",
+    "security_master_sha256": "b43262a836cee3a0992a2e1a6316521c68d1c12242061f668753ebee4e3a230e",
+    "corporate_actions_sha256": "66c80fefe9ef6907fc0d7eaffa8e7b434d0cbb9d08a903efb2b4b07fd95a31d4",
+    "universe_registry_sha256": "c5e2d78f094b4672f1d873f2ccc3a24987fe82b1699d9aaf2252d92cff25ac91",
+    "cost_model_sha256": "bc133d17c1571545850caa3a4c5ab5c210d8493e92bc1fca570f5c3fa2c41002",
+    "slippage_model_sha256": "f282ad43e6274409459d4176ed2b37545a026cfd213d5deb4971bfa9c2928a9b",
+    "validation_report_sha256": "60419466b24a767eed2a7605106533be09beb7797c922837d90b07d957da5105",
+    "validation_certificate_sha256": "7b06005599e59e965a3f2f4be92a8c03cb362683be3b481d52fdd33976509820",
+    "validation_results_sha256": "47783873b5e63b522063c6e4bf0e60eff7dae7066c6337d0a4f8770650b762a2",
+    "validation_manifest_sha256": "ebb18cc8486f52a87ca5ff8e8f5ae0e06f4c95ae6d21815e906ed5002861c608"
+  },
+  "immutable_gate_thresholds": {
+    "expectancy_r_min": 0.15,
+    "profit_factor_min": 1.2,
+    "sharpe_ratio_min": 1.1,
+    "max_drawdown_pct_max": 20.0,
+    "residual_accounting_error_inr": 0.0,
+    "min_executed_trades": 25
+  },
+  "one_shot_protocol": {
+    "retries_allowed": 0,
+    "tuning_allowed": false,
+    "failure_action": "PERMANENT_LOCK_TO_RESEARCH_GRAVEYARD"
+  },
+  "firewall_status": {
+    "development_status": "PERMANENTLY_CLOSED",
+    "validation_status": "COMPLETED_CLOSED",
+    "final_test_status": "SEALED",
+    "final_test_access_count": 0
+  },
+  "lock_timestamp": "2026-08-05T19:23:10Z"
+}
