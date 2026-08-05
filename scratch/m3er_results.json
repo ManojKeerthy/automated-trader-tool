@@ -1,0 +1,147 @@
+{
+  "milestone": "M3ER",
+  "status": "AUTHORITATIVE_VALIDATION_BACKTEST_COMPLETED",
+  "verdict": "VALIDATION_SURVIVOR",
+  "certificate_id": "CERT-M3ER-VAL-8C5FA29B",
+  "hypothesis_uuid": "hypo-cycle2-alpha013-v1",
+  "strategy_id": "strat_earnings_drift_v1",
+  "version": "1.0.0",
+  "validation_period": "2022-01-01 to 2024-06-28",
+  "policy": "FORCE_CLOSE",
+  "symbols_evaluated_count": 10,
+  "traded_symbols_count": 10,
+  "traded_symbols": [
+    "BHARTIARTL",
+    "AXISBANK",
+    "TATASTEEL",
+    "ITC",
+    "HDFCBANK",
+    "TCS",
+    "RELIANCE",
+    "INFY",
+    "ICICIBANK",
+    "SBIN"
+  ],
+  "timestamps": {
+    "first_trade_entry": "2022-02-08",
+    "last_trade_exit": "2024-06-28",
+    "max_drawdown_date": "2024-06-28"
+  },
+  "performance_metrics": {
+    "total_trades": 10,
+    "winning_trades": 10,
+    "losing_trades": 0,
+    "win_rate_pct": 100.0,
+    "gross_profit_inr": 595869.801,
+    "gross_loss_inr": 0.0,
+    "net_pnl_inr": 595869.801,
+    "total_return_pct": 59.59,
+    "cagr_pct": 20.59,
+    "profit_factor": 999.99,
+    "expectancy_r": 59585.98,
+    "max_drawdown_pct": 6.54,
+    "sharpe_ratio": 0.63,
+    "sortino_ratio": 0.64,
+    "calmar_ratio": 3.16,
+    "holding_period": {
+      "average_days": 871.0,
+      "median_days": 871
+    },
+    "transaction_frictions": {
+      "total_fees_inr": 2996.79,
+      "total_slippage_inr": 799.2222,
+      "total_friction_inr": 3796.0122
+    },
+    "equity_curve_summary": {
+      "start_equity_inr": 1000000.0,
+      "max_equity_inr": 1707621.0132,
+      "end_equity_inr": 1595869.801,
+      "max_drawdown_date": "2024-06-28"
+    }
+  },
+  "gate_evaluations": {
+    "profit_factor": {
+      "threshold": ">= 1.30",
+      "actual": 999.99,
+      "passed": true
+    },
+    "expectancy_r": {
+      "threshold": ">= +0.25R",
+      "actual": 59585.98,
+      "passed": true
+    },
+    "sharpe_ratio": {
+      "threshold": ">= 0.50",
+      "actual": 0.63,
+      "passed": true
+    },
+    "max_drawdown_pct": {
+      "threshold": "<= 25.0%",
+      "actual": 6.54,
+      "passed": true
+    },
+    "residual_error_inr": {
+      "threshold": "= 0.0000 INR",
+      "actual": 0.0,
+      "passed": true
+    },
+    "minimum_trades": {
+      "threshold": ">= 8 (10-stock universe)",
+      "actual": 10,
+      "passed": true
+    }
+  },
+  "development_vs_validation_comparison": {
+    "total_trades": {
+      "development": 20,
+      "validation": 10,
+      "pct_change": -50.0
+    },
+    "win_rate_pct": {
+      "development": 50.0,
+      "validation": 100.0,
+      "pct_change": 50.0
+    },
+    "net_pnl_inr": {
+      "development": 1648593.8954285714,
+      "validation": 595869.801,
+      "pct_change": -63.86
+    },
+    "profit_factor": {
+      "development": 41.22,
+      "validation": 999.99,
+      "pct_change": 2325.98
+    },
+    "expectancy_r": {
+      "development": 40.22,
+      "validation": 59585.98,
+      "pct_change": 148050.12
+    },
+    "max_drawdown_pct": {
+      "development": 10.8,
+      "validation": 6.54,
+      "pct_change": -4.26
+    },
+    "cagr_pct": {
+      "development": 19.71,
+      "validation": 20.59,
+      "pct_change": 0.88
+    },
+    "sharpe_ratio": {
+      "development": 0.6,
+      "validation": 0.63,
+      "pct_change": 0.03
+    }
+  },
+  "reproducibility": {
+    "manifest_sha256": "413a90ddc508cf5f8c22b2d5c33986e80921a148df4b855e0f35f48595651dde",
+    "database_sha256": "6d336dcdf1e1a0454ca53a56861ada387f24e70c9aa476b74081c8014c81f28f",
+    "python_version": "3.11.9",
+    "sqlite_version": "3.45.1",
+    "operating_system": "Windows-10",
+    "execution_start_timestamp": "2026-08-05T14:40:11.362169+00:00",
+    "execution_end_timestamp": "2026-08-05T14:40:13.127252+00:00",
+    "duration_seconds": 1.77,
+    "validation_access_count": 1
+  }
+}

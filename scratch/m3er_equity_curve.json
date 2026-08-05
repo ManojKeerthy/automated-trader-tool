@@ -1,0 +1,4300 @@
+[
+  {
+    "date": "2022-01-03",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-04",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-05",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-06",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-07",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-10",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-11",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-12",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-13",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-14",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-17",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-18",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-19",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-20",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-21",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-24",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-25",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-27",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-28",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-01-31",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-01",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-02",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-03",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-04",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-07",
+    "total_equity_inr": 1000000.0,
+    "cash_balance_inr": 1000000.0,
+    "invested_inr": 0.0,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-08",
+    "total_equity_inr": 998328.8443,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 989997.73,
+    "drawdown_pct": 0.16711557
+  },
+  {
+    "date": "2022-02-09",
+    "total_equity_inr": 1013560.5943,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1005229.48,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-10",
+    "total_equity_inr": 1016959.4843,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1008628.37,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-11",
+    "total_equity_inr": 1008262.4343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 999931.32,
+    "drawdown_pct": 0.8552012281970514
+  },
+  {
+    "date": "2022-02-14",
+    "total_equity_inr": 987635.7543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 979304.64,
+    "drawdown_pct": 2.883470821867038
+  },
+  {
+    "date": "2022-02-15",
+    "total_equity_inr": 1017398.9543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1009067.84,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-16",
+    "total_equity_inr": 1035951.6743,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1027620.56,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-17",
+    "total_equity_inr": 1042508.7643,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1034177.65,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-02-18",
+    "total_equity_inr": 1036694.3343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1028363.22,
+    "drawdown_pct": 0.5577343998545797
+  },
+  {
+    "date": "2022-02-21",
+    "total_equity_inr": 1018568.2543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1010237.14,
+    "drawdown_pct": 2.29643249244768
+  },
+  {
+    "date": "2022-02-22",
+    "total_equity_inr": 988633.8043,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 980302.69,
+    "drawdown_pct": 5.167818424641708
+  },
+  {
+    "date": "2022-02-23",
+    "total_equity_inr": 1009599.7343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1001268.62,
+    "drawdown_pct": 3.156714948300411
+  },
+  {
+    "date": "2022-02-24",
+    "total_equity_inr": 1018995.6543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1010664.54,
+    "drawdown_pct": 2.255435235193255
+  },
+  {
+    "date": "2022-02-25",
+    "total_equity_inr": 1016347.5643,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1008016.45,
+    "drawdown_pct": 2.5094465289762935
+  },
+  {
+    "date": "2022-02-28",
+    "total_equity_inr": 1001603.3543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 993272.24,
+    "drawdown_pct": 3.9237473487780443
+  },
+  {
+    "date": "2022-03-02",
+    "total_equity_inr": 975152.4143,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 966821.3,
+    "drawdown_pct": 6.460986449857513
+  },
+  {
+    "date": "2022-03-03",
+    "total_equity_inr": 998733.2343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 990402.12,
+    "drawdown_pct": 4.199056305238201
+  },
+  {
+    "date": "2022-03-04",
+    "total_equity_inr": 1010999.4643,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1002668.35,
+    "drawdown_pct": 3.0224494104044437
+  },
+  {
+    "date": "2022-03-07",
+    "total_equity_inr": 1011380.4343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1003049.32,
+    "drawdown_pct": 2.985905832734302
+  },
+  {
+    "date": "2022-03-08",
+    "total_equity_inr": 999720.4543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 991389.34,
+    "drawdown_pct": 4.104359739242146
+  },
+  {
+    "date": "2022-03-09",
+    "total_equity_inr": 976294.2443,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 967963.13,
+    "drawdown_pct": 6.351459313098458
+  },
+  {
+    "date": "2022-03-10",
+    "total_equity_inr": 1002807.2043,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 994476.09,
+    "drawdown_pct": 3.8082711013617137
+  },
+  {
+    "date": "2022-03-11",
+    "total_equity_inr": 1018109.6543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1009778.54,
+    "drawdown_pct": 2.3404225302971873
+  },
+  {
+    "date": "2022-03-14",
+    "total_equity_inr": 1021525.5143,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1013194.4,
+    "drawdown_pct": 2.0127648532613875
+  },
+  {
+    "date": "2022-03-15",
+    "total_equity_inr": 1012789.3443,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1004458.23,
+    "drawdown_pct": 2.8507597267017046
+  },
+  {
+    "date": "2022-03-16",
+    "total_equity_inr": 992071.1443,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 983740.03,
+    "drawdown_pct": 4.8381003332731405
+  },
+  {
+    "date": "2022-03-17",
+    "total_equity_inr": 1021968.4043,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1013637.29,
+    "drawdown_pct": 1.9702817571794682
+  },
+  {
+    "date": "2022-03-21",
+    "total_equity_inr": 1040607.6043,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1032276.49,
+    "drawdown_pct": 0.1823639344918647
+  },
+  {
+    "date": "2022-03-22",
+    "total_equity_inr": 1047197.3343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1038866.22,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-03-23",
+    "total_equity_inr": 1041357.6543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1033026.54,
+    "drawdown_pct": 0.5576484783456348
+  },
+  {
+    "date": "2022-03-24",
+    "total_equity_inr": 1023149.7743,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1014818.66,
+    "drawdown_pct": 2.2963733016064842
+  },
+  {
+    "date": "2022-03-25",
+    "total_equity_inr": 993078.5743,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 984747.46,
+    "drawdown_pct": 5.167961971195785
+  },
+  {
+    "date": "2022-03-28",
+    "total_equity_inr": 1014140.5643,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1005809.45,
+    "drawdown_pct": 3.1566896627078247
+  },
+  {
+    "date": "2022-03-29",
+    "total_equity_inr": 1023578.0543,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1015246.94,
+    "drawdown_pct": 2.255475565719266
+  },
+  {
+    "date": "2022-03-30",
+    "total_equity_inr": 1020918.7743,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1012587.66,
+    "drawdown_pct": 2.5094181525553565
+  },
+  {
+    "date": "2022-03-31",
+    "total_equity_inr": 1006110.3243,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 997779.21,
+    "drawdown_pct": 3.9235212556633035
+  },
+  {
+    "date": "2022-04-01",
+    "total_equity_inr": 979538.5343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 971207.42,
+    "drawdown_pct": 6.460940816396041
+  },
+  {
+    "date": "2022-04-04",
+    "total_equity_inr": 1003226.6343,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 994895.52,
+    "drawdown_pct": 4.198893423405461
+  },
+  {
+    "date": "2022-04-05",
+    "total_equity_inr": 1015548.1243,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1007217.01,
+    "drawdown_pct": 3.0222775558491985
+  },
+  {
+    "date": "2022-04-06",
+    "total_equity_inr": 1041120.5743,
+    "cash_balance_inr": 8331.1143,
+    "invested_inr": 1032789.46,
+    "drawdown_pct": 0.5802879553796817
+  },
+  {
+    "date": "2022-04-07",
+    "total_equity_inr": 1029101.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1029066.21,
+    "drawdown_pct": 1.7280545420884195
+  },
+  {
+    "date": "2022-04-08",
+    "total_equity_inr": 1004785.8932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1004750.91,
+    "drawdown_pct": 4.049995135668481
+  },
+  {
+    "date": "2022-04-11",
+    "total_equity_inr": 1032308.0032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1032273.02,
+    "drawdown_pct": 1.421826680828288
+  },
+  {
+    "date": "2022-04-12",
+    "total_equity_inr": 1048190.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1048155.46,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-04-13",
+    "total_equity_inr": 1051735.9932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1051701.01,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-04-18",
+    "total_equity_inr": 1042666.9532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1042631.97,
+    "drawdown_pct": 0.8622924439817489
+  },
+  {
+    "date": "2022-04-19",
+    "total_equity_inr": 1021161.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1021126.76,
+    "drawdown_pct": 2.907027067408346
+  },
+  {
+    "date": "2022-04-20",
+    "total_equity_inr": 1052196.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1052161.99,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-04-21",
+    "total_equity_inr": 1071543.2432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1071508.26,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-04-22",
+    "total_equity_inr": 1078383.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1078348.99,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-04-25",
+    "total_equity_inr": 1072321.9532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1072286.97,
+    "drawdown_pct": 0.5621392890337142
+  },
+  {
+    "date": "2022-04-26",
+    "total_equity_inr": 1053422.2932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1053387.31,
+    "drawdown_pct": 2.3147302464008837
+  },
+  {
+    "date": "2022-04-27",
+    "total_equity_inr": 1022210.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1022175.54,
+    "drawdown_pct": 5.209039766541664
+  },
+  {
+    "date": "2022-04-28",
+    "total_equity_inr": 1044074.1232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1044039.14,
+    "drawdown_pct": 3.181598656199317
+  },
+  {
+    "date": "2022-04-29",
+    "total_equity_inr": 1053872.0932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1053837.11,
+    "drawdown_pct": 2.273019685860443
+  },
+  {
+    "date": "2022-05-02",
+    "total_equity_inr": 1051111.0432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1051076.06,
+    "drawdown_pct": 2.529055575545158
+  },
+  {
+    "date": "2022-05-04",
+    "total_equity_inr": 1035740.9532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1035705.97,
+    "drawdown_pct": 3.9543447473037796
+  },
+  {
+    "date": "2022-05-05",
+    "total_equity_inr": 1008160.3332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1008125.35,
+    "drawdown_pct": 6.511932831458738
+  },
+  {
+    "date": "2022-05-06",
+    "total_equity_inr": 1032748.3932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1032713.41,
+    "drawdown_pct": 4.231848871472082
+  },
+  {
+    "date": "2022-05-09",
+    "total_equity_inr": 1045539.1832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1045504.2,
+    "drawdown_pct": 3.0457416668143042
+  },
+  {
+    "date": "2022-05-10",
+    "total_equity_inr": 1045938.7932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1045903.81,
+    "drawdown_pct": 3.00868529265342
+  },
+  {
+    "date": "2022-05-11",
+    "total_equity_inr": 1033782.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1033747.99,
+    "drawdown_pct": 4.135910872975129
+  },
+  {
+    "date": "2022-05-12",
+    "total_equity_inr": 1009357.3832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1009322.4,
+    "drawdown_pct": 6.400928770776357
+  },
+  {
+    "date": "2022-05-13",
+    "total_equity_inr": 1037003.2332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1036968.25,
+    "drawdown_pct": 3.8372918207608984
+  },
+  {
+    "date": "2022-05-16",
+    "total_equity_inr": 1052960.0032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1052925.02,
+    "drawdown_pct": 2.357599021483677
+  },
+  {
+    "date": "2022-05-17",
+    "total_equity_inr": 1056521.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1056486.76,
+    "drawdown_pct": 2.0273140683949475
+  },
+  {
+    "date": "2022-05-18",
+    "total_equity_inr": 1047414.7332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1047379.75,
+    "drawdown_pct": 2.871819386197087
+  },
+  {
+    "date": "2022-05-19",
+    "total_equity_inr": 1025811.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1025776.65,
+    "drawdown_pct": 4.875103980263789
+  },
+  {
+    "date": "2022-05-20",
+    "total_equity_inr": 1056987.8732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1056952.89,
+    "drawdown_pct": 1.9840892049340408
+  },
+  {
+    "date": "2022-05-23",
+    "total_equity_inr": 1076423.0332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1076388.05,
+    "drawdown_pct": 0.18184061046281136
+  },
+  {
+    "date": "2022-05-24",
+    "total_equity_inr": 1083292.7232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1083257.74,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-05-25",
+    "total_equity_inr": 1077204.0432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1077169.06,
+    "drawdown_pct": 0.5620530692770004
+  },
+  {
+    "date": "2022-05-26",
+    "total_equity_inr": 1058218.4532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1058183.47,
+    "drawdown_pct": 2.314634767039853
+  },
+  {
+    "date": "2022-05-27",
+    "total_equity_inr": 1026863.2632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1026828.28,
+    "drawdown_pct": 5.209068499353509
+  },
+  {
+    "date": "2022-05-30",
+    "total_equity_inr": 1048827.2932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1048792.31,
+    "drawdown_pct": 3.1815435719156873
+  },
+  {
+    "date": "2022-05-31",
+    "total_equity_inr": 1058669.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1058634.69,
+    "drawdown_pct": 2.272982128714441
+  },
+  {
+    "date": "2022-06-01",
+    "total_equity_inr": 1055895.2632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1055860.28,
+    "drawdown_pct": 2.529091113902167
+  },
+  {
+    "date": "2022-06-02",
+    "total_equity_inr": 1040453.6232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1040418.64,
+    "drawdown_pct": 3.9545267020215134
+  },
+  {
+    "date": "2022-06-03",
+    "total_equity_inr": 1012748.4032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1012713.42,
+    "drawdown_pct": 6.512027496281441
+  },
+  {
+    "date": "2022-06-06",
+    "total_equity_inr": 1038461.5132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1038426.53,
+    "drawdown_pct": 4.13842067244489
+  },
+  {
+    "date": "2022-06-07",
+    "total_equity_inr": 1051322.2632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1051287.28,
+    "drawdown_pct": 2.951230015241
+  },
+  {
+    "date": "2022-06-08",
+    "total_equity_inr": 1051724.2532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1051689.27,
+    "drawdown_pct": 2.914121854963458
+  },
+  {
+    "date": "2022-06-09",
+    "total_equity_inr": 1039499.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1039464.1,
+    "drawdown_pct": 4.042641389728482
+  },
+  {
+    "date": "2022-06-10",
+    "total_equity_inr": 1014938.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1014903.69,
+    "drawdown_pct": 6.309841147837224
+  },
+  {
+    "date": "2022-06-13",
+    "total_equity_inr": 1042738.7332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1042703.75,
+    "drawdown_pct": 3.7435855638543627
+  },
+  {
+    "date": "2022-06-14",
+    "total_equity_inr": 1058782.8632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1058747.88,
+    "drawdown_pct": 2.262533429339295
+  },
+  {
+    "date": "2022-06-15",
+    "total_equity_inr": 1062364.4032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1062329.42,
+    "drawdown_pct": 1.9319173434654526
+  },
+  {
+    "date": "2022-06-16",
+    "total_equity_inr": 1053205.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1053170.46,
+    "drawdown_pct": 2.777391498682228
+  },
+  {
+    "date": "2022-06-17",
+    "total_equity_inr": 1031482.4032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1031447.42,
+    "drawdown_pct": 4.782670361428678
+  },
+  {
+    "date": "2022-06-20",
+    "total_equity_inr": 1062830.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1062795.1,
+    "drawdown_pct": 1.888929885871867
+  },
+  {
+    "date": "2022-06-21",
+    "total_equity_inr": 1082373.6232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1082338.64,
+    "drawdown_pct": 0.08484318045495758
+  },
+  {
+    "date": "2022-06-22",
+    "total_equity_inr": 1089281.4732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1089246.49,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-06-23",
+    "total_equity_inr": 1083158.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1083123.78,
+    "drawdown_pct": 0.5620870409200309
+  },
+  {
+    "date": "2022-06-24",
+    "total_equity_inr": 1064069.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1064034.1,
+    "drawdown_pct": 2.314589077323894
+  },
+  {
+    "date": "2022-06-27",
+    "total_equity_inr": 1032541.8932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1032506.91,
+    "drawdown_pct": 5.208899756030478
+  },
+  {
+    "date": "2022-06-28",
+    "total_equity_inr": 1054628.3232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1054593.34,
+    "drawdown_pct": 3.181285173078256
+  },
+  {
+    "date": "2022-06-29",
+    "total_equity_inr": 1064524.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1064489.59,
+    "drawdown_pct": 2.2727734391067216
+  },
+  {
+    "date": "2022-06-30",
+    "total_equity_inr": 1061736.7832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1061701.8,
+    "drawdown_pct": 2.5287026978510445
+  },
+  {
+    "date": "2022-07-01",
+    "total_equity_inr": 1046211.6032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1046176.62,
+    "drawdown_pct": 3.953970673298329
+  },
+  {
+    "date": "2022-07-04",
+    "total_equity_inr": 1018353.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1018318.1,
+    "drawdown_pct": 6.511484106273516
+  },
+  {
+    "date": "2022-07-05",
+    "total_equity_inr": 1043192.2932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1043157.31,
+    "drawdown_pct": 4.231154309877598
+  },
+  {
+    "date": "2022-07-06",
+    "total_equity_inr": 1056113.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1056078.99,
+    "drawdown_pct": 3.0448971010737282
+  },
+  {
+    "date": "2022-07-07",
+    "total_equity_inr": 1056517.4332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1056482.45,
+    "drawdown_pct": 3.0078580060439792
+  },
+  {
+    "date": "2022-07-08",
+    "total_equity_inr": 1044238.3332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1044203.35,
+    "drawdown_pct": 4.135124034348627
+  },
+  {
+    "date": "2022-07-11",
+    "total_equity_inr": 1019568.0032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1019533.02,
+    "drawdown_pct": 6.399950032676274
+  },
+  {
+    "date": "2022-07-12",
+    "total_equity_inr": 1047494.3732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1047459.39,
+    "drawdown_pct": 3.836207722990216
+  },
+  {
+    "date": "2022-07-13",
+    "total_equity_inr": 1063613.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1063578.46,
+    "drawdown_pct": 2.356418486086485
+  },
+  {
+    "date": "2022-07-14",
+    "total_equity_inr": 1067211.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1067176.04,
+    "drawdown_pct": 2.0261475608469937
+  },
+  {
+    "date": "2022-07-15",
+    "total_equity_inr": 1058010.6132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1057975.63,
+    "drawdown_pct": 2.8707786526594528
+  },
+  {
+    "date": "2022-07-18",
+    "total_equity_inr": 1036187.7932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1036152.81,
+    "drawdown_pct": 4.8741928790935765
+  },
+  {
+    "date": "2022-07-19",
+    "total_equity_inr": 1067678.4332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1067643.45,
+    "drawdown_pct": 1.983237623287248
+  },
+  {
+    "date": "2022-07-20",
+    "total_equity_inr": 1087310.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1087275.73,
+    "drawdown_pct": 0.1809229339236319
+  },
+  {
+    "date": "2022-07-21",
+    "total_equity_inr": 1094251.3632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1094216.38,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-07-22",
+    "total_equity_inr": 1088102.6132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1088067.63,
+    "drawdown_pct": 0.5619138533233129
+  },
+  {
+    "date": "2022-07-25",
+    "total_equity_inr": 1068924.4932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1068889.51,
+    "drawdown_pct": 2.314538583341104
+  },
+  {
+    "date": "2022-07-26",
+    "total_equity_inr": 1037254.0332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1037219.05,
+    "drawdown_pct": 5.208796800884808
+  },
+  {
+    "date": "2022-07-27",
+    "total_equity_inr": 1059440.3732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1059405.39,
+    "drawdown_pct": 3.1812608300710408
+  },
+  {
+    "date": "2022-07-28",
+    "total_equity_inr": 1069383.1632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1069348.18,
+    "drawdown_pct": 2.2726222544768953
+  },
+  {
+    "date": "2022-07-29",
+    "total_equity_inr": 1066582.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1066547.85,
+    "drawdown_pct": 2.528535118209666
+  },
+  {
+    "date": "2022-08-01",
+    "total_equity_inr": 1093662.2832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1093627.3,
+    "drawdown_pct": 0.053834065902125985
+  },
+  {
+    "date": "2022-08-02",
+    "total_equity_inr": 1064540.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1064505.6,
+    "drawdown_pct": 2.715169566991863
+  },
+  {
+    "date": "2022-08-03",
+    "total_equity_inr": 1090504.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1090469.99,
+    "drawdown_pct": 0.3423701469326166
+  },
+  {
+    "date": "2022-08-04",
+    "total_equity_inr": 1104010.9532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1103975.97,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-08-05",
+    "total_equity_inr": 1104431.0132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1104396.03,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-08-08",
+    "total_equity_inr": 1091595.0732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1091560.09,
+    "drawdown_pct": 1.16222198096456
+  },
+  {
+    "date": "2022-08-10",
+    "total_equity_inr": 1065804.3032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1065769.32,
+    "drawdown_pct": 3.497430761934348
+  },
+  {
+    "date": "2022-08-11",
+    "total_equity_inr": 1094998.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1094963.65,
+    "drawdown_pct": 0.854048816745053
+  },
+  {
+    "date": "2022-08-12",
+    "total_equity_inr": 1111848.3432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1111813.36,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-08-16",
+    "total_equity_inr": 1115609.8732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1115574.89,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-08-17",
+    "total_equity_inr": 1105993.0932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1105958.11,
+    "drawdown_pct": 0.8620199794768184
+  },
+  {
+    "date": "2022-08-18",
+    "total_equity_inr": 1083181.2932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1083146.31,
+    "drawdown_pct": 2.9068028868355484
+  },
+  {
+    "date": "2022-08-19",
+    "total_equity_inr": 1116102.2232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1116067.24,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-08-22",
+    "total_equity_inr": 1136625.8032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1136590.82,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-08-23",
+    "total_equity_inr": 1143882.2232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1143847.24,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-08-24",
+    "total_equity_inr": 1137453.5632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1137418.58,
+    "drawdown_pct": 0.5620036634554808
+  },
+  {
+    "date": "2022-08-25",
+    "total_equity_inr": 1117406.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1117371.99,
+    "drawdown_pct": 2.3145083875799495
+  },
+  {
+    "date": "2022-08-26",
+    "total_equity_inr": 1084299.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1084264.46,
+    "drawdown_pct": 5.20882122228613
+  },
+  {
+    "date": "2022-08-29",
+    "total_equity_inr": 1107491.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1107456.46,
+    "drawdown_pct": 3.1813397622525446
+  },
+  {
+    "date": "2022-08-30",
+    "total_equity_inr": 1117886.3232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1117851.34,
+    "drawdown_pct": 2.2726028495553248
+  },
+  {
+    "date": "2022-09-01",
+    "total_equity_inr": 1114958.2732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1114923.29,
+    "drawdown_pct": 2.528577629179822
+  },
+  {
+    "date": "2022-09-02",
+    "total_equity_inr": 1098654.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1098619.04,
+    "drawdown_pct": 3.95392104909844
+  },
+  {
+    "date": "2022-09-05",
+    "total_equity_inr": 1069399.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1069364.83,
+    "drawdown_pct": 6.511370531804939
+  },
+  {
+    "date": "2022-09-06",
+    "total_equity_inr": 1095483.4532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1095448.47,
+    "drawdown_pct": 4.231097312152023
+  },
+  {
+    "date": "2022-09-07",
+    "total_equity_inr": 1109053.7732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1109018.79,
+    "drawdown_pct": 3.0447583932695212
+  },
+  {
+    "date": "2022-09-08",
+    "total_equity_inr": 1109477.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1109442.33,
+    "drawdown_pct": 3.0077318540498497
+  },
+  {
+    "date": "2022-09-09",
+    "total_equity_inr": 1096585.0732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1096550.09,
+    "drawdown_pct": 4.134791942800427
+  },
+  {
+    "date": "2022-09-12",
+    "total_equity_inr": 1070676.7932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1070641.81,
+    "drawdown_pct": 6.3997349128486745
+  },
+  {
+    "date": "2022-09-13",
+    "total_equity_inr": 1100004.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1099969.78,
+    "drawdown_pct": 3.8358372138394814
+  },
+  {
+    "date": "2022-09-14",
+    "total_equity_inr": 1116931.0032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1116896.02,
+    "drawdown_pct": 2.356118440638426
+  },
+  {
+    "date": "2022-09-15",
+    "total_equity_inr": 1120710.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1120675.85,
+    "drawdown_pct": 2.0256797011127814
+  },
+  {
+    "date": "2022-09-16",
+    "total_equity_inr": 1111048.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1111013.54,
+    "drawdown_pct": 2.87037418136878
+  },
+  {
+    "date": "2022-09-19",
+    "total_equity_inr": 1088133.2332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1088098.25,
+    "drawdown_pct": 4.873665213892625
+  },
+  {
+    "date": "2022-09-20",
+    "total_equity_inr": 1121203.8032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1121168.82,
+    "drawdown_pct": 1.9825834810648013
+  },
+  {
+    "date": "2022-09-21",
+    "total_equity_inr": 1141821.3332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1141786.35,
+    "drawdown_pct": 0.1801662757057872
+  },
+  {
+    "date": "2022-09-22",
+    "total_equity_inr": 1149111.3832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1149076.4,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-09-23",
+    "total_equity_inr": 1142653.0432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1142618.06,
+    "drawdown_pct": 0.562029068236629
+  },
+  {
+    "date": "2022-09-26",
+    "total_equity_inr": 1122515.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1122480.59,
+    "drawdown_pct": 2.3144675432539046
+  },
+  {
+    "date": "2022-09-27",
+    "total_equity_inr": 1089257.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1089222.6,
+    "drawdown_pct": 5.208703079184674
+  },
+  {
+    "date": "2022-09-28",
+    "total_equity_inr": 1112556.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1112521.76,
+    "drawdown_pct": 3.1811224337717445
+  },
+  {
+    "date": "2022-09-29",
+    "total_equity_inr": 1140806.1332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1140771.15,
+    "drawdown_pct": 0.7227541317075693
+  },
+  {
+    "date": "2022-09-30",
+    "total_equity_inr": 1137819.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1137784.04,
+    "drawdown_pct": 0.9827036930531035
+  },
+  {
+    "date": "2022-10-03",
+    "total_equity_inr": 1121179.4932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1121144.51,
+    "drawdown_pct": 2.4307382563922024
+  },
+  {
+    "date": "2022-10-04",
+    "total_equity_inr": 1091325.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1091290.04,
+    "drawdown_pct": 5.028786664620694
+  },
+  {
+    "date": "2022-10-06",
+    "total_equity_inr": 1117943.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1117908.7,
+    "drawdown_pct": 2.7123306283160664
+  },
+  {
+    "date": "2022-10-07",
+    "total_equity_inr": 1131791.8432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1131756.86,
+    "drawdown_pct": 1.5072115943860227
+  },
+  {
+    "date": "2022-10-10",
+    "total_equity_inr": 1132225.2732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1132190.29,
+    "drawdown_pct": 1.469492883533729
+  },
+  {
+    "date": "2022-10-11",
+    "total_equity_inr": 1119067.9932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1119033.01,
+    "drawdown_pct": 2.6144889380815597
+  },
+  {
+    "date": "2022-10-12",
+    "total_equity_inr": 1092628.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1092593.76,
+    "drawdown_pct": 4.915332040546789
+  },
+  {
+    "date": "2022-10-13",
+    "total_equity_inr": 1122558.2732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1122523.29,
+    "drawdown_pct": 2.3107516284501464
+  },
+  {
+    "date": "2022-10-14",
+    "total_equity_inr": 1139832.8832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1139797.9,
+    "drawdown_pct": 0.8074500118658298
+  },
+  {
+    "date": "2022-10-17",
+    "total_equity_inr": 1143689.3832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1143654.4,
+    "drawdown_pct": 0.4718428586879915
+  },
+  {
+    "date": "2022-10-18",
+    "total_equity_inr": 1133830.7832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1133795.8,
+    "drawdown_pct": 1.3297753571500779
+  },
+  {
+    "date": "2022-10-19",
+    "total_equity_inr": 1110446.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1110411.04,
+    "drawdown_pct": 3.364805236923703
+  },
+  {
+    "date": "2022-10-20",
+    "total_equity_inr": 1144194.8532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1144159.87,
+    "drawdown_pct": 0.4278549557405516
+  },
+  {
+    "date": "2022-10-21",
+    "total_equity_inr": 1165234.8932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1165199.91,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-10-25",
+    "total_equity_inr": 1172675.6432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1172640.66,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-10-27",
+    "total_equity_inr": 1166086.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1166051.76,
+    "drawdown_pct": 0.5618689224259996
+  },
+  {
+    "date": "2022-10-28",
+    "total_equity_inr": 1145536.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1145501.68,
+    "drawdown_pct": 2.3142784756698016
+  },
+  {
+    "date": "2022-10-31",
+    "total_equity_inr": 1111597.7232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1111562.74,
+    "drawdown_pct": 5.208424030478746
+  },
+  {
+    "date": "2022-11-01",
+    "total_equity_inr": 1135375.7032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1135340.72,
+    "drawdown_pct": 3.180755072068849
+  },
+  {
+    "date": "2022-11-02",
+    "total_equity_inr": 1146033.5932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1145998.61,
+    "drawdown_pct": 2.2719027341012312
+  },
+  {
+    "date": "2022-11-03",
+    "total_equity_inr": 1143033.1632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1142998.18,
+    "drawdown_pct": 2.527764618621355
+  },
+  {
+    "date": "2022-11-04",
+    "total_equity_inr": 1126320.4332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1126285.45,
+    "drawdown_pct": 3.9529438740200824
+  },
+  {
+    "date": "2022-11-07",
+    "total_equity_inr": 1096330.2132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1096295.23,
+    "drawdown_pct": 6.510362046206436
+  },
+  {
+    "date": "2022-11-09",
+    "total_equity_inr": 1123070.8432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1123035.86,
+    "drawdown_pct": 4.230052895499586
+  },
+  {
+    "date": "2022-11-10",
+    "total_equity_inr": 1136982.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1136947.83,
+    "drawdown_pct": 3.043708650978827
+  },
+  {
+    "date": "2022-11-11",
+    "total_equity_inr": 1137419.7232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1137384.74,
+    "drawdown_pct": 3.006451119236481
+  },
+  {
+    "date": "2022-11-14",
+    "total_equity_inr": 1124201.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1124166.73,
+    "drawdown_pct": 4.133617874736805
+  },
+  {
+    "date": "2022-11-15",
+    "total_equity_inr": 1097641.8632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1097606.88,
+    "drawdown_pct": 6.3985109979130845
+  },
+  {
+    "date": "2022-11-16",
+    "total_equity_inr": 1127707.6532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1127672.67,
+    "drawdown_pct": 3.8346485885296677
+  },
+  {
+    "date": "2022-11-17",
+    "total_equity_inr": 1145060.3832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1145025.4,
+    "drawdown_pct": 2.3548932869999257
+  },
+  {
+    "date": "2022-11-18",
+    "total_equity_inr": 1148935.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1148900.33,
+    "drawdown_pct": 2.024458351946096
+  },
+  {
+    "date": "2022-11-21",
+    "total_equity_inr": 1139031.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1138996.83,
+    "drawdown_pct": 2.8689800282875013
+  },
+  {
+    "date": "2022-11-22",
+    "total_equity_inr": 1115539.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1115504.33,
+    "drawdown_pct": 4.872304659120083
+  },
+  {
+    "date": "2022-11-23",
+    "total_equity_inr": 1149444.6932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1149409.71,
+    "drawdown_pct": 1.9810209357301334
+  },
+  {
+    "date": "2022-11-24",
+    "total_equity_inr": 1170582.1332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1170547.15,
+    "drawdown_pct": 0.17852421614959318
+  },
+  {
+    "date": "2022-11-25",
+    "total_equity_inr": 1178057.7032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1178022.72,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-11-28",
+    "total_equity_inr": 1171436.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1171401.54,
+    "drawdown_pct": 0.5620420784155694
+  },
+  {
+    "date": "2022-11-29",
+    "total_equity_inr": 1150791.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1150756.85,
+    "drawdown_pct": 2.3144766106054693
+  },
+  {
+    "date": "2022-11-30",
+    "total_equity_inr": 1180012.6132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1179977.63,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-12-01",
+    "total_equity_inr": 1205254.1132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1205219.13,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-12-02",
+    "total_equity_inr": 1216568.0632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1216533.08,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-12-05",
+    "total_equity_inr": 1213382.9632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1213347.98,
+    "drawdown_pct": 0.26181025923219386
+  },
+  {
+    "date": "2022-12-06",
+    "total_equity_inr": 1195640.6032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1195605.62,
+    "drawdown_pct": 1.7202046176482269
+  },
+  {
+    "date": "2022-12-07",
+    "total_equity_inr": 1163805.0532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1163770.07,
+    "drawdown_pct": 4.337037244033417
+  },
+  {
+    "date": "2022-12-08",
+    "total_equity_inr": 1192193.7032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1192158.72,
+    "drawdown_pct": 2.003534429129012
+  },
+  {
+    "date": "2022-12-09",
+    "total_equity_inr": 1206962.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1206927.54,
+    "drawdown_pct": 0.7895604274481829
+  },
+  {
+    "date": "2022-12-12",
+    "total_equity_inr": 1207425.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1207390.1,
+    "drawdown_pct": 0.7515387158816877
+  },
+  {
+    "date": "2022-12-13",
+    "total_equity_inr": 1193392.9432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1193357.96,
+    "drawdown_pct": 1.9049587689357321
+  },
+  {
+    "date": "2022-12-14",
+    "total_equity_inr": 1165197.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1165162.65,
+    "drawdown_pct": 4.222569336965643
+  },
+  {
+    "date": "2022-12-15",
+    "total_equity_inr": 1197116.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1197081.46,
+    "drawdown_pct": 1.5988928682572374
+  },
+  {
+    "date": "2022-12-16",
+    "total_equity_inr": 1215538.9532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1215503.97,
+    "drawdown_pct": 0.08459123916939594
+  },
+  {
+    "date": "2022-12-19",
+    "total_equity_inr": 1219652.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1219617.7,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-12-20",
+    "total_equity_inr": 1209139.3232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1209104.34,
+    "drawdown_pct": 0.8619962178426174
+  },
+  {
+    "date": "2022-12-21",
+    "total_equity_inr": 1184202.5632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1184167.58,
+    "drawdown_pct": 2.906575001908707
+  },
+  {
+    "date": "2022-12-22",
+    "total_equity_inr": 1220195.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1220160.21,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-12-23",
+    "total_equity_inr": 1242633.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1242598.85,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-12-26",
+    "total_equity_inr": 1250568.7832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1250533.8,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2022-12-27",
+    "total_equity_inr": 1243540.9032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1243505.92,
+    "drawdown_pct": 0.5619746865915531
+  },
+  {
+    "date": "2022-12-28",
+    "total_equity_inr": 1221626.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1221591.7,
+    "drawdown_pct": 2.314314925240811
+  },
+  {
+    "date": "2022-12-29",
+    "total_equity_inr": 1185433.2332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1185398.25,
+    "drawdown_pct": 5.208474005990205
+  },
+  {
+    "date": "2022-12-30",
+    "total_equity_inr": 1210791.7532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1210756.77,
+    "drawdown_pct": 3.180715090154187
+  },
+  {
+    "date": "2023-01-02",
+    "total_equity_inr": 1222156.8432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1222121.86,
+    "drawdown_pct": 2.271921415413754
+  },
+  {
+    "date": "2023-01-03",
+    "total_equity_inr": 1218959.3632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1218924.38,
+    "drawdown_pct": 2.5276034732865065
+  },
+  {
+    "date": "2023-01-04",
+    "total_equity_inr": 1201134.4232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1201099.44,
+    "drawdown_pct": 3.952950102712911
+  },
+  {
+    "date": "2023-01-05",
+    "total_equity_inr": 1169153.8032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1169118.82,
+    "drawdown_pct": 6.510236069676427
+  },
+  {
+    "date": "2023-01-06",
+    "total_equity_inr": 1197672.9932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1197638.01,
+    "drawdown_pct": 4.229738556614884
+  },
+  {
+    "date": "2023-01-09",
+    "total_equity_inr": 1212510.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1212475.59,
+    "drawdown_pct": 3.043272030396864
+  },
+  {
+    "date": "2023-01-10",
+    "total_equity_inr": 1212975.4632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1212940.48,
+    "drawdown_pct": 3.006097745683758
+  },
+  {
+    "date": "2023-01-11",
+    "total_equity_inr": 1198879.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1198844.68,
+    "drawdown_pct": 4.133248861988705
+  },
+  {
+    "date": "2023-01-12",
+    "total_equity_inr": 1170555.4932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1170520.51,
+    "drawdown_pct": 6.3981518709637974
+  },
+  {
+    "date": "2023-01-13",
+    "total_equity_inr": 1202620.3232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1202585.34,
+    "drawdown_pct": 3.8341321680289964
+  },
+  {
+    "date": "2023-01-16",
+    "total_equity_inr": 1221127.2432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1221092.26,
+    "drawdown_pct": 2.3542519528325294
+  },
+  {
+    "date": "2023-01-17",
+    "total_equity_inr": 1225260.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1225225.33,
+    "drawdown_pct": 2.0237567369337164
+  },
+  {
+    "date": "2023-01-18",
+    "total_equity_inr": 1214698.1832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1214663.2,
+    "drawdown_pct": 2.8683428278301517
+  },
+  {
+    "date": "2023-01-19",
+    "total_equity_inr": 1189646.9832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1189612.0,
+    "drawdown_pct": 4.87152732567905
+  },
+  {
+    "date": "2023-01-20",
+    "total_equity_inr": 1225805.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1225770.69,
+    "drawdown_pct": 1.9801477801672989
+  },
+  {
+    "date": "2023-01-23",
+    "total_equity_inr": 1248346.9332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1248311.95,
+    "drawdown_pct": 0.1776671567248505
+  },
+  {
+    "date": "2023-01-24",
+    "total_equity_inr": 1256318.1532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1256283.17,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-01-25",
+    "total_equity_inr": 1288219.5132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1288184.53,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-01-27",
+    "total_equity_inr": 1265518.7732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1265483.79,
+    "drawdown_pct": 1.762179486290365
+  },
+  {
+    "date": "2023-01-30",
+    "total_equity_inr": 1228026.0332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1227991.05,
+    "drawdown_pct": 4.672610481615549
+  },
+  {
+    "date": "2023-01-31",
+    "total_equity_inr": 1254294.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1254259.83,
+    "drawdown_pct": 2.6334564608270368
+  },
+  {
+    "date": "2023-02-01",
+    "total_equity_inr": 1266068.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1266033.83,
+    "drawdown_pct": 1.7194817942926965
+  },
+  {
+    "date": "2023-02-02",
+    "total_equity_inr": 1262755.2632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1262720.28,
+    "drawdown_pct": 1.9767011552825777
+  },
+  {
+    "date": "2023-02-03",
+    "total_equity_inr": 1244292.4832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1244257.5,
+    "drawdown_pct": 3.4099025476553386
+  },
+  {
+    "date": "2023-02-06",
+    "total_equity_inr": 1211162.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1211127.65,
+    "drawdown_pct": 5.981657567706528
+  },
+  {
+    "date": "2023-02-07",
+    "total_equity_inr": 1240706.3332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1240671.35,
+    "drawdown_pct": 3.6882828984615323
+  },
+  {
+    "date": "2023-02-08",
+    "total_equity_inr": 1256076.3032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1256041.32,
+    "drawdown_pct": 2.4951655886778723
+  },
+  {
+    "date": "2023-02-09",
+    "total_equity_inr": 1256559.5532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1256524.57,
+    "drawdown_pct": 2.4576525720647653
+  },
+  {
+    "date": "2023-02-10",
+    "total_equity_inr": 1241959.2032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1241924.22,
+    "drawdown_pct": 3.591026958215152
+  },
+  {
+    "date": "2023-02-13",
+    "total_equity_inr": 1212617.7932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1212582.81,
+    "drawdown_pct": 5.868698558384793
+  },
+  {
+    "date": "2023-02-14",
+    "total_equity_inr": 1245835.8832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1245800.9,
+    "drawdown_pct": 3.2900937740585063
+  },
+  {
+    "date": "2023-02-15",
+    "total_equity_inr": 1265008.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1264973.21,
+    "drawdown_pct": 1.8018140357416221
+  },
+  {
+    "date": "2023-02-16",
+    "total_equity_inr": 1269288.8032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1269253.82,
+    "drawdown_pct": 1.4695251706733734
+  },
+  {
+    "date": "2023-02-17",
+    "total_equity_inr": 1258348.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1258313.59,
+    "drawdown_pct": 2.3187771722071755
+  },
+  {
+    "date": "2023-02-20",
+    "total_equity_inr": 1232397.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1232362.76,
+    "drawdown_pct": 4.333249840420132
+  },
+  {
+    "date": "2023-02-21",
+    "total_equity_inr": 1269856.0032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1269821.02,
+    "drawdown_pct": 1.4254954075632769
+  },
+  {
+    "date": "2023-02-22",
+    "total_equity_inr": 1293209.3032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1293174.32,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-02-23",
+    "total_equity_inr": 1301469.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1301434.65,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-02-24",
+    "total_equity_inr": 1294158.7732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1294123.79,
+    "drawdown_pct": 0.5617388076911451
+  },
+  {
+    "date": "2023-02-27",
+    "total_equity_inr": 1271354.1832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1271319.2,
+    "drawdown_pct": 2.313957178236527
+  },
+  {
+    "date": "2023-02-28",
+    "total_equity_inr": 1233688.4032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1233653.42,
+    "drawdown_pct": 5.208053132468585
+  },
+  {
+    "date": "2023-03-01",
+    "total_equity_inr": 1260078.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1260043.99,
+    "drawdown_pct": 3.1803016331798957
+  },
+  {
+    "date": "2023-03-02",
+    "total_equity_inr": 1271908.2332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1271873.25,
+    "drawdown_pct": 2.271386073550994
+  },
+  {
+    "date": "2023-03-03",
+    "total_equity_inr": 1268580.2132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1268545.23,
+    "drawdown_pct": 2.527098532382415
+  },
+  {
+    "date": "2023-03-06",
+    "total_equity_inr": 1250033.1032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1249998.12,
+    "drawdown_pct": 3.952188256097069
+  },
+  {
+    "date": "2023-03-08",
+    "total_equity_inr": 1216750.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1216715.99,
+    "drawdown_pct": 6.509461138305412
+  },
+  {
+    "date": "2023-03-09",
+    "total_equity_inr": 1246430.1532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1246395.17,
+    "drawdown_pct": 4.229025295401722
+  },
+  {
+    "date": "2023-03-10",
+    "total_equity_inr": 1261872.0432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1261837.06,
+    "drawdown_pct": 3.0425289219110763
+  },
+  {
+    "date": "2023-03-13",
+    "total_equity_inr": 1262356.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1262321.6,
+    "drawdown_pct": 3.005298702500683
+  },
+  {
+    "date": "2023-03-14",
+    "total_equity_inr": 1247686.9332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1247651.95,
+    "drawdown_pct": 4.132459077647575
+  },
+  {
+    "date": "2023-03-15",
+    "total_equity_inr": 1218211.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1218176.21,
+    "drawdown_pct": 6.397263361058035
+  },
+  {
+    "date": "2023-03-16",
+    "total_equity_inr": 1251582.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1251547.85,
+    "drawdown_pct": 3.833112869283042
+  },
+  {
+    "date": "2023-03-17",
+    "total_equity_inr": 1270843.6532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1270808.67,
+    "drawdown_pct": 2.3531843708637368
+  },
+  {
+    "date": "2023-03-20",
+    "total_equity_inr": 1275145.1332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1275110.15,
+    "drawdown_pct": 2.0226749305916885
+  },
+  {
+    "date": "2023-03-21",
+    "total_equity_inr": 1264156.1132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1264121.13,
+    "drawdown_pct": 2.8670296292857063
+  },
+  {
+    "date": "2023-03-22",
+    "total_equity_inr": 1238085.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1238050.99,
+    "drawdown_pct": 4.87016050033798
+  },
+  {
+    "date": "2023-03-23",
+    "total_equity_inr": 1275719.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1275684.1,
+    "drawdown_pct": 1.978574785236103
+  },
+  {
+    "date": "2023-03-24",
+    "total_equity_inr": 1308114.4632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1308079.48,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-03-27",
+    "total_equity_inr": 1316468.4632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1316433.48,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-03-28",
+    "total_equity_inr": 1309072.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1309037.69,
+    "drawdown_pct": 0.5617901382933789
+  },
+  {
+    "date": "2023-03-29",
+    "total_equity_inr": 1286005.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1285970.6,
+    "drawdown_pct": 2.3139847897269403
+  },
+  {
+    "date": "2023-03-31",
+    "total_equity_inr": 1247907.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1247872.99,
+    "drawdown_pct": 5.207909791727702
+  },
+  {
+    "date": "2023-04-03",
+    "total_equity_inr": 1274603.1532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1274568.17,
+    "drawdown_pct": 3.1801225149166186
+  },
+  {
+    "date": "2023-04-05",
+    "total_equity_inr": 1286568.5032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1286533.52,
+    "drawdown_pct": 2.271224935181569
+  },
+  {
+    "date": "2023-04-06",
+    "total_equity_inr": 1283202.0432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1283167.06,
+    "drawdown_pct": 2.526943935985963
+  },
+  {
+    "date": "2023-04-10",
+    "total_equity_inr": 1264441.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1264406.21,
+    "drawdown_pct": 3.9520331443060126
+  },
+  {
+    "date": "2023-04-11",
+    "total_equity_inr": 1230774.8232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1230739.84,
+    "drawdown_pct": 6.509357602969125
+  },
+  {
+    "date": "2023-04-12",
+    "total_equity_inr": 1260798.4332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1260763.45,
+    "drawdown_pct": 4.22874011464584
+  },
+  {
+    "date": "2023-04-13",
+    "total_equity_inr": 1276419.7732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1276384.79,
+    "drawdown_pct": 3.0421306031632405
+  },
+  {
+    "date": "2023-04-17",
+    "total_equity_inr": 1276911.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1276876.7,
+    "drawdown_pct": 3.0047647251531973
+  },
+  {
+    "date": "2023-04-18",
+    "total_equity_inr": 1262073.4132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1262038.43,
+    "drawdown_pct": 4.131891611575675
+  },
+  {
+    "date": "2023-04-19",
+    "total_equity_inr": 1232257.9632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1232222.98,
+    "drawdown_pct": 6.396697099397709
+  },
+  {
+    "date": "2023-04-20",
+    "total_equity_inr": 1266014.9832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1265980.0,
+    "drawdown_pct": 3.832486794052052
+  },
+  {
+    "date": "2023-04-21",
+    "total_equity_inr": 1285499.7332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1285464.75,
+    "drawdown_pct": 2.352409561313979
+  },
+  {
+    "date": "2023-04-24",
+    "total_equity_inr": 1289852.3932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1289817.41,
+    "drawdown_pct": 2.0217780177812315
+  },
+  {
+    "date": "2023-04-25",
+    "total_equity_inr": 1278737.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1278702.69,
+    "drawdown_pct": 2.8660610606870174
+  },
+  {
+    "date": "2023-04-26",
+    "total_equity_inr": 1252366.3632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1252331.38,
+    "drawdown_pct": 4.86924691262137
+  },
+  {
+    "date": "2023-04-27",
+    "total_equity_inr": 1290433.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1290398.21,
+    "drawdown_pct": 1.9776599840998
+  },
+  {
+    "date": "2023-04-28",
+    "total_equity_inr": 1314167.0632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1314132.08,
+    "drawdown_pct": 0.17481618924663656
+  },
+  {
+    "date": "2023-05-02",
+    "total_equity_inr": 1322559.6132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1322524.63,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-05-03",
+    "total_equity_inr": 1315129.2232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1315094.24,
+    "drawdown_pct": 0.5618189097746449
+  },
+  {
+    "date": "2023-05-04",
+    "total_equity_inr": 1291955.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1291920.54,
+    "drawdown_pct": 2.314004578285273
+  },
+  {
+    "date": "2023-05-05",
+    "total_equity_inr": 1253679.5532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1253644.57,
+    "drawdown_pct": 5.208087356708345
+  },
+  {
+    "date": "2023-05-08",
+    "total_equity_inr": 1280499.3632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1280464.38,
+    "drawdown_pct": 3.180215816376934
+  },
+  {
+    "date": "2023-05-09",
+    "total_equity_inr": 1292520.7032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1292485.72,
+    "drawdown_pct": 2.2712707767719698
+  },
+  {
+    "date": "2023-05-10",
+    "total_equity_inr": 1289138.3832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1289103.4,
+    "drawdown_pct": 2.5270112338555113
+  },
+  {
+    "date": "2023-05-11",
+    "total_equity_inr": 1270290.6932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1270255.71,
+    "drawdown_pct": 3.9521031398753133
+  },
+  {
+    "date": "2023-05-12",
+    "total_equity_inr": 1236468.8532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1236433.87,
+    "drawdown_pct": 6.509404879807198
+  },
+  {
+    "date": "2023-05-15",
+    "total_equity_inr": 1266630.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1266595.68,
+    "drawdown_pct": 4.228841516238128
+  },
+  {
+    "date": "2023-05-16",
+    "total_equity_inr": 1282324.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1282289.54,
+    "drawdown_pct": 3.0422137193989434
+  },
+  {
+    "date": "2023-05-17",
+    "total_equity_inr": 1282818.5132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1282783.53,
+    "drawdown_pct": 3.0048626620197783
+  },
+  {
+    "date": "2023-05-18",
+    "total_equity_inr": 1267914.1132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1267879.13,
+    "drawdown_pct": 4.131798631577933
+  },
+  {
+    "date": "2023-05-19",
+    "total_equity_inr": 1237961.1432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1237926.16,
+    "drawdown_pct": 6.3965714025781955
+  },
+  {
+    "date": "2023-05-22",
+    "total_equity_inr": 1271874.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1271839.21,
+    "drawdown_pct": 3.832373187123419
+  },
+  {
+    "date": "2023-05-23",
+    "total_equity_inr": 1291449.7932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1291414.81,
+    "drawdown_pct": 2.352243308316985
+  },
+  {
+    "date": "2023-05-24",
+    "total_equity_inr": 1295822.8032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1295787.82,
+    "drawdown_pct": 2.021595830777634
+  },
+  {
+    "date": "2023-05-25",
+    "total_equity_inr": 1284655.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1284620.69,
+    "drawdown_pct": 2.8659532335400364
+  },
+  {
+    "date": "2023-05-26",
+    "total_equity_inr": 1317278.4532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1317243.47,
+    "drawdown_pct": 0.39931356948228336
+  },
+  {
+    "date": "2023-05-29",
+    "total_equity_inr": 1357319.0432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1357284.06,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-05-30",
+    "total_equity_inr": 1382282.3032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1382247.32,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-05-31",
+    "total_equity_inr": 1391110.6232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1391075.64,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-06-01",
+    "total_equity_inr": 1383297.5432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1383262.56,
+    "drawdown_pct": 0.5616433279782893
+  },
+  {
+    "date": "2023-06-02",
+    "total_equity_inr": 1358922.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1358887.69,
+    "drawdown_pct": 2.3138310831066335
+  },
+  {
+    "date": "2023-06-05",
+    "total_equity_inr": 1318663.3932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1318628.41,
+    "drawdown_pct": 5.207869797827305
+  },
+  {
+    "date": "2023-06-06",
+    "total_equity_inr": 1346872.9032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1346837.92,
+    "drawdown_pct": 3.1800289108740376
+  },
+  {
+    "date": "2023-06-07",
+    "total_equity_inr": 1359518.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1359483.68,
+    "drawdown_pct": 2.2709883364507975
+  },
+  {
+    "date": "2023-06-08",
+    "total_equity_inr": 1355963.2832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1355928.3,
+    "drawdown_pct": 2.5265668605958784
+  },
+  {
+    "date": "2023-06-09",
+    "total_equity_inr": 1336137.0632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1336102.08,
+    "drawdown_pct": 3.951774868453179
+  },
+  {
+    "date": "2023-06-12",
+    "total_equity_inr": 1300562.0432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1300527.06,
+    "drawdown_pct": 6.509085509800023
+  },
+  {
+    "date": "2023-06-13",
+    "total_equity_inr": 1332288.6932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1332253.71,
+    "drawdown_pct": 4.228414981454941
+  },
+  {
+    "date": "2023-06-14",
+    "total_equity_inr": 1348794.2832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1348759.3,
+    "drawdown_pct": 3.0419104918240696
+  },
+  {
+    "date": "2023-06-15",
+    "total_equity_inr": 1349312.3432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1349277.36,
+    "drawdown_pct": 3.004669743938161
+  },
+  {
+    "date": "2023-06-16",
+    "total_equity_inr": 1333635.5632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1333600.58,
+    "drawdown_pct": 4.131595219062374
+  },
+  {
+    "date": "2023-06-19",
+    "total_equity_inr": 1302130.7232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1302095.74,
+    "drawdown_pct": 6.3963209335083455
+  },
+  {
+    "date": "2023-06-20",
+    "total_equity_inr": 1337801.8932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1337766.91,
+    "drawdown_pct": 3.8320985485232546
+  },
+  {
+    "date": "2023-06-21",
+    "total_equity_inr": 1358391.3932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1358356.41,
+    "drawdown_pct": 2.35202215081467
+  },
+  {
+    "date": "2023-06-22",
+    "total_equity_inr": 1362991.9832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1362957.0,
+    "drawdown_pct": 2.0213086961637976
+  },
+  {
+    "date": "2023-06-23",
+    "total_equity_inr": 1351246.3932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1351211.41,
+    "drawdown_pct": 2.865640541821146
+  },
+  {
+    "date": "2023-06-26",
+    "total_equity_inr": 1323379.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1323344.6,
+    "drawdown_pct": 4.868846436108504
+  },
+  {
+    "date": "2023-06-27",
+    "total_equity_inr": 1363605.6232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1363570.64,
+    "drawdown_pct": 1.9771971790949083
+  },
+  {
+    "date": "2023-06-28",
+    "total_equity_inr": 1388685.4632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1388650.48,
+    "drawdown_pct": 0.17433264900395593
+  },
+  {
+    "date": "2023-06-30",
+    "total_equity_inr": 1397556.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1397521.73,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-07-03",
+    "total_equity_inr": 1389706.4932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1389671.51,
+    "drawdown_pct": 0.5617102995430697
+  },
+  {
+    "date": "2023-07-04",
+    "total_equity_inr": 1365219.4732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1365184.49,
+    "drawdown_pct": 2.3138409836662075
+  },
+  {
+    "date": "2023-07-05",
+    "total_equity_inr": 1324773.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1324738.59,
+    "drawdown_pct": 5.207884539679803
+  },
+  {
+    "date": "2023-07-06",
+    "total_equity_inr": 1353115.1032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1353080.12,
+    "drawdown_pct": 3.1799503791328503
+  },
+  {
+    "date": "2023-07-07",
+    "total_equity_inr": 1365818.0332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1365783.05,
+    "drawdown_pct": 2.2710119525187364
+  },
+  {
+    "date": "2023-07-10",
+    "total_equity_inr": 1362246.2832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1362211.3,
+    "drawdown_pct": 2.5265829763108036
+  },
+  {
+    "date": "2023-07-11",
+    "total_equity_inr": 1342331.7932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1342296.81,
+    "drawdown_pct": 3.951533378101768
+  },
+  {
+    "date": "2023-07-12",
+    "total_equity_inr": 1306592.9232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1306557.94,
+    "drawdown_pct": 6.508772713181655
+  },
+  {
+    "date": "2023-07-13",
+    "total_equity_inr": 1338466.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1338431.33,
+    "drawdown_pct": 4.228121795837544
+  },
+  {
+    "date": "2023-07-14",
+    "total_equity_inr": 1355049.0632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1355014.08,
+    "drawdown_pct": 3.041568875059803
+  },
+  {
+    "date": "2023-07-17",
+    "total_equity_inr": 1355570.9832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1355536.0,
+    "drawdown_pct": 3.0042237000790357
+  },
+  {
+    "date": "2023-07-18",
+    "total_equity_inr": 1339820.9832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1339786.0,
+    "drawdown_pct": 4.131190487991139
+  },
+  {
+    "date": "2023-07-19",
+    "total_equity_inr": 1308169.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1308134.99,
+    "drawdown_pct": 6.3959293498243985
+  },
+  {
+    "date": "2023-07-20",
+    "total_equity_inr": 1344009.3632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1343974.38,
+    "drawdown_pct": 3.8314974622669933
+  },
+  {
+    "date": "2023-07-21",
+    "total_equity_inr": 1364695.3632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1364660.38,
+    "drawdown_pct": 2.35134286069558
+  },
+  {
+    "date": "2023-07-24",
+    "total_equity_inr": 1399352.8632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1399317.88,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-07-25",
+    "total_equity_inr": 1387293.7232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1387258.74,
+    "drawdown_pct": 0.8617654858277493
+  },
+  {
+    "date": "2023-07-26",
+    "total_equity_inr": 1358685.5932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1358650.61,
+    "drawdown_pct": 2.9061483396691847
+  },
+  {
+    "date": "2023-07-27",
+    "total_equity_inr": 1399986.0332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1399951.05,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-07-28",
+    "total_equity_inr": 1425735.3932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1425700.41,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-07-31",
+    "total_equity_inr": 1434843.4132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1434808.43,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-08-01",
+    "total_equity_inr": 1426785.7832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1426750.8,
+    "drawdown_pct": 0.5615685952817531
+  },
+  {
+    "date": "2023-08-02",
+    "total_equity_inr": 1401645.2832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1401610.3,
+    "drawdown_pct": 2.3137110080856313
+  },
+  {
+    "date": "2023-08-03",
+    "total_equity_inr": 1360121.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1360086.65,
+    "drawdown_pct": 5.207660941437146
+  },
+  {
+    "date": "2023-08-04",
+    "total_equity_inr": 1389219.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1389184.73,
+    "drawdown_pct": 3.1796988842322267
+  },
+  {
+    "date": "2023-08-07",
+    "total_equity_inr": 1402263.8232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1402228.84,
+    "drawdown_pct": 2.2706024713415047
+  },
+  {
+    "date": "2023-08-08",
+    "total_equity_inr": 1398595.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1398560.7,
+    "drawdown_pct": 2.5262498797105675
+  },
+  {
+    "date": "2023-08-09",
+    "total_equity_inr": 1378148.5632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1378113.58,
+    "drawdown_pct": 3.951291791036533
+  },
+  {
+    "date": "2023-08-10",
+    "total_equity_inr": 1341455.3532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1341420.37,
+    "drawdown_pct": 6.508588961057789
+  },
+  {
+    "date": "2023-08-11",
+    "total_equity_inr": 1374179.2332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1374144.25,
+    "drawdown_pct": 4.2279303401272355
+  },
+  {
+    "date": "2023-08-14",
+    "total_equity_inr": 1391205.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1391170.1,
+    "drawdown_pct": 3.0413304754054957
+  },
+  {
+    "date": "2023-08-16",
+    "total_equity_inr": 1391743.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1391708.76,
+    "drawdown_pct": 3.0037890966707472
+  },
+  {
+    "date": "2023-08-17",
+    "total_equity_inr": 1375574.4132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1375539.43,
+    "drawdown_pct": 4.130694642687021
+  },
+  {
+    "date": "2023-08-18",
+    "total_equity_inr": 1343079.2132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1343044.23,
+    "drawdown_pct": 6.39541563600635
+  },
+  {
+    "date": "2023-08-21",
+    "total_equity_inr": 1379873.6932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1379838.71,
+    "drawdown_pct": 3.8310605529704502
+  },
+  {
+    "date": "2023-08-22",
+    "total_equity_inr": 1401113.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1401078.83,
+    "drawdown_pct": 2.3507512868443223
+  },
+  {
+    "date": "2023-08-23",
+    "total_equity_inr": 1405858.2132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1405823.23,
+    "drawdown_pct": 2.0200949966628734
+  },
+  {
+    "date": "2023-08-24",
+    "total_equity_inr": 1393744.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1393709.59,
+    "drawdown_pct": 2.8643432183544695
+  },
+  {
+    "date": "2023-08-25",
+    "total_equity_inr": 1365003.9632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1364968.98,
+    "drawdown_pct": 4.867391755609308
+  },
+  {
+    "date": "2023-08-28",
+    "total_equity_inr": 1406495.9032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1406460.92,
+    "drawdown_pct": 1.9756518195096384
+  },
+  {
+    "date": "2023-08-29",
+    "total_equity_inr": 1432364.7032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1432329.72,
+    "drawdown_pct": 0.17275125474994932
+  },
+  {
+    "date": "2023-08-30",
+    "total_equity_inr": 1441514.4232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1441479.44,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-08-31",
+    "total_equity_inr": 1433418.2432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1433383.26,
+    "drawdown_pct": 0.5616440508467054
+  },
+  {
+    "date": "2023-09-01",
+    "total_equity_inr": 1408160.7232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1408125.74,
+    "drawdown_pct": 2.3137957874856734
+  },
+  {
+    "date": "2023-09-04",
+    "total_equity_inr": 1366446.2232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1366411.24,
+    "drawdown_pct": 5.207592708878836
+  },
+  {
+    "date": "2023-09-05",
+    "total_equity_inr": 1395680.1932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1395645.21,
+    "drawdown_pct": 3.1795887201914472
+  },
+  {
+    "date": "2023-09-06",
+    "total_equity_inr": 1408784.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1408749.54,
+    "drawdown_pct": 2.2705218534923364
+  },
+  {
+    "date": "2023-09-07",
+    "total_equity_inr": 1405101.0732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1405066.09,
+    "drawdown_pct": 2.5260482596605907
+  },
+  {
+    "date": "2023-09-08",
+    "total_equity_inr": 1384559.8032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1384524.82,
+    "drawdown_pct": 3.951026717690909
+  },
+  {
+    "date": "2023-09-11",
+    "total_equity_inr": 1347697.8832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1347662.9,
+    "drawdown_pct": 6.508192945564695
+  },
+  {
+    "date": "2023-09-12",
+    "total_equity_inr": 1380575.3032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1380540.32,
+    "drawdown_pct": 4.227437410214877
+  },
+  {
+    "date": "2023-09-13",
+    "total_equity_inr": 1397680.7732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1397645.79,
+    "drawdown_pct": 3.040805509437375
+  },
+  {
+    "date": "2023-09-14",
+    "total_equity_inr": 1398221.5432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1398186.56,
+    "drawdown_pct": 3.003291490063254
+  },
+  {
+    "date": "2023-09-15",
+    "total_equity_inr": 1381975.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1381940.99,
+    "drawdown_pct": 4.1302708486142885
+  },
+  {
+    "date": "2023-09-18",
+    "total_equity_inr": 1349329.9432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1349294.96,
+    "drawdown_pct": 6.394974515437786
+  },
+  {
+    "date": "2023-09-20",
+    "total_equity_inr": 1383595.5132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1383560.53,
+    "drawdown_pct": 4.017920949512702
+  },
+  {
+    "date": "2023-09-21",
+    "total_equity_inr": 1404890.8232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1404855.84,
+    "drawdown_pct": 2.540633614938082
+  },
+  {
+    "date": "2023-09-22",
+    "total_equity_inr": 1409649.4732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1409614.49,
+    "drawdown_pct": 2.2105189852532585
+  },
+  {
+    "date": "2023-09-25",
+    "total_equity_inr": 1397503.1632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1397468.18,
+    "drawdown_pct": 3.0531265793581137
+  },
+  {
+    "date": "2023-09-26",
+    "total_equity_inr": 1368685.5032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1368650.52,
+    "drawdown_pct": 5.052250524023754
+  },
+  {
+    "date": "2023-09-27",
+    "total_equity_inr": 1410290.8632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1410255.88,
+    "drawdown_pct": 2.166024806792235
+  },
+  {
+    "date": "2023-09-28",
+    "total_equity_inr": 1436231.9132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1436196.93,
+    "drawdown_pct": 0.3664555772028574
+  },
+  {
+    "date": "2023-09-29",
+    "total_equity_inr": 1445408.4032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1445373.42,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-10-03",
+    "total_equity_inr": 1437291.9032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1437256.92,
+    "drawdown_pct": 0.5615367934786336
+  },
+  {
+    "date": "2023-10-04",
+    "total_equity_inr": 1411967.6232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1411932.64,
+    "drawdown_pct": 2.3135869368107462
+  },
+  {
+    "date": "2023-10-05",
+    "total_equity_inr": 1370138.5932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1370103.61,
+    "drawdown_pct": 5.207511581734244
+  },
+  {
+    "date": "2023-10-06",
+    "total_equity_inr": 1399451.8932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1399416.91,
+    "drawdown_pct": 3.179482691414866
+  },
+  {
+    "date": "2023-10-09",
+    "total_equity_inr": 1412592.4232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1412557.44,
+    "drawdown_pct": 2.2703603996869304
+  },
+  {
+    "date": "2023-10-10",
+    "total_equity_inr": 1408898.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1408863.73,
+    "drawdown_pct": 2.5259082429001336
+  },
+  {
+    "date": "2023-10-11",
+    "total_equity_inr": 1388303.0532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1388268.07,
+    "drawdown_pct": 3.9508107102168535
+  },
+  {
+    "date": "2023-10-12",
+    "total_equity_inr": 1351341.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1351306.33,
+    "drawdown_pct": 6.5079938508551765
+  },
+  {
+    "date": "2023-10-13",
+    "total_equity_inr": 1384307.4332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1384272.45,
+    "drawdown_pct": 4.227246075554018
+  },
+  {
+    "date": "2023-10-16",
+    "total_equity_inr": 1401460.4532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1401425.47,
+    "drawdown_pct": 3.0405212743127352
+  },
+  {
+    "date": "2023-10-17",
+    "total_equity_inr": 1402003.8532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1401968.87,
+    "drawdown_pct": 3.002926363504346
+  },
+  {
+    "date": "2023-10-18",
+    "total_equity_inr": 1385716.0532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1385681.07,
+    "drawdown_pct": 4.129791266457748
+  },
+  {
+    "date": "2023-10-19",
+    "total_equity_inr": 1352982.0032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1352947.02,
+    "drawdown_pct": 6.394483371992063
+  },
+  {
+    "date": "2023-10-20",
+    "total_equity_inr": 1390048.4732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1390013.49,
+    "drawdown_pct": 3.8300545283560172
+  },
+  {
+    "date": "2023-10-23",
+    "total_equity_inr": 1411444.6432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1411409.66,
+    "drawdown_pct": 2.3497690981183856
+  },
+  {
+    "date": "2023-10-25",
+    "total_equity_inr": 1416225.7532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1416190.77,
+    "drawdown_pct": 2.0189899225293226
+  },
+  {
+    "date": "2023-10-26",
+    "total_equity_inr": 1404024.0632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1403989.08,
+    "drawdown_pct": 2.8631589458300444
+  },
+  {
+    "date": "2023-10-27",
+    "total_equity_inr": 1375073.0132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1375038.03,
+    "drawdown_pct": 4.866125715353804
+  },
+  {
+    "date": "2023-10-30",
+    "total_equity_inr": 1416871.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1416836.59,
+    "drawdown_pct": 1.9743091251456757
+  },
+  {
+    "date": "2023-10-31",
+    "total_equity_inr": 1442934.1432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1442899.16,
+    "drawdown_pct": 0.17118068460943067
+  },
+  {
+    "date": "2023-11-01",
+    "total_equity_inr": 1452151.9632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1452116.98,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-11-02",
+    "total_equity_inr": 1443997.0332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1443962.05,
+    "drawdown_pct": 0.5615755242329862
+  },
+  {
+    "date": "2023-11-03",
+    "total_equity_inr": 1418554.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1418519.65,
+    "drawdown_pct": 2.3136235636085942
+  },
+  {
+    "date": "2023-11-06",
+    "total_equity_inr": 1376532.5532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1376497.57,
+    "drawdown_pct": 5.207403351462136
+  },
+  {
+    "date": "2023-11-07",
+    "total_equity_inr": 1405984.0032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1405949.02,
+    "drawdown_pct": 3.179278833756701
+  },
+  {
+    "date": "2023-11-08",
+    "total_equity_inr": 1419187.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1419152.78,
+    "drawdown_pct": 2.2700241321410486
+  },
+  {
+    "date": "2023-11-09",
+    "total_equity_inr": 1415478.3432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1415443.36,
+    "drawdown_pct": 2.5254670949991387
+  },
+  {
+    "date": "2023-11-10",
+    "total_equity_inr": 1394786.9132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1394751.93,
+    "drawdown_pct": 3.950347584393914
+  },
+  {
+    "date": "2023-11-13",
+    "total_equity_inr": 1357653.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1357618.76,
+    "drawdown_pct": 6.507460816412165
+  },
+  {
+    "date": "2023-11-15",
+    "total_equity_inr": 1390774.9532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1390739.97,
+    "drawdown_pct": 4.226624454974258
+  },
+  {
+    "date": "2023-11-16",
+    "total_equity_inr": 1408008.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1407973.73,
+    "drawdown_pct": 3.0398505885516816
+  },
+  {
+    "date": "2023-11-17",
+    "total_equity_inr": 1408553.4032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1408518.42,
+    "drawdown_pct": 3.002341428780296
+  },
+  {
+    "date": "2023-11-20",
+    "total_equity_inr": 1444324.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1444289.33,
+    "drawdown_pct": 0.5390379380647454
+  },
+  {
+    "date": "2023-11-21",
+    "total_equity_inr": 1410207.2832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1410172.3,
+    "drawdown_pct": 2.8884497671696567
+  },
+  {
+    "date": "2023-11-22",
+    "total_equity_inr": 1448841.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1448806.7,
+    "drawdown_pct": 0.22795685877842842
+  },
+  {
+    "date": "2023-11-23",
+    "total_equity_inr": 1471142.4332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1471107.45,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-11-24",
+    "total_equity_inr": 1476125.9432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1476090.96,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-11-28",
+    "total_equity_inr": 1463406.9132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1463371.93,
+    "drawdown_pct": 0.8616493774526596
+  },
+  {
+    "date": "2023-11-29",
+    "total_equity_inr": 1433230.6132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1433195.63,
+    "drawdown_pct": 2.905939713179888
+  },
+  {
+    "date": "2023-11-30",
+    "total_equity_inr": 1476797.9032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1476762.92,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-12-01",
+    "total_equity_inr": 1503960.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1503925.78,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-12-04",
+    "total_equity_inr": 1513569.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1513534.33,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2023-12-05",
+    "total_equity_inr": 1505069.9032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1505034.92,
+    "drawdown_pct": 0.5615474577791539
+  },
+  {
+    "date": "2023-12-06",
+    "total_equity_inr": 1478552.1732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1478517.19,
+    "drawdown_pct": 2.3135471692384204
+  },
+  {
+    "date": "2023-12-07",
+    "total_equity_inr": 1434752.5632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1434717.58,
+    "drawdown_pct": 5.207343285347469
+  },
+  {
+    "date": "2023-12-08",
+    "total_equity_inr": 1465449.6732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1465414.69,
+    "drawdown_pct": 3.1792161469146785
+  },
+  {
+    "date": "2023-12-11",
+    "total_equity_inr": 1479211.7032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1479176.72,
+    "drawdown_pct": 2.269972686441487
+  },
+  {
+    "date": "2023-12-12",
+    "total_equity_inr": 1475345.2032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1475310.22,
+    "drawdown_pct": 2.525428446959346
+  },
+  {
+    "date": "2023-12-13",
+    "total_equity_inr": 1453777.5532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1453742.57,
+    "drawdown_pct": 3.9503813587227
+  },
+  {
+    "date": "2023-12-14",
+    "total_equity_inr": 1415075.3532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1415040.37,
+    "drawdown_pct": 6.507396730432074
+  },
+  {
+    "date": "2023-12-15",
+    "total_equity_inr": 1449597.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1449562.7,
+    "drawdown_pct": 4.226541159502678
+  },
+  {
+    "date": "2023-12-18",
+    "total_equity_inr": 1467560.5332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1467525.55,
+    "drawdown_pct": 3.039753752851125
+  },
+  {
+    "date": "2023-12-19",
+    "total_equity_inr": 1468127.4132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1468092.43,
+    "drawdown_pct": 3.002300562233677
+  },
+  {
+    "date": "2023-12-20",
+    "total_equity_inr": 1451071.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1451036.73,
+    "drawdown_pct": 4.12915348210034
+  },
+  {
+    "date": "2023-12-21",
+    "total_equity_inr": 1416794.8732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1416759.89,
+    "drawdown_pct": 6.393789775996365
+  },
+  {
+    "date": "2023-12-22",
+    "total_equity_inr": 1455611.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1455576.1,
+    "drawdown_pct": 3.8292418784220894
+  },
+  {
+    "date": "2023-12-26",
+    "total_equity_inr": 1478018.9232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1477983.94,
+    "drawdown_pct": 2.3487784596292514
+  },
+  {
+    "date": "2023-12-27",
+    "total_equity_inr": 1483025.9432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1482990.96,
+    "drawdown_pct": 2.017969691485418
+  },
+  {
+    "date": "2023-12-28",
+    "total_equity_inr": 1470247.4132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1470212.43,
+    "drawdown_pct": 2.8622342975762702
+  },
+  {
+    "date": "2023-12-29",
+    "total_equity_inr": 1439930.1532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1439895.17,
+    "drawdown_pct": 4.865265129108063
+  },
+  {
+    "date": "2024-01-01",
+    "total_equity_inr": 1483700.8632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1483665.88,
+    "drawdown_pct": 1.973378406889863
+  },
+  {
+    "date": "2024-01-02",
+    "total_equity_inr": 1510991.5132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1510956.53,
+    "drawdown_pct": 0.1703126495442746
+  },
+  {
+    "date": "2024-01-03",
+    "total_equity_inr": 1520646.7132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1520611.73,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-01-04",
+    "total_equity_inr": 1512109.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1512074.46,
+    "drawdown_pct": 0.5614236315307218
+  },
+  {
+    "date": "2024-01-05",
+    "total_equity_inr": 1485467.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1485432.33,
+    "drawdown_pct": 2.3134499088200178
+  },
+  {
+    "date": "2024-01-08",
+    "total_equity_inr": 1441463.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1441428.6,
+    "drawdown_pct": 5.207200943693856
+  },
+  {
+    "date": "2024-01-09",
+    "total_equity_inr": 1472304.0732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1472269.09,
+    "drawdown_pct": 3.1790842396436254
+  },
+  {
+    "date": "2024-01-10",
+    "total_equity_inr": 1486129.1132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1486094.13,
+    "drawdown_pct": 2.269928951962963
+  },
+  {
+    "date": "2024-01-11",
+    "total_equity_inr": 1482245.5632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1482210.58,
+    "drawdown_pct": 2.525317002736938
+  },
+  {
+    "date": "2024-01-12",
+    "total_equity_inr": 1460579.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1460544.04,
+    "drawdown_pct": 3.950141047133524
+  },
+  {
+    "date": "2024-01-15",
+    "total_equity_inr": 1421695.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1421660.46,
+    "drawdown_pct": 6.507183367514084
+  },
+  {
+    "date": "2024-01-16",
+    "total_equity_inr": 1456380.0932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1456345.11,
+    "drawdown_pct": 4.226268957946148
+  },
+  {
+    "date": "2024-01-17",
+    "total_equity_inr": 1493366.2432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1493331.26,
+    "drawdown_pct": 1.794004469492579
+  },
+  {
+    "date": "2024-01-18",
+    "total_equity_inr": 1493946.2132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1493911.23,
+    "drawdown_pct": 1.755864775705353
+  },
+  {
+    "date": "2024-01-19",
+    "total_equity_inr": 1476592.4832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1476557.5,
+    "drawdown_pct": 2.897071990330594
+  },
+  {
+    "date": "2024-01-20",
+    "total_equity_inr": 1441714.3532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1441679.37,
+    "drawdown_pct": 5.190709933795029
+  },
+  {
+    "date": "2024-01-23",
+    "total_equity_inr": 1481213.7232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1481178.74,
+    "drawdown_pct": 2.5931723429052425
+  },
+  {
+    "date": "2024-01-24",
+    "total_equity_inr": 1504013.8732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1503978.89,
+    "drawdown_pct": 1.0938004110763102
+  },
+  {
+    "date": "2024-01-25",
+    "total_equity_inr": 1509111.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1509076.59,
+    "drawdown_pct": 0.7585680421276697
+  },
+  {
+    "date": "2024-01-29",
+    "total_equity_inr": 1496108.7332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1496073.75,
+    "drawdown_pct": 1.6136542292826888
+  },
+  {
+    "date": "2024-01-30",
+    "total_equity_inr": 1465259.0132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1465224.03,
+    "drawdown_pct": 3.6423779119243225
+  },
+  {
+    "date": "2024-01-31",
+    "total_equity_inr": 1509798.9532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1509763.97,
+    "drawdown_pct": 0.7133649062491526
+  },
+  {
+    "date": "2024-02-01",
+    "total_equity_inr": 1537572.2432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1537537.26,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-02-02",
+    "total_equity_inr": 1547396.5432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1547361.56,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-02-05",
+    "total_equity_inr": 1538709.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1538674.33,
+    "drawdown_pct": 0.5614094226961952
+  },
+  {
+    "date": "2024-02-06",
+    "total_equity_inr": 1511599.4732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1511564.49,
+    "drawdown_pct": 2.3133740447663165
+  },
+  {
+    "date": "2024-02-07",
+    "total_equity_inr": 1466820.3432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1466785.36,
+    "drawdown_pct": 5.20721080540669
+  },
+  {
+    "date": "2024-02-08",
+    "total_equity_inr": 1498205.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1498170.68,
+    "drawdown_pct": 3.1789446742768193
+  },
+  {
+    "date": "2024-02-09",
+    "total_equity_inr": 1512275.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1512240.78,
+    "drawdown_pct": 2.269669022742586
+  },
+  {
+    "date": "2024-02-12",
+    "total_equity_inr": 1508323.9132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1508288.93,
+    "drawdown_pct": 2.525056047960286
+  },
+  {
+    "date": "2024-02-13",
+    "total_equity_inr": 1486274.4132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1486239.43,
+    "drawdown_pct": 3.949997837890995
+  },
+  {
+    "date": "2024-02-14",
+    "total_equity_inr": 1446707.8532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1446672.87,
+    "drawdown_pct": 6.506973951988857
+  },
+  {
+    "date": "2024-02-15",
+    "total_equity_inr": 1482001.5232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1481966.54,
+    "drawdown_pct": 4.22613196904032
+  },
+  {
+    "date": "2024-02-16",
+    "total_equity_inr": 1500367.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1500332.6,
+    "drawdown_pct": 3.039231295085137
+  },
+  {
+    "date": "2024-02-19",
+    "total_equity_inr": 1500950.1532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1500915.17,
+    "drawdown_pct": 3.001582897681117
+  },
+  {
+    "date": "2024-02-20",
+    "total_equity_inr": 1483514.0532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1483479.07,
+    "drawdown_pct": 4.128385208092276
+  },
+  {
+    "date": "2024-02-21",
+    "total_equity_inr": 1448471.6332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1448436.65,
+    "drawdown_pct": 6.392990241236052
+  },
+  {
+    "date": "2024-02-22",
+    "total_equity_inr": 1488157.1232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1488122.14,
+    "drawdown_pct": 3.8283283144405567
+  },
+  {
+    "date": "2024-02-23",
+    "total_equity_inr": 1511065.1332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1511030.15,
+    "drawdown_pct": 2.34790559405458
+  },
+  {
+    "date": "2024-02-26",
+    "total_equity_inr": 1516185.9832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1516151.0,
+    "drawdown_pct": 2.016972322780099
+  },
+  {
+    "date": "2024-02-27",
+    "total_equity_inr": 1503123.7532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1503088.77,
+    "drawdown_pct": 2.8611147022756254
+  },
+  {
+    "date": "2024-02-28",
+    "total_equity_inr": 1472130.0732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1472095.09,
+    "drawdown_pct": 4.864071225359578
+  },
+  {
+    "date": "2024-02-29",
+    "total_equity_inr": 1516882.2632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1516847.28,
+    "drawdown_pct": 1.9719754534863303
+  },
+  {
+    "date": "2024-03-01",
+    "total_equity_inr": 1544786.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1544751.04,
+    "drawdown_pct": 0.16870400877343772
+  },
+  {
+    "date": "2024-03-04",
+    "total_equity_inr": 1554658.7532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1554623.77,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-03-05",
+    "total_equity_inr": 1545931.1832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1545896.2,
+    "drawdown_pct": 0.5613817168581713
+  },
+  {
+    "date": "2024-03-06",
+    "total_equity_inr": 1518694.5432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1518659.56,
+    "drawdown_pct": 2.3133185932908944
+  },
+  {
+    "date": "2024-03-07",
+    "total_equity_inr": 1473707.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1473672.33,
+    "drawdown_pct": 5.207023073930229
+  },
+  {
+    "date": "2024-03-11",
+    "total_equity_inr": 1505239.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1505204.7,
+    "drawdown_pct": 3.1787728270451163
+  },
+  {
+    "date": "2024-03-12",
+    "total_equity_inr": 1519376.0132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1519341.03,
+    "drawdown_pct": 2.26948453655032
+  },
+  {
+    "date": "2024-03-13",
+    "total_equity_inr": 1515406.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1515371.85,
+    "drawdown_pct": 2.524793297513465
+  },
+  {
+    "date": "2024-03-14",
+    "total_equity_inr": 1493257.6032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1493222.62,
+    "drawdown_pct": 3.9494937312523537
+  },
+  {
+    "date": "2024-03-15",
+    "total_equity_inr": 1531181.4832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1531146.5,
+    "drawdown_pct": 1.5101236815909629
+  },
+  {
+    "date": "2024-03-18",
+    "total_equity_inr": 1568538.1832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1568503.2,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-03-19",
+    "total_equity_inr": 1587975.2632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1587940.28,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-03-20",
+    "total_equity_inr": 1588590.3932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1588555.41,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-03-21",
+    "total_equity_inr": 1570137.0532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1570102.07,
+    "drawdown_pct": 1.1616172475290025
+  },
+  {
+    "date": "2024-03-22",
+    "total_equity_inr": 1533049.2032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1533014.22,
+    "drawdown_pct": 3.4962561927697298
+  },
+  {
+    "date": "2024-03-26",
+    "total_equity_inr": 1575051.1232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1575016.14,
+    "drawdown_pct": 0.8522820015754329
+  },
+  {
+    "date": "2024-03-27",
+    "total_equity_inr": 1599297.9932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1599263.01,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-03-28",
+    "total_equity_inr": 1604719.2432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1604684.26,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-04-01",
+    "total_equity_inr": 1590893.9332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1590858.95,
+    "drawdown_pct": 0.8615407373336346
+  },
+  {
+    "date": "2024-04-02",
+    "total_equity_inr": 1558089.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1558054.85,
+    "drawdown_pct": 2.905767485346249
+  },
+  {
+    "date": "2024-04-03",
+    "total_equity_inr": 1605454.4132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1605419.43,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-04-04",
+    "total_equity_inr": 1634986.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1634951.68,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-04-05",
+    "total_equity_inr": 1645436.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1645401.68,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-04-08",
+    "total_equity_inr": 1636198.6932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1636163.71,
+    "drawdown_pct": 0.5614296925920108
+  },
+  {
+    "date": "2024-04-09",
+    "total_equity_inr": 1607371.0132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1607336.03,
+    "drawdown_pct": 2.3134071855413123
+  },
+  {
+    "date": "2024-04-10",
+    "total_equity_inr": 1559756.7332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1559721.75,
+    "drawdown_pct": 5.207124158360008
+  },
+  {
+    "date": "2024-04-12",
+    "total_equity_inr": 1593129.2332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1593094.25,
+    "drawdown_pct": 3.178939133292068
+  },
+  {
+    "date": "2024-04-15",
+    "total_equity_inr": 1608090.5832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1608055.6,
+    "drawdown_pct": 2.2696759368039343
+  },
+  {
+    "date": "2024-04-16",
+    "total_equity_inr": 1603890.4532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1603855.47,
+    "drawdown_pct": 2.5249352302143353
+  },
+  {
+    "date": "2024-04-18",
+    "total_equity_inr": 1580446.9432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1580411.96,
+    "drawdown_pct": 3.949694415682326
+  },
+  {
+    "date": "2024-04-19",
+    "total_equity_inr": 1538373.3032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1538338.32,
+    "drawdown_pct": 6.506683751156129
+  },
+  {
+    "date": "2024-04-22",
+    "total_equity_inr": 1575905.7832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1575870.8,
+    "drawdown_pct": 4.225679514444407
+  },
+  {
+    "date": "2024-04-23",
+    "total_equity_inr": 1595436.4932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1595401.51,
+    "drawdown_pct": 3.0387173884141516
+  },
+  {
+    "date": "2024-04-24",
+    "total_equity_inr": 1596055.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1596020.78,
+    "drawdown_pct": 3.001081786032735
+  },
+  {
+    "date": "2024-04-25",
+    "total_equity_inr": 1577515.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1577480.76,
+    "drawdown_pct": 4.127835578180765
+  },
+  {
+    "date": "2024-04-26",
+    "total_equity_inr": 1540256.5332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1540221.55,
+    "drawdown_pct": 6.392232065344197
+  },
+  {
+    "date": "2024-04-29",
+    "total_equity_inr": 1582457.6932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1582422.71,
+    "drawdown_pct": 3.8274928113927054
+  },
+  {
+    "date": "2024-04-30",
+    "total_equity_inr": 1606818.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1606783.46,
+    "drawdown_pct": 2.346989152708944
+  },
+  {
+    "date": "2024-05-02",
+    "total_equity_inr": 1612265.8832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1612230.9,
+    "drawdown_pct": 2.0159256653179454
+  },
+  {
+    "date": "2024-05-03",
+    "total_equity_inr": 1598378.4632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1598343.48,
+    "drawdown_pct": 2.859921688415676
+  },
+  {
+    "date": "2024-05-06",
+    "total_equity_inr": 1565422.8032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1565387.82,
+    "drawdown_pct": 4.862773620492401
+  },
+  {
+    "date": "2024-05-07",
+    "total_equity_inr": 1613010.9932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1612976.01,
+    "drawdown_pct": 1.970642245015949
+  },
+  {
+    "date": "2024-05-08",
+    "total_equity_inr": 1642683.0832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1642648.1,
+    "drawdown_pct": 0.16734645954982633
+  },
+  {
+    "date": "2024-05-09",
+    "total_equity_inr": 1653180.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1653145.78,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-05-10",
+    "total_equity_inr": 1643901.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1643866.83,
+    "drawdown_pct": 0.5612786094872702
+  },
+  {
+    "date": "2024-05-13",
+    "total_equity_inr": 1614939.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1614904.83,
+    "drawdown_pct": 2.3131741459402435
+  },
+  {
+    "date": "2024-05-14",
+    "total_equity_inr": 1567102.6932,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1567067.71,
+    "drawdown_pct": 5.206815365633816
+  },
+  {
+    "date": "2024-05-15",
+    "total_equity_inr": 1600633.0232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1600598.04,
+    "drawdown_pct": 3.1785840465676185
+  },
+  {
+    "date": "2024-05-16",
+    "total_equity_inr": 1615667.1632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1615632.18,
+    "drawdown_pct": 2.269177142334171
+  },
+  {
+    "date": "2024-05-17",
+    "total_equity_inr": 1656701.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1656666.83,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-05-21",
+    "total_equity_inr": 1632487.1532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1632452.17,
+    "drawdown_pct": 1.4616184884368666
+  },
+  {
+    "date": "2024-05-22",
+    "total_equity_inr": 1589029.6632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1588994.68,
+    "drawdown_pct": 4.084751369305739
+  },
+  {
+    "date": "2024-05-23",
+    "total_equity_inr": 1627799.3032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1627764.32,
+    "drawdown_pct": 1.7445812981983402
+  },
+  {
+    "date": "2024-05-24",
+    "total_equity_inr": 1647974.6532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1647939.67,
+    "drawdown_pct": 0.526779166321009
+  },
+  {
+    "date": "2024-05-27",
+    "total_equity_inr": 1648616.8832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1648581.9,
+    "drawdown_pct": 0.4880135903505511
+  },
+  {
+    "date": "2024-05-28",
+    "total_equity_inr": 1629467.2232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1629432.24,
+    "drawdown_pct": 1.6439041584312066
+  },
+  {
+    "date": "2024-05-29",
+    "total_equity_inr": 1590979.6832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1590944.7,
+    "drawdown_pct": 3.96704642177306
+  },
+  {
+    "date": "2024-05-30",
+    "total_equity_inr": 1634570.5032,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1634535.52,
+    "drawdown_pct": 1.3358656231112767
+  },
+  {
+    "date": "2024-05-31",
+    "total_equity_inr": 1659734.8132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1659699.83,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-06-03",
+    "total_equity_inr": 1665360.5732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1665325.59,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-06-04",
+    "total_equity_inr": 1651014.7632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1650979.78,
+    "drawdown_pct": 0.8614236598885275
+  },
+  {
+    "date": "2024-06-05",
+    "total_equity_inr": 1616973.7532,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1616938.77,
+    "drawdown_pct": 2.9054861018490694
+  },
+  {
+    "date": "2024-06-06",
+    "total_equity_inr": 1666128.4432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1666093.46,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-06-07",
+    "total_equity_inr": 1696777.6432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1696742.66,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-06-10",
+    "total_equity_inr": 1707621.0132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1707586.03,
+    "drawdown_pct": 0.0
+  },
+  {
+    "date": "2024-06-11",
+    "total_equity_inr": 1698036.9632,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1698001.98,
+    "drawdown_pct": 0.5612515848607385
+  },
+  {
+    "date": "2024-06-12",
+    "total_equity_inr": 1668122.8332,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1668087.85,
+    "drawdown_pct": 2.313053054200961
+  },
+  {
+    "date": "2024-06-13",
+    "total_equity_inr": 1618709.4232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1618674.44,
+    "drawdown_pct": 5.206751926376447
+  },
+  {
+    "date": "2024-06-14",
+    "total_equity_inr": 1653344.9732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1653309.99,
+    "drawdown_pct": 3.178459364252569
+  },
+  {
+    "date": "2024-06-18",
+    "total_equity_inr": 1668874.1132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1668839.13,
+    "drawdown_pct": 2.2690573435489743
+  },
+  {
+    "date": "2024-06-19",
+    "total_equity_inr": 1664516.2732,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1664481.29,
+    "drawdown_pct": 2.524256826707923
+  },
+  {
+    "date": "2024-06-20",
+    "total_equity_inr": 1640185.2832,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1640150.3,
+    "drawdown_pct": 3.9491040153944152
+  },
+  {
+    "date": "2024-06-21",
+    "total_equity_inr": 1596522.9132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1596487.93,
+    "drawdown_pct": 6.506016214441369
+  },
+  {
+    "date": "2024-06-24",
+    "total_equity_inr": 1635473.8432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1635438.86,
+    "drawdown_pct": 4.225010669363904
+  },
+  {
+    "date": "2024-06-25",
+    "total_equity_inr": 1655743.3132,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1655708.33,
+    "drawdown_pct": 3.038010167301916
+  },
+  {
+    "date": "2024-06-26",
+    "total_equity_inr": 1656387.7432,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1656352.76,
+    "drawdown_pct": 3.0002716998657277
+  },
+  {
+    "date": "2024-06-27",
+    "total_equity_inr": 1637149.2232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1637114.24,
+    "drawdown_pct": 4.126898735448285
+  },
+  {
+    "date": "2024-06-28",
+    "total_equity_inr": 1598479.8232,
+    "cash_balance_inr": 34.9832,
+    "invested_inr": 1598444.84,
+    "drawdown_pct": 6.39141760123194
+  },
+  {
+    "date": "2024-06-28",
+    "total_equity_inr": 1595869.801,
+    "cash_balance_inr": 1595869.801,
+    "invested_inr": 0.0,
+    "drawdown_pct": 6.544263120221482
+  }
+]

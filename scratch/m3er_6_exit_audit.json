@@ -1,0 +1,153 @@
+{
+  "milestone": "M3ER.6",
+  "status": "ENGINEERING_EXIT_AUDIT_COMPLETED",
+  "verdict": "EXIT_LOGIC_REQUIRES_FIX",
+  "findings": [
+    "1. DISCOVERED DEFECT: In earnings_drift_v1.py:60, evaluate() delegates to generate_signals(current_date, data_portal) without passing active_positions. active_positions defaults to None.",
+    "2. CONSEQUENCE: self._bars_held counter was NEVER incremented during backtesting. The 30-session MAX_HOLDING_PERIOD exit condition was NEVER evaluated for any trade.",
+    "3. EXPLANATION OF 871-DAY WARNING: In Validation (M3ER), because zero trades hit ATR STOP_LOSS, all 10 trades remained open until FORCE_CLOSE liquidated them after 871 calendar days.",
+    "4. VERDICT: EXIT_LOGIC_REQUIRES_FIX. A one-line fix in evaluate() passing active_positions from the portfolio is required before the strategy can be evaluated under true 30-session time exit rules.",
+    "5. READ-ONLY AUDIT STRICTLY ENFORCED: Zero code edits made during M3ER.6. The codebase remains unchanged."
+  ],
+  "exit_logic_inspection": {
+    "strategy_class": "EarningsDriftV1Strategy",
+    "file_path": "src/tradecraft/strategy/earnings_drift_v1.py",
+    "entry_conditions": [
+      "1. Volume Expansion: volume_ratio >= min_volume_expansion_ratio (1.5x)",
+      "2. Price Surge: price_change_pct >= min_earnings_surge_pct (2.5%)",
+      "3. Session Filter: Single entry signal per surge session"
+    ],
+    "exit_conditions": [
+      "1. ATR Stop-Loss: Checked dynamically by ExecutionSimulator in BacktestEngine (low_price <= entry_price - 2.0*ATR)",
+      "2. Max Holding Period Exit: Evaluated in generate_signals() when sec_uuid in active_positions_set",
+      "3. Production EndOfBacktestPolicy.FORCE_CLOSE: Terminal exit at backtest end date"
+    ]
+  },
+  "holding_counter_trace": {
+    "counter_variable": "self._bars_held (dict[uuid.UUID, int])",
+    "initialization": "Initialized in __init__ as empty dictionary self._bars_held = {}",
+    "discovered_interface_defect": "In engine.py:315, BacktestEngine calls strategy.evaluate(current_date, portal). In earnings_drift_v1.py:60, evaluate() calls self.generate_signals(current_date, data_portal) WITHOUT passing active_positions! Consequently, active_positions defaults to None, active_positions_set is empty, and self._bars_held is NEVER incremented during backtest simulation.",
+    "impact_on_time_exits": "Because self._bars_held was never incremented, the time-based exit condition (holding_period_max_sessions = 30) was NEVER triggered for any trade in Development (M3D.4R) or Validation (M3ER).",
+    "impact_on_stop_loss": "Stop-loss exits were unaffected because ATR stop-loss checks are executed independently by ExecutionSimulator inside BacktestEngine."
+  },
+  "exit_trigger_coverage": {
+    "development_run_m3d_4r": {
+      "total_trades": 20,
+      "exit_reason_breakdown": {
+        "STOP_LOSS": 10,
+        "END_OF_BACKTEST": 10
+      },
+      "stop_loss_count": 10,
+      "max_holding_period_count": 0,
+      "force_close_count": 10,
+      "explanation": "10 trades exited via ATR STOP_LOSS. The remaining 10 trades held until FORCE_CLOSE at end-of-backtest because time exits were never evaluated due to the evaluate() interface defect."
+    },
+    "validation_run_m3er": {
+      "total_trades": 10,
+      "exit_reason_breakdown": {
+        "END_OF_BACKTEST": 10
+      },
+      "stop_loss_count": 0,
+      "max_holding_period_count": 0,
+      "force_close_count": 10,
+      "explanation": "Zero trades hit STOP_LOSS (100% win rate during 2022-2024 bull market). All 10 trades held until FORCE_CLOSE on June 28, 2024 because time exits were never evaluated due to the evaluate() interface defect."
+    }
+  },
+  "force_close_analysis": {
+    "policy_type": "EndOfBacktestPolicy.FORCE_CLOSE",
+    "role_in_validation": "FORCE_CLOSE acted as the PRIMARY exit mechanism for winning trades in Validation (and 50% of trades in Development) because time exits were bypassed by the evaluate() interface defect.",
+    "architectural_finding": "FORCE_CLOSE is intended as a safety net for backtest termination, but unintentionally became the sole exit mechanism for profitable positions."
+  },
+  "validation_trade_timelines": [
+    {
+      "trade_id": 1,
+      "symbol": "RELIANCE",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 63663.3126
+    },
+    {
+      "trade_id": 2,
+      "symbol": "TCS",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 50768.728
+    },
+    {
+      "trade_id": 3,
+      "symbol": "INFY",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 70723.66
+    },
+    {
+      "trade_id": 4,
+      "symbol": "HDFCBANK",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 42867.9338
+    },
+    {
+      "trade_id": 5,
+      "symbol": "ICICIBANK",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 80915.4944
+    },
+    {
+      "trade_id": 6,
+      "symbol": "TATASTEEL",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 51833.887
+    },
+    {
+      "trade_id": 7,
+      "symbol": "SBIN",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 60845.9436
+    },
+    {
+      "trade_id": 8,
+      "symbol": "BHARTIARTL",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 70082.1063
+    },
+    {
+      "trade_id": 9,
+      "symbol": "ITC",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 43305.0957
+    },
+    {
+      "trade_id": 10,
+      "symbol": "AXISBANK",
+      "entry_date": "2022-02-08",
+      "exit_date": "2024-06-28",
+      "actual_holding_days": 871,
+      "exit_reason": "END_OF_BACKTEST",
+      "net_pnl_inr": 60863.6396
+    }
+  ]
+}
