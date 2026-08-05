@@ -1,0 +1,86 @@
+{
+  "milestone": "M3D.4R2",
+  "status": "AUTHORITATIVE_DEVELOPMENT_BACKTEST_COMPLETED",
+  "certificate_id": "CERT-M3D-4R2-DEV-9A10B42F",
+  "hypothesis_uuid": "hypo-cycle2-alpha013-v1",
+  "strategy_id": "strat_earnings_drift_v1",
+  "version": "1.0.0",
+  "development_period": "2016-08-01 to 2021-12-31",
+  "policy": "FORCE_CLOSE",
+  "symbols_evaluated_count": 10,
+  "traded_symbols": [
+    "ITC",
+    "TATASTEEL",
+    "RELIANCE",
+    "BHARTIARTL",
+    "INFY",
+    "ICICIBANK",
+    "SBIN",
+    "TCS",
+    "HDFCBANK",
+    "AXISBANK"
+  ],
+  "timestamps": {
+    "first_trade_entry": "2016-09-30",
+    "last_trade_exit": "2021-12-30",
+    "max_drawdown_date": "2021-12-30"
+  },
+  "performance_metrics": {
+    "total_trades": 330,
+    "winning_trades": 106,
+    "losing_trades": 224,
+    "win_rate_pct": 32.12,
+    "gross_profit_inr": 286894.3638,
+    "gross_loss_inr": 676787.9193285714,
+    "net_pnl_inr": -389893.5555285714,
+    "total_return_pct": -38.99,
+    "cagr_pct": -8.72,
+    "profit_factor": 0.42,
+    "expectancy_r": -0.1,
+    "max_drawdown_pct": 43.82,
+    "sharpe_ratio": -0.7,
+    "sortino_ratio": -0.84,
+    "calmar_ratio": -0.2,
+    "exit_reasons_breakdown": {
+      "STOP_LOSS": 150,
+      "MAX_HOLDING_PERIOD": 180
+    },
+    "holding_period": {
+      "average_days": 24.9,
+      "median_days": 21,
+      "min_days": 1,
+      "max_days": 48
+    },
+    "transaction_frictions": {
+      "total_fees_inr": 65673.75,
+      "total_slippage_inr": 13541.9307,
+      "total_friction_inr": 79215.6807
+    },
+    "equity_curve_summary": {
+      "start_equity_inr": 1000000.0,
+      "max_equity_inr": 1086056.9677285715,
+      "end_equity_inr": 610106.4444714285,
+      "max_drawdown_date": "2021-12-30"
+    }
+  },
+  "supersedence": {
+    "supersedes_milestones": [
+      "M3D.4R",
+      "M3D.4.5R",
+      "M3ER",
+      "M3ER.5"
+    ],
+    "reason": "Previous results generated before M3R.4 interface remediation which restored 30-session holding-period exits.",
+    "authoritative_baseline_status": "M3D.4R2 IS NOW THE SOLE AUTHORITATIVE DEVELOPMENT BASELINE"
+  },
+  "reproducibility": {
+    "database_sha256": "6d336dcdf1e1a0454ca53a56861ada387f24e70c9aa476b74081c8014c81f28f",
+    "python_version": "3.11.9",
+    "sqlite_version": "3.45.1",
+    "operating_system": "Windows-10",
+    "execution_start_timestamp": "2026-08-05T15:03:24.047409+00:00",
+    "execution_end_timestamp": "2026-08-05T15:03:25.477531+00:00",
+    "duration_seconds": 1.43,
+    "validation_access_count": 0
+  }
+}

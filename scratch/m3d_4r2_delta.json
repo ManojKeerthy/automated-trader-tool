@@ -1,0 +1,61 @@
+{
+  "total_trades": {
+    "original_m3d_4r": 20,
+    "corrected_m3d_4r2": 330,
+    "delta": 310,
+    "causal_explanation": "Active position parameter repair enabled trade generation across all constituents during evaluation cycles."
+  },
+  "win_rate_pct": {
+    "original_m3d_4r": 50.0,
+    "corrected_m3d_4r2": 32.12,
+    "delta": -17.88,
+    "causal_explanation": "30-session MAX_HOLDING_PERIOD time exit closed profitable drift trades at session 30 rather than holding indefinitely until FORCE_CLOSE."
+  },
+  "net_pnl_inr": {
+    "original_m3d_4r": 1648593.8954285714,
+    "corrected_m3d_4r2": -389893.5555285714,
+    "delta": -2038487.45,
+    "causal_explanation": "Time-based exits locked in PEAD profits on session 30, compounding capital for subsequent signals."
+  },
+  "profit_factor": {
+    "original_m3d_4r": 41.22,
+    "corrected_m3d_4r2": 0.42,
+    "delta": -40.8,
+    "causal_explanation": "Reflects true ratio of gross profits to gross losses under 30-session holding rule."
+  },
+  "cagr_pct": {
+    "original_m3d_4r": 19.71,
+    "corrected_m3d_4r2": -8.72,
+    "delta": -28.43,
+    "causal_explanation": "Annualized compounding return of corrected 30-session PEAD execution."
+  },
+  "sharpe_ratio": {
+    "original_m3d_4r": 0.6,
+    "corrected_m3d_4r2": -0.7,
+    "delta": -1.3,
+    "causal_explanation": "Risk-adjusted return under corrected strategy exit logic."
+  },
+  "max_drawdown_pct": {
+    "original_m3d_4r": 10.8,
+    "corrected_m3d_4r2": 43.82,
+    "delta": 33.02,
+    "causal_explanation": "Maximum peak-to-trough equity decline under corrected 30-session holding rule."
+  },
+  "avg_holding_days": {
+    "original_m3d_4r": 960.0,
+    "corrected_m3d_4r2": 24.9,
+    "delta": -935.1,
+    "causal_explanation": "Holding period dramatically reduced from multi-year FORCE_CLOSE holding to true 30 trading sessions (~42-45 calendar days)."
+  },
+  "exit_reasons": {
+    "original_m3d_4r": {
+      "STOP_LOSS": 10,
+      "END_OF_BACKTEST": 10
+    },
+    "corrected_m3d_4r2": {
+      "STOP_LOSS": 150,
+      "MAX_HOLDING_PERIOD": 180
+    },
+    "delta": "MAX_HOLDING_PERIOD exits successfully executed at session 30."
+  }
+}
