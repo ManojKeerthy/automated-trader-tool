@@ -1,0 +1,21 @@
+{
+  "avg_win_inr": 2706.55,
+  "median_win_inr": 2470.75,
+  "avg_loss_inr": 3021.37,
+  "median_loss_inr": 3127.12,
+  "reward_to_risk_ratio": 0.9,
+  "holding_duration_histogram": {
+    "1_to_5_days": 74,
+    "6_to_15_days": 32,
+    "16_to_30_days": 92,
+    "31_to_48_days": 132
+  },
+  "yearly_trade_frequency": {
+    "2016": 20,
+    "2017": 60,
+    "2018": 60,
+    "2019": 60,
+    "2020": 70,
+    "2021": 60
+  }
+}

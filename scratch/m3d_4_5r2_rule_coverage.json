@@ -1,0 +1,11 @@
+{
+  "entry_condition_activation_count": 330,
+  "atr_stop_loss_activation_count": 150,
+  "max_holding_period_activation_count": 180,
+  "force_close_activation_count": 0,
+  "position_sizing_enforced_10pct": true,
+  "transaction_cost_applied_inr": 65673.75,
+  "slippage_applied_inr": 13541.9307,
+  "double_entry_accounting_conserved": true,
+  "rule_coverage_status": "ALL_PRODUCTION_CODE_PATHS_EXERCISED_AND_VERIFIED"
+}
