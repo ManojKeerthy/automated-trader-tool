@@ -43,10 +43,24 @@ class SignalIntent:
         stop_trigger: Required for STOP orders
         stop_loss_level: Protective stop-loss level for risk management
         target_level: Optional profit target
+        max_holding_days: Time stop in trading sessions, ENFORCED BY THE ENGINE
         quantity_hint: Suggested quantity (may be adjusted by risk hooks)
         confidence: Strategy's confidence score [0, 1]
         rationale: Human-readable explanation
         metadata: Additional signal context for audit trail
+
+    EXIT COMPLETENESS (defect F3, fixed 2026-08-06)
+    ==============================================
+    Every entry must declare how it intends to leave. Before this fix no Cycle 1 strategy
+    emitted an ExitSignal or a target_level, and `max_holding_days` was buried in
+    `metadata` where nothing read it. The only exits that could fire were STOP_LOSS and the
+    end-of-backtest force close, which mechanically produced a ~10-14% win rate with an
+    ~11x payoff ratio across all four "independent" strategy families. That was one
+    artifact observed four times, not four findings.
+
+    `max_holding_days` is now a first-class field that the engine enforces, and
+    `__post_init__` rejects any signal that declares no exit path at all.
+    See docs/research/REPO_AUDIT_2026-08-06.md §3.
     """
 
     instrument_id: uuid.UUID
@@ -56,10 +70,15 @@ class SignalIntent:
     stop_trigger: Decimal | None = None
     stop_loss_level: Decimal | None = None
     target_level: Decimal | None = None
+    max_holding_days: int | None = None
     quantity_hint: int | None = None
     confidence: Decimal = Decimal("0.5")
     rationale: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
+    # Escape hatch for genuine buy-and-hold benchmarks, which legitimately have no exit.
+    # Must be set deliberately; it exists so that "no exit" is always an explicit choice
+    # rather than an omission that silently turns a strategy into a hold.
+    intentional_buy_and_hold: bool = False
 
     def __post_init__(self) -> None:
         if self.direction != "BUY":
@@ -70,6 +89,23 @@ class SignalIntent:
             raise ValueError("LIMIT orders require limit_price")
         if self.order_type == "STOP" and self.stop_trigger is None:
             raise ValueError("STOP orders require stop_trigger")
+
+        has_exit = (
+            self.stop_loss_level is not None
+            or self.target_level is not None
+            or self.max_holding_days is not None
+        )
+        if not has_exit and not self.intentional_buy_and_hold:
+            raise ValueError(
+                "SignalIntent declares no exit path: stop_loss_level, target_level and "
+                "max_holding_days are all None. A position that can only be closed by the "
+                "end-of-backtest force close is not a strategy - that configuration produced "
+                "a ~10-14% win rate with an ~11x payoff across all four Cycle 1 families. "
+                "Set at least one exit, or pass intentional_buy_and_hold=True if this really "
+                "is a hold benchmark. See REPO_AUDIT_2026-08-06 section 3."
+            )
+        if self.max_holding_days is not None and self.max_holding_days < 1:
+            raise ValueError(f"max_holding_days must be >= 1, got {self.max_holding_days}")
 
 
 @dataclass(frozen=True)

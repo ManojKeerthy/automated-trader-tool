@@ -168,6 +168,9 @@ class MeanReversionV3Strategy(BaseV2Strategy):
                         direction="BUY",
                         order_type="MARKET",
                         stop_loss_level=stop_price,
+                        # Defect F3: previously this lived only in metadata below, where
+                        # nothing read it, so the 7-session time stop never fired.
+                        max_holding_days=self.max_holding_days,
                         metadata={
                             "strategy_name": self.name,
                             "strategy_version": self.version,

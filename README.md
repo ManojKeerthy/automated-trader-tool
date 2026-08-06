@@ -1,4 +1,18 @@
-# TradeCraft — Quantitative Research Platform
+# TradeCraft — Automated Swing Trading for Indian Equities
+
+> **Goal:** an automated swing-trading tool that places real orders on Zerodha Kite under
+> human approval and makes money net of costs. The research platform below is the machinery
+> for finding something worth trading — it is not the product.
+
+### 👉 Status: [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md) — read this before anything else
+
+**Current position (2026-08-06):** real NSE data ingested for the first time (142
+instruments, 387,874 bars, 2014–2026). Research Cycles 1 and 2 are **void** — they ran
+against a synthetic price series generated inside this repo, so their conclusions are
+artifacts, not findings. Four engine defects fixed. **No validated strategy exists and no
+order-placement code exists yet.** See the [audit](docs/research/REPO_AUDIT_2026-08-06.md).
+
+---
 
 > **Institutional Algorithmic Trading & Quantitative Research Infrastructure for Indian Equities**
 

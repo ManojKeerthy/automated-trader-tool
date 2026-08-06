@@ -44,6 +44,7 @@ class OrderIntent:
     stop_trigger: Decimal | None = None
     stop_loss_level: Decimal | None = None
     target_level: Decimal | None = None
+    max_holding_days: int | None = None
     quantity_hint: int | None = None
     rationale: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)

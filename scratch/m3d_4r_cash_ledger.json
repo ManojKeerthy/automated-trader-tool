@@ -1,9 +1,0 @@
-{
-  "starting_capital_inr": 1000000.0,
-  "gross_profit_inr": 1689586.64,
-  "gross_loss_inr": 40992.74457142857,
-  "net_realized_pnl_inr": 1648593.8954285714,
-  "ending_cash_balance_inr": 2648593.8954285714,
-  "residual_error_inr": 0.0,
-  "reconciliation_status": "VERIFIED_EXACT_0.0000_RESIDUAL"
-}

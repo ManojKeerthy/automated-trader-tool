@@ -1,7 +1,0 @@
-{
-  "hypothesis_uuid": "hypo-cycle2-alpha013-v1",
-  "novelty_score": 0.9697,
-  "highest_similarity_lineage": "strat_momentum_rs",
-  "is_sufficiently_novel": true,
-  "explanation": "Novelty score 0.9697 vs Graveyard lineage 'strat_momentum_rs' (Similarity: 0.0303). PASS: Sufficient novelty."
-}

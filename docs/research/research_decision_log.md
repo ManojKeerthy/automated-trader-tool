@@ -1,5 +1,16 @@
 # TRADECRAFT RESEARCH DECISION LOG
 
+> ## 🚨 VOID — SYNTHETIC DATA (annotated 2026-08-06)
+>
+> Every quantitative figure in this document was produced against `data/tradecraft.db`, which
+> contains **deterministically generated synthetic prices** from `scratch/seed_real_market_bars.py`
+> — not Zerodha market data, despite the `ZERODHA_KITE_EOD` source stamp. Expected gross edge on
+> that series is exactly zero for any rule.
+>
+> Retained for historical record. **Zero evidentiary weight.**
+> See [REPO_AUDIT_2026-08-06.md](./REPO_AUDIT_2026-08-06.md).
+
+
 > **GOVERNANCE TRACKER**: Formal record of all structural research decisions across Research Cycle 1.
 
 ---

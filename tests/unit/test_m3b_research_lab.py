@@ -259,9 +259,23 @@ def test_zero_risk_or_invalid_risk_r_handling():
         end_date=date(2024, 1, 31),
     )
 
-    exp_r = res.metrics["expectancy_r"].value
-    assert exp_r is not None
-    assert float(exp_r) == 0.0
+    # BEHAVIOUR CHANGED 2026-08-06 (defect F2b).
+    #
+    # This test previously asserted `exp_r == 0.0`, encoding the defect it was meant to
+    # guard. The trade above is a WINNER (+Rs 100 net) whose stop equals its entry price, so
+    # its risk distance is zero and its R-multiple is not measurable. Scoring it 0.0 counted
+    # a winning trade as a neutral one and dragged the mean toward zero. Applied across a
+    # ledger where every winner was force-closed without a recorded stop, this is what made
+    # `expectancy_r` structurally incapable of returning a positive value - and it was the
+    # gate that terminated all four Cycle 1 strategy families.
+    #
+    # Unmeasurable now means EXCLUDED (None), never "scored zero".
+    # See docs/research/REPO_AUDIT_2026-08-06.md section 2.
+    assert res.metrics["expectancy_r"].value is None
+    assert res.metrics["expectancy_r"].status == "NO_MEASURABLE_R_MULTIPLES"
+    assert res.metrics["r_multiple_coverage_pct"].value == Decimal("0")
+    # The original intent of the test still holds: no crash, no NaN, no Inf.
+    assert res.metrics["profit_factor"].status in ("ALL_WINNERS", None, "OK")
 
 
 # 7. Deterministic Stop Selection (min/max)

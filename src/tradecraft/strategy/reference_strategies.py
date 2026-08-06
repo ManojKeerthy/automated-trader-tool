@@ -86,6 +86,9 @@ class BuyAndHoldStrategy:
                 order_type="MARKET",
                 quantity_hint=10,
                 confidence=Decimal("1.0"),
+                # Genuinely has no exit: this is the hold benchmark, so the omission is
+                # deliberate and must be declared rather than inferred.
+                intentional_buy_and_hold=True,
                 rationale=f"Reference buy and hold entry on {current_date}",
             )
         ]

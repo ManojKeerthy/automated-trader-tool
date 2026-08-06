@@ -4,6 +4,34 @@
 
 ---
 
+## MISTAKE #0: NEVER VERIFYING THAT THE MARKET DATA WAS REAL
+
+> **THE MISTAKE THAT INVALIDATED TWO ENTIRE RESEARCH CYCLES.** Discovered 2026-08-06.
+
+- **Symptom**: Two full research cycles, ~250 governance documents, 21 ADRs, SHA-256 database
+  certificates, dataset firewalls, and an "Authenticity Guarantee" — all reporting that no
+  strategy could be made profitable.
+- **Reality**: `data/tradecraft.db` was populated by `scratch/seed_real_market_bars.py`, a
+  deterministic price generator. Every bar was synthetic while stamped
+  `source = 'ZERODHA_KITE_EOD'`. The generator emits a repeating 21-day sawtooth,
+  **identical across all 10 instruments**, with `open == close` on every bar, a constant
+  2.4%-of-price ATR, and volume as a linear counter. Expected gross edge is exactly zero for
+  any rule; net P&L is therefore exactly minus friction. Failure was guaranteed by construction.
+- **Why every audit missed it**: `AUTHENTICITY_GUARANTEE.md` verified that prices came *from
+  the database* and that metrics came *from `BacktestEngine.run()`*. It never verified that the
+  database contained real market data. Every control tested **internal consistency**; none
+  tested **external validity**.
+- **Permanent Lesson**: Provenance is not a string column. Before any hypothesis is evaluated,
+  the input data must pass an adversarial authenticity gate that a synthetic series would fail:
+  cross-sectional return correlation < 0.9, dispersion in per-symbol volatility, `open != close`
+  on >95% of bars, non-constant high/low ratios, fat tails, and known historical events present
+  (e.g. a ≥25% index drawdown in Q1 2020). Make it a blocking precondition in `preflight.py`.
+- **Meta-Lesson**: The volume of governance documentation was inversely correlated with the
+  validity of the research. A 20-line test would have caught this on day one; 250 markdown
+  files did not. **Prefer assertions in code over certificates in prose.**
+
+---
+
 ## MISTAKE #1: ASSUMING MORE INDICATOR FILTERS PRODUCES BETTER SIGNALS
 - **Symptom**: Combining multiple strict technical filters (RSI <= 45 AND ATR distance <= 1.0 AND Close > SMA50 AND Donchian High on a single daily bar).
 - **Reality**: Caused extreme **signal scarcity** and filter collision. Most trading sessions yielded 0 signals, starving the strategy of sample size.

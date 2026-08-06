@@ -243,27 +243,50 @@ class MetricsEngine:
         m["expectancy"] = MetricValue("expectancy", expectancy)
 
         # Expectancy_R (R-normalised trade expectancy)
-        r_multiples: list[Decimal] = []
-        for t in trades:
-            if (
-                t.stop_loss_level is not None
-                and t.stop_loss_level > Decimal("0")
-                and t.stop_loss_level != t.entry_price
-            ):
-                initial_risk_per_share = abs(t.entry_price - t.stop_loss_level)
-                initial_trade_risk = initial_risk_per_share * Decimal(str(t.quantity))
-                if initial_trade_risk > Decimal("0"):
-                    r_multiples.append(t.net_pnl / initial_trade_risk)
-                else:
-                    r_multiples.append(Decimal("0.0"))
-            else:
-                r_multiples.append(Decimal("0.0"))
+        #
+        # Defect F2/F2b (fixed 2026-08-06): this block used to recompute R here as
+        # net_pnl / |entry_price - stop_loss_level|, falling back to 0.0 whenever the stop
+        # was missing. Because engine.py omitted stop_loss_level on two of its three ledger
+        # call sites, and because no strategy emitted exits, every winner was force-closed
+        # and scored 0.0 while every loser scored a real negative R. The metric could not
+        # return a positive value, and it was the gate that terminated all four Cycle 1
+        # strategy families. See docs/research/REPO_AUDIT_2026-08-06.md section 2.
+        #
+        # R is now computed once at trade close from the entry-time risk distance, and
+        # unmeasurable trades are EXCLUDED rather than scored zero.
+        r_multiples: list[Decimal] = [t.r_multiple for t in trades if t.r_multiple is not None]
+        measurable = len(r_multiples)
+        coverage = (
+            (Decimal(measurable) / Decimal(total_trades)) * Decimal("100")
+            if total_trades
+            else Decimal("0")
+        )
+        m["r_multiple_coverage_pct"] = MetricValue("r_multiple_coverage_pct", coverage)
+        m["r_multiple_measurable_trades"] = MetricValue(
+            "r_multiple_measurable_trades", Decimal(measurable)
+        )
 
-        if r_multiples:
-            mean_r = sum(r_multiples) / Decimal(str(len(r_multiples)))
-            m["expectancy_r"] = MetricValue("expectancy_r", mean_r)
+        if not r_multiples:
+            m["expectancy_r"] = MetricValue(
+                "expectancy_r", None, status="NO_MEASURABLE_R_MULTIPLES"
+            )
         else:
-            m["expectancy_r"] = MetricValue("expectancy_r", None, status="NO_TRADES")
+            mean_r = sum(r_multiples) / Decimal(str(measurable))
+            # Below 90% coverage the mean is taken over a biased subsample (typically the
+            # stopped-out losers), so it is reported but flagged as ungateable.
+            status = "OK" if coverage >= Decimal("90") else "INSUFFICIENT_R_COVERAGE"
+            m["expectancy_r"] = MetricValue("expectancy_r", mean_r, status=status)
+
+        # Exit reason distribution. A high END_OF_BACKTEST share means the strategy's own
+        # exit rules never fired and the metrics describe the force-close policy instead.
+        exit_counts: dict[str, int] = {}
+        for t in trades:
+            exit_counts[t.exit_reason] = exit_counts.get(t.exit_reason, 0) + 1
+        forced = exit_counts.get("END_OF_BACKTEST", 0)
+        m["force_close_pct"] = MetricValue(
+            "force_close_pct",
+            (Decimal(forced) / Decimal(total_trades)) * Decimal("100"),
+        )
 
         # Avg Holding Period
         avg_holding = sum(t.holding_days for t in trades) / total_trades

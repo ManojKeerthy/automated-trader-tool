@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 from sqlalchemy import inspect
 from sqlalchemy.orm import Session
@@ -48,3 +49,21 @@ def validate_database_schema(session: Session) -> None:
         raise
     except Exception as e:
         logger.warning(f"Database preflight check encountered an unexpected error: {e}")
+
+
+def validate_research_data(session: Session, raise_on_fail: bool = True) -> Any:
+    """Blocking precondition: refuse to run research against non-real market data.
+
+    Research Cycles 1 and 2 were conducted entirely against a synthetic price database
+    whose bars were stamped `source = "ZERODHA_KITE_EOD"`. Schema validation passed,
+    accounting reconciled to 0.0000, look-ahead protection held — and every result was
+    meaningless, because nothing verified that the prices were real.
+
+    This function must be called before any backtest that will be reported.
+    See docs/research/REPO_AUDIT_2026-08-06.md and
+    tradecraft.market_data.authenticity.DataAuthenticityGate.
+    """
+    from tradecraft.market_data.authenticity import verify_data_authenticity
+
+    logger.info("Running data authenticity preflight...")
+    return verify_data_authenticity(session, raise_on_fail=raise_on_fail)

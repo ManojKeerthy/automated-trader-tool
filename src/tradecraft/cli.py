@@ -315,6 +315,254 @@ def handle_backtest(args: argparse.Namespace) -> None:
     db_session.close()
 
 
+def handle_verify(args: argparse.Namespace) -> None:
+    """Run the data authenticity gate. Exit code 1 on failure so CI can enforce it."""
+    import json as _json
+
+    from tradecraft.market_data.authenticity import DataAuthenticityGate
+
+    db_session = SessionLocal()
+    try:
+        report = DataAuthenticityGate().run(db_session)
+        if getattr(args, "json", False):
+            print(_json.dumps(report.to_dict(), indent=2))
+        else:
+            print(report.render())
+        if not report.passed:
+            sys.exit(1)
+    finally:
+        db_session.close()
+
+
+def handle_corporate_actions(args: argparse.Namespace) -> None:
+    """Detect / import / apply / list corporate actions."""
+    import json as _json
+
+    from sqlalchemy import text as _text
+
+    db_session = SessionLocal()
+    try:
+        if args.ca_cmd == "detect":
+            from tradecraft.corporate_actions.detector import CorporateActionDetector
+            from tradecraft.corporate_actions.importer import write_template
+
+            report = CorporateActionDetector(gap_threshold=args.threshold).run(db_session)
+            if getattr(args, "json", False):
+                print(_json.dumps(report.to_dict(), indent=2))
+            else:
+                print(report.render())
+
+            if args.write_template:
+                candidates = report.high + report.medium
+                p = write_template(args.write_template, candidates)
+                print(f"\n  Wrote {len(candidates)} candidate(s) to {p}")
+                print("  Verify each against its NSE circular, set verified=true, then:")
+                print(f"      python -m tradecraft data corporate-actions import {p}")
+
+        elif args.ca_cmd == "import":
+            from tradecraft.corporate_actions.importer import CorporateActionImporter
+
+            res = CorporateActionImporter().load(db_session, args.csv_path)
+            print(res.render())
+            if not res.ok:
+                sys.exit(1)
+
+        elif args.ca_cmd == "apply":
+            from tradecraft.corporate_actions.adjuster import CorporateActionAdjuster
+
+            if args.include_unverified:
+                print(
+                    "\n  WARNING: applying UNVERIFIED actions. Inferred ratios are leads to\n"
+                    "  check, not facts. Adjusting prices from an unverified inference\n"
+                    "  replaces one silent data corruption with another.\n"
+                )
+            adjuster = CorporateActionAdjuster(include_unverified=args.include_unverified)
+            report = adjuster.run(db_session, dry_run=not args.apply)
+            print(report.render())
+
+        elif args.ca_cmd == "list":
+            rows = db_session.execute(
+                _text(
+                    """
+                    SELECT i.symbol, ca.action_type, ca.ex_date, ca.ratio_from,
+                           ca.ratio_to, ca.amount, ca.source, ca.verified
+                    FROM corporate_actions ca
+                    JOIN instruments i ON i.id = ca.instrument_id
+                    ORDER BY i.symbol, ca.ex_date
+                    """
+                )
+            ).all()
+            if not rows:
+                print("\n  No corporate actions stored.")
+                print("  Start with: python -m tradecraft data corporate-actions detect\n")
+                return
+            print(f"\n  {len(rows)} corporate action(s):\n")
+            print(f"  {'SYMBOL':<14} {'TYPE':<14} {'EX-DATE':<12} {'RATIO':<10} "
+                  f"{'VERIFIED':<9} SOURCE")
+            for r in rows:
+                ratio = f"{r[3]}:{r[4]}" if r[3] and r[4] else (str(r[5]) if r[5] else "-")
+                print(f"  {r[0]:<14} {r[1]:<14} {str(r[2]):<12} {ratio:<10} "
+                      f"{str(bool(r[7])):<9} {r[6]}")
+            unverified = sum(1 for r in rows if not r[7])
+            if unverified:
+                print(f"\n  {unverified} unverified — these are NOT applied to prices.")
+    finally:
+        db_session.close()
+
+
+def handle_quality_report(args: argparse.Namespace) -> None:
+    """Post-ingestion diagnostics. Exit code 1 when blocking defects are found."""
+    import json as _json
+
+    from tradecraft.core.db_provenance import fingerprint
+    from tradecraft.market_data.quality_report import build_quality_report
+
+    db_session = SessionLocal()
+    try:
+        report = build_quality_report(db_session)
+        if getattr(args, "json", False):
+            out = report.to_dict()
+            out["provenance"] = fingerprint(db_session).to_dict()
+            print(_json.dumps(out, indent=2))
+        else:
+            print(fingerprint(db_session).render())
+            print()
+            print(report.render(top_n=args.top))
+        if report.blocking:
+            sys.exit(1)
+    finally:
+        db_session.close()
+
+
+def handle_purge_synthetic(args: argparse.Namespace) -> None:
+    """Remove fabricated bars from the research database.
+
+    Real bars must never be appended alongside synthetic ones: the backfill resumes from the
+    earliest existing bar per instrument, so leaving fabricated rows in place would cause a
+    silent real/fake mixture that is far harder to detect than the original problem.
+    """
+    from sqlalchemy import func, select
+
+    from tradecraft.core.db_models import MarketBar
+    from tradecraft.market_data.authenticity import DataAuthenticityGate
+
+    db_session = SessionLocal()
+    try:
+        report = DataAuthenticityGate().run(db_session)
+        total = db_session.scalar(select(func.count()).select_from(MarketBar)) or 0
+
+        print("=" * 78)
+        print("  PURGE SYNTHETIC MARKET DATA")
+        print("=" * 78)
+        print(f"  Bars currently in market_bars: {total}")
+        print(f"  Authenticity gate verdict:     {'PASS' if report.passed else 'FAIL'}")
+
+        if report.passed:
+            print("\n  The database PASSES the authenticity gate. Nothing will be purged.")
+            print("  If you believe it still contains fabricated data, investigate before")
+            print("  deleting anything.")
+            return
+
+        print("\n  Blocking failures:")
+        for c in report.blocking_failures:
+            print(f"    - {c.name}: {c.observed}")
+
+        if not args.confirm:
+            print(f"\n  DRY RUN: would delete all {total} bars from market_bars.")
+            print("  Re-run with --confirm to execute.")
+            return
+
+        deleted = db_session.query(MarketBar).delete()
+        db_session.commit()
+        print(f"\n  Deleted {deleted} bars.")
+        print("\n  Next:")
+        print("    python -m tradecraft data backfill --universe NIFTY100 --start 2015-01-01")
+        print("    python -m tradecraft data verify")
+    finally:
+        db_session.close()
+
+
+def handle_backfill(args: argparse.Namespace) -> None:
+    """Seed the target universe and run a real historical backfill via Kite."""
+    from tradecraft.instruments.universes import resolve_universe
+    from tradecraft.market_data.backfill import HistoricalBackfillWorkflow
+
+    if args.start:
+        start_date = datetime.strptime(args.start, "%Y-%m-%d").date()
+        target_years = max(1, (date.today() - start_date).days // 365 + 1)
+    else:
+        start_date = date.today() - timedelta(days=args.years * 365)
+        target_years = args.years
+
+    symbols = resolve_universe(args.universe) if not args.symbol else [args.symbol]
+
+    print("=" * 78)
+    print("  HISTORICAL BACKFILL — REAL MARKET DATA")
+    print("=" * 78)
+    print(f"  Universe:  {args.universe} ({len(symbols)} symbols, survivorship-reduced superset)")
+    print(f"  From:      {start_date}")
+    print(f"  Provider:  Zerodha Kite Connect")
+    print("=" * 78)
+
+    session_manager = KiteSessionManager()
+    cached_token = session_manager.get_cached_access_token()
+    if not settings.KITE_API_KEY or not cached_token:
+        print("\nERROR: No active Zerodha session. Authenticate first:")
+        print("  1. Run: python -m tradecraft auth login")
+        print("  2. Paste redirected callback request token:")
+        print("     python -m tradecraft auth token <request_token>\n")
+        sys.exit(1)
+
+    db_session = SessionLocal()
+    try:
+        calendar = TradingCalendar()
+        provider: MarketDataProvider = ZerodhaMarketDataProvider(settings.KITE_API_KEY, cached_token)
+
+        workflow = HistoricalBackfillWorkflow(
+            db_session=db_session,
+            calendar=calendar,
+            market_provider=provider,
+            chunk_delay_seconds=args.chunk_delay,
+        )
+
+        if not args.symbol:
+            seed = workflow.seed_universe(symbols)
+            print(
+                f"\n  Universe seeded: {seed['created']} created, "
+                f"{seed['existing']} already present, {len(seed['unresolved'])} unresolved"
+            )
+            if seed["unresolved"]:
+                from tradecraft.instruments.universes import unresolved_symbol_guidance
+
+                print("\n  UNRESOLVED SYMBOLS — these need mapping, not re-adding:")
+                for line in unresolved_symbol_guidance(seed["unresolved"]):
+                    print(f"    {line}")
+                print(
+                    "\n  Each is either a succession to record or a survivorship-bias hazard.\n"
+                    "  Re-adding them as new symbols would create empty instruments."
+                )
+
+        report = workflow.run_backfill(
+            target_years=target_years,
+            instrument_symbol=args.symbol,
+        )
+
+        print(f"\n  Status:          {report['status']}")
+        print(f"  Instruments:     {report['total_instruments']}")
+        print(f"  Bars inserted:   {report['bars_inserted']}")
+        print(f"  Chunks:          {report['chunks_processed']}")
+
+        empty = [c for c in report["instrument_coverages"] if c.status == "EMPTY"]
+        if empty:
+            print(f"\n  {len(empty)} instrument(s) returned no data (delisted or bad symbol):")
+            for c in empty[:20]:
+                print(f"    - {c.symbol}")
+
+        print("\n  Next: python -m tradecraft data verify")
+    finally:
+        db_session.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="TradeCraft Platform CLI Interface")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -351,7 +599,88 @@ def main() -> None:
         "--years", type=int, default=2, help="Number of historical years to fetch (default: 2)"
     )
     backfill_parser.add_argument(
+        "--start", type=str, help="Explicit start date YYYY-MM-DD (overrides --years)"
+    )
+    backfill_parser.add_argument(
+        "--universe",
+        type=str,
+        default="NIFTY100",
+        help="Index universe to seed and backfill: NIFTY50 | NIFTY100 (default: NIFTY100)",
+    )
+    backfill_parser.add_argument(
         "--symbol", type=str, help="Specific instrument symbol to backfill (optional)"
+    )
+    backfill_parser.add_argument(
+        "--chunk-delay",
+        type=float,
+        default=0.4,
+        help="Seconds to sleep between provider chunks (Kite rate limit; default: 0.4)",
+    )
+
+    # Data integrity commands
+    verify_parser = data_sub.add_parser(
+        "verify", help="Run the data authenticity gate against the market database"
+    )
+    verify_parser.add_argument(
+        "--json", action="store_true", help="Emit the report as JSON instead of text"
+    )
+
+    quality_parser = data_sub.add_parser(
+        "quality-report",
+        help="Locate actionable defects in ingested data (unadjusted corporate actions, "
+        "stale instruments, duplicate listings, coverage gaps)",
+    )
+    quality_parser.add_argument(
+        "--json", action="store_true", help="Emit the report as JSON instead of text"
+    )
+    quality_parser.add_argument(
+        "--top", type=int, default=25, help="Rows to show per section (default: 25)"
+    )
+
+    ca_parser = data_sub.add_parser(
+        "corporate-actions", help="Detect, import and apply corporate action adjustments"
+    )
+    ca_sub = ca_parser.add_subparsers(dest="ca_cmd", required=True)
+
+    ca_detect = ca_sub.add_parser(
+        "detect", help="Infer candidate splits/bonuses from price discontinuities"
+    )
+    ca_detect.add_argument("--json", action="store_true", help="Emit JSON")
+    ca_detect.add_argument(
+        "--threshold", type=float, default=0.20, help="Gap size to investigate (default 0.20)"
+    )
+    ca_detect.add_argument(
+        "--write-template",
+        type=str,
+        metavar="PATH",
+        help="Write a CSV of candidates pre-filled for human verification",
+    )
+
+    ca_import = ca_sub.add_parser("import", help="Import human-verified actions from CSV")
+    ca_import.add_argument("csv_path", type=str, help="Path to the CSV file")
+
+    ca_apply = ca_sub.add_parser(
+        "apply", help="Build the adjusted price series from verified actions"
+    )
+    ca_apply.add_argument(
+        "--apply", action="store_true", help="Actually write. Without this it is a dry run."
+    )
+    ca_apply.add_argument(
+        "--include-unverified",
+        action="store_true",
+        help="DANGEROUS: also apply unverified (inferred) actions",
+    )
+
+    ca_sub.add_parser("list", help="List corporate actions currently stored")
+
+    purge_parser = data_sub.add_parser(
+        "purge-synthetic",
+        help="Delete fabricated bars so real data cannot be silently mixed with them",
+    )
+    purge_parser.add_argument(
+        "--confirm",
+        action="store_true",
+        help="Required. Without this the command reports what it WOULD delete and exits.",
     )
 
     # Backtest commands
@@ -381,6 +710,16 @@ def main() -> None:
         handle_auth(args)
     elif args.command == "data" and args.data_cmd == "update":
         handle_data(args)
+    elif args.command == "data" and args.data_cmd == "backfill":
+        handle_backfill(args)
+    elif args.command == "data" and args.data_cmd == "verify":
+        handle_verify(args)
+    elif args.command == "data" and args.data_cmd == "quality-report":
+        handle_quality_report(args)
+    elif args.command == "data" and args.data_cmd == "corporate-actions":
+        handle_corporate_actions(args)
+    elif args.command == "data" and args.data_cmd == "purge-synthetic":
+        handle_purge_synthetic(args)
     elif args.command == "backtest":
         handle_backtest(args)
     elif args.command == "strategy" and args.strat_cmd == "list":

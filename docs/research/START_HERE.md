@@ -1,73 +1,109 @@
-# TRADECRAFT RESEARCH SYSTEM — START HERE
+# TRADECRAFT RESEARCH — START HERE
 
-> **MANDATORY ONBOARDING INSTRUCTION FOR ALL DEVELOPERS AND AI AGENTS**:  
-> Before proposing, modifying, or testing any strategy, you MUST read the [Research Graveyard](file:///c:/infiligence/automated-trader-tool/docs/research/research_graveyard.md) and [Strategy Lineage Registry](file:///c:/infiligence/automated-trader-tool/docs/research/strategy_lineage_registry.md) and verify that the proposed hypothesis is not a disguised retry of an abandoned lineage.
+> **MANDATORY ONBOARDING FOR ALL DEVELOPERS AND AI AGENTS.**
 >
-> **NON-NEGOTIABLE RULE**:  
-> *A rejected strategy family may not be revived simply by changing parameter values, indicator periods, thresholds, or naming. Any future proposal must first demonstrate that it is based on a materially different economic hypothesis rather than a variation of an abandoned lineage.*
+> Read **[docs/PROJECT_STATUS.md](../PROJECT_STATUS.md)** before doing anything else. It is
+> the authoritative status document and supersedes every narrative in this repository.
 
 ---
 
-## 1. CURRENT PROJECT STATUS
+## 1. CURRENT STATUS
 
-- **Active Research Cycle**: `Research Cycle 1 (CLOSED)`
-- **Cycle 1 Master Outcome**: **`CLOSED_NO_SURVIVOR`**
-- **Strategy Families Status**:
-  - `Trend Pullback`: **`RESEARCH_GRAVEYARD`** (V1 $\rightarrow$ V2 $\rightarrow$ ABANDONED)
-  - `Momentum Relative Strength`: **`RESEARCH_GRAVEYARD`** (V1 $\rightarrow$ V2 $\rightarrow$ ABANDONED)
-  - `Breakout Confirmation`: **`RESEARCH_GRAVEYARD`** (V1 $\rightarrow$ V2 $\rightarrow$ V3 $\rightarrow$ ABANDONED)
-  - `Mean Reversion`: **`RESEARCH_GRAVEYARD`** (V1 $\rightarrow$ V2 $\rightarrow$ V3 $\rightarrow$ ABANDONED)
-- **Next Permitted Milestone**: `M3C.1 — POINT-IN-TIME UNIVERSE EXPANSION ARCHITECTURE` (Pending User Approval)
+- **Research Cycles 1 and 2: VOID.** Both ran entirely against a synthetic price database
+  generated inside this repo and stamped `source='ZERODHA_KITE_EOD'`. Their conclusions —
+  "no strategy survived development", "PEAD V1 does not work" — are artifacts, not findings.
+- **The research graveyard has been deleted and all four family bans lifted.** Trend
+  Pullback, Momentum RS, Breakout Confirmation and Mean Reversion were never validly tested
+  and are eligible again.
+- **Real data ingested 2026-08-06**: 142 instruments, 387,874 bars, 2014-08-11 → 2026-08-06,
+  in PostgreSQL, passing the authenticity gate.
+- **Blocking now**: corporate action adjustment. Largest daily move is +190.67% and
+  `is_adjusted=False` on every bar.
+- **No validated strategy exists. No order-placement code exists.**
 
----
-
-## 2. SEALED DATASETS & DATA FIREWALL
-
-Access rules are enforced at runtime via `DevelopmentDataFirewall`:
-- **`DEVELOPMENT`** (`2016-08-01` $\rightarrow$ `2021-12-31`): The ONLY historical dataset consumed during Cycle 1.
-- **`VALIDATION`** (`2022-01-01` $\rightarrow$ `2024-06-30`): **STRICTLY SEALED** (`VALIDATION_ACCESS_COUNT = 0`).
-- **`FINAL TEST`** (`2024-07-01` $\rightarrow$ `2026-07-28`): **STRICTLY SEALED** (`FINAL_TEST_ACCESS_COUNT = 0`).
-
-> [!CAUTION]
-> Any attempted query or feature calculation beyond `2021-12-31` will raise `DataBoundaryViolationError` and terminate execution immediately.
+Void milestone certificates, cycle summaries, the graveyard, the lineage registry and all
+scratch artifacts were deleted on 2026-08-06. They remain in git history (commit `55e1360`).
 
 ---
 
-## 3. MANDATORY BACKTESTING INVARIANTS
+## 2. THE NON-NEGOTIABLE RULE — RESTATED
 
-All strategy research code must strictly satisfy:
-1. **Point-in-Time Data**: Clock gating via `DataPortal` prevents lookahead bias.
-2. **Signal/Execution Timing**: Signal evaluated at Date $T$ close $\rightarrow$ Execution strictly at Date $T+1$ open or later (`signal_date < entry_date <= exit_date`).
-3. **No Leverage or Short Selling**: Long-only cash equity delivery, integer share quantities (`quantity >= 1`).
-4. **Accounting Integrity**: Realised Net PnL must reconcile to equity change: $\text{Final Equity} - \text{Initial Capital} \equiv \sum \text{TradeRecord.net\_pnl}$ under `EndOfBacktestPolicy.FORCE_CLOSE` ($\le ₹0.0001$).
-5. **Execution Friction**: Transaction costs (STT, exchange fees, SEBI, GST, stamp duty, DP charges) and fixed basis point slippage embedded in execution prices.
+The original rule was *"a rejected strategy family may not be revived by changing parameter
+values."* That rule is sound, but it was applied to families rejected on fabricated
+evidence, which turned a safeguard into a permanent ban on legitimate research.
 
----
+**The corrected rule:**
 
-## 4. PROHIBITED RESEARCH PRACTICES
+> A strategy family may not be revived by changing parameter values, indicator periods,
+> thresholds or naming — **when the original rejection was based on valid evidence.**
+> A rejection derived from data that has since been shown to be invalid confers no
+> protection and must be discarded, not honoured.
 
-The following are strictly forbidden across TradeCraft:
-- Grid search, random parameter sweeps, or Bayesian optimization.
-- Post-hoc strategy modifications or threshold adjustments after observing P&L results.
-- Peeking into Validation or Final Test datasets.
-- Re-interpreting failed Development Gate criteria as passed.
-- Rescuing abandoned strategy lineages.
+Before any future rejection is treated as binding, confirm it was produced against data that
+passed the authenticity gate.
 
 ---
 
-## 5. REQUIRED READING ROADMAP
+## 3. DATASET FIREWALL
 
-Before writing any research code or proposing new hypotheses, consult the following permanent documentation artifacts:
+Re-declared 2026-08-06 against real data. Both access counters reset to 0 — prior counts
+referred to the synthetic store.
+
+| Split | Range | Status |
+|---|---|---|
+| DEVELOPMENT | `2014-08-11` → `2021-12-31` | Open for research |
+| VALIDATION | `2022-01-01` → `2024-06-30` | **SEALED** (access count 0) |
+| FINAL TEST | `2024-07-01` → `2026-08-06` | **SEALED** (access count 0) |
+
+> The FINAL TEST split now holds real out-of-sample data for the first time. It can be spent
+> exactly once. Its right edge moves as daily ingestion continues — freeze an explicit end
+> date in the run config before it is ever used.
+
+---
+
+## 4. MANDATORY INVARIANTS
+
+1. **Data authenticity is blocking.** `python -m tradecraft data verify` must pass before any
+   research run. Provenance is a property of the numbers, never of a `source` label.
+2. **Point-in-time data.** `DataPortal` clock gating prevents lookahead.
+3. **Signal/execution timing.** Signal at date T close → execution at T+1 open or later
+   (`signal_date < entry_date <= exit_date`).
+4. **No leverage or short selling.** Long-only cash equity, integer share quantities.
+5. **Accounting integrity.** `Final Equity − Initial Capital ≡ Σ net_pnl` under `FORCE_CLOSE`.
+6. **Execution friction.** STT, exchange fees, SEBI, GST, stamp duty, DP charges and slippage
+   embedded in execution prices.
+7. **Every strategy declares its exits.** `SignalIntent` rejects signals with no stop, target
+   or time stop. `END_OF_BACKTEST` exits above 5% of trades means exits are not firing.
+8. **Every result names its source database** via `BacktestResult.data_provenance`.
+
+---
+
+## 5. PROHIBITED
+
+- Grid search, parameter sweeps, Bayesian optimisation.
+- Post-hoc threshold changes after observing P&L.
+- Peeking into Validation or Final Test.
+- Re-interpreting a failed gate as passed.
+- **Citing any M3A–M3G result as evidence.**
+- Gating a decision on a metric that has no hand-computed fixture test.
+
+---
+
+## 6. REQUIRED READING
 
 | Document | Purpose |
-| :--- | :--- |
-| [research_principles.md](file:///c:/infiligence/automated-trader-tool/docs/research/research_principles.md) | Immutable project research philosophy (15 principles). |
-| [research_cycle_1_summary.md](file:///c:/infiligence/automated-trader-tool/docs/research/research_cycle_1_summary.md) | Chronological master history from M3A to M3B.4. |
-| [strategy_lineage_registry.md](file:///c:/infiligence/automated-trader-tool/docs/research/strategy_lineage_registry.md) | Complete lineage records and SHA256 hashes for all strategies. |
-| [research_graveyard.md](file:///c:/infiligence/automated-trader-tool/docs/research/research_graveyard.md) | Detailed failure mechanisms for all abandoned hypotheses. |
-| [research_decision_log.md](file:///c:/infiligence/automated-trader-tool/docs/research/research_decision_log.md) | Log of formal governance decisions (DEC-2026-001 to DEC-2026-014). |
-| [known_mistakes.md](file:///c:/infiligence/automated-trader-tool/docs/research/known_mistakes.md) | Registry of "research scars" and mistakes never to repeat. |
-| [engineering_lessons.md](file:///c:/infiligence/automated-trader-tool/docs/research/engineering_lessons.md) | Analysis of the 6 major engineering defects discovered & fixed. |
-| [backtesting_invariants.md](file:///c:/infiligence/automated-trader-tool/docs/research/backtesting_invariants.md) | Technical invariants required for all backtesting code. |
-| [research_roadmap.md](file:///c:/infiligence/automated-trader-tool/docs/research/research_roadmap.md) | Long-term multi-cycle project roadmap (Cycles 1 to 7). |
-| [glossary.md](file:///c:/infiligence/automated-trader-tool/docs/research/glossary.md) | Canonical definitions of all research and trading terminology. |
+|---|---|
+| [../PROJECT_STATUS.md](../PROJECT_STATUS.md) | **Authoritative status and roadmap** |
+| [REPO_AUDIT_2026-08-06.md](./REPO_AUDIT_2026-08-06.md) | What went wrong and why it was invisible |
+| [known_mistakes.md](./known_mistakes.md) | Research scars — MISTAKE #0 is the important one |
+| [NEXT_STEPS.md](./NEXT_STEPS.md) | Current remediation state and commands |
+| [research_principles.md](./research_principles.md) | Research philosophy |
+| [research_methodology.md](./research_methodology.md) | Methodology |
+| [anti_overfitting_rules.md](./anti_overfitting_rules.md) | Pre-registration and experiment budgets |
+| [backtesting_invariants.md](./backtesting_invariants.md) | Technical invariants |
+| [dataset_firewall.md](./dataset_firewall.md) | Split separation rules |
+| [engineering_lessons.md](./engineering_lessons.md) | Defects found and fixed |
+| [research_decision_log.md](./research_decision_log.md) | Formal governance decisions |
+| [research_roadmap.md](./research_roadmap.md) | Multi-cycle roadmap |
+| [glossary.md](./glossary.md) | Terminology |
+| [alpha_library/alpha_registry.json](./alpha_library/alpha_registry.json) | 35-hypothesis backlog (ALPHA-014→048) |

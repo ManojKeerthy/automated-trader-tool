@@ -237,6 +237,7 @@ class TrendPullbackV2Strategy(BaseV2Strategy):
                         direction="BUY",
                         order_type="MARKET",
                         stop_loss_level=stop_price,
+                        max_holding_days=getattr(self, "max_holding_days", None),
                         metadata={
                             "strategy_name": self.name,
                             "strategy_version": self.version,
@@ -385,6 +386,7 @@ class BreakoutConfirmV2Strategy(BaseV2Strategy):
                         direction="BUY",
                         order_type="MARKET",
                         stop_loss_level=stop_price,
+                        max_holding_days=getattr(self, "max_holding_days", None),
                         metadata={
                             "strategy_name": self.name,
                             "strategy_version": self.version,
@@ -512,6 +514,7 @@ class MomentumRSV2Strategy(BaseV2Strategy):
                     direction="BUY",
                     order_type="MARKET",
                     stop_loss_level=stop_price,
+                    max_holding_days=getattr(self, "max_holding_days", None),
                     metadata={
                         "strategy_name": self.name,
                         "strategy_version": self.version,
@@ -650,6 +653,7 @@ class MeanReversionV2Strategy(BaseV2Strategy):
                         direction="BUY",
                         order_type="MARKET",
                         stop_loss_level=stop_price,
+                        max_holding_days=getattr(self, "max_holding_days", None),
                         metadata={
                             "strategy_name": self.name,
                             "strategy_version": self.version,

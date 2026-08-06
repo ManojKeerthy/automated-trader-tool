@@ -1,8 +1,0 @@
-{
-  "milestone": "M3D.3",
-  "status": "COMPLETED",
-  "blind_signal_audit": "PASSED",
-  "signal_sanity_audit": "PASSED",
-  "financial_blinding_certified": true,
-  "firewall_verified": true
-}

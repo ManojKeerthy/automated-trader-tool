@@ -34,7 +34,7 @@ from tradecraft.backtesting.slippage import FixedBasisPointSlippage, SlippageMod
 from tradecraft.backtesting.trade_ledger import TradeLedger, TradeRecord
 from tradecraft.instruments.universe import PointInTimeUniverse
 from tradecraft.research.risk_free_rate import RiskFreeRateConfig
-from tradecraft.research.sizing import ResearchSizingCalculator
+from tradecraft.research.sizing import ResearchSizingCalculator, RiskBasedSizingCalculator
 from tradecraft.strategy.base import ExitSignal, SignalIntent, Strategy
 
 logger = logging.getLogger(__name__)
@@ -70,6 +70,17 @@ class BacktestConfig:
     allow_unverified_universe: bool = True  # If True, classifies run as UNVERIFIED/RESEARCH_ONLY
     end_of_backtest_policy: EndOfBacktestPolicy = EndOfBacktestPolicy.MARK_TO_MARKET
 
+    # --- Sizing & concurrency (defect F4). Enforced by the engine, not merely declared. ---
+    risk_pct_per_trade: Decimal = Decimal("0.01")
+    max_position_pct: Decimal = Decimal("0.20")
+    max_concurrent_positions: int = 10
+    use_legacy_notional_sizing: bool = False  # True only to reproduce pre-2026-08-06 runs
+
+    # --- Exit health invariant (defect F3) ---
+    # If more than this fraction of trades exit via END_OF_BACKTEST, the strategy's own exit
+    # rules are not firing and the results describe the force-close policy, not the strategy.
+    max_force_close_fraction: Decimal = Decimal("0.05")
+
 
 @dataclass
 class BacktestResult:
@@ -83,6 +94,10 @@ class BacktestResult:
     trades: list[TradeRecord]
     metrics: BacktestMetricsSummary
     benchmark_result: BenchmarkResult | None
+    # Which database this result actually came from. Non-optional in spirit: for two
+    # research cycles no artifact recorded its source, so nobody noticed that ingestion
+    # wrote to PostgreSQL while every backtest read a stale SQLite file.
+    data_provenance: dict[str, Any] = field(default_factory=dict)
 
 
 class BacktestEngine:
@@ -155,7 +170,23 @@ class BacktestEngine:
         portfolio = Portfolio(initial_capital=config.initial_capital)
         simulator = ExecutionSimulator(config.cost_model, config.slippage_model)
         ledger = TradeLedger(run_id)
-        sizing_calculator = ResearchSizingCalculator(allocation_pct=Decimal("0.10"))
+
+        sizing_calculator: Any
+        if config.use_legacy_notional_sizing:
+            sizing_calculator = ResearchSizingCalculator(
+                allocation_pct=Decimal("0.10"),
+                max_concurrent_positions=config.max_concurrent_positions,
+            )
+            warnings.append(
+                "LEGACY_NOTIONAL_SIZING in use: per-trade risk varies with stop distance, "
+                "so expectancy_r is not comparable across trades."
+            )
+        else:
+            sizing_calculator = RiskBasedSizingCalculator(
+                risk_pct=config.risk_pct_per_trade,
+                max_position_pct=config.max_position_pct,
+                max_concurrent_positions=config.max_concurrent_positions,
+            )
 
         # Queued order intents for session T+1 execution
         pending_entry_orders: list[OrderIntent] = []
@@ -163,6 +194,11 @@ class BacktestEngine:
 
         # Track daily sold instruments for DP charge de-duplication: set of (date, instrument_id)
         daily_sold_instruments: set[tuple[date, uuid.UUID]] = set()
+
+        # Attrition counters. Signals that never become trades must be observable:
+        # a silent drop to zero quantity previously destroyed 32,822 signals unnoticed.
+        rejected_position_cap = 0
+        sizing_rejections: dict[str, int] = {}
 
         # 4. Chronological Simulation Loop
         for current_date in clock:
@@ -214,6 +250,10 @@ class BacktestEngine:
                                 exit_costs=exec_res.costs,
                                 slippage_cost=exec_res.slippage_cost,
                                 exit_reason=exec_res.exit_reason or "STRATEGY_SIGNAL",
+                                # Defect F2: this call site previously omitted the stop, so
+                                # every signal-exit trade was scored R = 0.0.
+                                stop_loss_level=pos.initial_stop,
+                                initial_risk_per_share=pos.initial_risk_per_share,
                             )
 
                             portfolio.process_exit_fill(exec_res)
@@ -225,10 +265,25 @@ class BacktestEngine:
 
             pending_exit_signals.clear()
 
-            # Check protective stops/targets for existing positions not manually exited
+            # Check protective stops/targets/time-stops for positions not manually exited.
+            #
+            # Defect F3: the time stop is enforced HERE, by the engine. Previously
+            # `max_holding_days` sat unread in SignalIntent.metadata, so no position could
+            # ever exit on time and every winner survived to the end-of-backtest force
+            # close. Precedence inside simulate_exit_execution is stop -> target ->
+            # exit_signal, so passing a time-stop signal preserves the conservative
+            # adverse-first assumption for ambiguous bars.
             for inst_id, pos in list(portfolio.positions.items()):
                 bar = portal.get_bar(inst_id, current_date)
-                if bar and (pos.current_stop or pos.current_target):
+                time_stop_sig: ExitSignal | None = None
+                if pos.is_time_stop_due:
+                    time_stop_sig = ExitSignal(
+                        instrument_id=pos.instrument_id,
+                        exit_type="MARKET",
+                        reason="MAX_HOLDING_PERIOD",
+                    )
+
+                if bar and (pos.current_stop or pos.current_target or time_stop_sig):
                     is_first_sell = (current_date, pos.instrument_id) not in daily_sold_instruments
                     exec_res = simulator.simulate_exit_execution(
                         position_id=pos.position_id,
@@ -238,7 +293,7 @@ class BacktestEngine:
                         quantity=pos.quantity,
                         stop_loss_level=pos.current_stop,
                         target_level=pos.current_target,
-                        exit_signal=None,
+                        exit_signal=time_stop_sig,
                         bar=bar,
                         execution_date=current_date,
                         is_first_isin_sell_today=is_first_sell,
@@ -263,7 +318,10 @@ class BacktestEngine:
                             exit_costs=exec_res.costs,
                             slippage_cost=exec_res.slippage_cost,
                             exit_reason=exec_res.exit_reason or "PROTECTIVE_EXIT",
-                            stop_loss_level=pos.current_stop,
+                            # Entry-time stop, NOT pos.current_stop, which a trailing rule
+                            # may have moved. The R denominator is the risk taken at entry.
+                            stop_loss_level=pos.initial_stop,
+                            initial_risk_per_share=pos.initial_risk_per_share,
                         )
                         portfolio.process_exit_fill(exec_res)
                         if exec_res.is_ambiguous_bar:
@@ -274,16 +332,40 @@ class BacktestEngine:
 
             # Process Entries
             for order in list(pending_entry_orders):
+                # Defect F4: enforce the concurrent-position cap. It was previously a
+                # constructor parameter that the engine never passed, so the documented
+                # 10-holding limit (DEC-002) did not exist in code and concurrency was
+                # bounded only incidentally by running out of cash.
+                if (
+                    order.instrument_id not in portfolio.positions
+                    and len(portfolio.positions) >= config.max_concurrent_positions
+                ):
+                    rejected_position_cap += 1
+                    continue
+
                 bar = portal.get_bar(order.instrument_id, current_date)
                 if bar:
-                    # Resolve unsized orders using approved ResearchSizingCalculator (10% allocation)
+                    # Resolve unsized orders. Risk-based sizing needs the stop, so that
+                    # every trade risks the same fraction of equity.
                     if order.quantity_hint is None or order.quantity_hint <= 0:
                         est_fill = simulator.slippage_model.apply(bar["open"], order.direction, 0)
-                        size_res = sizing_calculator.calculate_quantity(
-                            portfolio.total_equity, portfolio.cash, est_fill
-                        )
+                        if config.use_legacy_notional_sizing:
+                            size_res = sizing_calculator.calculate_quantity(
+                                portfolio.total_equity, portfolio.cash, est_fill
+                            )
+                        else:
+                            size_res = sizing_calculator.calculate_quantity(
+                                portfolio_equity=portfolio.total_equity,
+                                available_cash=portfolio.cash,
+                                actual_fill_price=est_fill,
+                                stop_loss_level=order.stop_loss_level,
+                            )
                         if size_res.is_valid and size_res.quantity >= 1:
                             order.quantity_hint = size_res.quantity
+                        else:
+                            sizing_rejections[size_res.rejection_reason] = (
+                                sizing_rejections.get(size_res.rejection_reason, 0) + 1
+                            )
 
                     # Apply risk hook
                     filtered_order = config.risk_hook.filter_order(order, portfolio)
@@ -310,6 +392,12 @@ class BacktestEngine:
 
             portfolio.mark_to_market(current_date, closing_prices)
 
+            # Age open positions by one session. Done at the close, after entries, so a
+            # position entered today has bars_held == 1 at today's close and a
+            # max_holding_days of N exits on the Nth session after entry.
+            for pos in portfolio.positions.values():
+                pos.bars_held += 1
+
             # C. Strategy Evaluation at session T Close
             # -----------------------------------------
             active_position_uuids = list(portfolio.positions.keys())
@@ -332,6 +420,7 @@ class BacktestEngine:
                             stop_trigger=sig.stop_trigger,
                             stop_loss_level=sig.stop_loss_level,
                             target_level=sig.target_level,
+                            max_holding_days=sig.max_holding_days,
                             quantity_hint=sig.quantity_hint,
                             rationale=sig.rationale,
                             metadata=sig.metadata,
@@ -384,10 +473,51 @@ class BacktestEngine:
                             exit_costs=exec_res.costs,
                             slippage_cost=exec_res.slippage_cost,
                             exit_reason="END_OF_BACKTEST",
+                            # Defect F2: this call site previously omitted the stop. Because
+                            # no strategy emitted exits, EVERY winner was force-closed here
+                            # and therefore scored R = 0.0, while losers scored real negative
+                            # R. That alone made expectancy_r incapable of being positive.
+                            stop_loss_level=pos.initial_stop,
+                            initial_risk_per_share=pos.initial_risk_per_share,
                         )
                         portfolio.process_exit_fill(exec_res)
             # Re-record final equity snapshot with zero open positions and updated cash
             portfolio.mark_to_market(final_date, {})
+
+        # 4.6. Exit-health and attrition invariants (defects F2/F3/F4)
+        # These make silent failures loud. Every one of them corresponds to a defect that
+        # previously went undetected through a full research cycle.
+        total_trades = len(ledger.trades)
+        if total_trades:
+            breakdown = ledger.exit_reason_breakdown()
+            forced = breakdown.get("END_OF_BACKTEST", 0)
+            forced_frac = Decimal(forced) / Decimal(total_trades)
+            if forced_frac > config.max_force_close_fraction:
+                warnings.append(
+                    f"EXIT_RULES_NOT_FIRING: {forced}/{total_trades} trades "
+                    f"({forced_frac:.1%}) exited via END_OF_BACKTEST, above the "
+                    f"{config.max_force_close_fraction:.0%} limit. These results describe "
+                    "the force-close policy, not the strategy. Check that the strategy "
+                    "declares a target and/or max_holding_days."
+                )
+
+            measurable, _, coverage = ledger.r_multiple_coverage()
+            if coverage < Decimal("90"):
+                warnings.append(
+                    f"LOW_R_COVERAGE: only {measurable}/{total_trades} trades "
+                    f"({coverage:.1f}%) have a measurable R-multiple. expectancy_r is "
+                    "computed on a biased subsample and MUST NOT be used as a decision gate."
+                )
+
+            warnings.append(f"EXIT_REASON_BREAKDOWN: {breakdown}")
+
+        if rejected_position_cap:
+            warnings.append(
+                f"POSITION_CAP_REJECTIONS: {rejected_position_cap} entry orders skipped "
+                f"(cap = {config.max_concurrent_positions} concurrent positions)."
+            )
+        if sizing_rejections:
+            warnings.append(f"SIZING_REJECTIONS: {sizing_rejections}")
 
         # 5. Compute Validation Metrics
         metrics_engine = MetricsEngine(config.risk_free_config)
@@ -408,6 +538,20 @@ class BacktestEngine:
             f"Backtest run {run_id} complete. Total return: {metrics_summary.metrics.get('total_return_pct')}"
         )
 
+        # 7. Stamp data provenance onto the result.
+        # A result that cannot name its source database is not auditable.
+        try:
+            from tradecraft.core.db_provenance import fingerprint
+
+            fp = fingerprint(self.db)
+            provenance = fp.to_dict()
+            logger.info("Backtest %s data provenance:\n%s", run_id, fp.render())
+            if fp.bar_count == 0:
+                warnings.append("EMPTY_DATA_STORE: the resolved database contains no bars.")
+        except Exception as e:  # provenance capture must never break a run
+            logger.warning("Could not capture data provenance: %s", e)
+            provenance = {"error": str(e)}
+
         return BacktestResult(
             run_id=run_id,
             config=config,
@@ -417,4 +561,5 @@ class BacktestEngine:
             trades=ledger.trades,
             metrics=metrics_summary,
             benchmark_result=benchmark_res,
+            data_provenance=provenance,
         )

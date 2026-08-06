@@ -36,9 +36,26 @@ class Position:
     unrealised_pnl: Decimal = Decimal("0")
     current_price: Decimal = Decimal("0")
 
+    # --- Risk provenance (defect F2). Captured at ENTRY and never mutated afterwards. ---
+    # `current_stop` may be trailed by a strategy; `initial_stop` must not be, because the
+    # R-multiple denominator is defined by the risk taken when the position was opened.
+    initial_stop: Decimal | None = None
+    initial_risk_per_share: Decimal | None = None
+
+    # --- Time-stop state (defect F3). Enforced by the engine, not by strategy metadata. ---
+    # Previously `max_holding_days` lived in SignalIntent.metadata and was never read by
+    # anything, so no position could ever exit on time. See REPO_AUDIT_2026-08-06 §3.
+    max_holding_days: int | None = None
+    bars_held: int = 0
+
     @property
     def cost_basis(self) -> Decimal:
         return self.quantity * self.avg_entry_price
+
+    @property
+    def is_time_stop_due(self) -> bool:
+        """True when the position has been held for its full permitted session count."""
+        return self.max_holding_days is not None and self.bars_held >= self.max_holding_days
 
     @property
     def market_value(self) -> Decimal:
@@ -130,8 +147,13 @@ class Portfolio:
                 pos.entry_costs_breakdown = execution.costs
             pos.current_stop = execution.order_intent.stop_loss_level or pos.current_stop
             pos.current_target = execution.order_intent.target_level or pos.current_target
+            # Averaging in changes the entry basis, so the entry-time risk distance is
+            # recomputed against the new average. `initial_stop` itself is left alone.
+            if pos.initial_stop is not None:
+                pos.initial_risk_per_share = abs(pos.avg_entry_price - pos.initial_stop)
             return pos
         else:
+            initial_stop = execution.order_intent.stop_loss_level
             pos = Position(
                 position_id=uuid.uuid4(),
                 instrument_id=inst_id,
@@ -144,9 +166,14 @@ class Portfolio:
                 entry_fees=execution.costs.total,
                 signal_date=sig_dt,
                 entry_costs_breakdown=execution.costs,
-                current_stop=execution.order_intent.stop_loss_level,
+                current_stop=initial_stop,
                 current_target=execution.order_intent.target_level,
                 current_price=execution.fill_price,
+                initial_stop=initial_stop,
+                initial_risk_per_share=(
+                    abs(execution.fill_price - initial_stop) if initial_stop is not None else None
+                ),
+                max_holding_days=execution.order_intent.max_holding_days,
             )
             self.positions[inst_id] = pos
             return pos
