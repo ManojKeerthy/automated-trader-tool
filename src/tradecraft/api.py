@@ -78,7 +78,7 @@ def get_bars(
         raise HTTPException(status_code=404, detail=f"Instrument {symbol} not found.")
 
     query = select(MarketBar).where(
-        and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False)
+        and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == True)  # noqa: E712
     )
 
     if start:
@@ -140,7 +140,7 @@ def get_data_quality_report(db: Session = Depends(get_db)) -> dict[str, Any]:
         # Load last 30 bars
         bars_stmt = (
             select(MarketBar)
-            .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False))
+            .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == True))  # noqa: E712
             .order_by(MarketBar.trading_date.desc())
             .limit(30)
         )
@@ -352,7 +352,7 @@ def get_current_regime(
     # Query benchmark close prices up to query_date
     stmt = (
         select(MarketBar)
-        .where(and_(MarketBar.is_adjusted == False, MarketBar.trading_date <= query_date))  # noqa: E712
+        .where(and_(MarketBar.is_adjusted == True, MarketBar.trading_date <= query_date))  # noqa: E712
         .order_by(MarketBar.trading_date.asc())
     )
     bars = db.scalars(stmt).all()
@@ -433,7 +433,7 @@ def run_screening(
     for inst in instruments:
         bars_stmt = (
             select(MarketBar)
-            .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False))  # noqa: E712
+            .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == True))  # noqa: E712
             .order_by(MarketBar.trading_date.asc())
         )
         bars = db.scalars(bars_stmt).all()

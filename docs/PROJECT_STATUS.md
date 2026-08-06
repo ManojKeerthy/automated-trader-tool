@@ -2,7 +2,7 @@
 
 > **THE AUTHORITATIVE STATUS DOCUMENT. READ THIS FIRST.**
 >
-> Last updated: **2026-08-06**
+> Last updated: **2026-08-06** (data re-ingestion + quality-report pass, this revision)
 > Supersedes: all prior status summaries, cycle-closure certificates, and narrative
 > milestone reports. Where this document and any other disagree, this one is correct.
 
@@ -79,25 +79,144 @@ explicitly cleared.
 ### 3.1 Data — real for the first time
 
 ```
-DATA_AUTHENTICITY_PASSED   (gate v1.0.0)
-instruments=142  bars=387,874  range=2014-08-11 -> 2026-08-06
-mean pairwise correlation = 0.2546      (synthetic store was 1.0000)
+DATA_AUTHENTICITY_PASSED   (gate v1.0.0, re-verified 2026-08-06 after re-ingestion below)
+instruments=142  bars=398,422  range=2014-08-11 -> 2026-08-06
+mean pairwise correlation = 0.2540      (synthetic store was 1.0000)
 annualised vol spread     = 53.07pp     (synthetic store was 0.01pp)
 COVID median drawdown     = 42.9%       (synthetic store was 6.5%)
-excess kurtosis           = 156.34
+excess kurtosis           = 157.62
 ```
 
 Stored in PostgreSQL — the configured store, now shared by ingestion and research.
+
+> **Incident, 2026-08-06 (same day, later session): the store was found completely empty —
+> ROOT CAUSE FOUND AND FIXED.** A fresh session queried this same `tradecraft-db`
+> container/volume and found zero tables — `alembic current` returned nothing, `data verify`
+> failed with `relation "market_bars" does not exist`. Initially treated as a mystery and
+> worked around by re-ingesting (see below). **It then happened a second time, mid-session,
+> immediately after running `pytest tests/`**, which made the actual cause traceable:
+>
+> `tests/integration/test_db_postgres.py` connected to `settings.database_url` — the exact
+> same database the real research pipeline uses — and its `db_schema` fixture ran
+> `Base.metadata.drop_all()` at both setup AND teardown; `test_alembic_migration_upgrade_path`
+> dropped it a third time mid-test. **Every ordinary `pytest tests/` run wiped the real
+> database, twice.** This is why the store was empty at the start of the session too — some
+> earlier test run, at any point in this repo's history, did the same thing.
+>
+> Fixing it surfaced two more bugs, both previously invisible because they cancelled each
+> other out: (1) `alembic/env.py`'s `get_url()` unconditionally returned
+> `settings.database_url`, ignoring any `Config.set_main_option("sqlalchemy.url", ...)`
+> override — so even pointing the test fixture at an isolated database silently redirected
+> migrations back to the real one. (2) Once (1) was fixed, the fixture's own
+> `str(engine.url)` call turned out to mask the password as `***` by default in this
+> SQLAlchemy version, breaking the connection outright. Bug (1) had been silently absorbing
+> bug (2) the whole time. **Full fix:** isolated `tradecraft_test` database on the same
+> Postgres instance (`config.py`: `POSTGRES_TEST_DB`, defaults to `tradecraft_test`, with a
+> hard runtime refusal if it ever equals `POSTGRES_DB`), `env.py` now honors an explicit
+> override, `alembic.ini`'s stale hardcoded URL (wrong password) blanked out, and the test
+> fixture uses `url.render_as_string(hide_password=False)` instead of `str(url)`. Verified:
+> full `pytest tests/` run leaves the real database's 18-table schema byte-for-byte
+> unchanged, confirmed via direct `\dt` before/after, not just exit code.
+>
+> **Recovery:** `alembic upgrade head`, then `data backfill --universe NIFTY100 --start
+> 2015-01-01` re-run in full against the live Kite API — required twice in this session, once
+> for each wipe. Verified independently via direct SQL query (`SELECT count(*) FROM
+> market_bars`), not just CLI output, before being trusted. **The standing risk is now
+> closed**, not just worked around: `pytest tests/` is safe to run repeatedly. If `data
+> verify` ever again fails with a missing-relation error, suspect a *different* cause — this
+> specific one is fixed and tested.
 
 ### 3.2 Open data issues — blocking
 
 | Issue | Status |
 |---|---|
-| **Corporate action adjustment** | Largest daily move is **+190.67%**; excess kurtosis 156. `backfill.py` writes `is_adjusted=False` and the provider performs no adjustment. Unadjusted bonuses/splits create overnight gaps that never happened, which stop out every long in that name. **This would reproduce the Cycle 1 symptom on real data.** |
-| **Corporate actions table** | Effectively empty. `NSECorporateActionsProvider.get_corporate_actions()` returns `[]` — the NSE fetch was never implemented. Until populated, adjustment defects cannot be distinguished from real events. |
-| **Stale instrument(s)** | `price_granularity` WARN: lowest distinct-close ratio 42.3%. At least one name repeats the same close on ~58% of its bars. |
-| **4 truncated symbols** | ONGC, COALINDIA, PETRONET, NMDC. Both underlying bugs fixed; a plain re-run now repairs them. |
+| **Corporate action adjustment — premise overturned, see §3.2.1** | The `is_adjusted=False` label `backfill.py` writes on every bar is **factually wrong**, not just cautious: Zerodha's historical API adjusts for bonuses/splits/rights/spin-offs/dividends server-side by default (their own statement, cited in §3.2.1). The code comments claiming "the provider performs no adjustment" are the actual defect here. |
+| **Corporate actions table** | Effectively empty. `NSECorporateActionsProvider.get_corporate_actions()` returns `[]` — the NSE fetch was never implemented. Given §3.2.1, it's now unclear this table needs populating for standard bonus/split events at all — see the recommendation there. |
+| **Stale instrument(s) — investigated, RESOLVED as non-issue** | `price_granularity` WARN traced to **NMDC** (33.9% distinct-close ratio). Investigated 2026-08-06: NMDC's price ranged ₹7.40–₹96.04 over the series, spending long stretches at ₹10–20, where 2-decimal/NSE-tick precision allows only a few hundred valid price levels — repeats are structurally inevitable. Volume is healthy throughout (1.2M–1B shares/day, **zero** zero-volume days, so not halted) and the longest run of consecutive identical closes is 3–4 days (a stale/forward-filled feed would show long flat runs, not this). **Verdict: false positive from the `price_granularity` heuristic on low-priced equities, not a data defect.** The other 82 of 142 instruments below the 90% threshold (BAJFINANCE, KOTAKBANK, POWERGRID, WIPRO…) are large, liquid, higher-priced names where this same effect is even less likely to bind — not independently re-checked, but the mechanism generalizes. Consider raising the gate's threshold or scaling it by price rather than treating this as an open item. |
+| **Corporate-action gap — RECHARACTERISED 2026-08-06, likely not what it was assumed to be** | See the new §3.2.1 below. Short version: the "60 unexplained moves" are almost entirely genuine market crash days, not unadjusted corporate actions, and Kite's historical API appears to already deliver bonus/split-adjusted prices — the opposite of what `is_adjusted=False` on every bar claims. Do not run `corporate-actions apply` against `ca_candidates.csv` — none of its 17 HIGH CONFIDENCE rows verified as real, and applying an adjustment on top of data Kite already adjusted would double-adjust and corrupt prices. |
+| **3 truncated/failed symbols — repaired 2026-08-06** | `ADANIPORTS` (0 bars — every chunk failed with Kite `502 Bad Gateway`, mislabeled by the backfill summary as "delisted or bad symbol"), `ADANIENT` (only 245/2962 bars — aborted early after the same 502s), `APOLLOHOSP` (missing its first ~2 years, 2014-08-11→2016-08-12). Fixed via `data backfill --symbol <SYM> --chunk-delay 0.6`, which correctly resumed from the detected gap rather than re-fetching whole history. All three now have full-length series and passed `data verify`. The original "4 truncated symbols: ONGC, COALINDIA, PETRONET, NMDC" note below is unverified against the current store — re-check before assuming it's still accurate. |
 | **11 unresolved symbols** | Successions recorded in `instruments/universes.py`. `TATAMOTORS` and `PEL` are demergers with no single successor — their history must not be spliced. Four effective dates remain `UNCONFIRMED`. |
+
+### 3.2.1 The corporate-action gap probably isn't what it was thought to be
+
+Investigated 2026-08-06 by checking every one of the detector's 17 HIGH CONFIDENCE candidates
+against real bonus/split history (Trendlyne per-company records), and cross-checking against
+documented market events. Full working notes in this session's transcript; conclusions below.
+
+**Finding 1 — the 17 HIGH CONFIDENCE candidates are 17/17 false positives.** None of them is a
+real corporate action:
+
+| Symbol | Candidate said | Reality |
+|---|---|---|
+| ADANIENT | 1:4 bonus, 2017-04-26 | Only real bonus was 1:1 in 2009 |
+| ADANIPORTS | 1:4 bonus, 2024-06-04 | Has never issued a bonus |
+| ASHOKLEY | 1:4 bonus, 2020-03-23 | Real bonuses were 1:1 (2011) and 1:1 (2025) |
+| BAJAJFINSV | 1:3 bonus, 2020-03-23 | Real bonus was 1:1 in Sept 2022 |
+| BANDHANBNK | 1:4/1:3 bonus, 2018/2020 | Has never issued a bonus |
+| BHEL | 1:4 bonus, 2024-06-04 | Real bonuses were 1:1 (2007) and 1:2 (2017) |
+| BPCL | 1:4 bonus, 2018-10-05 | Real bonuses: 1:1×3 (2000/2012/2016), 1:2 (2017), 1:1 (2024) — none in Oct 2018 |
+| IDEA | 1:4/1:3 bonus ×3, 2019-2020 | Has never issued a bonus |
+| INDUSINDBK | 1:3 bonus, 2020-03-18 | Has never issued a bonus |
+| POLYCAB | (unlabeled), 2024-01-11 | Confirmed cause: Income Tax Dept raid disclosure, 20% lower-circuit crash |
+| RECLTD | 1:3 bonus, 2024-06-04 | Not checked individually; date matches Finding 2 below |
+| VEDL | 1:4/1:3/1:2 bonus ×3, 2019/2020/2026 | Real bonuses were 1:1 (2005) and 1:1 (2008) only |
+
+**Finding 2 — two dates explain most of the 60-candidate list, and they're both documented
+market-wide crashes, not corporate actions:**
+- **2020-03-23** (and the surrounding week, 2020-03-16 → 2020-03-26): the COVID crash. Nifty
+  -12.88%, Sensex -13.15%, 620 of 2,326 BSE stocks locked in a lower circuit that day (59 at
+  -20%, 132 at -10%). This explains ASHOKLEY, BAJAJFINSV, BANDHANBNK, INDUSINDBK, CANBK,
+  COFORGE, FEDERALBNK, ICICIPRULI, MOTHERSON, VEDL, RBLBANK and more, all clustered here.
+- **2024-06-04**: the Lok Sabha election-result "Terrible Tuesday." Nifty -5.93%, Sensex
+  -5.74%, worst single day since COVID; PSU, defence, railway and Adani-group names hit
+  hardest — which is exactly the cluster in the candidate list (ADANIPORTS, BHEL, RECLTD,
+  PFC, SAIL).
+
+**Finding 3 — real bonuses that DID occur inside the dataset window produced zero price gap
+in our data**, checked directly: BHEL 1:2 on 2017-09-28 (₹82.80→₹82.65, flat), BAJAJFINSV 1:1
+on 2022-09-14 (up, not down), BPCL 1:2 in Jul 2017 and 1:1 in May 2024 (no gap either date),
+ASHOKLEY 1:1 on 2025-07-16 (flat). If the raw data really were unadjusted, these ex-dates
+would show a sharp, ratio-sized drop. They don't.
+
+**Finding 4 — why: Zerodha's own statement.** Zerodha's official account has stated
+(https://x.com/zerodha/status/1952292763929874868): *"the historical prices provided through
+the Kite Connect API are adjusted for corporate actions such as bonuses, stock splits, rights
+issues, spin-offs, and extraordinary dividends... Corporate action is updated on the
+historical data at the beginning of the day process (before market open) on the ex-date...
+historical prices are retroactively adjusted across the entire historical dataset."` This
+directly contradicts `backfill.py`'s `is_adjusted=False` and the code comments in
+`corporate_actions/detector.py`, `corporate_actions/adjuster.py` and
+`market_data/quality_report.py` asserting "the Kite provider performs no adjustment." Those
+comments, and the label, are the actual defect — not the market data.
+
+**Finding 5 — the +190.67% headline number (largest single move in the dataset) is CGPOWER,
+and it's a real, correctly-unadjusted demerger, not a bug.** Crompton Greaves Ltd demerged its
+consumer-electricals business into a separately-listed Crompton Greaves Consumer Electricals
+Ltd, effective 2015-10-01; the parent was renamed CG Power and Industrial Solutions Ltd in
+Jan 2017. CGPOWER's -71.67% drop on 2016-03-15 lines up with the demerger settling into the
+industrial-only entity's price. This is exactly the kind of demerger-with-no-single-successor
+case the "11 unresolved symbols" row above already warns about for TATAMOTORS and PEL — CGPOWER
+should be added to that watch list, and its pre-2016 and post-2016 series should not be
+treated as one continuous instrument for backtesting without deciding how to handle the split
+in value. Kite's adjustment (Finding 4) evidently does not, and should not, retroactively
+splice demerger discontinuities — there's no single ratio that describes what a spin-off does.
+
+**What this means for Phase A:**
+- **Do not run `corporate-actions import`/`apply` on `ca_candidates.csv`.** None of the 17
+  HIGH CONFIDENCE rows verified as real, and applying a manual adjustment on top of data Kite
+  has already adjusted would double-adjust prices — the same silent-corruption failure mode
+  CLAUDE.md already warns against, just from the opposite direction.
+- The 60 `UNEXPLAINED_LARGE_MOVE` events flagged by `data quality-report` are, on this
+  evidence, mostly genuine market history (COVID crash, election crash, company-specific bad
+  news) correctly present in the data, not defects to fix.
+- **Open decision, not yet made:** whether to correct the `is_adjusted` label itself (many
+  query sites across `api.py`, `data_portal.py`, `ingestion.py`, `backfill.py`,
+  `attrition_analysis.py`, `trade_analysis.py` filter on `is_adjusted == False` to select
+  "raw" bars) — this is a schema/semantics change with real blast radius and hasn't been made
+  yet, pending a decision on whether Kite-adjusted-by-default changes what "raw bars, used for
+  execution reasoning" (per this doc's own architecture section) should mean.
+- CGPOWER (and possibly other 2014-2026-window demergers not yet checked) needs the same
+  no-splice treatment already applied to TATAMOTORS/PEL.
 
 ### 3.3 Engine — defects fixed 2026-08-06
 

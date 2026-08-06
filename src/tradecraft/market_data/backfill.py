@@ -4,6 +4,15 @@ Per approved amendments:
 - `data update` = normal incremental EOD update
 - `data backfill` = intentional historical population
 
+Bars are written with `is_adjusted=True`. Confirmed 2026-08-06: Zerodha's Kite Connect
+historical API adjusts for bonuses, splits, rights issues, spin-offs and extraordinary
+dividends server-side, retroactively across the whole series, at the ex-date
+(https://x.com/zerodha/status/1952292763929874868). There is no genuinely raw/unadjusted
+series available from this provider — `is_adjusted=False` here would be a false claim, not a
+conservative default. Demerger-style discontinuities (e.g. CGPOWER's 2015-10-01 spin-off of
+Crompton Greaves Consumer Electricals) are NOT adjusted by Kite, because a spin-off isn't a
+single ratio — those must be handled per-instrument via the successions table, never spliced.
+
 Backfill characteristics:
 - Resumable (picks up from earliest existing bar per instrument)
 - Incremental & Idempotent (skips already-covered date ranges)
@@ -239,7 +248,7 @@ class HistoricalBackfillWorkflow:
             select(MarketBar.trading_date).where(
                 and_(
                     MarketBar.instrument_id == inst.id,
-                    MarketBar.is_adjusted == False,  # noqa: E712
+                    MarketBar.is_adjusted == True,  # noqa: E712
                 )
             )
         ).all()
@@ -355,7 +364,7 @@ class HistoricalBackfillWorkflow:
                     volume=b["volume"],
                     source=b["source"],
                     retrieved_at=b["retrieved_at"],
-                    is_adjusted=False,
+                    is_adjusted=True,
                 )
             )
 
@@ -398,7 +407,7 @@ class HistoricalBackfillWorkflow:
             .where(
                 and_(
                     MarketBar.instrument_id == inst.id,
-                    MarketBar.is_adjusted == False,  # noqa: E712
+                    MarketBar.is_adjusted == True,  # noqa: E712
                     MarketBar.trading_date >= target_start,
                     MarketBar.trading_date <= target_end,
                 )

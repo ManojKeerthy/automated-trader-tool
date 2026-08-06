@@ -25,6 +25,16 @@ target_metadata = Base.metadata
 
 
 def get_url() -> str:
+    # An explicit sqlalchemy.url (set via -x, alembic.ini, or Config.set_main_option, e.g.
+    # by the isolated test-database fixture in tests/integration/test_db_postgres.py) must
+    # win over the app default. Previously this always returned settings.database_url
+    # unconditionally, silently redirecting any programmatic override back to the real
+    # research database - discovered 2026-08-06 when it caused the test suite's migration
+    # step to run against the wrong database while its drop_all() correctly ran against the
+    # intended one, leaving the intended database schema-less.
+    configured = context.config.get_main_option("sqlalchemy.url")
+    if configured:
+        return configured
     return settings.database_url
 
 

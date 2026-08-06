@@ -80,7 +80,7 @@ class DataPortal:
                 .where(
                     and_(
                         MarketBar.instrument_id == inst_id,
-                        MarketBar.is_adjusted == False,  # noqa: E712
+                        MarketBar.is_adjusted == True,  # noqa: E712
                         MarketBar.trading_date <= self._end_date,
                     )
                 )

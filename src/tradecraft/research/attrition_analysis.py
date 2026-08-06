@@ -588,7 +588,7 @@ class ConditionAttritionAnalyzer:
             select(MarketBar)
             .where(
                 and_(
-                    MarketBar.is_adjusted == False,  # noqa: E712
+                    MarketBar.is_adjusted == True,  # noqa: E712
                     MarketBar.trading_date >= DEVELOPMENT_SPLIT.start_date,
                     MarketBar.trading_date <= DEVELOPMENT_SPLIT.end_date,
                 )

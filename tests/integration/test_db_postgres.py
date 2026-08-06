@@ -12,12 +12,35 @@ from tradecraft.core.db_models import Instrument, MarketBar
 
 
 # Try to initialize the Postgres test engine based on configuration
+#
+# CRITICAL: this module runs Base.metadata.drop_all() at both setup and teardown (see
+# db_schema below), and test_alembic_migration_upgrade_path drops mid-test too. It must
+# NEVER connect to the same database the real application/research pipeline uses.
+# Incident 2026-08-06: this fixture used to resolve settings.database_url directly (the
+# app's real DB) and silently destroyed 398K rows of ingested market data, twice in one
+# session, via ordinary `pytest tests/` runs. Fixed by pointing at settings.test_database_url
+# (a separate database name on the same Postgres instance) plus a hard refusal below if the
+# two ever resolve to the same database.
 @pytest.fixture(scope="module")
 def postgres_engine():
-    db_url = settings.database_url
+    db_url = settings.test_database_url
+    if settings.POSTGRES_HOST == "localhost":
+        # Windows/Docker Desktop quirk observed 2026-08-06: "localhost" intermittently
+        # resolves to ::1, and although pg_hba.conf trusts ::1/128 identically to
+        # 127.0.0.1/32, connections routed through the NAT layer for ::1 sometimes fall
+        # through to the scram-sha-256 catch-all rule instead, causing sporadic
+        # "password authentication failed" errors under connection churn. Pinning to
+        # 127.0.0.1 explicitly was 100% reliable across repeated tests; "localhost" was not.
+        db_url = db_url.replace("@localhost:", "@127.0.0.1:")
+    if settings.POSTGRES_TEST_DB == settings.POSTGRES_DB:
+        pytest.fail(
+            "POSTGRES_TEST_DB must not equal POSTGRES_DB - this test suite drops all "
+            "tables in whatever database it connects to, and running it against the real "
+            "research database destroys ingested market data. Refusing to proceed."
+        )
     # Ensure it's postgresql
     if not db_url or "postgresql" not in db_url:
-        pytest.skip("PostgreSQL database URL is not configured.")
+        pytest.skip("PostgreSQL test database URL is not configured.")
 
     try:
         engine = create_engine(db_url, connect_args={"connect_timeout": 2})
@@ -26,7 +49,11 @@ def postgres_engine():
             conn.execute(text("SELECT 1"))
         return engine
     except OperationalError:
-        pytest.skip("PostgreSQL database is offline or unreachable.")
+        pytest.skip(
+            f"PostgreSQL test database '{settings.POSTGRES_TEST_DB}' is offline or "
+            "unreachable. Create it with: CREATE DATABASE tradecraft_test; "
+            "(as the configured Postgres user, on the same instance)."
+        )
 
 
 @pytest.fixture(scope="module")
@@ -41,7 +68,12 @@ def db_schema(postgres_engine):
 
     # 2. Run migrations
     alembic_cfg = Config("alembic.ini")
-    alembic_cfg.set_main_option("sqlalchemy.url", str(postgres_engine.url))
+    # str(url) masks the password as '***' by default in this SQLAlchemy version - that
+    # silently broke Alembic's connection here until 2026-08-06 (see comment on the
+    # postgres_engine fixture above). render_as_string(hide_password=False) is required.
+    alembic_cfg.set_main_option(
+        "sqlalchemy.url", postgres_engine.url.render_as_string(hide_password=False)
+    )
     command.upgrade(alembic_cfg, "head")
 
     yield postgres_engine
@@ -266,7 +298,12 @@ def test_alembic_migration_upgrade_path(postgres_engine):
     from sqlalchemy import inspect
 
     alembic_cfg = Config("alembic.ini")
-    alembic_cfg.set_main_option("sqlalchemy.url", str(postgres_engine.url))
+    # str(url) masks the password as '***' by default in this SQLAlchemy version - that
+    # silently broke Alembic's connection here until 2026-08-06 (see comment on the
+    # postgres_engine fixture above). render_as_string(hide_password=False) is required.
+    alembic_cfg.set_main_option(
+        "sqlalchemy.url", postgres_engine.url.render_as_string(hide_password=False)
+    )
 
     # Start clean: drop all tables and alembic history
     Base.metadata.drop_all(bind=postgres_engine)

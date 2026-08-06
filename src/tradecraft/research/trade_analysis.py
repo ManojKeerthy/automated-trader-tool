@@ -216,7 +216,7 @@ class TradeDistributionAnalyzer:
                 .where(
                     and_(
                         MarketBar.instrument_id == t.instrument_id,
-                        MarketBar.is_adjusted == False,  # noqa: E712
+                        MarketBar.is_adjusted == True,  # noqa: E712
                         MarketBar.trading_date >= t.entry_date,
                         MarketBar.trading_date <= t.exit_date,
                     )

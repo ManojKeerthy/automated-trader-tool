@@ -1,0 +1,992 @@
+{
+  "instrument_count": 142,
+  "bar_count": 398422,
+  "corporate_action_count": 0,
+  "blocking": true,
+  "extreme_moves": [
+    {
+      "symbol": "ADANIENT",
+      "date": "2015-06-03",
+      "prev_close": 183.2,
+      "close": 106.4,
+      "pct_change": -0.41921397379912656,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ADANIENT",
+      "date": "2019-05-20",
+      "prev_close": 115.7,
+      "close": 147.3,
+      "pct_change": 0.2731201382886777,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ADANIENT",
+      "date": "2023-02-01",
+      "prev_close": 2883.2,
+      "close": 2070.2,
+      "pct_change": -0.28197835738068816,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ADANIENT",
+      "date": "2023-02-02",
+      "prev_close": 2070.2,
+      "close": 1517.5,
+      "pct_change": -0.2669790358419476,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ADANIPOWER",
+      "date": "2018-10-10",
+      "prev_close": 4.8,
+      "close": 6.0,
+      "pct_change": 0.25000000000000006,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ADANIPOWER",
+      "date": "2020-03-12",
+      "prev_close": 8.25,
+      "close": 6.05,
+      "pct_change": -0.26666666666666666,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ASHOKLEY",
+      "date": "2020-03-19",
+      "prev_close": 29.65,
+      "close": 21.55,
+      "pct_change": -0.2731871838111298,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ASHOKLEY",
+      "date": "2020-03-26",
+      "prev_close": 14.75,
+      "close": 18.95,
+      "pct_change": 0.28474576271186436,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "AXISBANK",
+      "date": "2020-03-23",
+      "prev_close": 428.15,
+      "close": 308.65,
+      "pct_change": -0.27910778932617075,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "BAJAJFINSV",
+      "date": "2020-03-23",
+      "prev_close": 623.3,
+      "close": 462.1,
+      "pct_change": -0.2586234557997753,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "date": "2020-03-23",
+      "prev_close": 231.6,
+      "close": 173.65,
+      "pct_change": -0.2502158894645941,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "date": "2020-03-26",
+      "prev_close": 154.75,
+      "close": 215.6,
+      "pct_change": 0.3932148626817447,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "BANKBARODA",
+      "date": "2017-10-25",
+      "prev_close": 126.9,
+      "close": 169.05,
+      "pct_change": 0.33215130023640665,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "CANBK",
+      "date": "2017-10-25",
+      "prev_close": 56.24,
+      "close": 79.24,
+      "pct_change": 0.40896159317211933,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "CANBK",
+      "date": "2020-03-23",
+      "prev_close": 14.99,
+      "close": 11.2,
+      "pct_change": -0.2528352234823216,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "date": "2015-01-01",
+      "prev_close": 64.18,
+      "close": 186.55,
+      "pct_change": 1.9066687441570582,
+      "verdict": "UNEXPLAINED_EXTREME_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "date": "2016-03-15",
+      "prev_close": 155.3,
+      "close": 44.0,
+      "pct_change": -0.716677398583387,
+      "verdict": "UNEXPLAINED_EXTREME_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "CGPOWER",
+      "date": "2019-02-13",
+      "prev_close": 33.7,
+      "close": 23.65,
+      "pct_change": -0.298219584569733,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "CHOLAFIN",
+      "date": "2020-03-23",
+      "prev_close": 193.25,
+      "close": 136.05,
+      "pct_change": -0.2959896507115135,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "CONCOR",
+      "date": "2015-01-01",
+      "prev_close": 277.1,
+      "close": 347.6,
+      "pct_change": 0.2544207867195958,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "DLF",
+      "date": "2014-10-14",
+      "prev_close": 146.9,
+      "close": 104.95,
+      "pct_change": -0.28556841388699794,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "GLENMARK",
+      "date": "2020-06-22",
+      "prev_close": 409.35,
+      "close": 519.75,
+      "pct_change": 0.2696958592891168,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ICICIPRULI",
+      "date": "2020-03-25",
+      "prev_close": 254.45,
+      "close": 320.45,
+      "pct_change": 0.2593829829043034,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2017-01-30",
+      "prev_close": 47.1,
+      "close": 59.0,
+      "pct_change": 0.2526539278131634,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2019-07-29",
+      "prev_close": 9.25,
+      "close": 6.75,
+      "pct_change": -0.2702702702702703,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2019-11-19",
+      "prev_close": 4.45,
+      "close": 6.05,
+      "pct_change": 0.3595505617977527,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2020-01-17",
+      "prev_close": 6.0,
+      "close": 4.5,
+      "pct_change": -0.25,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2020-02-19",
+      "prev_close": 3.0,
+      "close": 4.2,
+      "pct_change": 0.4000000000000001,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2020-03-13",
+      "prev_close": 4.2,
+      "close": 5.6,
+      "pct_change": 0.3333333333333332,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2020-03-18",
+      "prev_close": 4.85,
+      "close": 3.15,
+      "pct_change": -0.35051546391752575,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2020-09-03",
+      "prev_close": 9.9,
+      "close": 12.55,
+      "pct_change": 0.2676767676767677,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "IDEA",
+      "date": "2021-09-16",
+      "prev_close": 8.95,
+      "close": 11.25,
+      "pct_change": 0.2569832402234638,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "INDUSINDBK",
+      "date": "2020-03-26",
+      "prev_close": 301.3,
+      "close": 435.9,
+      "pct_change": 0.44673083305675393,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "INDUSINDBK",
+      "date": "2025-03-11",
+      "prev_close": 900.5,
+      "close": 655.95,
+      "pct_change": -0.27157134925041637,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "JINDALSTEL",
+      "date": "2015-02-19",
+      "prev_close": 155.35,
+      "close": 195.35,
+      "pct_change": 0.2574831026713872,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "JINDALSTEL",
+      "date": "2020-04-07",
+      "prev_close": 63.15,
+      "close": 81.4,
+      "pct_change": 0.2889944576405385,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "MFSL",
+      "date": "2016-01-27",
+      "prev_close": 224.7,
+      "close": 348.6,
+      "pct_change": 0.5514018691588787,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "MFSL",
+      "date": "2020-03-23",
+      "prev_close": 407.75,
+      "close": 288.55,
+      "pct_change": -0.2923359901900674,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "NMDC",
+      "date": "2022-10-27",
+      "prev_close": 15.75,
+      "close": 29.25,
+      "pct_change": 0.8571428571428571,
+      "verdict": "UNEXPLAINED_EXTREME_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "OFSS",
+      "date": "2024-01-18",
+      "prev_close": 4564.5,
+      "close": 5939.5,
+      "pct_change": 0.3012378135611787,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "PNB",
+      "date": "2017-10-25",
+      "prev_close": 130.51,
+      "close": 190.81,
+      "pct_change": 0.4620335606466939,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "RECLTD",
+      "date": "2024-06-04",
+      "prev_close": 604.5,
+      "close": 452.2,
+      "pct_change": -0.25194375516956163,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "SBIN",
+      "date": "2017-10-25",
+      "prev_close": 254.45,
+      "close": 324.9,
+      "pct_change": 0.27687168402436624,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "SIEMENS",
+      "date": "2025-04-07",
+      "prev_close": 3754.25,
+      "close": 2812.45,
+      "pct_change": -0.25086235599653733,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "VEDL",
+      "date": "2016-02-15",
+      "prev_close": 19.9,
+      "close": 25.6,
+      "pct_change": 0.2864321608040203,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "VEDL",
+      "date": "2026-04-30",
+      "prev_close": 404.9,
+      "close": 271.55,
+      "pct_change": -0.3293405779204741,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2018-09-21",
+      "prev_close": 319.2,
+      "close": 226.5,
+      "pct_change": -0.29041353383458646,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2019-02-14",
+      "prev_close": 169.45,
+      "close": 221.25,
+      "pct_change": 0.3056948952493362,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2019-04-30",
+      "prev_close": 237.2,
+      "close": 168.0,
+      "pct_change": -0.2917369308600337,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2019-10-03",
+      "prev_close": 32.0,
+      "close": 42.5,
+      "pct_change": 0.328125,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2020-03-05",
+      "prev_close": 29.3,
+      "close": 36.8,
+      "pct_change": 0.25597269624573366,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2020-03-06",
+      "prev_close": 36.8,
+      "close": 16.15,
+      "pct_change": -0.561141304347826,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2020-03-09",
+      "prev_close": 16.15,
+      "close": 21.25,
+      "pct_change": 0.3157894736842106,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2020-03-11",
+      "prev_close": 21.25,
+      "close": 28.8,
+      "pct_change": 0.35529411764705887,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2020-03-16",
+      "prev_close": 25.55,
+      "close": 37.1,
+      "pct_change": 0.452054794520548,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "YESBANK",
+      "date": "2020-03-17",
+      "prev_close": 37.1,
+      "close": 58.65,
+      "pct_change": 0.5808625336927222,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ZEEL",
+      "date": "2019-01-25",
+      "prev_close": 424.93,
+      "close": 311.85,
+      "pct_change": -0.26611441884545683,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ZEEL",
+      "date": "2021-09-14",
+      "prev_close": 183.01,
+      "close": 256.17,
+      "pct_change": 0.39975957597945483,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ZEEL",
+      "date": "2021-09-22",
+      "prev_close": 250.44,
+      "close": 329.88,
+      "pct_change": 0.31720172496406324,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    },
+    {
+      "symbol": "ZEEL",
+      "date": "2024-01-23",
+      "prev_close": 226.64,
+      "close": 152.74,
+      "pct_change": -0.32606777267913867,
+      "verdict": "UNEXPLAINED_LARGE_MOVE",
+      "matched_action": null
+    }
+  ],
+  "stale_instruments": [
+    {
+      "symbol": "NMDC",
+      "bars": 2962,
+      "distinct_close_pct": 33.929777177582714
+    },
+    {
+      "symbol": "ADANIPOWER",
+      "bars": 2962,
+      "distinct_close_pct": 42.30249831195138
+    },
+    {
+      "symbol": "BAJFINANCE",
+      "bars": 2962,
+      "distinct_close_pct": 45.20594193112762
+    },
+    {
+      "symbol": "GMRAIRPORT",
+      "bars": 2962,
+      "distinct_close_pct": 45.20594193112762
+    },
+    {
+      "symbol": "IDEA",
+      "bars": 2962,
+      "distinct_close_pct": 45.57731262660364
+    },
+    {
+      "symbol": "ASHOKLEY",
+      "bars": 2962,
+      "distinct_close_pct": 49.39230249831195
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "bars": 2659,
+      "distinct_close_pct": 51.29748025573524
+    },
+    {
+      "symbol": "COFORGE",
+      "bars": 2962,
+      "distinct_close_pct": 54.287643484132346
+    },
+    {
+      "symbol": "CANBK",
+      "bars": 2962,
+      "distinct_close_pct": 55.50303848750844
+    },
+    {
+      "symbol": "NAUKRI",
+      "bars": 2962,
+      "distinct_close_pct": 57.12356515867657
+    },
+    {
+      "symbol": "PFC",
+      "bars": 2962,
+      "distinct_close_pct": 57.59621877110061
+    },
+    {
+      "symbol": "BEL",
+      "bars": 2962,
+      "distinct_close_pct": 58.13639432815665
+    },
+    {
+      "symbol": "MOTHERSON",
+      "bars": 2962,
+      "distinct_close_pct": 58.64280891289669
+    },
+    {
+      "symbol": "GAIL",
+      "bars": 2962,
+      "distinct_close_pct": 59.11546252532073
+    },
+    {
+      "symbol": "POWERGRID",
+      "bars": 2962,
+      "distinct_close_pct": 60.12829169480081
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "bars": 2962,
+      "distinct_close_pct": 60.195813639432814
+    },
+    {
+      "symbol": "IOC",
+      "bars": 2962,
+      "distinct_close_pct": 60.43214044564483
+    },
+    {
+      "symbol": "NATIONALUM",
+      "bars": 2962,
+      "distinct_close_pct": 60.97231600270088
+    },
+    {
+      "symbol": "RECLTD",
+      "bars": 2962,
+      "distinct_close_pct": 61.81634031060094
+    },
+    {
+      "symbol": "WIPRO",
+      "bars": 2962,
+      "distinct_close_pct": 62.39027683997299
+    },
+    {
+      "symbol": "SAIL",
+      "bars": 2962,
+      "distinct_close_pct": 62.559081701553005
+    },
+    {
+      "symbol": "TATASTEEL",
+      "bars": 2962,
+      "distinct_close_pct": 63.87575962187711
+    },
+    {
+      "symbol": "PETRONET",
+      "bars": 2962,
+      "distinct_close_pct": 64.28089128966914
+    },
+    {
+      "symbol": "FEDERALBNK",
+      "bars": 2966,
+      "distinct_close_pct": 64.76736345246123
+    },
+    {
+      "symbol": "YESBANK",
+      "bars": 2962,
+      "distinct_close_pct": 65.42876434841324
+    },
+    {
+      "symbol": "TATAPOWER",
+      "bars": 2962,
+      "distinct_close_pct": 65.80013504388927
+    },
+    {
+      "symbol": "BPCL",
+      "bars": 2962,
+      "distinct_close_pct": 66.61039837947332
+    },
+    {
+      "symbol": "ONGC",
+      "bars": 2962,
+      "distinct_close_pct": 67.04929101958136
+    },
+    {
+      "symbol": "IRFC",
+      "bars": 1368,
+      "distinct_close_pct": 67.25146198830409
+    },
+    {
+      "symbol": "JSWENERGY",
+      "bars": 2962,
+      "distinct_close_pct": 68.12964213369345
+    },
+    {
+      "symbol": "VEDL",
+      "bars": 2962,
+      "distinct_close_pct": 68.6360567184335
+    },
+    {
+      "symbol": "PNB",
+      "bars": 2962,
+      "distinct_close_pct": 68.7373396353815
+    },
+    {
+      "symbol": "ITC",
+      "bars": 2962,
+      "distinct_close_pct": 69.04118838622553
+    },
+    {
+      "symbol": "EXIDEIND",
+      "bars": 2962,
+      "distinct_close_pct": 70.1215395003376
+    },
+    {
+      "symbol": "BANKBARODA",
+      "bars": 2962,
+      "distinct_close_pct": 71.06684672518568
+    },
+    {
+      "symbol": "IGL",
+      "bars": 2962,
+      "distinct_close_pct": 72.01215395003376
+    },
+    {
+      "symbol": "NTPC",
+      "bars": 2962,
+      "distinct_close_pct": 72.21471978392978
+    },
+    {
+      "symbol": "INDHOTEL",
+      "bars": 2962,
+      "distinct_close_pct": 72.4510465901418
+    },
+    {
+      "symbol": "BHEL",
+      "bars": 2962,
+      "distinct_close_pct": 74.30790006752194
+    },
+    {
+      "symbol": "OFSS",
+      "bars": 2962,
+      "distinct_close_pct": 75.52329507089804
+    },
+    {
+      "symbol": "VBL",
+      "bars": 2414,
+      "distinct_close_pct": 76.55343827671913
+    },
+    {
+      "symbol": "AMBUJACEM",
+      "bars": 2962,
+      "distinct_close_pct": 76.56988521269413
+    },
+    {
+      "symbol": "ULTRACEMCO",
+      "bars": 2962,
+      "distinct_close_pct": 77.04253882511816
+    },
+    {
+      "symbol": "BIOCON",
+      "bars": 2962,
+      "distinct_close_pct": 77.17758271438217
+    },
+    {
+      "symbol": "ADANIENT",
+      "bars": 2962,
+      "distinct_close_pct": 77.75151924375422
+    },
+    {
+      "symbol": "HDFCBANK",
+      "bars": 2962,
+      "distinct_close_pct": 78.52802160702228
+    },
+    {
+      "symbol": "CGPOWER",
+      "bars": 2962,
+      "distinct_close_pct": 78.59554355165429
+    },
+    {
+      "symbol": "COALINDIA",
+      "bars": 2962,
+      "distinct_close_pct": 78.6630654962863
+    },
+    {
+      "symbol": "APOLLOTYRE",
+      "bars": 2962,
+      "distinct_close_pct": 78.6968264686023
+    },
+    {
+      "symbol": "SHRIRAMFIN",
+      "bars": 2962,
+      "distinct_close_pct": 79.13571910871033
+    },
+    {
+      "symbol": "BAJAJ-AUTO",
+      "bars": 2962,
+      "distinct_close_pct": 79.77717758271439
+    },
+    {
+      "symbol": "DABUR",
+      "bars": 2962,
+      "distinct_close_pct": 80.45239702903443
+    },
+    {
+      "symbol": "NESTLEIND",
+      "bars": 2962,
+      "distinct_close_pct": 81.46522619851451
+    },
+    {
+      "symbol": "BERGEPAINT",
+      "bars": 2962,
+      "distinct_close_pct": 81.49898717083052
+    },
+    {
+      "symbol": "CONCOR",
+      "bars": 2962,
+      "distinct_close_pct": 83.11951384199865
+    },
+    {
+      "symbol": "TMPV",
+      "bars": 2962,
+      "distinct_close_pct": 83.22079675894666
+    },
+    {
+      "symbol": "TRENT",
+      "bars": 2962,
+      "distinct_close_pct": 83.7272113436867
+    },
+    {
+      "symbol": "PIDILITIND",
+      "bars": 2962,
+      "distinct_close_pct": 84.16610398379473
+    },
+    {
+      "symbol": "DLF",
+      "bars": 2962,
+      "distinct_close_pct": 84.67251856853477
+    },
+    {
+      "symbol": "PERSISTENT",
+      "bars": 2962,
+      "distinct_close_pct": 85.68534773801485
+    },
+    {
+      "symbol": "INFY",
+      "bars": 2962,
+      "distinct_close_pct": 85.78663065496286
+    },
+    {
+      "symbol": "MARICO",
+      "bars": 2962,
+      "distinct_close_pct": 86.02295746117488
+    },
+    {
+      "symbol": "ICICIPRULI",
+      "bars": 2439,
+      "distinct_close_pct": 86.10086100861008
+    },
+    {
+      "symbol": "TECHM",
+      "bars": 2965,
+      "distinct_close_pct": 86.27318718381113
+    },
+    {
+      "symbol": "HDFCLIFE",
+      "bars": 2159,
+      "distinct_close_pct": 86.38258452987495
+    },
+    {
+      "symbol": "UPL",
+      "bars": 2962,
+      "distinct_close_pct": 86.39432815665091
+    },
+    {
+      "symbol": "SBIN",
+      "bars": 2962,
+      "distinct_close_pct": 86.63065496286293
+    },
+    {
+      "symbol": "HINDALCO",
+      "bars": 2962,
+      "distinct_close_pct": 86.76569885212695
+    },
+    {
+      "symbol": "TORNTPOWER",
+      "bars": 2962,
+      "distinct_close_pct": 86.76569885212695
+    },
+    {
+      "symbol": "TATACONSUM",
+      "bars": 2962,
+      "distinct_close_pct": 86.83322079675895
+    },
+    {
+      "symbol": "BHARTIARTL",
+      "bars": 2962,
+      "distinct_close_pct": 86.86698176907495
+    },
+    {
+      "symbol": "SUNTV",
+      "bars": 2962,
+      "distinct_close_pct": 86.86698176907495
+    },
+    {
+      "symbol": "JINDALSTEL",
+      "bars": 2962,
+      "distinct_close_pct": 87.13706954760298
+    },
+    {
+      "symbol": "RELIANCE",
+      "bars": 2966,
+      "distinct_close_pct": 87.5590020229265
+    },
+    {
+      "symbol": "RBLBANK",
+      "bars": 2458,
+      "distinct_close_pct": 88.20179007323027
+    },
+    {
+      "symbol": "ADANIPORTS",
+      "bars": 2962,
+      "distinct_close_pct": 88.35246455097906
+    },
+    {
+      "symbol": "LICI",
+      "bars": 1049,
+      "distinct_close_pct": 88.36987607244996
+    },
+    {
+      "symbol": "ZEEL",
+      "bars": 2962,
+      "distinct_close_pct": 88.69007427413909
+    },
+    {
+      "symbol": "ZYDUSLIFE",
+      "bars": 2962,
+      "distinct_close_pct": 88.8251181634031
+    },
+    {
+      "symbol": "HCLTECH",
+      "bars": 2962,
+      "distinct_close_pct": 89.26401080351114
+    },
+    {
+      "symbol": "RAMCOCEM",
+      "bars": 2962,
+      "distinct_close_pct": 89.46657663740716
+    },
+    {
+      "symbol": "BANDHANBNK",
+      "bars": 2071,
+      "distinct_close_pct": 89.90825688073394
+    },
+    {
+      "symbol": "CHOLAFIN",
+      "bars": 2962,
+      "distinct_close_pct": 89.9729912221472
+    }
+  ],
+  "duplicate_pairs": [],
+  "short_history": [
+    {
+      "symbol": "SWIGGY",
+      "bars": 428
+    },
+    {
+      "symbol": "HYUNDAI",
+      "bars": 444
+    }
+  ],
+  "provenance": {
+    "resolved_at": "2026-08-06T13:07:49.768454+00:00",
+    "database_url_redacted": "postgresql://tradecraft:***@localhost:5432/tradecraft",
+    "dialect": "postgresql",
+    "host": "localhost",
+    "database_name": "tradecraft",
+    "instrument_count": 142,
+    "bar_count": 398422,
+    "earliest_bar": "2014-08-11",
+    "latest_bar": "2026-08-06",
+    "distinct_instruments_with_bars": 142,
+    "sources": {
+      "zerodha": 398422
+    },
+    "authenticity_gate_passed": null
+  }
+}

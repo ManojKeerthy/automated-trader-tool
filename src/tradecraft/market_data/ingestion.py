@@ -84,7 +84,7 @@ class DataIngestionWorkflow:
                 # Determine incremental start date
                 last_bar_stmt = (
                     select(MarketBar)
-                    .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False))
+                    .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == True))  # noqa: E712
                     .order_by(MarketBar.trading_date.desc())
                     .limit(1)
                 )
@@ -126,7 +126,7 @@ class DataIngestionWorkflow:
                 # Merge with previous 10 bars for context (stale or extreme returns check)
                 history_stmt = (
                     select(MarketBar)
-                    .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False))
+                    .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == True))  # noqa: E712
                     .order_by(MarketBar.trading_date.desc())
                     .limit(10)
                 )
@@ -165,7 +165,7 @@ class DataIngestionWorkflow:
                         volume=bar_data["volume"],
                         source=bar_data["source"],
                         retrieved_at=bar_data["retrieved_at"],
-                        is_adjusted=False,
+                        is_adjusted=True,
                         adjustment_factor=Decimal("1.000000"),
                     )
                     self.db.add(bar)
@@ -226,7 +226,7 @@ class DataIngestionWorkflow:
         for inst in instruments:
             last_date_stmt = (
                 select(MarketBar.trading_date)
-                .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == False))
+                .where(and_(MarketBar.instrument_id == inst.id, MarketBar.is_adjusted == True))  # noqa: E712
                 .order_by(MarketBar.trading_date.desc())
                 .limit(1)
             )

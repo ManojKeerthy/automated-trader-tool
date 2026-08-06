@@ -17,10 +17,21 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = "tradecraft"
     POSTGRES_PASSWORD: str = "secret"  # Default fallback, should be set in .env
 
+    # Separate database for the integration test suite. Must never equal POSTGRES_DB:
+    # tests/integration/test_db_postgres.py runs Base.metadata.drop_all() against whatever
+    # this resolves to, at both setup and teardown. Pointed at the real research database
+    # (2026-08-06 incident), it silently destroyed the ingested market data twice in one
+    # session. Same Postgres instance, different database name - full namespace isolation.
+    POSTGRES_TEST_DB: str = "tradecraft_test"
+
     # Database URL helper
     @property
     def database_url(self) -> str:
         return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+
+    @property
+    def test_database_url(self) -> str:
+        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_TEST_DB}"
 
     # Zerodha Kite Connect credentials
     KITE_API_KEY: str | None = None

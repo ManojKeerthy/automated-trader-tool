@@ -95,7 +95,10 @@ class MarketBar(Base):
     retrieved_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=datetime.utcnow
     )
-    is_adjusted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    # Kite-sourced bars are adjusted for bonuses/splits/rights/dividends by the provider
+    # itself, server-side, retroactively (confirmed 2026-08-06). Default True reflects that
+    # this pipeline has no genuinely raw/unadjusted source, not a design choice.
+    is_adjusted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     adjustment_factor: Mapped[Decimal] = mapped_column(
         Numeric(10, 6), nullable=False, default=Decimal("1.000000")
     )

@@ -1,17 +1,48 @@
 """Corporate action detection from price series.
 
+CORRECTION, 2026-08-06 — READ BEFORE TRUSTING THIS MODULE'S OUTPUT
+====================================================================
+The premise below (unadjusted vendor feed => detect bonuses from price gaps) is WRONG for
+this data source. Zerodha's Kite Connect historical API adjusts for bonuses, splits, rights
+issues, spin-offs and extraordinary dividends server-side, retroactively, at the ex-date
+(https://x.com/zerodha/status/1952292763929874868). `backfill.py` now writes
+`is_adjusted=True` to reflect this. Verified empirically: real bonus ex-dates inside the
+dataset window (BHEL 2017-09-28, BAJAJFINSV 2022-09-14, BPCL Jul-2017/May-2024, ASHOKLEY
+2025-07-16) show ZERO price gap in the ingested data.
+
+Checking this module's own output confirmed the consequence: all 17 candidates it scored
+HIGH_CONFIDENCE on the live NIFTY100 dataset were false positives (see PROJECT_STATUS.md
+section 3.2.1 for the full per-symbol check). The "traded value continuity" heuristic below
+does NOT reliably distinguish a bonus from a market-wide panic day, because panic days
+(COVID crash week, March 2020; election-result crash, 2024-06-04) elevate volume for
+essentially every stock simultaneously — which can satisfy the continuity test even though
+nothing corporate happened. Do not treat a HIGH_CONFIDENCE hit as evidence; it is a lead for
+a human/external check, and on this evidence its hit rate on real data is currently 0%.
+
+Genuine remaining use: catching demerger/spin-off discontinuities that Kite's adjustment
+does NOT retroactively splice (there's no single ratio for a spin-off) — e.g. CGPOWER's
+2015-10-01 demerger of Crompton Greaves Consumer Electricals, the dataset's single largest
+move (+190.67%) and a real event, not a defect. For that narrower purpose this module is
+still useful as a discontinuity scanner; for inferring bonuses/splits to backward-adjust, it
+is currently unreliable and its output must not be applied via `corporate_actions/adjuster.py`
+without independent confirmation.
+
+ORIGINAL DESIGN RATIONALE (superseded above, kept for context)
+================================================================
 WHY THIS EXISTS
 ===============
-`backfill.py` stores every bar with `is_adjusted=False` and the Kite provider performs no
-corporate action adjustment. The ingested NIFTY 100 data shows a largest daily move of
-+190.67% and pooled excess kurtosis of 156 — both far outside normal equity behaviour and
-consistent with unadjusted splits, bonuses and consolidations.
+The original premise was that `backfill.py` stores every bar with `is_adjusted=False` and
+the Kite provider performs no corporate action adjustment — this is now known to be false,
+see the correction above. The ingested NIFTY 100 data shows a largest daily move of +190.67%
+and pooled excess kurtosis of 156, both far outside normal equity behaviour; this is now
+understood to be the CGPOWER demerger and genuine crash-day volatility, not unadjusted
+corporate actions.
 
-This matters more here than in a typical backtest. An unadjusted 1:1 bonus appears as a
--50% overnight gap that never happened. Every long position in that name is stopped out on
-a date with no relationship to the strategy. Research Cycle 1's symptom was "almost every
-trade hits its stop" — unadjusted corporate actions would reproduce that symptom on
-genuinely real data, and it would look like a strategy result rather than a data defect.
+An unadjusted 1:1 bonus, if it existed in this data, would appear as a -50% overnight gap
+that never happened, stopping out every long position in that name on a date with no
+relationship to the strategy. Research Cycle 1's symptom was "almost every trade hits its
+stop" — this remains worth guarding against in principle, even though the specific mechanism
+assumed here (Kite feed unadjusted) turned out not to apply.
 
 WHY DETECTION RATHER THAN JUST FETCHING
 =======================================
@@ -357,7 +388,7 @@ class CorporateActionDetector:
                        m.close AS c, m.volume AS v
                 FROM market_bars m
                 JOIN instruments i ON i.id = m.instrument_id
-                WHERE m.is_adjusted = false
+                WHERE m.is_adjusted = true
                 ORDER BY i.symbol, m.trading_date
                 """
             )

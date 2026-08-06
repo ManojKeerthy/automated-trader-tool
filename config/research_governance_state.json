@@ -5,36 +5,46 @@
   "completed_milestone": "REPO_AUDIT_2026-08-06",
   "next_authorised_milestone": "DATA_INGESTION_REAL_NSE_NIFTY100",
 
-  "data_integrity_status": "AUTHENTICITY_GATE_PASSED_QUALITY_AUDIT_PENDING",
+  "data_integrity_status": "AUTHENTICITY_GATE_PASSED_QUALITY_AUDIT_BLOCKING_CORPORATE_ACTIONS",
   "data_integrity_reference": "docs/research/REPO_AUDIT_2026-08-06.md",
   "authenticity_gate_result": {
     "gate_version": "1.0.0",
     "verdict": "DATA_AUTHENTICITY_PASSED",
     "run_on": "2026-08-06",
+    "note": "Re-verified 2026-08-06 in a later session after the store was found completely empty (see data_integrity_notes) and re-ingested from Kite. Numbers below are from direct SQL query, not just CLI/doc claims.",
     "store": "postgresql (configured store)",
     "instruments": 142,
-    "instruments_with_min_history": 136,
-    "bars": 387874,
+    "instruments_with_min_history": 140,
+    "bars": 398422,
     "range": "2014-08-11 -> 2026-08-06",
-    "mean_pairwise_correlation": 0.2546,
+    "mean_pairwise_correlation": 0.254,
     "vol_dispersion_pp": 53.07,
     "covid_median_drawdown": 0.429,
     "warnings": [
-      "price_granularity WARN: lowest distinct-close ratio 42.3% - at least one stale or halted instrument"
+      "price_granularity WARN investigated 2026-08-06 and RESOLVED as a heuristic false positive, not a data defect: NMDC (33.9% distinct-close ratio) traded most of its history at Rs 10-20, where 2-decimal/NSE-tick precision allows only a few hundred valid price levels, making repeats structurally inevitable. Confirmed not stale/halted: volume 1.2M-1B shares/day with zero zero-volume days across 2962 bars, and longest consecutive-identical-close run is only 3-4 days. The other 82/142 instruments below the 90% threshold are larger/higher-priced names where the same low-price-tick-size mechanism applies even less; not individually re-checked. Recommend the gate's price_granularity threshold be scaled by price or raised, rather than continuing to treat this as an open data-quality item."
     ]
   },
   "open_data_quality_questions": [
-    "Largest daily move is +190.67% and pooled excess kurtosis is 156.34. Both are far outside normal equity behaviour and are consistent with UNADJUSTED corporate actions (splits, bonuses, demergers).",
+    "Largest daily move is +190.67% and pooled excess kurtosis is 157.62. Both are far outside normal equity behaviour and are consistent with UNADJUSTED corporate actions (splits, bonuses, demergers).",
     "backfill.py writes is_adjusted=False on every bar and the Kite provider performs no corporate-action adjustment.",
     "The corporate_actions table must be populated before adjustment defects can be distinguished from genuine events.",
     "Unadjusted actions create overnight gaps that never happened, stopping out every long position in the affected name - this would reproduce the Cycle 1 'everything hits its stop' symptom on real data.",
-    "RESOLVE VIA: python -m tradecraft data quality-report"
+    "QUANTIFIED 2026-08-06: data quality-report reports blocking=true, corporate_action_count=0, and 60 UNEXPLAINED_LARGE_MOVE events across the universe. Full per-symbol list in docs/research/quality_report.json.",
+    "RECHARACTERISED 2026-08-06 (see PROJECT_STATUS.md section 3.2.1 for full detail): all 17 HIGH_CONFIDENCE candidates in docs/research/ca_candidates.csv were checked against real bonus/split history via external research and are 17/17 FALSE POSITIVES - the underlying moves are the 2020-03-23 COVID crash week (620 BSE stocks in lower circuit) and the 2024-06-04 election-result crash (Nifty -5.93%, worst since COVID), not corporate actions. Real bonuses that did occur in-window (BHEL 2017-09-28, BAJAJFINSV 2022-09-14, BPCL Jul-2017/May-2024, ASHOKLEY 2025-07-16) show ZERO price gap in our raw data.",
+    "ROOT CAUSE FOUND 2026-08-06: Zerodha's own statement (https://x.com/zerodha/status/1952292763929874868) confirms the Kite historical API adjusts for bonuses/splits/rights/spin-offs/dividends server-side by default, retroactively, at the ex-date. backfill.py's is_adjusted=False label and the 'the Kite provider performs no adjustment' comments in corporate_actions/detector.py, corporate_actions/adjuster.py, and market_data/quality_report.py are themselves the defect, not the market data.",
+    "The +190.67% headline largest-move (CGPOWER) is the real 2015-10-01 Crompton Greaves demerger into CG Power (industrial) + Crompton Greaves Consumer Electricals - correctly left unadjusted by Kite since spin-offs aren't a simple ratio adjustment. Same no-splice treatment as TATAMOTORS/PEL should apply; CGPOWER should be added to that watch list.",
+    "DO NOT run corporate-actions import/apply on ca_candidates.csv as currently written - none of its HIGH_CONFIDENCE rows verified as real, and applying an adjustment on top of data Kite already adjusted would double-adjust and corrupt prices.",
+    "OPEN DECISION, not yet made: whether to correct the is_adjusted label given Kite already adjusts by default. Real blast radius - api.py, data_portal.py, ingestion.py, backfill.py, attrition_analysis.py, trade_analysis.py all filter on is_adjusted==False to select 'raw' bars for execution reasoning. Needs an explicit decision before code changes, not a silent relabel."
   ],
   "data_integrity_notes": [
     "RESOLVED 2026-08-06: the previous SQLite store (data/tradecraft.db) was synthetic, generated by scratch/seed_real_market_bars.py while stamped source='ZERODHA_KITE_EOD'.",
     "RESOLVED 2026-08-06: research runners hardcoded sqlite:///data/tradecraft.db while ingestion wrote to PostgreSQL. All runners now resolve the configured store via resolve_research_session().",
     "RESOLVED 2026-08-06: several runners pinned a SHA-256 of the synthetic SQLite file as a preflight check, which would have blocked ingesting real data. All pinned hashes removed.",
-    "The legacy synthetic SQLite file still exists on disk and is NOT the research store. It should be deleted or renamed to synthetic_fixture.db."
+    "The legacy synthetic SQLite file still exists on disk and is NOT the research store. It should be deleted or renamed to synthetic_fixture.db.",
+    "INCIDENT 2026-08-06, ROOT-CAUSED AND FIXED (updated from earlier note in this file which said root cause was not found - it has since been found): the configured PostgreSQL store was found empty twice in one session. Root cause: tests/integration/test_db_postgres.py connected to settings.database_url (the real research database, not an isolated test DB) and ran Base.metadata.drop_all() at setup, teardown, AND mid-test in test_alembic_migration_upgrade_path - every ordinary `pytest tests/` run destroyed the real data. Confirmed by reproducing the second wipe immediately after a pytest run in this session.",
+    "Fix chain (3 bugs, first 2 previously invisible because they cancelled out): (1) added isolated POSTGRES_TEST_DB=tradecraft_test in config.py with a hard runtime refusal if it ever equals POSTGRES_DB; (2) alembic/env.py's get_url() unconditionally returned settings.database_url, ignoring any Config.set_main_option override - fixed to check config.get_main_option('sqlalchemy.url') first; (3) alembic.ini had a stale hardcoded sqlalchemy.url with the wrong password, invisible only because of bug (2) - blanked out; (4) once (2) was fixed, the test fixture's str(engine.url) turned out to mask the password as '***' by default in this SQLAlchemy version - fixed to use url.render_as_string(hide_password=False). Verified: full pytest tests/ run leaves the real database's 18-table schema unchanged (direct \\dt before/after), all 6 previously-broken test_db_postgres.py tests now pass.",
+    "This standing risk is CLOSED, not worked around: pytest tests/ is now safe to run repeatedly and will never touch the real research database again. Recovery for both wipes: alembic upgrade head + full data backfill re-run, verified via direct SQL query.",
+    "REPAIRED 2026-08-06: ADANIPORTS (0 bars, every chunk hit Kite 502 Bad Gateway), ADANIENT (truncated to 245/2962 bars, aborted after the same 502s), and APOLLOHOSP (missing first ~2 years) were re-backfilled individually via `data backfill --symbol <SYM> --chunk-delay 0.6`, which resumed correctly from the detected gap. All three now pass data verify with full-length series."
   ],
 
   "research_cycle_1_status": "VOID_SYNTHETIC_DATA",

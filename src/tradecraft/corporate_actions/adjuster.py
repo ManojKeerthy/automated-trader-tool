@@ -1,10 +1,30 @@
 """Back-adjustment of historical prices for corporate actions.
 
-THE CONVENTION
-==============
-Raw bars are **immutable**. They are stored with `is_adjusted=False` and are never
-rewritten — they are the record of what actually printed on the exchange, and they are what
-execution logic must reference when reasoning about real order prices.
+CORRECTION, 2026-08-06 — READ BEFORE RUNNING `apply()`
+=========================================================
+The premise below (bars come in raw, this module derives an adjusted series from them) does
+not hold for this project's data. Confirmed: Zerodha's Kite Connect historical API already
+adjusts for bonuses, splits, rights issues, spin-offs and extraordinary dividends server-side
+(https://x.com/zerodha/status/1952292763929874868). `backfill.py` now writes bars with
+`is_adjusted=True`, correctly, because that is what they are. There is no genuinely raw
+series in this pipeline to adjust.
+
+Practical consequence: `apply()` queries for `is_adjusted=false` source rows (see below) and
+after the 2026-08-06 relabeling there generally won't be any to find, so it should be a
+safe no-op on this dataset. Do not attempt to "fix" that by pointing it at `is_adjusted=true`
+rows — doing so would back-adjust data that is already adjusted, silently double-counting
+every bonus/split and corrupting prices. If this module is used at all going forward, its
+legitimate purpose is narrower than originally designed: handling demerger/spin-off
+discontinuities Kite does not retroactively splice (e.g. CGPOWER 2015-10-01) — and even
+there, per the no-splice rule for TATAMOTORS/PEL, the right answer is usually to NOT create
+one continuous adjusted series across the demerger, not to compute a ratio and apply it.
+
+THE CONVENTION (as originally designed; superseded above)
+=============================================================
+Raw bars were assumed **immutable**, stored with `is_adjusted=False`, never
+rewritten — the record of what actually printed on the exchange, referenced by execution
+logic when reasoning about real order prices. This assumption is now known to be false for
+Kite-sourced bars; see the correction above.
 
 Adjusted bars are **derived**. They are written as separate rows with `is_adjusted=True`,
 which the `uq_instrument_date_adj` unique constraint already permits, and they are what
@@ -13,7 +33,9 @@ adjusted series rather than mutating it in place.
 
 This separation matters because the two questions differ. "What would my stop have been hit
 at?" is a raw-price question. "What was the return series?" is an adjusted-price question.
-Conflating them is how backtests silently diverge from reality.
+Conflating them is how backtests silently diverge from reality. In practice, for this data
+source, both questions are currently answered by the same (Kite-adjusted) series, because no
+raw series exists to answer the first one differently.
 
 BACK-ADJUSTMENT DIRECTION
 =========================

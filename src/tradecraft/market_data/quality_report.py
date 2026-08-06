@@ -8,23 +8,29 @@ mostly right and wrong in specific, locatable places — an unadjusted bonus iss
 illiquid name, a symbol whose history is stitched across a demerger. Those defects survive
 the authenticity gate because they are, in fact, real data. They still destroy backtests.
 
-THE ONE THAT MATTERS MOST: CORPORATE ACTION ADJUSTMENT
-=====================================================
-`backfill.py` writes `is_adjusted=False` for every bar and the provider performs no
-adjustment. If the vendor feed is also unadjusted, a 1:1 bonus issue appears as a -50%
-overnight gap that never happened.
+CORPORATE ACTION ADJUSTMENT — CORRECTED 2026-08-06
+====================================================
+The original assumption here (`backfill.py` writes `is_adjusted=False`, provider performs no
+adjustment, so a bonus would appear as a fake overnight gap) is wrong. Zerodha's Kite Connect
+historical API adjusts for bonuses, splits, rights, spin-offs and dividends server-side,
+retroactively (https://x.com/zerodha/status/1952292763929874868), confirmed empirically
+against four real in-window bonus ex-dates that show zero price gap. `backfill.py` now
+writes `is_adjusted=True`.
 
-The consequence is specific and severe for this project: a fake -50% gap stops out every
-long position in that name, on a date that has nothing to do with the strategy. Cycle 1's
-symptom was "almost every trade hits its stop". Unadjusted corporate actions would
-reproduce that symptom on genuinely real data, and it would look like a strategy result.
+`UNEXPLAINED_LARGE_MOVE` flags below therefore do NOT mean "unadjusted corporate action" —
+checked against all 17 candidates the detector scored HIGH_CONFIDENCE on this dataset, and
+17/17 were genuine market events (the 2020-03-23 COVID crash week, the 2024-06-04
+election-result crash, company-specific news) rather than corporate actions. Treat a flag
+here as "large move, cause not yet identified," not as a data defect to fix by adjustment.
 
 `adjustment_audit()` cross-references every extreme move against the `corporate_actions`
 table so the two can be told apart:
   - extreme move WITH a matching corporate action  -> almost certainly an adjustment defect
   - extreme move with NO corporate action          -> possibly a genuine event, or a data error
+On current evidence, expect most/all flagged moves to fall in the second bucket and to be
+genuine, not errors — verify before assuming otherwise.
 
-See docs/research/REPO_AUDIT_2026-08-06.md.
+See docs/research/REPO_AUDIT_2026-08-06.md and docs/PROJECT_STATUS.md section 3.2.1.
 """
 
 from __future__ import annotations
