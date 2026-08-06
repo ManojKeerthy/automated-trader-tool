@@ -8,19 +8,20 @@ This document serves as the single source of truth for the active state of the T
 
 ## 1. PROJECT STATE METADATA
 
-- **Current Completed Milestone**: `M3G.0 — RESEARCH CYCLE CLOSURE & KNOWLEDGE CAPTURE`
-- **Cycle Closure Certification**: **`RESEARCH_CYCLE_CLOSED`** ([M3G_0_CYCLE_CLOSURE_CERTIFICATE.md](file:///c:/infiligence/automated-trader-tool/docs/research/M3G_0_CYCLE_CLOSURE_CERTIFICATE.md))
-- **Research Closure Summary**: [M3G_0_RESEARCH_CLOSURE.md](file:///c:/infiligence/automated-trader-tool/docs/research/M3G_0_RESEARCH_CLOSURE.md)
-- **Specification Verdict**: **`HYPOTHESIS_REJECTED`** (`hypo-cycle2-alpha013-v1` raw PEAD specification rejected; PEAD alpha family preserved for future refined variants)
-- **Lessons Learned & Knowledge Capture**: [M3G_0_LESSONS_LEARNED.md](file:///c:/infiligence/automated-trader-tool/docs/research/M3G_0_LESSONS_LEARNED.md)
-- **Platform Status**: **`VERIFIED_PRODUCTION_GRADE_PLATFORM`**
+- **Current Completed Milestone**: `C3R.1.5 — STRATEGY DESIGN REVIEW & ASSUMPTION REGISTER (ALPHA-015)`
+- **Active Research Cycle**: **`Research Cycle 3`** (Targeting `ALPHA-015`)
+- **Active Candidate Alpha**: **`ALPHA-015`** (Dual-Momentum Relative Strength & Sector Leadership)
+- **Specification Version**: **`0.95 (Pre-Engineering Draft)`** ([C3R_1_5_STRATEGY_DESIGN_REVIEW.md](file:///c:/infiligence/automated-trader-tool/docs/research/C3R_1_5_STRATEGY_DESIGN_REVIEW.md))
+- **Hypothesis Readiness Score**: **`25 / 30 (HIGH READINESS — APPROVED FOR C3R.2)`**
+- **Architectural Decision Log**: DEC-001 (Long-Only), DEC-002 (Max 10 Holdings), DEC-003 (NIFTY 50/500 Benchmark Universe).
+- **Institutional Assumption Register**: Documented 4 core market assumptions (Persistence, Survivorship Protection, Friction Realism, Regime Guard).
+- **Research Integrity Commitments**: Pre-committed non-optimization bounds (no lookback curve-fitting, no indicator toggling, locked stops).
+- **Stage Kill Criteria**: Pre-defined triggers (`BLOCKED_PENDING_DATA`, `UNFEASIBLE_FRICTION`).
+- **Research Questions Register**: 4 formal experiments pre-defined for C3R.2/C3R.3.
+- **Platform Status**: **`VERIFIED_PRODUCTION_GRADE_RESEARCH_OPERATING_SYSTEM`**
 - **Validation Access Count**: **`1`** (Sealed & Preserved)
 - **Final Test Access Count**: **`0` (100% SEALED)**
-- **Next Authorized Milestone**: **`CYCLE_3_HYPOTHESIS_DISCOVERY`**
-- **Active Research Cycle**: `Research Cycle 2 (Closed)`
-- **Active Hypothesis UUID**: `hypo-cycle2-alpha013-v1` (Archived)
-- **Active Alpha Source**: `ALPHA-013` (Post-Earnings Announcement Drift)
-- **Active Strategy Class**: `EarningsDriftV1Strategy` in [earnings_drift_v1.py](file:///c:/infiligence/automated-trader-tool/src/tradecraft/strategy/earnings_drift_v1.py)
+- **Next Authorized Milestone**: **`C3R.2 — DATA FEASIBILITY AUDIT FOR ALPHA-015`**
 - **Public SDK Status**: Active (`ResearchClient`)
 
 ---
@@ -29,7 +30,7 @@ This document serves as the single source of truth for the active state of the T
 
 | Dataset Split | Date Range | Firewall Access Count | Status |
 | :--- | :---: | :---: | :--- |
-| **DEVELOPMENT** | `2016-08-01` $\rightarrow$ `2021-12-31` | N/A | **M3G.0 COMPLETED — FORENSICALLY AUDITED & VERIFIED BASELINE** |
+| **DEVELOPMENT** | `2016-08-01` $\rightarrow$ `2021-12-31` | N/A | **READY FOR C3R.2 DATA FEASIBILITY AUDIT** |
 | **VALIDATION** | `2022-01-01` $\rightarrow$ `2024-06-28` | **`1`** | **SEALED & PRESERVED FOR FUTURE HYPOTHESIS CYCLES** |
 | **FINAL TEST** | `2024-07-01` $\rightarrow$ `2026-07-28` | **`0`** | **100% SEALED (HARD STOP ENFORCED)** |
 
