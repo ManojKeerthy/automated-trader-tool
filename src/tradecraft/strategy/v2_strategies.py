@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import uuid
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
@@ -63,7 +64,12 @@ class BaseV2Strategy:
     def required_history(self) -> int:
         return 70
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
         raise NotImplementedError
 
     @property
@@ -114,11 +120,13 @@ class TrendPullbackV2Strategy(BaseV2Strategy):
         pullback_ema: int = 20,
         atr_dist_max: float = 2.0,
         atr_stop_mult: float = 2.0,
+        max_holding_days: int = 20,
     ):
         self.trend_ma = trend_ma
         self.pullback_ema = pullback_ema
         self.atr_dist_max = atr_dist_max
         self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
 
     @property
     def strategy_id(self) -> str:
@@ -154,6 +162,7 @@ class TrendPullbackV2Strategy(BaseV2Strategy):
             "pullback_ema": self.pullback_ema,
             "atr_dist_max": self.atr_dist_max,
             "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
         }
 
     @property
@@ -183,13 +192,30 @@ class TrendPullbackV2Strategy(BaseV2Strategy):
                 "PRIOR_CANONICAL",
                 "Preserved 2.0 ATR stop loss placement from canonical V1.",
             ),
+            ParameterOrigin(
+                "max_holding_days",
+                self.max_holding_days,
+                "MARKET_CONVENTION",
+                "ADDED 2026-08-06 (Phase B engine baseline gap - see PROJECT_STATUS.md "
+                "section 4). Previously unset, so no time exit ever fired and winners rode "
+                "uncapped to the literal end of the backtest window, producing implausible "
+                "30x+ payoff ratios. 20 trading sessions (~4 weeks) matches the established "
+                "swing-trading convention for pullback-continuation setups (commonly cited "
+                "as a 2-4 week hold) and this strategy's own 20-session EMA baseline. Set "
+                "from that convention, not fitted to this backtest's results.",
+            ),
         ]
 
     @property
     def required_history(self) -> int:
         return 70
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
         """Evaluate V2 strategy across universe at current_date Close."""
         universe_members = data_portal.get_universe_members(current_date)
         signals: list[SignalIntent] = []
@@ -263,11 +289,13 @@ class BreakoutConfirmV2Strategy(BaseV2Strategy):
         max_consolidation_pct: float = 0.20,
         rvol_min: float = 1.2,
         atr_stop_mult: float = 1.5,
+        max_holding_days: int = 20,
     ):
         self.channel_period = channel_period
         self.max_consolidation_pct = max_consolidation_pct
         self.rvol_min = rvol_min
         self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
 
     @property
     def strategy_id(self) -> str:
@@ -302,6 +330,7 @@ class BreakoutConfirmV2Strategy(BaseV2Strategy):
             "max_consolidation_pct": self.max_consolidation_pct,
             "rvol_min": self.rvol_min,
             "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
         }
 
     @property
@@ -331,13 +360,33 @@ class BreakoutConfirmV2Strategy(BaseV2Strategy):
                 "PRIOR_CANONICAL",
                 "Preserved 1.5 ATR stop loss placement from canonical V1.",
             ),
+            ParameterOrigin(
+                "max_holding_days",
+                self.max_holding_days,
+                "MARKET_CONVENTION",
+                "ADDED 2026-08-06 (Phase B engine baseline gap - see PROJECT_STATUS.md "
+                "section 4). Previously unset, so no time exit ever fired and winners rode "
+                "uncapped to the literal end of the backtest window, producing implausible "
+                "33x+ payoff ratios. Classic Turtle-system breakout trading (this strategy's "
+                "own stated model, per channel_period above) manages winners via a trailing "
+                "structural exit rather than a fixed day count, which this engine does not "
+                "implement; 20 trading sessions is used as a time-based backstop matching "
+                "the strategy's own 20-day Donchian channel period and the general "
+                "swing-trading convention for breakout-continuation holds (2-4 weeks). Set "
+                "from that convention, not fitted to this backtest's results.",
+            ),
         ]
 
     @property
     def required_history(self) -> int:
         return 50
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
         universe_members = data_portal.get_universe_members(current_date)
         signals: list[SignalIntent] = []
 
@@ -410,10 +459,12 @@ class MomentumRSV2Strategy(BaseV2Strategy):
         rs_lookback: int = 63,
         top_percentile_cutoff: float = 0.25,
         atr_stop_mult: float = 2.5,
+        max_holding_days: int = 63,
     ):
         self.rs_lookback = rs_lookback
         self.top_percentile_cutoff = top_percentile_cutoff
         self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
 
     @property
     def strategy_id(self) -> str:
@@ -444,6 +495,7 @@ class MomentumRSV2Strategy(BaseV2Strategy):
             "rs_lookback": self.rs_lookback,
             "top_percentile_cutoff": self.top_percentile_cutoff,
             "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
         }
 
     @property
@@ -467,13 +519,34 @@ class MomentumRSV2Strategy(BaseV2Strategy):
                 "PRIOR_CANONICAL",
                 "Preserved 2.5 ATR stop loss placement from canonical V1.",
             ),
+            ParameterOrigin(
+                "max_holding_days",
+                self.max_holding_days,
+                "MARKET_CONVENTION",
+                "ADDED 2026-08-06 (Phase B engine baseline gap - see PROJECT_STATUS.md "
+                "section 4). Previously unset, so no time exit ever fired and winners rode "
+                "uncapped to the literal end of the backtest window, producing implausible "
+                "61x+ payoff ratios. Set to 63 sessions to match rs_lookback exactly, "
+                "mirroring Jegadeesh & Titman (1993), the foundational academic study this "
+                "relative-strength design follows: they tested J-month formation / K-month "
+                "holding combinations for J,K in {3,6,9,12} and found matched J=K periods "
+                "(e.g. their most-cited 6/6 combination) to be a standard, robust choice. "
+                "This strategy's 63-session (~3-month) formation period gets the matching "
+                "63-session holding period. Set from that literature, not fitted to this "
+                "backtest's results.",
+            ),
         ]
 
     @property
     def required_history(self) -> int:
         return 85
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
         universe_members = data_portal.get_universe_members(current_date)
         signals: list[SignalIntent] = []
 
@@ -612,7 +685,12 @@ class MeanReversionV2Strategy(BaseV2Strategy):
     def required_history(self) -> int:
         return 210
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
         universe_members = data_portal.get_universe_members(current_date)
         signals: list[SignalIntent] = []
 

@@ -1,8 +1,6 @@
 """Unit tests for Milestone M3B.3.1 Reconciliation Addendum & Evidence Integrity Audit."""
 
-import json
 from datetime import date
-from pathlib import Path
 
 import pytest
 
@@ -18,9 +16,9 @@ from tradecraft.strategy.v2_strategies import (
 def test_m3b_3_1_frozen_v2_hashes():
     """Verify SHA256 hashes of all four frozen V2 strategy configurations."""
     hashes = {
-        TrendPullbackV2Strategy(): "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523",
-        BreakoutConfirmV2Strategy(): "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213",
-        MomentumRSV2Strategy(): "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d",
+        TrendPullbackV2Strategy(): "c4556b07bd4edc39f9a53c1c27c601d2c0747fcbc7ad356d4e4ec42af6c993da",
+        BreakoutConfirmV2Strategy(): "85d9c0b3d8c360ec9f51beec15b7c0ad09aa04d26473bd463ba9ea97e6f2aacd",
+        MomentumRSV2Strategy(): "221c35751fde73a351138d14502bd8b1bf6ad49e051bfe55d6bb086a1d2df825",
         MeanReversionV2Strategy(): "8bf0965a6c0ed6a234424a66b6324bdaaa3e96b10e9873b63e314bf4bd553b82",
     }
     for strat, expected_hash in hashes.items():
@@ -53,52 +51,11 @@ def test_mean_reversion_expectancy_r_fails_threshold():
     )
 
 
-def test_m3b_3_1_json_artifacts_and_conservation():
-    """Verify that M3B.3.1 JSON artifacts exist and satisfy exact conservation laws."""
-    master_file = Path("scratch/m3b_3_1_reconciliation_evidence.json")
-    yearly_file = Path("scratch/m3b_3_1_yearly_reconciliation.json")
-    regime_file = Path("scratch/m3b_3_1_regime_reconciliation.json")
-    concentration_file = Path("scratch/m3b_3_1_concentration_reconciliation.json")
-    attrition_file = Path("scratch/m3b_3_1_attrition_reconciliation.json")
 
-    assert master_file.exists(), "master_evidence JSON must exist"
-    assert yearly_file.exists(), "yearly_reconciliation JSON must exist"
-    assert regime_file.exists(), "regime_reconciliation JSON must exist"
-    assert concentration_file.exists(), "concentration_reconciliation JSON must exist"
-    assert attrition_file.exists(), "attrition_reconciliation JSON must exist"
-
-    with open(yearly_file) as f:
-        yearly_data = json.load(f)
-    with open(regime_file) as f:
-        regime_data = json.load(f)
-    with open(concentration_file) as f:
-        concentration_data = json.load(f)
-    with open(attrition_file) as f:
-        attrition_data = json.load(f)
-
-    for strat_id in [
-        "strat_trend_pullback_v2",
-        "strat_breakout_confirm_v2",
-        "strat_momentum_rs_v2",
-        "strat_mean_reversion_v2",
-    ]:
-        # 1. Yearly conservation
-        y = yearly_data[strat_id]
-        assert y["trade_count_conserved"] is True
-        assert y["pnl_conserved"] is True
-
-        # 2. Regime conservation
-        r = regime_data[strat_id]
-        assert r["trade_regime_attribution_date"] == "SIGNAL_DATE"
-        assert r["trade_count_conserved"] is True
-        assert r["pnl_conserved"] is True
-
-        # 3. Concentration conservation
-        c = concentration_data[strat_id]
-        assert c["trade_count_conserved"] is True
-        assert c["pnl_conserved"] is True
-        assert c["win_share_denominator"] == "TOTAL_WINNING_TRADE_PNL"
-
-        # 4. Attrition conservation
-        a = attrition_data[strat_id]
-        assert a["attrition_conserved"] is True
+# test_m3b_3_1_json_artifacts_and_conservation removed 2026-08-06: certified specific
+# reconciliation numbers from scratch/m3b_3_1_*.json, artifacts of the voided Cycle 1/2
+# synthetic-data research run. Those files were deleted in the 2026-08-06 governance
+# cleanup along with ~250 other documents attesting to results computed against fabricated
+# prices (see CLAUDE.md, "Do not trust the historical record"). The other three tests in
+# this file exercise real, still-valid mechanisms (frozen strategy config hashes, the
+# DevelopmentDataFirewall, a threshold-gating check) and are kept.

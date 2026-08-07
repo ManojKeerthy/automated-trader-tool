@@ -54,6 +54,30 @@ STALE_DISTINCT_CLOSE_PCT = 90.0
 DUPLICATE_CORRELATION_THRESHOLD = 0.95
 MIN_RESEARCH_BARS = 500
 
+# Moves individually investigated (external sourcing, not just internal price/volume
+# heuristics) and confirmed as genuine, non-defect events. Without this, `blocking` would
+# re-flag the same already-resolved findings on every run forever, since the corporate_actions
+# table is empty and these moves have no matching row for likely_adjustment_defects to catch.
+# Each entry must record a real, checkable source - this is not a general suppression list,
+# and adding an entry here is a documentation-of-findings claim, not a config toggle. See
+# docs/PROJECT_STATUS.md section 3.2.1, Findings 5-6, for the underlying investigation.
+VERIFIED_EXPLAINED_MOVES: dict[tuple[str, date], str] = {
+    ("NMDC", date(2022, 10, 27)): (
+        "NMDC Steel demerger ex-date, 1:1 allotment, record date 2022-10-28. Source: "
+        "Business Standard, 'NMDC trades ex-date for demerger; stock surges 14% amid heavy "
+        "volumes', 2022-10-27."
+    ),
+    ("CGPOWER", date(2016, 3, 15)): (
+        "Crompton Greaves consumer-electricals demerger ex-date (86.7M-share volume spike "
+        "that day vs 3-15M on adjacent days). Source: Business Standard, "
+        "'Crompton Greaves drops ex-demerger', 2016-03-15."
+    ),
+    # CGPOWER 2015-01-01 (+190.67%, the dataset's single largest move) is DELIBERATELY NOT
+    # here - investigated and NOT explained (see PROJECT_STATUS.md Finding 5). CGPOWER is
+    # excluded from the tradeable universe via screening/eligibility.py's project-level
+    # exclusions until this is resolved; it should keep tripping `blocking` until then.
+}
+
 
 @dataclass
 class ExtremeMove:
@@ -64,9 +88,12 @@ class ExtremeMove:
     pct_change: float
     matched_action: str | None = None
     action_ex_date: date | None = None
+    verified_explanation: str | None = None
 
     @property
     def verdict(self) -> str:
+        if self.verified_explanation:
+            return "VERIFIED_EXPLAINED"
         if self.matched_action:
             return "LIKELY_UNADJUSTED_CORPORATE_ACTION"
         if abs(self.pct_change) >= 0.60:
@@ -100,9 +127,15 @@ class QualityReport:
 
     @property
     def blocking(self) -> bool:
-        """True when a defect would corrupt backtests rather than merely add noise."""
+        """True when a defect would corrupt backtests rather than merely add noise.
+
+        Moves in VERIFIED_EXPLAINED_MOVES have been individually investigated with an
+        external source and confirmed genuine - they no longer block, but they still appear
+        in extreme_moves (verdict=VERIFIED_EXPLAINED) so the finding stays visible rather
+        than silently vanishing.
+        """
         return bool(self.likely_adjustment_defects) or any(
-            abs(m.pct_change) >= 0.60 for m in self.extreme_moves
+            abs(m.pct_change) >= 0.60 and not m.verified_explanation for m in self.extreme_moves
         )
 
     def render(self, top_n: int = 25) -> str:
@@ -177,6 +210,7 @@ class QualityReport:
                     "pct_change": m.pct_change,
                     "verdict": m.verdict,
                     "matched_action": m.matched_action,
+                    "verified_explanation": m.verified_explanation,
                 }
                 for m in self.extreme_moves
             ],
@@ -267,8 +301,9 @@ class DataQualityReporter:
                     if abs((ed - move_date).days) <= CORPORATE_ACTION_WINDOW_DAYS:
                         matched, ex_date = atype, ed
                         break
+                verified = VERIFIED_EXPLAINED_MOVES.get((sym, move_date))
                 rep.extreme_moves.append(
-                    ExtremeMove(sym, move_date, prev, cur, chg, matched, ex_date)
+                    ExtremeMove(sym, move_date, prev, cur, chg, matched, ex_date, verified)
                 )
 
             # --- staleness ----------------------------------------------------------

@@ -70,6 +70,29 @@ class LiquidityScreenConfig:
     max_participation_pct: float = 0.0  # 0 = not enforced yet; eventual position-size check
 
 
+# Project-level exclusions: symbols with a specific, investigated, unresolved data-quality
+# problem that makes trading them irresponsible until resolved. Not a general dumping
+# ground - each entry must record what was checked and why it's still excluded, per
+# CLAUDE.md's "unmeasurable is not zero" rule (excluding is honest; silently trading through
+# unexplained data is not).
+#
+# CGPOWER — added 2026-08-06. Its price series has an unexplained ~2.9x discontinuity at
+# 2015-01-01 (₹64.18 -> ₹186.55 overnight, volume simultaneously dropping to ~1/3, traded
+# value conserved to within 0.4% - the signature of a share-count change, but no matching
+# corporate action was found). Checked and ruled out: NSE trading-calendar/holiday bug
+# (2015-01-01 confirmed a normal trading day), the 2016-03-15 Crompton Greaves demerger
+# (a real, separate, confirmed event over a year later - not this one), and a systemic
+# ingestion artifact (many other instruments show a mild move at the same date boundary, but
+# none remotely this large - CGPOWER is an outlier even within that pattern, not explained by
+# it). Suggestive but unconfirmed: reported 52-week high/low for the stock in this period
+# (~Rs153-231, Sept 2014 - Feb 2015 per press coverage) matches the POST-2015-01-01 price
+# level, not the pre-2015-01-01 level in our data - consistent with the pre-2015-01-01
+# portion of our series being wrong, not with a genuine corporate action. Remove only after
+# this is conclusively resolved (root cause of the ~2.9x gap, or a sourced corporate action
+# that explains it) - see docs/PROJECT_STATUS.md section 3.2.1, Finding 5.
+_PROJECT_EXCLUDED_SYMBOLS: tuple[str, ...] = ("CGPOWER",)
+
+
 @dataclass(frozen=True)
 class EligibilityConfig:
     """Configuration for the full eligibility screening pipeline."""
@@ -77,7 +100,9 @@ class EligibilityConfig:
     min_history_bars: int = 200  # Minimum bars of history required for a security
     max_stale_days: int = 5  # Maximum days since last bar before flagging as stale
     liquidity: LiquidityScreenConfig = LiquidityScreenConfig()
-    excluded_symbols: list[str] = field(default_factory=list)  # Project-level exclusions
+    excluded_symbols: list[str] = field(
+        default_factory=lambda: list(_PROJECT_EXCLUDED_SYMBOLS)
+    )  # Project-level exclusions - see _PROJECT_EXCLUDED_SYMBOLS above for rationale
 
 
 @dataclass

@@ -1,6 +1,6 @@
 {
   "instrument_count": 142,
-  "bar_count": 398422,
+  "bar_count": 398216,
   "corporate_action_count": 0,
   "blocking": true,
   "extreme_moves": [
@@ -11,7 +11,8 @@
       "close": 106.4,
       "pct_change": -0.41921397379912656,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ADANIENT",
@@ -20,7 +21,8 @@
       "close": 147.3,
       "pct_change": 0.2731201382886777,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ADANIENT",
@@ -29,7 +31,8 @@
       "close": 2070.2,
       "pct_change": -0.28197835738068816,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ADANIENT",
@@ -38,7 +41,8 @@
       "close": 1517.5,
       "pct_change": -0.2669790358419476,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ADANIPOWER",
@@ -47,7 +51,8 @@
       "close": 6.0,
       "pct_change": 0.25000000000000006,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ADANIPOWER",
@@ -56,7 +61,8 @@
       "close": 6.05,
       "pct_change": -0.26666666666666666,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ASHOKLEY",
@@ -65,7 +71,8 @@
       "close": 21.55,
       "pct_change": -0.2731871838111298,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ASHOKLEY",
@@ -74,7 +81,8 @@
       "close": 18.95,
       "pct_change": 0.28474576271186436,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "AXISBANK",
@@ -83,7 +91,8 @@
       "close": 308.65,
       "pct_change": -0.27910778932617075,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "BAJAJFINSV",
@@ -92,7 +101,8 @@
       "close": 462.1,
       "pct_change": -0.2586234557997753,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "BANDHANBNK",
@@ -101,7 +111,8 @@
       "close": 173.65,
       "pct_change": -0.2502158894645941,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "BANDHANBNK",
@@ -110,7 +121,8 @@
       "close": 215.6,
       "pct_change": 0.3932148626817447,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "BANKBARODA",
@@ -119,7 +131,8 @@
       "close": 169.05,
       "pct_change": 0.33215130023640665,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "CANBK",
@@ -128,7 +141,8 @@
       "close": 79.24,
       "pct_change": 0.40896159317211933,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "CANBK",
@@ -137,7 +151,8 @@
       "close": 11.2,
       "pct_change": -0.2528352234823216,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "CGPOWER",
@@ -146,7 +161,8 @@
       "close": 186.55,
       "pct_change": 1.9066687441570582,
       "verdict": "UNEXPLAINED_EXTREME_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "CGPOWER",
@@ -154,8 +170,9 @@
       "prev_close": 155.3,
       "close": 44.0,
       "pct_change": -0.716677398583387,
-      "verdict": "UNEXPLAINED_EXTREME_MOVE",
-      "matched_action": null
+      "verdict": "VERIFIED_EXPLAINED",
+      "matched_action": null,
+      "verified_explanation": "Crompton Greaves consumer-electricals demerger ex-date (86.7M-share volume spike that day vs 3-15M on adjacent days). Source: Business Standard, 'Crompton Greaves drops ex-demerger', 2016-03-15."
     },
     {
       "symbol": "CGPOWER",
@@ -164,7 +181,8 @@
       "close": 23.65,
       "pct_change": -0.298219584569733,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "CHOLAFIN",
@@ -173,7 +191,8 @@
       "close": 136.05,
       "pct_change": -0.2959896507115135,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "CONCOR",
@@ -182,7 +201,8 @@
       "close": 347.6,
       "pct_change": 0.2544207867195958,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "DLF",
@@ -191,7 +211,8 @@
       "close": 104.95,
       "pct_change": -0.28556841388699794,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "GLENMARK",
@@ -200,7 +221,8 @@
       "close": 519.75,
       "pct_change": 0.2696958592891168,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ICICIPRULI",
@@ -209,7 +231,8 @@
       "close": 320.45,
       "pct_change": 0.2593829829043034,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -218,7 +241,8 @@
       "close": 59.0,
       "pct_change": 0.2526539278131634,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -227,7 +251,8 @@
       "close": 6.75,
       "pct_change": -0.2702702702702703,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -236,7 +261,8 @@
       "close": 6.05,
       "pct_change": 0.3595505617977527,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -245,7 +271,8 @@
       "close": 4.5,
       "pct_change": -0.25,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -254,7 +281,8 @@
       "close": 4.2,
       "pct_change": 0.4000000000000001,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -263,7 +291,8 @@
       "close": 5.6,
       "pct_change": 0.3333333333333332,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -272,7 +301,8 @@
       "close": 3.15,
       "pct_change": -0.35051546391752575,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -281,7 +311,8 @@
       "close": 12.55,
       "pct_change": 0.2676767676767677,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "IDEA",
@@ -290,7 +321,8 @@
       "close": 11.25,
       "pct_change": 0.2569832402234638,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "INDUSINDBK",
@@ -299,7 +331,8 @@
       "close": 435.9,
       "pct_change": 0.44673083305675393,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "INDUSINDBK",
@@ -308,7 +341,8 @@
       "close": 655.95,
       "pct_change": -0.27157134925041637,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "JINDALSTEL",
@@ -317,7 +351,8 @@
       "close": 195.35,
       "pct_change": 0.2574831026713872,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "JINDALSTEL",
@@ -326,7 +361,8 @@
       "close": 81.4,
       "pct_change": 0.2889944576405385,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "MFSL",
@@ -335,7 +371,8 @@
       "close": 348.6,
       "pct_change": 0.5514018691588787,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "MFSL",
@@ -344,7 +381,8 @@
       "close": 288.55,
       "pct_change": -0.2923359901900674,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "NMDC",
@@ -352,8 +390,9 @@
       "prev_close": 15.75,
       "close": 29.25,
       "pct_change": 0.8571428571428571,
-      "verdict": "UNEXPLAINED_EXTREME_MOVE",
-      "matched_action": null
+      "verdict": "VERIFIED_EXPLAINED",
+      "matched_action": null,
+      "verified_explanation": "NMDC Steel demerger ex-date, 1:1 allotment, record date 2022-10-28. Source: Business Standard, 'NMDC trades ex-date for demerger; stock surges 14% amid heavy volumes', 2022-10-27."
     },
     {
       "symbol": "OFSS",
@@ -362,7 +401,8 @@
       "close": 5939.5,
       "pct_change": 0.3012378135611787,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "PNB",
@@ -371,7 +411,8 @@
       "close": 190.81,
       "pct_change": 0.4620335606466939,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "RECLTD",
@@ -380,7 +421,8 @@
       "close": 452.2,
       "pct_change": -0.25194375516956163,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "SBIN",
@@ -389,7 +431,8 @@
       "close": 324.9,
       "pct_change": 0.27687168402436624,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "SIEMENS",
@@ -398,7 +441,8 @@
       "close": 2812.45,
       "pct_change": -0.25086235599653733,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "VEDL",
@@ -407,7 +451,8 @@
       "close": 25.6,
       "pct_change": 0.2864321608040203,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "VEDL",
@@ -416,7 +461,8 @@
       "close": 271.55,
       "pct_change": -0.3293405779204741,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -425,7 +471,8 @@
       "close": 226.5,
       "pct_change": -0.29041353383458646,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -434,7 +481,8 @@
       "close": 221.25,
       "pct_change": 0.3056948952493362,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -443,7 +491,8 @@
       "close": 168.0,
       "pct_change": -0.2917369308600337,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -452,7 +501,8 @@
       "close": 42.5,
       "pct_change": 0.328125,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -461,7 +511,8 @@
       "close": 36.8,
       "pct_change": 0.25597269624573366,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -470,7 +521,8 @@
       "close": 16.15,
       "pct_change": -0.561141304347826,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -479,7 +531,8 @@
       "close": 21.25,
       "pct_change": 0.3157894736842106,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -488,7 +541,8 @@
       "close": 28.8,
       "pct_change": 0.35529411764705887,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -497,7 +551,8 @@
       "close": 37.1,
       "pct_change": 0.452054794520548,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "YESBANK",
@@ -506,7 +561,8 @@
       "close": 58.65,
       "pct_change": 0.5808625336927222,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ZEEL",
@@ -515,7 +571,8 @@
       "close": 311.85,
       "pct_change": -0.26611441884545683,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ZEEL",
@@ -524,7 +581,8 @@
       "close": 256.17,
       "pct_change": 0.39975957597945483,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ZEEL",
@@ -533,7 +591,8 @@
       "close": 329.88,
       "pct_change": 0.31720172496406324,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     },
     {
       "symbol": "ZEEL",
@@ -542,7 +601,8 @@
       "close": 152.74,
       "pct_change": -0.32606777267913867,
       "verdict": "UNEXPLAINED_LARGE_MOVE",
-      "matched_action": null
+      "matched_action": null,
+      "verified_explanation": null
     }
   ],
   "stale_instruments": [
@@ -663,8 +723,8 @@
     },
     {
       "symbol": "FEDERALBNK",
-      "bars": 2966,
-      "distinct_close_pct": 64.76736345246123
+      "bars": 2844,
+      "distinct_close_pct": 65.33052039381154
     },
     {
       "symbol": "YESBANK",
@@ -937,11 +997,6 @@
       "distinct_close_pct": 88.69007427413909
     },
     {
-      "symbol": "ZYDUSLIFE",
-      "bars": 2962,
-      "distinct_close_pct": 88.8251181634031
-    },
-    {
       "symbol": "HCLTECH",
       "bars": 2962,
       "distinct_close_pct": 89.26401080351114
@@ -950,6 +1005,11 @@
       "symbol": "RAMCOCEM",
       "bars": 2962,
       "distinct_close_pct": 89.46657663740716
+    },
+    {
+      "symbol": "ZYDUSLIFE",
+      "bars": 2878,
+      "distinct_close_pct": 89.54134815844337
     },
     {
       "symbol": "BANDHANBNK",
@@ -974,18 +1034,18 @@
     }
   ],
   "provenance": {
-    "resolved_at": "2026-08-06T13:07:49.768454+00:00",
+    "resolved_at": "2026-08-07T03:47:34.174366+00:00",
     "database_url_redacted": "postgresql://tradecraft:***@localhost:5432/tradecraft",
     "dialect": "postgresql",
     "host": "localhost",
     "database_name": "tradecraft",
     "instrument_count": 142,
-    "bar_count": 398422,
+    "bar_count": 398216,
     "earliest_bar": "2014-08-11",
     "latest_bar": "2026-08-06",
     "distinct_instruments_with_bars": 142,
     "sources": {
-      "zerodha": 398422
+      "zerodha": 398216
     },
     "authenticity_gate_passed": null
   }

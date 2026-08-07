@@ -56,7 +56,10 @@ class BuyAndHoldStrategy:
         return 1
 
     def evaluate(
-        self, current_date: date, data_portal: DataPortal
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
     ) -> list[SignalIntent | ExitSignal]:
         if self._bought:
             return []
@@ -132,7 +135,10 @@ class SMACrossoverStrategy:
         return self.slow_period + 1
 
     def evaluate(
-        self, current_date: date, data_portal: DataPortal
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
     ) -> list[SignalIntent | ExitSignal]:
         signals: list[SignalIntent | ExitSignal] = []
         members = data_portal.get_universe_members(current_date)

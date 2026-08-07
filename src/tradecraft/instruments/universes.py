@@ -17,8 +17,13 @@ but were constituents during the 2015-2026 research window. Fetching a delisted 
 name costs one API call; omitting it silently biases every backtest.
 
 Symbol notes:
-- Zerodha trading symbols are used (e.g. LTIM, TMPV, LTM), which differ from some NSE
-  historical tickers after mergers and renames.
+- Zerodha trading symbols are used (e.g. LTM, TMPV), which differ from some NSE historical
+  or commonly-reported tickers after mergers and renames. VERIFIED 2026-08-06 directly
+  against Kite's live instrument dump: LTIMindtree's Kite tradingsymbol is "LTM", not
+  "LTIM" - most financial media and aggregator sites report "LTIM" (that IS the widely-used
+  public ticker), but Kite's own `kite.instruments('NSE')` dump has no "LTIM" entry at all,
+  only "LTM" (instrument_token 4561409). Do not trust external sources over a direct query
+  against the actual provider for this kind of fact - see PROJECT_STATUS.md.
 - Renamed/merged predecessors are listed under HISTORICAL_SYMBOLS so their pre-merger
   history can still be fetched.
 """
@@ -71,9 +76,11 @@ NIFTY_NEXT50_SYMBOLS: list[str] = [
 
 HISTORICAL_SYMBOLS: list[str] = [
     "HDFC",          # merged into HDFCBANK, Jul 2023
-    "LTI",           # merged with MINDTREE -> LTIM, Nov 2022
-    "MINDTREE",      # merged into LTIM
-    "LTIM",          # kept: renamed to LTM in some feeds
+    "LTI",           # merged with MINDTREE -> LTM, Nov 2022
+    "MINDTREE",      # merged into LTM
+    # "LTIM" removed 2026-08-06: not a real, distinct Kite ticker (see the Symbol notes
+    # above). It was a redundant, always-unresolved entry; LTI + MINDTREE already cover the
+    # pre-merger history and LTM (in NIFTY50_SYMBOLS) covers the current, live entity.
     "TATAMOTORS",    # demerged -> TMPV / TATAMOTORS
     "SHRIRAMCIT",    # merged -> SHRIRAMFIN
     "SRTRANSFIN",    # renamed -> SHRIRAMFIN
@@ -109,31 +116,90 @@ HISTORICAL_SYMBOLS: list[str] = [
 # confirming against the NSE circular for that event before any result depending on it is
 # reported. Effective dates in particular are approximate where noted.
 SYMBOL_SUCCESSION: dict[str, dict[str, Any]] = {
+    # Verified 2026-08-06 against real sources; "effective" is the record date wherever a
+    # source gave one (NSE/exchange convention: the date determining which shareholders
+    # receive the new security is the operationally relevant date for a price-series
+    # splice), falling back to the announced effective date when no record date was found.
     "HDFC": {"successor": "HDFCBANK", "effective": date(2023, 7, 13), "event": "MERGER",
-             "note": "HDFC Ltd merged into HDFC Bank."},
-    "LTI": {"successor": "LTIM", "effective": date(2022, 11, 14), "event": "MERGER",
-            "note": "L&T Infotech merged with Mindtree to form LTIMindtree."},
-    "MINDTREE": {"successor": "LTIM", "effective": date(2022, 11, 14), "event": "MERGER",
-                 "note": "Mindtree merged into LTIMindtree."},
-    "LTIM": {"successor": "LTM", "effective": None, "event": "RENAME",
-             "note": "Ticker differs by feed; confirm which form Kite serves."},
-    "SRTRANSFIN": {"successor": "SHRIRAMFIN", "effective": date(2022, 11, 25), "event": "RENAME",
-                   "note": "Shriram Transport Finance renamed after amalgamation."},
-    "SHRIRAMCIT": {"successor": "SHRIRAMFIN", "effective": date(2022, 11, 25), "event": "MERGER",
-                   "note": "Shriram City Union Finance merged into Shriram Finance."},
-    "MCDOWELL-N": {"successor": "UNITDSPR", "effective": None, "event": "RENAME",
-                   "note": "United Spirits ticker change; confirm effective date."},
-    "CADILAHC": {"successor": "ZYDUSLIFE", "effective": date(2022, 2, 21), "event": "RENAME",
-                 "note": "Cadila Healthcare renamed Zydus Lifesciences."},
+             "note": "HDFC Ltd merged into HDFC Bank. Legal merger effective date 2023-07-01; "
+                     "2023-07-13 is the record date used here (HDFC Bank press release, "
+                     "Business Standard 'HDFC twins gain up to 3% after they fix July 13 as "
+                     "record date for merger'). Ratio: 42 HDFCBANK shares for every 25 HDFC "
+                     "Ltd shares."},
+    "LTI": {"successor": "LTM", "effective": date(2022, 11, 14), "event": "MERGER",
+            "note": "L&T Infotech merged with Mindtree to form LTIMindtree, publicly known as "
+                    "'LTIM' but Kite's actual tradingsymbol is 'LTM' (verified 2026-08-06 "
+                    "against the live instrument dump - see Symbol notes above). 2022-11-14 "
+                    "is the date the merged entity began operating (BusinessWire/Business "
+                    "Standard, 'LTI and Mindtree to Start Operating as a Merged Entity From "
+                    "November 14, 2022'); the record date for share allotment to Mindtree "
+                    "shareholders was separately fixed as 2022-11-24, ratio 73 LTI shares per "
+                    "100 Mindtree shares - both dates sourced, kept 11-14 here for the "
+                    "operational split."},
+    "MINDTREE": {"successor": "LTM", "effective": date(2022, 11, 14), "event": "MERGER",
+                 "note": "Mindtree merged into the entity publicly known as LTIMindtree, "
+                         "Kite tradingsymbol 'LTM'. Same sourcing as LTI above; record date "
+                         "for share allotment was 2022-11-24."},
+    "SRTRANSFIN": {"successor": "SHRIRAMFIN", "effective": date(2022, 11, 30), "event": "RENAME",
+                   "note": "Shriram Transport Finance renamed Shriram Finance after "
+                           "amalgamation. CORRECTED 2026-08-06: was 2022-11-25, wrong; the "
+                           "actual record date is 2022-11-30 (search explicitly disambiguated "
+                           "this from the prior incorrect date; STFC fixed Nov 30, 2022 as "
+                           "record date for the Shriram Capital / Shriram City Union merger)."},
+    "SHRIRAMCIT": {"successor": "SHRIRAMFIN", "effective": date(2022, 11, 30), "event": "MERGER",
+                   "note": "Shriram City Union Finance merged into Shriram Finance. CORRECTED "
+                           "2026-08-06: was 2022-11-25, wrong; same 2022-11-30 record date as "
+                           "SRTRANSFIN above - one consolidated scheme covering both entities."},
+    "MCDOWELL-N": {"successor": "UNITDSPR", "effective": date(2024, 6, 7), "event": "RENAME",
+                   "note": "United Spirits ticker changed from MCDOWELL-N to UNITDSPR. "
+                           "RESOLVED 2026-08-06: effective 2024-06-07, sourced from Zerodha's "
+                           "own bulletin, 'Change in stock name and symbol for United Spirits "
+                           "Limited'."},
+    "CADILAHC": {"successor": "ZYDUSLIFE", "effective": date(2022, 2, 24), "event": "RENAME",
+                 "note": "Cadila Healthcare renamed Zydus Lifesciences. CORRECTED 2026-08-06: "
+                         "was 2022-02-21, wrong; the actual date is 2022-02-24, confirmed by "
+                         "the NSE press-release filing itself "
+                         "(nsearchives.nseindia.com/corporate/CADILAHC_24022022143246_"
+                         "PressRelease24022022.pdf - the filename encodes 24-02-2022)."},
     "TATAMOTORS": {"successor": None, "effective": date(2025, 10, 14), "event": "DEMERGER",
-                   "note": "Demerged into commercial and passenger vehicle entities. No single "
-                           "successor carries the full history - splicing it onto either side "
-                           "creates a fictitious continuous series."},
-    "ZOMATO": {"successor": "ETERNAL", "effective": None, "event": "RENAME",
-               "note": "Corporate rename; confirm the ticker Kite serves and the date."},
-    "PEL": {"successor": None, "effective": None, "event": "DEMERGER",
-            "note": "Piramal Enterprises demerged Piramal Pharma. Verify treatment."},
+                   "note": "Demerged into commercial vehicles (TML Commercial Vehicles Ltd) "
+                           "and passenger vehicles (renamed Tata Motors Passenger Vehicles "
+                           "Ltd, retains the TATAMOTORS listing). No single successor carries "
+                           "the full history - splicing it onto either side creates a "
+                           "fictitious continuous series. VERIFIED 2026-08-06: 2025-10-14 "
+                           "record date confirmed independently (Business Standard, 'Tata "
+                           "Motors fixes October 14 as record date for demerger, stock rallies "
+                           "5%'; scheme effective 2025-10-01, 1:1 share entitlement)."},
+    "ZOMATO": {"successor": "ETERNAL", "effective": date(2025, 4, 9), "event": "RENAME",
+               "note": "Corporate rename to Eternal Limited; ticker changed ZOMATO -> "
+                       "ETERNAL. RESOLVED 2026-08-06: effective 2025-04-09, confirmed by "
+                       "multiple sources (Angel One, Bajaj Broking, India Infoline all agree "
+                       "on this date for the exchange symbol change; the underlying corporate "
+                       "name change was registered 2025-03-20)."},
+    "PEL": {"successor": None, "effective": date(2022, 8, 30), "event": "DEMERGER",
+            "note": "Piramal Enterprises demerged Piramal Pharma. RESOLVED 2026-08-06: ex-date "
+                    "2022-08-30, record date 2022-09-01 (Business Standard, 'Piramal "
+                    "Enterprises shares trade ex-demerger; stock surges 9% intra-day'). Ratio: "
+                    "4 Piramal Pharma shares (Rs 10 each) per 1 Piramal Enterprises share "
+                    "(Rs 2 each). successor=None is deliberate and correct, not unresolved: "
+                    "Piramal Pharma is a separately listed entity (listed 2022-10-19), not a "
+                    "single successor carrying PEL's full history forward."},
 }
+
+# CORRECTED 2026-08-06 (see also the Symbol notes at the top of this file): an earlier pass
+# this session removed "LTIM" from this map on the theory that "LTIM" was the correct live
+# Kite ticker and the map entry was backwards. That was wrong, based on trusting general web
+# search results over a direct check. Verified properly by querying Kite's own
+# `kite.instruments('NSE')` dump directly: it contains "LTM" (instrument_token 4561409) and
+# no "LTIM" entry at all. "LTIM" is the ticker most financial media and aggregator sites
+# report, but it is not what Kite itself serves. There is therefore no live "LTIM" symbol to
+# protect here, and no succession entry is needed for it either - LTI and MINDTREE above
+# already point their successor at "LTM" directly, and "LTIM" was removed from
+# HISTORICAL_SYMBOLS as a redundant, always-unresolvable entry. Lesson: for empirically
+# checkable facts about what this project's own data provider serves, query it directly
+# rather than trusting external sources - the same principle CLAUDE.md already establishes
+# for market data more broadly.
+assert "LTIM" not in SYMBOL_SUCCESSION, "LTIM was never a real Kite ticker - do not re-add"
 
 
 def resolve_successor(symbol: str) -> str | None:

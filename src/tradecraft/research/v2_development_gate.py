@@ -80,6 +80,7 @@ class V2DevelopmentScorecard:
     net_pnl_inr: Decimal
     gross_expectancy_r: float
     net_expectancy_r: float
+    r_multiple_coverage_pct: float
     win_rate_pct: float
     payoff_ratio: float
     profit_factor: float
@@ -126,6 +127,21 @@ class V2DevelopmentGateEvaluator:
         trades = res.trades
         executed_count = len(trades)
 
+        # Real equity-curve metrics (CAGR, max drawdown, Sharpe, Sortino). These previously
+        # returned hardcoded constants keyed to gate_pass (e.g. `12.5 if gate_pass else -5.0`)
+        # - fabricated numbers dressed as computed results, not derived from the actual
+        # backtest at all. Fixed 2026-08-06 to reuse MetricsEngine, the same real computation
+        # Phase B validation used (docs/PROJECT_STATUS.md section 4).
+        from tradecraft.backtesting.metrics import MetricsEngine
+
+        equity_metrics = MetricsEngine().calculate(
+            res.equity_curve, trades, config.initial_capital, config.start_date, config.end_date
+        )
+
+        def _metric_float(name: str, default: float = 0.0) -> float:
+            mv = equity_metrics.metrics.get(name)
+            return float(mv.value) if mv and mv.value is not None else default
+
         # Extract P&L metrics
         net_pnl = sum((t.net_pnl for t in trades), Decimal("0.0"))
         gross_pnl = sum((t.gross_pnl for t in trades), Decimal("0.0"))
@@ -144,21 +160,20 @@ class V2DevelopmentGateEvaluator:
         tot_loss_inr = abs(sum((t.net_pnl for t in losses), Decimal("0")))
         pf = round(float(tot_win_inr / max(Decimal("0.01"), tot_loss_inr)), 2)
 
-        # Calculate Expectancy_R
-        # Risk per trade = abs(entry - stop_loss) * qty
-        r_multiples: list[float] = []
-        for t in trades:
-            init_risk = abs(
-                t.entry_price - (t.stop_loss_level or (t.entry_price * Decimal("0.95")))
-            ) * Decimal(str(t.quantity))
-            if init_risk > Decimal("0"):
-                r_multiples.append(float(t.net_pnl / init_risk))
-            else:
-                r_multiples.append(0.0)
-
-        net_exp_r = (
-            round(sum(r_multiples) / max(1, executed_count), 4) if executed_count > 0 else 0.0
+        # Expectancy_R. Previously reimplemented R-multiple calculation locally instead of
+        # using TradeRecord.r_multiple (the engine's official, F2/F2b-fixed value) -
+        # fabricating a fake 5%-of-entry-price stop when stop_loss_level was None, and
+        # scoring degenerate risk distances as 0.0 instead of excluding them. That is
+        # precisely the defect class F2/F2b fixed elsewhere (docs/PROJECT_STATUS.md section
+        # 3.3): "Unmeasurable is not zero." Fixed 2026-08-06 to use t.r_multiple directly,
+        # excluding trades where it's None rather than inventing a number for them.
+        r_multiples: list[float] = [
+            float(t.r_multiple) for t in trades if t.r_multiple is not None
+        ]
+        r_coverage_pct = (
+            round(len(r_multiples) / executed_count * 100, 2) if executed_count > 0 else 0.0
         )
+        net_exp_r = round(sum(r_multiples) / len(r_multiples), 4) if r_multiples else 0.0
         gross_exp_r = (
             round(net_exp_r + float(friction_cost / max(Decimal("1.0"), net_pnl)), 4)
             if executed_count > 0
@@ -205,6 +220,15 @@ class V2DevelopmentGateEvaluator:
                 f"Net Expectancy_R <= 0 ({net_exp_r:.4f} <= {MIN_NET_EXPECTANCY_R})"
             )
 
+        # r_multiple_coverage_pct < 90%: the mean is taken over a biased subsample (see
+        # MetricsEngine.calculate, docs/PROJECT_STATUS.md section 3.3) and expectancy_r is
+        # not gateable from it, regardless of which side of zero it lands on.
+        if r_coverage_pct < 90.0:
+            rejection_reasons.append(
+                f"R-multiple coverage too low to gate on Expectancy_R "
+                f"({r_coverage_pct}% < 90%, {len(r_multiples)}/{executed_count} trades measurable)"
+            )
+
         if pf <= MIN_PROFIT_FACTOR:
             rejection_reasons.append(f"Profit Factor <= 1.0 ({pf} <= {MIN_PROFIT_FACTOR})")
 
@@ -235,14 +259,15 @@ class V2DevelopmentGateEvaluator:
             gross_pnl_inr=gross_pnl,
             net_pnl_inr=net_pnl,
             gross_expectancy_r=gross_exp_r,
+            r_multiple_coverage_pct=r_coverage_pct,
             net_expectancy_r=net_exp_r,
             win_rate_pct=win_rate,
             payoff_ratio=payoff,
             profit_factor=pf,
-            cagr_pct=12.5 if gate_pass else -5.0,  # Descriptive metric
-            max_drawdown_pct=-15.0 if gate_pass else -25.0,
-            sharpe_ratio=1.2 if gate_pass else -0.5,
-            sortino_ratio=1.5 if gate_pass else -0.6,
+            cagr_pct=_metric_float("cagr_pct"),
+            max_drawdown_pct=-_metric_float("max_drawdown_pct"),
+            sharpe_ratio=_metric_float("sharpe_ratio"),
+            sortino_ratio=_metric_float("sortino_ratio"),
             avg_holding_days=avg_holding,
             total_friction_cost_inr=friction_cost,
             max_single_instrument_profit_share_pct=max_inst_share,

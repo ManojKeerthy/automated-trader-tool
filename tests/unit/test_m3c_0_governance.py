@@ -1,7 +1,6 @@
 """Unit tests for Milestone M3C.0 Research Cycle 1 Closure & Research Governance Baseline."""
 
 from datetime import date
-from pathlib import Path
 
 import pytest
 
@@ -10,7 +9,6 @@ from tradecraft.research.m3c_0_governance import (
     GraveyardEnforcementGuard,
     LineageCollisionDetector,
     ResearchGovernanceError,
-    ResearchGovernanceManager,
 )
 
 
@@ -63,55 +61,20 @@ def test_m3c_0_lineage_collision_detector():
     )
 
 
-def test_m3c_0_research_governance_state_json():
-    """Verify that config/research_governance_state.json exists and reports CLOSED_NO_SURVIVOR."""
-    state_file = Path("config/research_governance_state.json")
-    assert state_file.exists(), "config/research_governance_state.json must exist"
 
-    mgr = ResearchGovernanceManager(state_file)
-    assert mgr.validate_governance_state() is True
-    assert mgr.state["research_cycle_1_status"] == "CLOSED_NO_SURVIVOR"
-    assert mgr.state["validation_status"] == "SEALED_UNTOUCHED"
-    assert mgr.state["final_test_status"] == "SEALED_UNTOUCHED"
-    assert len(mgr.state["abandoned_strategy_families"]) == 4
-
-
-def test_m3c_0_documentation_suite_exists():
-    """Verify that all required permanent documentation files exist in docs/research/."""
-    docs_dir = Path("docs/research")
-    required_files = [
-        "START_HERE.md",
-        "research_principles.md",
-        "research_cycle_1_summary.md",
-        "strategy_lineage_registry.md",
-        "research_graveyard.md",
-        "research_decision_log.md",
-        "known_mistakes.md",
-        "engineering_lessons.md",
-        "backtesting_invariants.md",
-        "research_methodology.md",
-        "anti_overfitting_rules.md",
-        "dataset_firewall.md",
-        "gate_methodology_review.md",
-        "future_research_questions.md",
-        "universe_expansion_requirements.md",
-        "research_roadmap.md",
-        "glossary.md",
-        "research_cycle_1_lessons.json",
-    ]
-    for fname in required_files:
-        p = docs_dir / fname
-        assert p.exists(), f"Missing required documentation artifact: {p}"
-
-    adr_dir = docs_dir / "adr"
-    required_adrs = [
-        "ADR-001_why_t_plus_1_execution.md",
-        "ADR-002_why_force_close_policy.md",
-        "ADR-003_why_sha256_hypothesis_hashes.md",
-        "ADR-004_why_immutable_graveyard.md",
-        "ADR-005_why_three_datasets.md",
-        "ADR-006_why_point_in_time_features.md",
-    ]
-    for adr in required_adrs:
-        p = adr_dir / adr
-        assert p.exists(), f"Missing required ADR: {p}"
+# test_m3c_0_research_governance_state_json and test_m3c_0_documentation_suite_exists
+# removed 2026-08-06. Both certified the PRE-AUDIT state as correct: the first asserted
+# research_cycle_1_status == "CLOSED_NO_SURVIVOR" and validation/final_test_status ==
+# "SEALED_UNTOUCHED", claims the 2026-08-06 audit found false (Cycle 1 ran on synthetic
+# data, so status is now correctly VOID_SYNTHETIC_DATA; "SEALED_UNTOUCHED" was vacuous since
+# the final-test range held zero rows, now correctly POPULATED_SEALED with real data). The
+# second required docs/research/research_cycle_1_summary.md and research_cycle_1_lessons.json
+# to exist - both correctly deleted in the same cleanup, since they documented conclusions
+# drawn from fabricated prices. Keeping either test passing would mean reverting real
+# corrections back to false claims, or resurrecting deleted fictional documentation. See
+# CLAUDE.md, "Do not trust the historical record", and PROJECT_STATUS.md section 2. The
+# other three tests in this file (firewall, graveyard guard, lineage collision detector)
+# exercise real, still-valid mechanisms and are kept. (The removed test also checked for
+# ADR-00N_why_*.md files under docs/adr/ - also void, from the same methodology cycle; the
+# ADRs that actually exist today are numbered/named differently and cover real architecture
+# decisions, e.g. ADR-008-human-approval-workflow.md.)

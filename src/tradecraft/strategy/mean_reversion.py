@@ -58,7 +58,12 @@ class MeanReversionStrategy:
     def required_history(self) -> int:
         return 210  # Needs 200-MA
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
         """Evaluate strategy across universe at current_date Close."""
         universe_members = data_portal.get_universe_members(current_date)
         signals: list[SignalIntent] = []

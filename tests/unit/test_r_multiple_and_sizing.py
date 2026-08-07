@@ -451,3 +451,56 @@ class TestRiskBasedSizing:
     def test_rejects_absurd_risk_pct(self) -> None:
         with pytest.raises(ValueError):
             RiskBasedSizingCalculator(risk_pct=Decimal("0.5"))
+
+    def test_cash_starved_micro_position_rejected_not_accepted(self) -> None:
+        """THE REGRESSION TEST FOR F7.
+
+        Found running Phase C on real DEVELOPMENT data: with cash nearly exhausted (routine
+        with several concurrent positions open), the old cash-fitting loop shrank quantity
+        all the way to 1 share rather than rejecting the trade. A 1-share position with a
+        few paise of price-based risk cannot economically absorb a real ~Rs 15 flat DP/
+        brokerage charge - the resulting R-multiple is dominated by fee structure, not
+        trading edge (observed: -31.5R and -19.4R trades that were, in rupee terms, just
+        the fixed cost, regardless of which way the price moved).
+
+        entry 12.50, stop 11.66 -> risk 0.84/share (6.7% of price, clears the 0.5%
+        DEGENERATE_RISK_DISTANCE floor easily - the position is small because of cash, not
+        because the stop is unreasonably tight).
+
+        Risk budget alone would ask for floor(10,000 / 0.84) = 11,904 shares - far more than
+        cash allows. available_cash=20.00 with estimated_transaction_cost=5.00 only fits
+        needed(1)=12.50+5.00=17.50 (not needed(2)=30.00), so cash-fitting shrinks to
+        quantity=1. total_risk at that point = 0.84 * 1 = 0.84, far below the floor
+        (max(5.00 * 10, 200) = 200) - correctly rejected rather than silently accepted.
+        """
+        r = self.calc.calculate_quantity(
+            portfolio_equity=Decimal("1000000"),
+            available_cash=Decimal("20.00"),
+            actual_fill_price=Decimal("12.50"),
+            stop_loss_level=Decimal("11.66"),
+            estimated_transaction_cost=Decimal("5.00"),
+        )
+        assert not r.is_valid
+        assert r.quantity == 0
+        assert r.rejection_reason == "POSITION_TOO_SMALL_RELATIVE_TO_COSTS"
+
+    def test_adequately_funded_small_price_trade_still_sizes(self) -> None:
+        """Same low-priced instrument and stop as the F7 regression test above, but with
+        enough cash for a real position: the floor must not reject well-funded trades.
+
+        entry 12.50, stop 11.66 -> risk 0.84/share. Risk budget implies 11,904 shares
+        (nowhere near affordable), notional cap (20% of 1,000,000 = 200,000) implies
+        floor(200,000 / 12.50) = 16,000, so cash is still the binding constraint at
+        available_cash=100,000: floor(100,000 / 12.50) = 8000 shares fit (before costs).
+        total_risk at that size (0.84 * ~8000 ~= 6,720) clears the floor comfortably.
+        """
+        r = self.calc.calculate_quantity(
+            portfolio_equity=Decimal("1000000"),
+            available_cash=Decimal("100000"),
+            actual_fill_price=Decimal("12.50"),
+            stop_loss_level=Decimal("11.66"),
+            estimated_transaction_cost=Decimal("5.00"),
+        )
+        assert r.is_valid
+        assert r.quantity > 1000
+        assert Decimal(r.quantity) * Decimal("0.84") >= Decimal("200")

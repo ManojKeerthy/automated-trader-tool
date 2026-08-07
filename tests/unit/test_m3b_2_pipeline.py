@@ -74,7 +74,10 @@ def test_v2_strategy_lineage_and_hashing():
 
     lineage = strat.get_lineage()
     assert lineage.parent_strategy_id == "strat_trend_pullback"
-    assert len(lineage.parameter_origins) == 4
+    # 5, not 4: max_holding_days was added 2026-08-06 (Phase B engine baseline gap - the
+    # strategy previously declared no time-based exit at all, see PROJECT_STATUS.md
+    # section 4), with its own MARKET_CONVENTION-sourced ParameterOrigin entry.
+    assert len(lineage.parameter_origins) == 5
     categories = {p.origin_category for p in lineage.parameter_origins}
     assert "MARKET_CONVENTION" in categories
     assert "ECONOMIC_RATIONALE" in categories

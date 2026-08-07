@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import uuid
 from datetime import date
 from decimal import Decimal
 from typing import Any
@@ -127,7 +128,12 @@ class BreakoutConfirmV3Strategy(BaseV2Strategy):
     def required_history(self) -> int:
         return 60
 
-    def evaluate(self, current_date: date, data_portal: DataPortal) -> list[SignalIntent]:
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
         universe_members = data_portal.get_universe_members(current_date)
         signals: list[SignalIntent] = []
 

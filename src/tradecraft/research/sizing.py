@@ -24,6 +24,22 @@ realised risk per trade varied roughly fourfold. Consequences:
 - Portfolio outcomes were dominated by whichever names happened to have tight stops. In the
   Cycle 1 evidence a single instrument contributed 42.9% of all P&L.
 
+FIXED-COST-DOMINATED MICRO-POSITIONS (defect F7, 2026-08-06)
+==============================================================
+The cash-fitting loop below (`while qty >= 1: ... qty -= 1`) had no floor: when available
+cash was nearly exhausted (routine with several concurrent positions open), it would shrink
+a position all the way down to a handful of shares - even 1 - rather than rejecting the
+trade. Found running Phase C on real data: 15.7% of TrendPullbackV2's DEVELOPMENT trades had
+total risk (risk_per_share x quantity) under Rs 30, and the 15 worst R-multiples in the run
+(as low as -31.5R) were *all* quantity<=5 positions losing almost exactly Rs 14-17 regardless
+of which direction the price moved - the flat DP/brokerage charge (~Rs 13-18 per this
+project's own cost model), not a real trading loss. A 1-share position with ~Rs 0.50 of
+price-based risk cannot economically absorb a ~Rs 15 fixed cost; R-multiple for such a trade
+is dominated by fee structure, not edge, and contaminates `expectancy_r` for the whole
+strategy. `calculate_quantity` now rejects (`POSITION_TOO_SMALL_RELATIVE_TO_COSTS`) rather
+than accepting a cash-starved position whose risk can't clear a floor tied to the actual
+estimated transaction cost for that trade.
+
 Additionally `max_concurrent_positions` was a constructor parameter that the engine never
 passed and never enforced — the 10-holding cap documented in DEC-002 did not exist in code.
 Concurrency was limited only incidentally, by running out of cash, which also produced
@@ -63,6 +79,20 @@ class RiskBasedSizingCalculator:
     notional allocation — which would reintroduce the very defect this class exists to fix —
     it is rejected with NO_STOP_PROVIDED. Strategies must declare their risk.
     """
+
+    # A trade's total risk (risk_per_share x quantity) must clear this multiple of its own
+    # estimated transaction cost, so a full stop-out loss is dominated by genuine price risk
+    # rather than by flat fees. 10x is a round, conservative number - it does not come from
+    # tuning against any backtest result, only from wanting fixed costs to be a clearly minor
+    # component (<=10%) of a worst-case loss. See "FIXED-COST-DOMINATED MICRO-POSITIONS"
+    # above for the real trades (losing ~Rs 15 on a 1-share position regardless of price
+    # direction) that this exists to prevent.
+    MIN_RISK_TO_TRANSACTION_COST_RATIO = Decimal("10")
+    # Floor even when estimated_transaction_cost is reported as 0 (e.g. not yet estimated at
+    # sizing time) - Rs 200 is comfortably above the ~Rs 15-18 flat DP/brokerage charge this
+    # project's own cost model documents (CLAUDE.md: "DP charges ~Rs 13+GST"), so it cannot
+    # itself become the binding constraint in the common case.
+    ABSOLUTE_MIN_TOTAL_RISK_INR = Decimal("200")
 
     def __init__(
         self,
@@ -117,10 +147,21 @@ class RiskBasedSizingCalculator:
         if qty < 1:
             return SizingResult(0, Decimal("0"), Decimal("0"), False, "QUANTITY_LESS_THAN_ONE")
 
-        # Fit within available cash including costs
+        # Fit within available cash including costs. Once cash-fitting has reduced qty to
+        # the point where total risk can't clear the cost floor, no smaller qty will fix
+        # it either (risk only shrinks further) - reject immediately rather than accepting
+        # a fee-dominated micro-position (defect F7, see class docstring above).
+        min_risk_floor = max(
+            estimated_transaction_cost * self.MIN_RISK_TO_TRANSACTION_COST_RATIO,
+            self.ABSOLUTE_MIN_TOTAL_RISK_INR,
+        )
         while qty >= 1:
             needed = (actual_fill_price * Decimal(str(qty))) + estimated_transaction_cost
             if needed <= available_cash:
+                if risk_per_share * Decimal(str(qty)) < min_risk_floor:
+                    return SizingResult(
+                        0, Decimal("0"), Decimal("0"), False, "POSITION_TOO_SMALL_RELATIVE_TO_COSTS"
+                    )
                 return SizingResult(qty, estimated_transaction_cost, needed, True, "")
             qty -= 1
 

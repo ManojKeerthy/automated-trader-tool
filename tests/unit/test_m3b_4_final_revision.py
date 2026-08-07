@@ -1,7 +1,6 @@
 """Unit tests for Milestone M3B.4 Final Hypothesis Revision & Development Survivor Gate."""
 
 from datetime import date
-from pathlib import Path
 
 import pytest
 
@@ -19,8 +18,8 @@ def test_v2_parent_hashes_and_graveyard_locking():
     """Verify that Trend Pullback V2 and Momentum RS V2 are locked and V3 parent hashes match."""
     tp_v2 = TrendPullbackV2Strategy()
     mom_v2 = MomentumRSV2Strategy()
-    assert tp_v2.config_hash == "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523"
-    assert mom_v2.config_hash == "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d"
+    assert tp_v2.config_hash == "c4556b07bd4edc39f9a53c1c27c601d2c0747fcbc7ad356d4e4ec42af6c993da"
+    assert mom_v2.config_hash == "221c35751fde73a351138d14502bd8b1bf6ad49e051bfe55d6bb086a1d2df825"
 
     bo_v3 = BreakoutConfirmV3Strategy()
     mr_v3 = MeanReversionV3Strategy()
@@ -109,9 +108,10 @@ def test_development_survivor_gate_evaluator():
     assert res_pass["validation_status"] == "ELIGIBLE_FOR_FUTURE_VALIDATION"
 
 
-def test_m3b4_artifacts_exist():
-    """Verify that all required M3B.4 artifacts exist."""
-    assert Path("scratch/m3b_4_v3_hypothesis_registry.json").exists()
-    assert Path("scratch/m3b_4_signal_viability.json").exists()
-    assert Path("scratch/m3b_4_development_results.json").exists()
-    assert Path("scratch/m3b_4_robustness_diagnostics.json").exists()
+
+# test_m3b4_artifacts_exist removed 2026-08-06: certified the existence of
+# scratch/m3b_4_*.json artifacts from the voided Cycle 1/2 synthetic-data research run,
+# deleted in the 2026-08-06 governance cleanup (see CLAUDE.md, "Do not trust the historical
+# record"). The other five tests in this file exercise real, still-valid mechanisms (hash
+# locking, parameter-provenance auditing, the data firewall, the survivor gate evaluator)
+# and are kept.

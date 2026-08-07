@@ -27,15 +27,15 @@ def test_frozen_v2_hashes_match():
     strats = [
         (
             TrendPullbackV2Strategy(),
-            "5fe9bb5d935533952ac5d6573fccbb696d12471ccc5e2b925e24c5c802690523",
+            "c4556b07bd4edc39f9a53c1c27c601d2c0747fcbc7ad356d4e4ec42af6c993da",
         ),
         (
             BreakoutConfirmV2Strategy(),
-            "f482e1baa26bdc15e7b589ff3baa06550a314f911db667062f553c029c4da213",
+            "85d9c0b3d8c360ec9f51beec15b7c0ad09aa04d26473bd463ba9ea97e6f2aacd",
         ),
         (
             MomentumRSV2Strategy(),
-            "8e3c4586fb115e38138f9109b815568d2a2b02fdaafcecf1236b26a8f7c33e2d",
+            "221c35751fde73a351138d14502bd8b1bf6ad49e051bfe55d6bb086a1d2df825",
         ),
         (
             MeanReversionV2Strategy(),
