@@ -35,6 +35,7 @@ from tradecraft.backtesting.trade_ledger import TradeLedger, TradeRecord
 from tradecraft.instruments.universe import PointInTimeUniverse
 from tradecraft.research.risk_free_rate import RiskFreeRateConfig
 from tradecraft.research.sizing import ResearchSizingCalculator, RiskBasedSizingCalculator
+from tradecraft.screening.eligibility import EligibilityConfig
 from tradecraft.strategy.base import ExitSignal, SignalIntent, Strategy
 
 logger = logging.getLogger(__name__)
@@ -163,6 +164,30 @@ class BacktestEngine:
             inst_ids = [i.id for i in all_insts]
             # Seed unverified universe
             pit_universe.seed_current_members(all_insts)
+
+        # Project-level exclusions (e.g. CGPOWER - unresolved corporate-action discontinuity,
+        # docs/PROJECT_STATUS.md section 3.2.1). `screening/eligibility.py` declared this
+        # exclusion but was never wired into the actual backtest path - every backtest run
+        # through this engine, including Phase B/C, was still trading excluded instruments.
+        # Found 2026-08-07 investigating why an excluded symbol appeared in MomentumRSV2's
+        # largest winning trades. Enforced here, unconditionally, since it is a data-integrity
+        # exclusion (an instrument this project cannot currently trust), not a research choice.
+        excluded_symbols = set(EligibilityConfig().excluded_symbols)
+        if excluded_symbols:
+            id_to_symbol = {m["instrument"].id: m["instrument"].symbol for m in all_members}
+            excluded_hits = [
+                id_to_symbol[i] for i in inst_ids if id_to_symbol.get(i) in excluded_symbols
+            ]
+            inst_ids = [i for i in inst_ids if id_to_symbol.get(i) not in excluded_symbols]
+            if excluded_hits:
+                warnings.append(
+                    f"Excluded project-level excluded symbols from tradeable universe: "
+                    f"{sorted(set(excluded_hits))}"
+                )
+                logger.warning(
+                    f"Backtest run {run_id}: excluded project-level excluded symbols "
+                    f"from universe: {sorted(set(excluded_hits))}"
+                )
 
         portal.preload(inst_ids)
 

@@ -231,6 +231,74 @@ def test_survivorship_bias_temporal_filtering_and_quality_gate():
     session.close()
 
 
+def test_backtest_engine_excludes_project_level_symbols():
+    """Regression for the CGPOWER exclusion never actually reaching a live backtest.
+
+    `screening/eligibility.py` has declared CGPOWER a project-level exclusion since
+    docs/PROJECT_STATUS.md section 3.2.1 (an unresolved corporate-action discontinuity), but
+    nothing in the backtest execution path consulted it until 2026-08-07: BacktestEngine only
+    filtered its own `preload()` list, while `DataPortal.get_universe_members` - what a
+    strategy actually calls to find candidates - queried `PointInTimeUniverse` directly,
+    bypassing that filter. CGPOWER was traded in every backtest run through this engine,
+    including the Phase C survivor evaluation, until both were fixed together. Proven here
+    with `target_instrument_id` pinned directly to the excluded instrument: if exclusion is
+    not enforced, BuyAndHoldStrategy finds it in `get_universe_members` and buys it (1 trade);
+    if enforced, it isn't a member at all and no trade is placed (0 trades).
+    """
+    engine_db = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(bind=engine_db)
+    session = Session(bind=engine_db)
+    calendar = TradingCalendar()
+
+    excluded = Instrument(symbol="CGPOWER", name="CG Power", exchange="NSE", is_active=True)
+    normal = Instrument(symbol="COMPA", name="Company A", exchange="NSE", is_active=True)
+    session.add_all([excluded, normal])
+    session.commit()
+
+    for inst in (excluded, normal):
+        session.add(
+            UniverseMembership(
+                instrument_id=inst.id,
+                index_name="NIFTY_50",
+                effective_from=date(2026, 1, 1),
+                effective_to=None,
+                source="test_fixture",
+                confidence="VERIFIED",
+            )
+        )
+        for i, d in enumerate([date(2026, 7, 20), date(2026, 7, 21)]):
+            price = Decimal("100.00") + i
+            session.add(
+                MarketBar(
+                    instrument_id=inst.id,
+                    trading_date=d,
+                    open=price,
+                    high=price,
+                    low=price,
+                    close=price,
+                    volume=1000,
+                    source="test_fixture",
+                    is_adjusted=True,
+                )
+            )
+    session.commit()
+
+    from tradecraft.strategy.reference_strategies import BuyAndHoldStrategy
+
+    config = BacktestConfig(
+        strategy=BuyAndHoldStrategy(target_instrument_id=excluded.id),
+        start_date=date(2026, 7, 20),
+        end_date=date(2026, 7, 21),
+    )
+    engine = BacktestEngine(db_session=session, calendar_instance=calendar)
+    res = engine.run(config)
+
+    assert res.trades == [], "CGPOWER must never be tradeable - it is a project-level exclusion"
+    assert any("CGPOWER" in w for w in res.warnings)
+
+    session.close()
+
+
 # ---------------------------------------------------------------------------
 # 5. Known-Answer Accounting Expansion (Profitable, Losing, Cash Sizing)
 # ---------------------------------------------------------------------------

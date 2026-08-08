@@ -24,7 +24,7 @@ import pandas as pd
 from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
-from tradecraft.core.db_models import Instrument, MarketBar
+from tradecraft.core.db_models import DeliveryPosition, Instrument, MarketBar
 from tradecraft.core.exceptions import LookAheadError
 from tradecraft.instruments.universe import PointInTimeUniverse
 
@@ -57,6 +57,11 @@ class DataPortal:
 
         # Pre-loaded data cache: instrument_id -> sorted list of bar dicts
         self._bars_cache: dict[uuid.UUID, list[dict[str, Any]]] = {}
+        # Pre-loaded delivery-position cache: instrument_id -> sorted list of delivery dicts.
+        # Coverage does not match _bars_cache 1:1 - NSE's delivery report has its own gaps
+        # (see delivery_provider.py); callers must handle a shorter/missing series honestly
+        # rather than assume every trading day has a delivery row.
+        self._delivery_cache: dict[uuid.UUID, list[dict[str, Any]]] = {}
         # Instrument lookup cache
         self._instruments: dict[uuid.UUID, Instrument] = {}
 
@@ -98,6 +103,27 @@ class DataPortal:
                     "volume": b.volume,
                 }
                 for b in bars
+            ]
+
+            delivery_stmt = (
+                select(DeliveryPosition)
+                .where(
+                    and_(
+                        DeliveryPosition.instrument_id == inst_id,
+                        DeliveryPosition.trading_date <= self._end_date,
+                    )
+                )
+                .order_by(DeliveryPosition.trading_date)
+            )
+            delivery_rows = self._db.scalars(delivery_stmt).all()
+            self._delivery_cache[inst_id] = [
+                {
+                    "trading_date": d.trading_date,
+                    "traded_qty": d.traded_qty,
+                    "delivery_qty": d.delivery_qty,
+                    "delivery_pct": d.delivery_pct,
+                }
+                for d in delivery_rows
             ]
 
         logger.info(f"Pre-loaded data for {len(self._bars_cache)} instruments")
@@ -171,6 +197,28 @@ class DataPortal:
             filtered = filtered[-count:]
         return [dict(b) for b in filtered]
 
+    def get_delivery_history(
+        self,
+        instrument_id: uuid.UUID,
+        end_date: date,
+        count: int,
+    ) -> list[dict[str, Any]]:
+        """Get historical delivery-position dicts up to and including end_date.
+
+        Same point-in-time guarantee as `get_history`, but the underlying series is NOT
+        guaranteed to have one row per trading session (NSE's delivery report has its own
+        coverage gaps, distinct from MarketBar's) - callers must check length/dates rather
+        than assume a 1:1 correspondence with price bars.
+
+        Raises LookAheadError if end_date > current clock date.
+        """
+        self._check_date(end_date)
+        all_rows = self._delivery_cache.get(instrument_id, [])
+        filtered = [r for r in all_rows if r["trading_date"] <= end_date]
+        if count > 0:
+            filtered = filtered[-count:]
+        return [dict(r) for r in filtered]
+
     def get_close(self, instrument_id: uuid.UUID, query_date: date) -> Decimal | None:
         """Get closing price at a specific date.
 
@@ -217,9 +265,19 @@ class DataPortal:
         """Get universe members at a point in time.
 
         Raises LookAheadError if query_date > current clock date.
+
+        Filtered to instruments actually preloaded via `preload()` - the engine excludes
+        project-level excluded symbols (e.g. CGPOWER) from the preload list before calling
+        this, and this method previously queried the underlying universe table directly,
+        bypassing that filter entirely. A strategy calling this to find candidates would see
+        an excluded instrument regardless of what was preloaded. Found 2026-08-07: CGPOWER
+        was actively traded in every backtest despite being on the project's own exclusion
+        list, because nothing in the actual execution path ever consulted it. Fixed by scoping
+        this to `self._instruments`, the same set `preload()` populates.
         """
         self._check_date(query_date)
-        return self._universe.member_instruments(query_date)
+        members = self._universe.member_instruments(query_date)
+        return [m for m in members if m.id in self._instruments]
 
     def get_universe_confidence(self, query_date: date) -> str:
         """Get confidence level of universe membership at query_date."""

@@ -1,11 +1,11 @@
 {
   "governance_state_version": "2.0.0",
-  "last_updated": "2026-08-06",
-  "current_research_cycle": "PHASE_C_FIRST_SURVIVOR_TRENDPULLBACKV2_PENDING_ROBUSTNESS_CHECK",
+  "last_updated": "2026-08-08T06:55:00Z",
+  "current_research_cycle": "PHASE_C_DELIVERY_DATA_INGESTED_ALPHA017_FAILED_CONCENTRATION_STILL_NO_PROVEN_STRATEGY",
   "F6_fabricated_metrics_found_and_fixed_2026_08_06": "Before starting Phase C, re-checked the actual evaluation mechanism (V2DevelopmentGateEvaluator in research/v2_development_gate.py) and found it returned HARDCODED CONSTANTS for cagr_pct, max_drawdown_pct, sharpe_ratio, and sortino_ratio - literally `12.5 if gate_pass else -5.0` etc, not computed from the backtest's actual equity curve at all. This is the exact 'governance certificate that looks rigorous but isn't' failure this project's own audit history warns about, live in the mechanism meant to gate Phase C admissions. Fixed: now computed via MetricsEngine (the same real computation Phase B validation used), reusing res.equity_curve from the same backtest run. Verified: 275/275 tests still pass (no test had asserted the old fake values), clean on ruff and mypy. SECOND DEFECT FOUND IN THE SAME FILE: the gate also reimplemented R-multiple calculation locally instead of using TradeRecord.r_multiple (the engine's official F2/F2b-fixed field) - it fabricated a fake 5%-of-entry-price stop when stop_loss_level was None and scored degenerate risk distances as 0.0 instead of excluding them, exactly the F2/F2b defect pattern reintroduced in a second code path with zero test coverage proving it correct. Fixed: now uses t.r_multiple directly, excludes unmeasurable trades from the mean rather than inventing values for them, added r_multiple_coverage_pct to the scorecard and a rejection reason when coverage < 90% (mirrors MetricsEngine's INSUFFICIENT_R_COVERAGE handling). RELATED, NOT YET FIXED: research/benchmark_suite.py has the same defect class - hardcoded 'baseline benchmark' returns (BENCH-NIFTY50-BH: 12.5, BENCH-EQUAL-WEIGHT: 11.2, etc.) presented as comparison baselines but never actually computed from real backtests of those benchmarks. Not fixed because it doesn't block Phase C hypothesis evaluation directly; flagged for whoever next touches benchmark comparison.",
-    "F7_fee_dominated_micro_positions_found_and_fixed_2026_08_06": "With F6 fixed, the first real gate run showed ALL FOUR strategies failing with strongly negative net_expectancy_r (-0.54 to -0.87) despite two (TrendPullback, MomentumRS) showing POSITIVE total P&L - investigated the contradiction rather than reporting it. Traced to STOP_LOSS exits averaging -1.627R (not ~-1.0R), worst case -31.5R. Pulled actual trades: all 15 worst-R trades had total risk (risk_per_share x quantity) between Rs 0.48 and Rs 1.90, every one losing ~Rs 14-17 regardless of price direction (one exit price was even ABOVE entry) - the flat DP/brokerage charge, not a trading loss. Root cause: RiskBasedSizingCalculator's cash-fitting loop (research/sizing.py) had no floor - with cash nearly exhausted (routine with several concurrent positions open), it shrank positions to 1 share rather than rejecting. 149/948 TrendPullbackV2 trades (15.7%) had total risk under Rs 30. FIXED: sizing now rejects (POSITION_TOO_SMALL_RELATIVE_TO_COSTS) when total risk can't clear 10x the trade's own estimated transaction cost (or Rs 200, whichever is larger) - derived from cost structure, not fitted to any result. Added 2 hand-computed regression tests (tests/unit/test_r_multiple_and_sizing.py): cash-starved rejection, and adequately-funded trades still sizing correctly (proving the fix doesn't over-reject). Full suite: 277 passed (was 275), clean on ruff/mypy.",
-    "PHASE_C_FIRST_RESULT_2026_08_06": "Re-ran all four strategies with both F6 and F7 fixed, DEVELOPMENT split (2016-08-01 to 2021-12-31): TrendPullbackV2 = V2_DEVELOPMENT_SURVIVOR (714 trades, net P&L +Rs 729,800, CAGR +10.9%, Sharpe 0.36, net_expectancy_r +0.0259, profit_factor 1.21) - the FIRST strategy in this project's entire history to survive evaluation against real market data. MomentumRSV2 = near-miss FAILURE (291 trades, net P&L +Rs 1,652,782, CAGR +21.9%, profit_factor 1.58, but net_expectancy_r -0.0412 and single-trade profit share 29.4% > 25% cap - one large trade dominates). BreakoutConfirmV2 = FAILURE (net_expectancy_r -0.1182, profit_factor 0.83). MeanReversionV2 = FAILURE (net_expectancy_r -0.1855, profit_factor 0.70, CAGR -28.0%). Full detail and the table: docs/PROJECT_STATUS.md section 8.",
-    "IMPORTANT_CAVEAT": "TrendPullbackV2's expectancy is small (+0.026R) and this is ONE DEVELOPMENT-split run - not robustness-checked, not validated, not out-of-sample. Per prohibited_research_actions and section 4 Phase D, VALIDATION_SPLIT and the sealed final-test range must NOT be touched yet - the legitimate next step is the predeclared-robustness-neighbourhood check the FrozenV2CanonicalRecord/PredeclaredRobustnessNeighbourhood machinery in v2_development_gate.py is designed for (parameter sensitivity within a pre-declared range, not re-optimization), not a validation-split run.",
+  "F7_fee_dominated_micro_positions_found_and_fixed_2026_08_06": "With F6 fixed, the first real gate run showed ALL FOUR strategies failing with strongly negative net_expectancy_r (-0.54 to -0.87) despite two (TrendPullback, MomentumRS) showing POSITIVE total P&L - investigated the contradiction rather than reporting it. Traced to STOP_LOSS exits averaging -1.627R (not ~-1.0R), worst case -31.5R. Pulled actual trades: all 15 worst-R trades had total risk (risk_per_share x quantity) between Rs 0.48 and Rs 1.90, every one losing ~Rs 14-17 regardless of price direction (one exit price was even ABOVE entry) - the flat DP/brokerage charge, not a trading loss. Root cause: RiskBasedSizingCalculator's cash-fitting loop (research/sizing.py) had no floor - with cash nearly exhausted (routine with several concurrent positions open), it shrank positions to 1 share rather than rejecting. 149/948 TrendPullbackV2 trades (15.7%) had total risk under Rs 30. FIXED: sizing now rejects (POSITION_TOO_SMALL_RELATIVE_TO_COSTS) when total risk can't clear 10x the trade's own estimated transaction cost (or Rs 200, whichever is larger) - derived from cost structure, not fitted to any result. Added 2 hand-computed regression tests (tests/unit/test_r_multiple_and_sizing.py): cash-starved rejection, and adequately-funded trades still sizing correctly (proving the fix doesn't over-reject). Full suite: 277 passed (was 275), clean on ruff/mypy.",
+  "PHASE_C_FIRST_RESULT_2026_08_06": "Re-ran all four strategies with both F6 and F7 fixed, DEVELOPMENT split (2016-08-01 to 2021-12-31): TrendPullbackV2 = V2_DEVELOPMENT_SURVIVOR (714 trades, net P&L +Rs 729,800, CAGR +10.9%, Sharpe 0.36, net_expectancy_r +0.0259, profit_factor 1.21) - the FIRST strategy in this project's entire history to survive evaluation against real market data. MomentumRSV2 = near-miss FAILURE (291 trades, net P&L +Rs 1,652,782, CAGR +21.9%, profit_factor 1.58, but net_expectancy_r -0.0412 and single-trade profit share 29.4% > 25% cap - one large trade dominates). BreakoutConfirmV2 = FAILURE (net_expectancy_r -0.1182, profit_factor 0.83). MeanReversionV2 = FAILURE (net_expectancy_r -0.1855, profit_factor 0.70, CAGR -28.0%). Full detail and the table: docs/PROJECT_STATUS.md section 8.",
+  "IMPORTANT_CAVEAT": "TrendPullbackV2's expectancy is small (+0.026R) and this is ONE DEVELOPMENT-split run - not robustness-checked, not validated, not out-of-sample. Per prohibited_research_actions and section 4 Phase D, VALIDATION_SPLIT and the sealed final-test range must NOT be touched yet - the legitimate next step is the predeclared-robustness-neighbourhood check the FrozenV2CanonicalRecord/PredeclaredRobustnessNeighbourhood machinery in v2_development_gate.py is designed for (parameter sensitivity within a pre-declared range, not re-optimization), not a validation-split run.",
   "completed_milestone": "REPO_AUDIT_2026-08-06",
   "next_authorised_milestone": "PHASE_C_ALPHA_DISCOVERY",
   "phase_b_run_2026_08_06": {
@@ -18,7 +18,6 @@
     "RESOLVED_2026_08_06": "Derived max_holding_days from sourced convention BEFORE re-running the backtest, not fitted to results: TrendPullbackV2/BreakoutConfirmV2 = 20 sessions (swing-trading pullback/breakout-continuation convention, commonly cited as 2-4 weeks; also matches each strategy's own existing 20-session parameter). MomentumRSV2 = 63 sessions, set equal to rs_lookback (also 63), mirroring Jegadeesh & Titman (1993)'s matched J=K formation/holding convention (their most-cited combination is 6-month/6-month). Added as a ParameterOrigin entry (category MARKET_CONVENTION) on each strategy, same audit trail as every other parameter. This changed each strategy's config_hash; every test that pinned the old hash was updated to the recomputed value (test_m3b_2_pipeline.py, test_m3b_2_2_accounting.py, test_m3b_3_decision_gate.py, test_m3b_3_1_reconciliation.py, test_m3b_4_final_revision.py).",
     "RESULT_AFTER_FIX": "TrendPullbackV2: PASS all 4 bands (win_rate 34.9%, payoff 1.98x, force_close 1.0%, r_coverage 100%). MeanReversionV2: PASS all 4 (unchanged). BreakoutConfirmV2: 3/4 (win_rate 28.5%, just under the 30% floor; payoff 1.94x, force_close 0.9%, r_coverage 100%). MomentumRSV2: 3/4 (win_rate 35.2%, force_close 2.0%, r_coverage 100%; payoff 3.71x, down from 61.6x but still above the illustrative 2x ceiling). The pathological near-zero-win-rate/30-60x-payoff signature is gone from all four. Deliberately not tuning further to force the remaining 2 gaps closed - that would reintroduce the same post-hoc-fitting problem this fix avoided. PHASE B COMPLETE: all four families produce plausible, bounded trade distributions."
   },
-
   "data_integrity_status": "PHASE_A_FUNCTIONALLY_COMPLETE_141_OF_142_TRADEABLE_CGPOWER_EXCLUDED",
   "data_integrity_reference": "docs/research/REPO_AUDIT_2026-08-06.md",
   "authenticity_gate_result": {
@@ -66,18 +65,16 @@
     "SYMBOL SUCCESSIONS RESOLVED 2026-08-06: all 10 entries in instruments/universes.py SYMBOL_SUCCESSION now have sourced dates, zero UNCONFIRMED. Filled 3 blank dates (MCDOWELL-N 2024-06-07, ZOMATO 2025-04-09, PEL 2022-08-30), corrected 2 wrong dates found during verification (CADILAHC was 2022-02-21 now 2022-02-24 per the NSE filing itself; SRTRANSFIN/SHRIRAMCIT was 2022-11-25 now 2022-11-30), confirmed 5 already-correct ones. Also fixed a real bug: 'LTIM' was never a valid Kite ticker - the real tradingsymbol is 'LTM' (confirmed via direct kite.instruments('NSE') query, not web search - external sources saying LTIM were wrong). Removed from HISTORICAL_SYMBOLS/SYMBOL_SUCCESSION as a redundant phantom entry; LTM already ingested with 2486 bars via NIFTY50_SYMBOLS, no gap existed. PHASE A NOW FULLY COMPLETE - no remaining data-integrity blockers besides ongoing research (Phase B/C).",
     "REPAIRED 2026-08-06: ADANIPORTS (0 bars, every chunk hit Kite 502 Bad Gateway), ADANIENT (truncated to 245/2962 bars, aborted after the same 502s), and APOLLOHOSP (missing first ~2 years) were re-backfilled individually via `data backfill --symbol <SYM> --chunk-delay 0.6`, which resumed correctly from the detected gap. All three now pass data verify with full-length series."
   ],
-
   "research_cycle_1_status": "VOID_SYNTHETIC_DATA",
   "research_cycle_2_status": "VOID_SYNTHETIC_DATA",
   "prior_verdict_evidentiary_weight": "ZERO",
-
   "development_range": "2014-08-11 -> 2021-12-31",
   "validation_range": "2022-01-01 -> 2024-06-30",
   "final_test_range": "2024-07-01 -> 2026-08-06",
   "development_status": "POPULATED_REAL_DATA",
-  "validation_status": "POPULATED_SEALED",
+  "validation_status": "SPENT_2026_08_07_RESULT_CONTAMINATED_SEE_SECTION_8_6",
   "final_test_status": "POPULATED_SEALED",
-  "validation_access_count": 0,
+  "validation_access_count": 1,
   "final_test_access_count": 0,
   "dataset_split_notes": [
     "Re-declared 2026-08-06 against real ingested data spanning 2014-08-11 to 2026-08-06.",
@@ -86,7 +83,6 @@
     "FINAL TEST now genuinely holds ~2 years of real out-of-sample data. It is the single most valuable asset in this project and can be spent exactly once.",
     "CAVEAT: the final test window has a moving right edge because daily ingestion keeps extending it. Freeze an explicit end date in the run config before the final test is ever executed, so the window cannot silently grow between runs."
   ],
-
   "target_universe": "NIFTY100",
   "target_history_start": "2015-01-01",
   "supported_universes": [
@@ -96,13 +92,11 @@
     "NIFTY500",
     "CUSTOM"
   ],
-
   "security_master_version": "1.0.0",
   "membership_version": "1.0.0",
   "corporate_actions_version": "1.0.0",
   "survivorship_protection": "UNVERIFIED_PENDING_REAL_DATA",
   "point_in_time_status": "UNVERIFIED_PENDING_REAL_DATA",
-
   "abandoned_strategy_families": [],
   "graveyard_bans_status": "ALL_LIFTED_2026-08-06",
   "previously_banned_families_now_eligible": [
@@ -112,9 +106,14 @@
     "strat_mean_reversion"
   ],
   "active_strategy_families": [
-    "strat_trend_pullback_v2 (V2_DEVELOPMENT_SURVIVOR 2026-08-06, pending robustness check before any validation-split use - see PROJECT_STATUS.md section 8)"
+    "strat_trend_pullback_v2 (fails parameter-robustness AND sub-period consistency)",
+    "strat_momentum_rs_v2 (fails concentration cap AND sub-period consistency)",
+    "strat_vol_squeeze_v1 (unfiltered ALPHA-018 - fails sub-period consistency, superseded by regime-filtered variant)",
+    "strat_vol_squeeze_v1_regime_filtered (strongest DEVELOPMENT candidate - VALIDATION_SPLIT run 2026-08-07 dominated by one real, non-repeatable demerger event (NMDC, 63% of gross profit) - NOT a data defect (corrected same day) - result inconclusive, NOT proven, VALIDATION_SPLIT now spent - see PROJECT_STATUS.md section 8.6)",
+    "strat_cross_sectional_reversal_v1 (ALPHA-019 - FAILS outright, negative net_expectancy_r in aggregate and both DEVELOPMENT halves - not pursued further - see PROJECT_STATUS.md section 8.7)",
+    "strat_vol_contraction_v1 and strat_vol_contraction_v1_regime_filtered (ALPHA-020 - FAILS sub-period consistency both ways, H1 -0.215 to -0.227 - not pursued further - see PROJECT_STATUS.md section 8.8)",
+    "strat_delivery_volume_breakout_v1 (ALPHA-017 - FAILS on concentration (31.21% > 25% cap), full DEVELOPMENT gate_pass=False - not pursued further - see PROJECT_STATUS.md section 9.1)"
   ],
-
   "known_engine_defects_open": [],
   "engine_defects_fixed_2026_08_06_test_suite_cleanup": [
     "F5: BacktestEngine (engine.py:404) unconditionally passes active_positions= to strategy.evaluate(), but 8 of 9 strategy files had a narrower evaluate() signature that didn't accept it (breakout_confirm.py, breakout_confirm_v3.py, mean_reversion.py, mean_reversion_v3.py, momentum_rs.py, reference_strategies.py x2, trend_pullback.py, v2_strategies.py x4). Any real backtest of any strategy except earnings_drift_v1 would crash on the first session. Fixed in all 8 files. Same class of defect as the Cycle 2 missing-exit bug CLAUDE.md already documents (fixed in one strategy, missed in three others) - recurred with the active_positions/F3 interface change and went unnoticed because the 7 affected tests were miscategorised as legacy/stale rather than investigated.",
@@ -131,7 +130,6 @@
     "Notional cap (max_position_pct) binds before the risk budget when a stop is tighter than 5% of price, so those positions under-risk. Deliberate: prevents concentration in tight-stop names.",
     "BreakoutConfirmV3 declares no max_holding_days and still exits only via stop or force close. Not patched, because inventing a holding period would change the hypothesis; the EXIT_RULES_NOT_FIRING warning surfaces it."
   ],
-
   "permitted_research_actions": [
     "REAL_DATA_INGESTION",
     "DATA_AUTHENTICITY_VERIFICATION",
@@ -146,8 +144,343 @@
     "POST_HOC_GATE_MODIFICATION",
     "LIVE_ORDER_PLACEMENT"
   ],
-
   "authoritative_backtest_policy": "FORCE_CLOSE",
   "accounting_integrity_status": "VERIFIED_0.0000_RESIDUAL",
-  "temporal_integrity_status": "VERIFIED_0_VIOLATIONS"
+  "temporal_integrity_status": "VERIFIED_0_VIOLATIONS",
+  "F8_fabricated_metrics_in_robustness_module_found_and_fixed_2026_08_07": {
+    "summary": "LimitedRobustnessAnalyzer (research/robustness.py) had the same fabricated-metric pattern as F6 (hardcoded max_drawdown_pct = -18.0 if v_exp_r > 0 else -30.0) and the same F2/F2b fake-5%-stop R-multiple reimplementation, in the module that runs the predeclared robustness check itself.",
+    "fix": "max_drawdown_pct now computed per-variant via MetricsEngine from that variant equity curve; R-multiple now reads TradeRecord.r_multiple directly, excluding unmeasurable trades rather than fabricating a fake stop.",
+    "found_via": "Proactive re-check of the evaluation mechanism before trusting its output, per this project standing rule, before running the robustness check on TrendPullbackV2.",
+    "reference": "PROJECT_STATUS.md section 8.1"
+  },
+  "PHASE_C_ROBUSTNESS_RESULT_2026_08_07": {
+    "strategy_id": "strat_trend_pullback_v2",
+    "neighbourhood": {
+      "atr_dist_max": [
+        1.8,
+        2.2
+      ],
+      "atr_stop_mult": [
+        1.8,
+        2.2
+      ]
+    },
+    "neighbourhood_source": "Existing +/-10% defaults already hardcoded in robustness.py._generate_predeclared_variants, not chosen after seeing this run result",
+    "canonical_net_expectancy_r": 0.0259,
+    "variant_net_expectancy_r": {
+      "atr_dist_max=1.8": 0.0055,
+      "atr_dist_max=2.2": 0.0123,
+      "atr_stop_mult=1.8": -0.0249,
+      "atr_stop_mult=2.2": -0.0035
+    },
+    "is_neighbourhood_stable": false,
+    "parameter_cliff_flagged": true,
+    "verdict": "NOT_ELIGIBLE_FOR_VALIDATION_SPLIT",
+    "reference": "PROJECT_STATUS.md section 8.1"
+  },
+  "F9_cgpower_exclusion_never_wired_into_backtest_engine_found_and_fixed_2026_08_07": {
+    "summary": "CGPOWER has been on screening/eligibility.py excluded_symbols since the corporate-action gap was found (section 3.2.1), but BacktestEngine.run() built its tradeable universe solely from PointInTimeUniverse.members() with no reference to that exclusion list, and DataPortal.get_universe_members() (what strategies actually call for candidates) queried PointInTimeUniverse directly, bypassing even engine-level preload filtering. CGPOWER was tradeable in every backtest run through this engine to date, including all of Phase B and the pre-correction Phase C/robustness numbers in section 8/8.1.",
+    "found_via": "Investigating why an excluded symbol appeared in MomentumRSV2 top winning trades (~18% combined profit share) while following up on the MomentumRSV2 near-miss thread from the robustness-check result.",
+    "fix": "backtesting/engine.py filters project-level excluded symbols out of the preload list; backtesting/data_portal.py get_universe_members() now intersects with the actually-preloaded instrument set, closing the gap at both the preload and the query-time boundary.",
+    "regression_test": "tests/unit/test_m2_audit_acceptance.py::test_backtest_engine_excludes_project_level_symbols",
+    "lesson": "Distinct from F6/F7/F8 (defects in code that computes a number): F9 is a governance control that existed, was correctly implemented in isolation, and was simply never wired into the execution path it was meant to constrain. Worth spot-checking other declared-but-possibly-unwired controls (e.g. max_concurrent_positions, LiquidityScreenConfig).",
+    "reference": "PROJECT_STATUS.md section 8.2"
+  },
+  "PHASE_C_CORRECTED_RESULT_2026_08_07": {
+    "trend_pullback_v2": {
+      "trades": 719,
+      "net_expectancy_r": 0.0165,
+      "profit_factor": 1.15,
+      "gate_pass": true,
+      "robustness_verdict": "PARAMETER_CLIFF",
+      "validation_eligible": false
+    },
+    "momentum_rs_v2": {
+      "trades": 284,
+      "net_expectancy_r": 0.0183,
+      "profit_factor": 1.38,
+      "gate_pass": false,
+      "rejection_reason": "single_trade_profit_share_31.17pct_gt_25pct_cap"
+    },
+    "breakout_confirm_v2": {
+      "trades": 725,
+      "net_expectancy_r": -0.1249,
+      "profit_factor": 0.83,
+      "gate_pass": false
+    },
+    "mean_reversion_v2": {
+      "trades": 1498,
+      "net_expectancy_r": -0.1815,
+      "profit_factor": 0.7,
+      "gate_pass": false
+    },
+    "reference": "PROJECT_STATUS.md section 8.2"
+  },
+  "ALPHA018_PRE_REGISTRATION_AND_RESULT_2026_08_07": {
+    "hypothesis": "Volatility compression (Bollinger Bands inside Keltner Channel - TTM Squeeze) release with bullish confirmation in an uptrend carries directional continuation edge.",
+    "source": "docs/research/alpha_library/alpha_registry.json ALPHA-018, selected as highest-scored (39.0) OHLCV-only-feasible candidate; ALPHA-014/016/017 need earnings/fundamentals/delivery-volume data never ingested by this project; ALPHA-021-048 are unfilled placeholder stubs.",
+    "pre_registration_committed_before_run": true,
+    "pre_registration_reference": "PROJECT_STATUS.md section 8.3, committed to git working tree before vol_squeeze_evaluation.py was ever executed",
+    "parameters": {
+      "bb_period": 20,
+      "bb_std": 2.0,
+      "kc_period": 20,
+      "kc_atr_mult": 1.5,
+      "trend_ma": 50,
+      "atr_stop_mult": 2.0,
+      "max_holding_days": 25
+    },
+    "predeclared_robustness_neighbourhood": {
+      "bb_std": [
+        1.8,
+        2.2
+      ],
+      "atr_stop_mult": [
+        1.8,
+        2.2
+      ]
+    },
+    "canonical_result": {
+      "executed_trades": 513,
+      "net_expectancy_r": 0.1223,
+      "profit_factor": 1.23,
+      "gate_pass": true,
+      "outcome_status": "V2_DEVELOPMENT_SURVIVOR"
+    },
+    "robustness_result": {
+      "is_neighbourhood_stable": true,
+      "parameter_cliff_flagged": false,
+      "variant_net_expectancy_r": {
+        "bb_std=1.8": 0.173,
+        "bb_std=2.2": 0.1749,
+        "atr_stop_mult=1.8": 0.1524,
+        "atr_stop_mult=2.2": 0.1971
+      }
+    },
+    "caveats": "Weakest literature support (Moderate) of the three OHLCV-feasible ALPHA candidates tested. Single continuous DEVELOPMENT window, not independent samples. Has not been tested against VALIDATION_SPLIT or FINAL_TEST, which remain untouched per the one-shot rule.",
+    "reference": "PROJECT_STATUS.md section 8.3"
+  },
+  "SUBPERIOD_CONSISTENCY_FINDING_2026_08_07": {
+    "summary": "Split DEVELOPMENT (2016-08-01 to 2021-12-31) into two contiguous halves (H1: 2016-08 to 2019-03, H2: 2019-04 to 2021-12) and re-ran canonical (unmodified) parameters of every survivor/near-survivor tested this cycle. All three (TrendPullbackV2, MomentumRSV2, ALPHA-018 vol squeeze) are flat-to-losing in H1 (net_expectancy_r -0.013 to -0.108) and strongly positive in H2 (+0.026 to +0.210). Not a per-strategy overfitting artifact (parameter robustness already checked separately) - a shared regime artifact: H2 contains the COVID crash and extraordinary 2020-2021 recovery rally, an unusually strong trending environment that flatters any trend/momentum long strategy; H1 is a more ordinary, choppier market where none of them have edge.",
+    "conclusion": "No strategy validated so far represents a proven, regime-robust edge. Full-period positive results substantially restate catching the 2020-2021 rally, not durable edge in typical conditions.",
+    "new_standing_requirement": "Any future candidate must show non-catastrophic expectancy_r in BOTH DEVELOPMENT halves independently before being considered for VALIDATION_SPLIT - same discipline as the predeclared parameter-robustness check, applied along the time axis.",
+    "not_yet_started": [
+      "searching for a hypothesis that clears the sub-period bar in both halves",
+      "pairing an existing candidate with an explicit market-regime filter and re-testing both halves"
+    ],
+    "reference": "PROJECT_STATUS.md section 8.4"
+  },
+  "REGIME_FILTER_OVERLAY_2026_08_07": {
+    "user_directive": "User asked for a proven strategy that works on both historical and live data; informed no proven strategy existed yet (section 8.4 sub-period finding); user chose option 2 (regime-conditional strategy + explicit regime filter) over option 1 (keep searching for an all-weather edge).",
+    "regime_signal": "Market breadth: percentage of the tradeable universe (same CGPOWER-excluded set every strategy uses) with Close > its own 200-session SMA. Not a NIFTY index price series - none has been ingested (checked: no NIFTY/NSEI instrument in the instruments table; Benchmark.calculate_return() in backtesting/benchmark.py is an unfixed stub returning a hardcoded placeholder, noted so it is not mistaken for real data) and Kite re-authentication was not available this session.",
+    "rule": "regime ON when breadth >= 50%; new entries only taken when ON; existing positions still managed by normal stop-loss/max-holding exits regardless of regime.",
+    "pre_registration_committed_before_run": true,
+    "pre_registration_reference": "PROJECT_STATUS.md section 8.5",
+    "full_period_result": {
+      "trades": 407,
+      "net_expectancy_r": 0.1398,
+      "profit_factor": 1.18,
+      "cagr_pct": 6.8,
+      "max_drawdown_pct": -44.25,
+      "sharpe_ratio": 0.167,
+      "gate_pass": true,
+      "outcome_status": "V2_DEVELOPMENT_SURVIVOR"
+    },
+    "subperiod_result": {
+      "h1_2016_08_to_2019_03": {
+        "trades": 182,
+        "net_expectancy_r": 0.078,
+        "profit_factor": 1.1
+      },
+      "h2_2019_04_to_2021_12": {
+        "trades": 230,
+        "net_expectancy_r": 0.1674,
+        "profit_factor": 1.19
+      }
+    },
+    "parameter_robustness_result": {
+      "canonical_200_050": 0.1398,
+      "sma_period_180": 0.1112,
+      "sma_period_220": 0.1372,
+      "breadth_threshold_045": 0.1203,
+      "breadth_threshold_055": 0.1654,
+      "verdict": "stable, no cliff"
+    },
+    "regression_tests": "tests/unit/test_vol_squeeze_regime_filter.py - hand-computed 2-instrument fixture proving the breadth gate suppresses/passes signals correctly",
+    "caveats": "Not risk-free (max drawdown -44.3%, Sharpe 0.167). ALPHA-018 base hypothesis literature support is Moderate, not Strong. Still one continuous historical window (now examined in 2 halves, not independent samples). Breadth>=50% regime rule is itself only tested once.",
+    "status": "Strongest candidate to date. NOT promoted toward VALIDATION_SPLIT - awaiting explicit decision on spending the one-shot resource.",
+    "reference": "PROJECT_STATUS.md section 8.5"
+  },
+  "PHASE_D_VALIDATION_RUN_2026_08_07": {
+    "user_directive": "Explicit instruction to proceed with VALIDATION_SPLIT run for strat_vol_squeeze_v1_regime_filtered after being informed no proven strategy existed and this was the strongest DEVELOPMENT-tested candidate.",
+    "strategy_id": "strat_vol_squeeze_v1_regime_filtered",
+    "config_hash": "c5baa46384a07491ac01c0d926603bee2feb886d068858eff8d40bc18b6690de",
+    "parameters": {
+      "bb_period": 20,
+      "bb_std": 2.0,
+      "kc_period": 20,
+      "kc_atr_mult": 1.5,
+      "trend_ma": 50,
+      "atr_stop_mult": 2.0,
+      "max_holding_days": 25,
+      "sma_period": 200,
+      "breadth_threshold": 0.5
+    },
+    "no_parameters_changed_based_on_result": true,
+    "raw_result": {
+      "executed_trades": 209,
+      "net_pnl_inr": 116294.96,
+      "win_rate_pct": 34.45,
+      "profit_factor": 1.11,
+      "net_expectancy_r": 0.0715,
+      "cagr_pct": 4.91,
+      "max_drawdown_pct": -18.29,
+      "sharpe_ratio": 0.0764,
+      "max_single_instrument_profit_share_pct": 11.43,
+      "max_single_trade_profit_share_pct": 63.25
+    },
+    "contamination_finding": {
+      "dominant_trade": "NMDC, entry 2022-10-07, exit 2022-11-16, gross_pnl 118423.05 - larger than the entire run net P&L of 116294.96",
+      "root_cause": "NMDC gapped +85.7% on 2022-10-27 (close 15.75 -> 29.25). Zero CorporateAction DB record. docs/research/quality_report.json already has this move as VERIFIED_EXPLAINED (NMDC Steel demerger ex-date, 1:1 allotment, record date 2022-10-28, source Business Standard reporting the real move as a 14% surge) but matched_action=null - the demerger was narratively verified but never actually run through the corporate-actions adjustment pipeline. Real move ~14%, database shows 85.7%, ~6x inflated.",
+      "connection_to_known_issue": "This is a live, concrete instance of the corporate-action adjustment gap CLAUDE.md has flagged as BLOCKING since 2026-08-06 (unadjusted bonuses/corporate actions creating gaps that never happened at this magnitude) - previously a theoretical risk, now shown to have corrupted an actual Phase D result."
+    },
+    "result_not_rerun_with_exclusion": true,
+    "result_not_rerun_reason": "VALIDATION_SPLIT is one-shot per this project standing rule. Re-running with the contaminating trade excluded to get a cleaner number would itself be the after-the-fact cherry-picking this rule exists to prevent. Result stands as spent and inconclusive.",
+    "consequences": [
+      "strat_vol_squeeze_v1_regime_filtered is NOT proven on out-of-sample data - the positive raw number is not trustworthy evidence either way.",
+      "FINAL_TEST_SPLIT must NOT be touched now - spending the last one-shot resource immediately after an inconclusive Validation would repeat the same mistake at higher cost.",
+      "CORRECTED: the actionable fix is strategy-level (add a corporate-action exclusion window to the entry logic), not the corporate-action adjustment pipeline - that pipeline remains genuinely incomplete per section 3.2 but is not shown to have caused this result."
+    ],
+    "reference": "PROJECT_STATUS.md section 8.6",
+    "CORRECTION_2026_08_07": {
+      "original_diagnosis_retracted": "The first version of this record concluded NMDC price move was a ~6x-inflated corporate-action-adjustment data defect and named src/tradecraft/corporate_actions/ as the fix. That conclusion was drawn from comparing our raw close-to-close pct_change (85.7%) to a news headline (surges 14%) without checking what reference price the 14% figure used. Retracted after verification.",
+      "verification_performed": "Web search of contemporaneous financial reporting (Business Standard, Zee Business, India Infoline) on the actual NMDC-NMDC Steel demerger, 2022-10-27 ex-date.",
+      "finding": "The exchange reset NMDC opening reference price to an adjusted Rs 93.70 on the ex-date (demerger removed ~Rs 18,650 crore of assets to NMDC Steel) - the surges 14% headline describes the INTRADAY rally from that already-reset adjusted open (to Rs 107.25), not the raw move from the prior close. A stock split (NMDC also had an unrelated 3:1 split in Dec 2024, retroactively applied by Kite) cannot explain a percentage-return discrepancy since it is a scalar rescaling; a demerger reference-price reset can and did. Our own OHLC for the date (open 25.80, high 30.65) is the right order of magnitude for Rs 93.70/3 (~31.2), consistent with a genuine reset, not a garbled number.",
+      "revised_conclusion": "NMDC move was very likely REAL, structurally identical to the already-confirmed CGPOWER 2015 demerger case (detector.py docstring: Kite does not retroactively splice spin-off ratios, there is no single ratio). The corporate-action pipeline is NOT shown to be the cause and should not have been named as the fix.",
+      "reframed_finding": "The genuine problem is strategy-level, not data-level: VolatilitySqueezeV1RegimeFilteredStrategy has no mechanism to distinguish a genuine momentum breakout from a demerger-driven price discontinuity that mechanically looks identical (quiet pre-event trading + one large move). 63% of gross validation profit depended on this one non-repeatable corporate event either way - the result is still not trustworthy evidence of a repeatable edge, just for a corrected reason."
+    }
+  },
+  "ALPHA019_RESULT_2026_08_08": {
+    "hypothesis": "Cross-sectional 5-day short-term reversal, bottom decile, long-term uptrend filter (falling-knife guard)",
+    "pre_registration_committed_before_run": true,
+    "pre_registration_reference": "PROJECT_STATUS.md section 8.7",
+    "result": {
+      "full": {
+        "trades": 1219,
+        "net_expectancy_r": -0.0387,
+        "profit_factor": 0.83,
+        "cagr_pct": -13.03
+      },
+      "h1": {
+        "trades": 592,
+        "net_expectancy_r": -0.0516,
+        "profit_factor": 0.82
+      },
+      "h2": {
+        "trades": 629,
+        "net_expectancy_r": -0.0065,
+        "profit_factor": 0.96
+      }
+    },
+    "verdict": "FAILS OUTRIGHT - negative net_expectancy_r in aggregate AND both DEVELOPMENT halves independently. Not a regime-dependency failure like TrendPullbackV2/MomentumRSV2/ALPHA-018 unfiltered - a consistent failure matching the risk this hypothesis pre-registered in advance (alpha destroyed by transaction costs).",
+    "diversification_goal_met": "Yes - 1219 trades, ~6x TrendPullbackV2, ~3x the regime-filtered squeeze strategy - proves the trade-count lever works as designed, just applied to a signal with no underlying edge here.",
+    "reference": "PROJECT_STATUS.md section 8.7"
+  },
+  "ALPHA020_RESULT_2026_08_08": {
+    "hypothesis": "Volatility Contraction Pattern (Minervini/ONeil) - 3-stage contracting ATR + drying volume + high-volume breakout, Close>SMA150 trend filter",
+    "pre_registration_committed_before_run": true,
+    "pre_registration_reference": "PROJECT_STATUS.md section 8.8",
+    "unfiltered_result": {
+      "full": {
+        "trades": 145,
+        "net_expectancy_r": 0.1203,
+        "profit_factor": 1.14
+      },
+      "h1": {
+        "trades": 66,
+        "net_expectancy_r": -0.2269,
+        "profit_factor": 0.7
+      },
+      "h2": {
+        "trades": 77,
+        "net_expectancy_r": 0.3832,
+        "profit_factor": 1.58
+      }
+    },
+    "regime_filtered_result": {
+      "full": {
+        "trades": 128,
+        "net_expectancy_r": 0.1026,
+        "profit_factor": 1.2
+      },
+      "h1": {
+        "trades": 57,
+        "net_expectancy_r": -0.215,
+        "profit_factor": 0.73
+      },
+      "h2": {
+        "trades": 70,
+        "net_expectancy_r": 0.3031,
+        "profit_factor": 1.59
+      }
+    },
+    "verdict": "FAILS sub-period consistency both unfiltered and regime-filtered - H1 remains catastrophic (-0.215 to -0.227) in both cases, the worst single-half result of any strategy tested this cycle. Third independent strategy design with the identical fails-2016-19-thrives-2019-21 fingerprint (after TrendPullbackV2 and unfiltered ALPHA-018).",
+    "lesson": "MarketBreadthRegimeFilter (generalized from the ALPHA-018-specific overlay into reusable infrastructure) only adds discriminating power when the base strategy lacks its own trend-context filter. ALPHA-020 already requires Close>SMA150 in its own entry logic, so the market-breadth filter had little new information to add. Not a universal fix.",
+    "reference": "PROJECT_STATUS.md section 8.8"
+  },
+  "ALPHA_BACKLOG_STATUS": "EXHAUSTED_2026_08_08 - ALPHA-014/016/017 infeasible (need earnings/fundamentals/delivery-volume data never ingested), ALPHA-015 not yet tried, ALPHA-018/019/020 tested (018 DEVELOPMENT-survivor but VALIDATION-inconclusive, 019 failed outright, 020 failed sub-period both filtered and unfiltered), ALPHA-021-048 unfilled placeholder stubs with no real content.",
+  "NSE_DELIVERY_DATA_INGESTION_2026_08_08": {
+    "summary": "New data source beyond OHLCV, per explicit user instruction. Kite Connect confirmed to provide no fundamentals/delivery data (checked its own API docs). NSE publishes daily Security Wise Delivery Position (MTO_DDMMYYYY.DAT) free, no login, verified live to cover 2014-08-11 to present.",
+    "schema": "New table delivery_positions (migration 006_delivery_positions): instrument_id, trading_date, traded_qty, delivery_qty, delivery_pct.",
+    "pipeline": "market_data/delivery_provider.py (fetch+parse), market_data/delivery_backfill.py (resumable/idempotent backfill orchestrator), DataPortal.get_delivery_history() (served through the same look-ahead-safe interface as prices).",
+    "bug_found_and_fixed_before_trusting": "First symbol-matching implementation walked SYMBOL_SUCCESSION chains, incorrectly attributing pre-merger HDFC Ltd delivery data to HDFCBANK (two genuinely separate, both-listed companies until their 2023 merger) - caught by a DB uniqueness violation on a real 2016 file. Fixed to direct current-symbol matching only; an instrument that changed ticker has an honest delivery-data gap before the change, not fabricated continuity.",
+    "backfill_result": {
+      "trading_days_processed": 2950,
+      "trading_days_with_data": 2949,
+      "records_written": 371058,
+      "instruments_covered": "142/142",
+      "fetch_errors": [
+        "2026-02-13: network timeout, single day gap, not filled"
+      ]
+    },
+    "verification": "Cross-checked RELIANCE 2024-01-02 against NSE's separate sec_bhavdata_full report format - exact match (traded_qty=3724400, delivery_qty=2059678, delivery_pct=55.30 in both independently-fetched files).",
+    "not_yet_solved": "Fundamentals data (earnings, ROE, balance sheet) - no equally clean free primary source found. ALPHA-014/016 remain infeasible.",
+    "reference": "PROJECT_STATUS.md section 9"
+  },
+  "ALPHA017_RESULT_2026_08_08": {
+    "hypothesis": "Donchian 20-day breakout + RVOL>=1.5 + delivery_pct >= 1.2x own trailing 20-day average, Close>SMA50 trend filter",
+    "pre_registration_committed_before_run": true,
+    "pre_registration_reference": "PROJECT_STATUS.md section 9.1",
+    "result": {
+      "full": {
+        "trades": 384,
+        "net_expectancy_r": 0.1366,
+        "profit_factor": 1.1,
+        "net_pnl": 232832.44
+      },
+      "h1": {
+        "trades": 181,
+        "net_expectancy_r": 0.1382,
+        "profit_factor": 0.96,
+        "net_pnl": -51880.89
+      },
+      "h2": {
+        "trades": 193,
+        "net_expectancy_r": 0.1563,
+        "profit_factor": 1.28,
+        "net_pnl": 336212.44
+      }
+    },
+    "official_gate_result": {
+      "gate_pass": false,
+      "outcome_status": "V2_DEVELOPMENT_FAILURE",
+      "max_single_trade_profit_share_pct": 31.21,
+      "rejection_reasons": [
+        "Single trade profit share too high (31.21% > 25.0%)"
+      ]
+    },
+    "investigation_finding": "net_expectancy_r positive in both halves looked like the first fully-consistent result, but H1 profit_factor=0.96<1.0 and net_pnl negative contradicted the positive average R-multiple - investigated per this project standing practice of never trusting a single metric in isolation. Root cause: one trade with R=+38.9 (risked ~1944, returned ~75696) pulls the UNWEIGHTED mean R-multiple positive while the DOLLAR-weighted total P&L is negative once set against several larger-risk losing trades. Not a repeat of F7 (checked - no fee-dominated micro-positions). Confirmed formally via the official gate: rejected on the same 25% single-trade-profit-share concentration cap already used throughout this project.",
+    "verdict": "FAILS - does not qualify, not pursued further as-is. Delivery-data infrastructure itself remains valid and reusable for future hypotheses.",
+    "reference": "PROJECT_STATUS.md section 9.1"
+  }
 }

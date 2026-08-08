@@ -117,6 +117,45 @@ class MarketBar(Base):
         return f"<MarketBar(symbol={self.instrument.symbol if self.instrument else self.instrument_id}, date={self.trading_date}, close={self.close}, is_adjusted={self.is_adjusted})>"
 
 
+class DeliveryPosition(Base):
+    """Daily security-wise delivery position: what fraction of traded volume was actually
+    delivered (bought/sold for holding) rather than squared off intraday or via F&O settlement.
+
+    Source: NSE's own daily "Security Wise Delivery Position" report (MTO_DDMMYYYY.DAT),
+    published free at a stable archive URL with no login required - verified live 2026-08-08
+    to cover 2014-08-11 through the present, matching this project's existing MarketBar
+    coverage. Not available from Kite Connect (confirmed against its own API documentation -
+    Kite provides no fundamentals or delivery data of any kind).
+    """
+
+    __tablename__ = "delivery_positions"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    instrument_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("instruments.id", ondelete="CASCADE"), nullable=False
+    )
+    trading_date: Mapped[date] = mapped_column(Date, nullable=False)
+    traded_qty: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    delivery_qty: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    delivery_pct: Mapped[Decimal] = mapped_column(Numeric(6, 2), nullable=False)
+    source: Mapped[str] = mapped_column(String(50), nullable=False, default="NSE_MTO")
+    retrieved_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=datetime.utcnow
+    )
+
+    instrument: Mapped["Instrument"] = relationship("Instrument")
+
+    __table_args__ = (
+        UniqueConstraint("instrument_id", "trading_date", name="uq_instrument_delivery_date"),
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"<DeliveryPosition(symbol={self.instrument.symbol if self.instrument else self.instrument_id}, "
+            f"date={self.trading_date}, delivery_pct={self.delivery_pct})>"
+        )
+
+
 class CorporateAction(Base):
     """Historical corporate actions (splits, dividends, etc.) affecting prices."""
 

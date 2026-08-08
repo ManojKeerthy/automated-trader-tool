@@ -745,3 +745,1035 @@ class MeanReversionV2Strategy(BaseV2Strategy):
                 )
 
         return signals
+
+
+def _ema_series_last_two(closes: list[float], period: int) -> tuple[float, float]:
+    """EMA at t-1 and t, seeded the same way as every other EMA in this module (seed on the
+    single close `period` bars back, then iterate forward) - kept consistent rather than
+    introducing a second seeding convention.
+    """
+    k = 2.0 / (period + 1.0)
+    ema = closes[-period]
+    prev_ema = ema
+    for c in closes[-period + 1 :]:
+        prev_ema = ema
+        ema = (c * k) + (ema * (1.0 - k))
+    return prev_ema, ema
+
+
+def _atr_last_two(highs: list[float], lows: list[float], closes: list[float], period: int) -> tuple[float, float]:
+    """Simple (non-exponential) ATR at t-1 and t, matching this module's existing ATR14 style."""
+    tr = [
+        max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+        for i in range(-(period + 1), 0)
+    ]
+    atr_prev = sum(tr[:-1]) / period
+    atr_curr = sum(tr[1:]) / period
+    return atr_prev, atr_curr
+
+
+class VolatilitySqueezeV1Strategy(BaseV2Strategy):
+    """ALPHA-018: Volatility Compression Keltner-Bollinger Squeeze.
+
+    First strategy family in this project's history to be pre-registered (hypothesis,
+    parameters, and robustness neighbourhood declared before any DEVELOPMENT-split run) -
+    see docs/PROJECT_STATUS.md section 8.3. Not a revision of a discredited Cycle 1 family;
+    a new hypothesis from the ALPHA-014-048 backlog, selected because it is the
+    highest-scored candidate implementable with this project's OHLCV-only data (PEAD and
+    Quality-Low-Vol need earnings/fundamentals data never ingested here).
+
+    Classic "TTM Squeeze" definition (Carter 2005; Bollinger 2001): Bollinger Bands (20, 2sigma)
+    contracting inside the Keltner Channel (20-EMA +/- 1.5xATR20) marks compressed volatility;
+    release (bands expanding back outside the channel) with a confirming close above the upper
+    band, in an established uptrend, is the entry trigger.
+    """
+
+    def __init__(
+        self,
+        bb_period: int = 20,
+        bb_std: float = 2.0,
+        kc_period: int = 20,
+        kc_atr_mult: float = 1.5,
+        trend_ma: int = 50,
+        atr_stop_mult: float = 2.0,
+        max_holding_days: int = 25,
+    ):
+        self.bb_period = bb_period
+        self.bb_std = bb_std
+        self.kc_period = kc_period
+        self.kc_atr_mult = kc_atr_mult
+        self.trend_ma = trend_ma
+        self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
+
+    @property
+    def strategy_id(self) -> str:
+        return "strat_vol_squeeze_v1"
+
+    @property
+    def name(self) -> str:
+        return "Volatility Squeeze V1 Strategy"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return "ALPHA-018"
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            "HYPOTHESIS ALPHA-018: Stocks in an established uptrend (Close > SMA50) whose "
+            "Bollinger Bands (20, 2 sigma) have contracted inside their Keltner Channel "
+            "(20-EMA +/- 1.5x ATR20) - a volatility squeeze - and then release with the "
+            "Bollinger Band expanding back outside the Keltner Channel while price closes "
+            "above the upper Bollinger Band, exhibit positive directional continuation edge "
+            "as compressed risk pricing resolves."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            "Not a revision - a new hypothesis pre-registered 2026-08-07 (PROJECT_STATUS.md "
+            "section 8.3), selected from the ALPHA-014-048 backlog after TrendPullbackV2 "
+            "failed its robustness check and MomentumRSV2's concentration issue was found to "
+            "be structural rather than a defect worth patching post-hoc."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        return {
+            "bb_period": self.bb_period,
+            "bb_std": self.bb_std,
+            "kc_period": self.kc_period,
+            "kc_atr_mult": self.kc_atr_mult,
+            "trend_ma": self.trend_ma,
+            "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
+        }
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            ParameterOrigin(
+                "bb_period", self.bb_period, "MARKET_CONVENTION",
+                "Bollinger's own standard 20-period band.",
+            ),
+            ParameterOrigin(
+                "bb_std", self.bb_std, "MARKET_CONVENTION",
+                "Bollinger's own standard 2 standard-deviation width.",
+            ),
+            ParameterOrigin(
+                "kc_period", self.kc_period, "MARKET_CONVENTION",
+                "Matches the standard TTM Squeeze definition (20-period Keltner EMA).",
+            ),
+            ParameterOrigin(
+                "kc_atr_mult", self.kc_atr_mult, "MARKET_CONVENTION",
+                "Carter's (2005) original TTM Squeeze Keltner multiple of 1.5x ATR.",
+            ),
+            ParameterOrigin(
+                "trend_ma", self.trend_ma, "PRIOR_CANONICAL",
+                "Same Close > SMA50 uptrend filter already used by TrendPullbackV2, applied "
+                "so this long-only strategy does not take bullish-release signals inside "
+                "downtrends.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult", self.atr_stop_mult, "MARKET_CONVENTION",
+                "Same 2.0x ATR stop convention as TrendPullbackV2 - this family has no prior "
+                "canonical V1 of its own to inherit a stop multiple from.",
+            ),
+            ParameterOrigin(
+                "max_holding_days", self.max_holding_days, "MARKET_CONVENTION",
+                "Upper bound of the ALPHA-018 registry entry's own stated 10-25 session "
+                "expected holding period, taken from the pre-registration content itself "
+                "(docs/research/alpha_library/alpha_registry.json), not fitted to any "
+                "backtest result.",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return 60
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        universe_members = data_portal.get_universe_members(current_date)
+        signals: list[SignalIntent] = []
+
+        for inst in universe_members:
+            bars = data_portal.get_history(inst.id, current_date, count=self.required_history)
+            # Must cover trend_ma (the largest single window used below) plus the +1/+2 lookback
+            # margin the squeeze-state and ATR comparisons need for "yesterday" values.
+            if len(bars) < max(self.trend_ma, self.kc_period + 15):
+                continue
+
+            closes = [float(b["close"]) for b in bars]
+            highs = [float(b["high"]) for b in bars]
+            lows = [float(b["low"]) for b in bars]
+
+            c_curr = closes[-1]
+            sma_trend = sum(closes[-self.trend_ma :]) / self.trend_ma
+
+            def _bb(period: int, k: float, window: list[float]) -> tuple[float, float]:
+                mean = sum(window) / period
+                var = sum((x - mean) ** 2 for x in window) / period
+                std = var**0.5
+                return mean + k * std, mean - k * std
+
+            bb_upper_curr, bb_lower_curr = _bb(self.bb_period, self.bb_std, closes[-self.bb_period :])
+            bb_upper_prev, bb_lower_prev = _bb(
+                self.bb_period, self.bb_std, closes[-self.bb_period - 1 : -1]
+            )
+
+            ema_prev, ema_curr = _ema_series_last_two(closes, self.kc_period)
+            atr_kc_prev, atr_kc_curr = _atr_last_two(highs, lows, closes, self.kc_period)
+            kc_upper_curr = ema_curr + self.kc_atr_mult * atr_kc_curr
+            kc_lower_curr = ema_curr - self.kc_atr_mult * atr_kc_curr
+            kc_upper_prev = ema_prev + self.kc_atr_mult * atr_kc_prev
+            kc_lower_prev = ema_prev - self.kc_atr_mult * atr_kc_prev
+
+            squeeze_prev = bb_upper_prev <= kc_upper_prev and bb_lower_prev >= kc_lower_prev
+            squeeze_curr = bb_upper_curr <= kc_upper_curr and bb_lower_curr >= kc_lower_curr
+
+            is_release = squeeze_prev and not squeeze_curr
+            is_bullish_confirm = c_curr > bb_upper_curr
+            is_uptrend = c_curr > sma_trend
+
+            if is_release and is_bullish_confirm and is_uptrend:
+                _, atr14_curr = _atr_last_two(highs, lows, closes, 14)
+                stop_price = Decimal(str(round(c_curr - (atr14_curr * self.atr_stop_mult), 2)))
+                signals.append(
+                    SignalIntent(
+                        instrument_id=inst.id,
+                        direction="BUY",
+                        order_type="MARKET",
+                        stop_loss_level=stop_price,
+                        max_holding_days=self.max_holding_days,
+                        metadata={
+                            "strategy_name": self.name,
+                            "strategy_version": self.version,
+                            "signal_date": current_date.isoformat(),
+                            "bb_upper": bb_upper_curr,
+                            "kc_upper": kc_upper_curr,
+                            "config_hash": self.config_hash,
+                        },
+                    )
+                )
+
+        return signals
+
+
+class VolatilitySqueezeV1RegimeFilteredStrategy(BaseV2Strategy):
+    """ALPHA-018 (VolatilitySqueezeV1Strategy) plus a market-breadth regime overlay.
+
+    Pre-registered 2026-08-07, PROJECT_STATUS.md section 8.5, BEFORE this class was written -
+    added after section 8.4 found that ALPHA-018 (and every other strategy tested this cycle)
+    is flat-to-losing in the 2016-2019 half of DEVELOPMENT and only profitable in the
+    2019-2021 half (the COVID-recovery rally). Rather than treat that as disqualifying, it is
+    treated as a well-precedented, well-documented property of trend/momentum strategies
+    (regime-conditional edge - see managed-futures/CTA literature) and addressed the standard
+    way: stand aside during unfavourable regimes instead of trading through them.
+
+    Regime signal is market BREADTH (percentage of the tradeable universe with Close > its own
+    200-session SMA), not a NIFTY index price series - this project has never ingested one (no
+    NIFTY/NSEI instrument exists; `backtesting/benchmark.py`'s Benchmark.calculate_return() is
+    itself an unfixed stub returning a hardcoded placeholder, not real data) and re-authenticating
+    to Kite to backfill an index series was not available in this session. Breadth is itself a
+    well-precedented practitioner indicator in its own right (e.g. "% of index members above
+    200-day MA"), 100% computable from data already in this database.
+    """
+
+    def __init__(
+        self,
+        sma_period: int = 200,
+        breadth_threshold: float = 0.5,
+        **squeeze_kwargs: Any,
+    ):
+        self.sma_period = sma_period
+        self.breadth_threshold = breadth_threshold
+        self._inner = VolatilitySqueezeV1Strategy(**squeeze_kwargs)
+
+    @property
+    def strategy_id(self) -> str:
+        return "strat_vol_squeeze_v1_regime_filtered"
+
+    @property
+    def name(self) -> str:
+        return "Volatility Squeeze V1 Regime-Filtered Strategy"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return "strat_vol_squeeze_v1"
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            self._inner.hypothesis_statement + " OVERLAY: new entries are only taken when "
+            "market breadth (percentage of the tradeable universe with Close > its own "
+            "200-session SMA) is >= 50% - i.e. more than half the universe is itself in a "
+            "long-term uptrend. Existing open positions continue to be managed by their "
+            "normal stop-loss/max-holding-day exits regardless of regime; the overlay only "
+            "gates new risk-taking."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            "Added 2026-08-07 (PROJECT_STATUS.md section 8.5) after section 8.4's sub-period "
+            "check found ALPHA-018's full-period edge is concentrated entirely in the "
+            "2019-2021 COVID-recovery rally and flat-to-losing in 2016-2019. Not a parameter "
+            "change to the underlying squeeze logic - an overlay that makes the strategy "
+            "stand aside during the regime it does not work in."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        params = dict(self._inner.parameters)
+        params["sma_period"] = self.sma_period
+        params["breadth_threshold"] = self.breadth_threshold
+        return params
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            *self._inner.parameter_origins,
+            ParameterOrigin(
+                "sma_period", self.sma_period, "MARKET_CONVENTION",
+                "Standard long-term trend benchmark for regime timing (Faber 2007, 'A "
+                "Quantitative Approach to Tactical Asset Allocation') - predates and is "
+                "independent of this project's results.",
+            ),
+            ParameterOrigin(
+                "breadth_threshold", self.breadth_threshold, "MARKET_CONVENTION",
+                "Natural symmetric majority threshold (more than half the universe in a "
+                "long-term uptrend), not tuned to this data.",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return max(self._inner.required_history, self.sma_period + 5)
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        universe_members = data_portal.get_universe_members(current_date)
+        above = 0
+        counted = 0
+        for inst in universe_members:
+            bars = data_portal.get_history(inst.id, current_date, count=self.sma_period)
+            if len(bars) < self.sma_period:
+                continue
+            closes = [float(b["close"]) for b in bars]
+            sma = sum(closes[-self.sma_period :]) / self.sma_period
+            counted += 1
+            if closes[-1] > sma:
+                above += 1
+
+        regime_on = counted > 0 and (above / counted) >= self.breadth_threshold
+        if not regime_on:
+            return []
+
+        return self._inner.evaluate(current_date, data_portal, active_positions)
+
+
+class CrossSectionalShortReversalV1Strategy(BaseV2Strategy):
+    """ALPHA-019: Cross-Sectional Short-Term Reversal & Oversold Bounce.
+
+    Pre-registered 2026-08-08, PROJECT_STATUS.md section 8.7, BEFORE this class was written.
+    Selected after section 8.6 found a ~200-trade, 10-25-session-hold strategy can have 63% of
+    its result decided by one unpredictable event landing mid-hold, regardless of entry
+    timing - the structural fix is more, shorter, more diversified trades, not a smarter
+    filter. This hypothesis's own registry entry states "3 to 10 sessions" expected holding
+    and "Very High" turnover, directly addressing that.
+
+    Genuinely different mechanism from MeanReversionV2Strategy (which failed, net_expectancy_r
+    -0.1815): this ranks stocks CROSS-SECTIONALLY by short-term return each day and buys the
+    worst decile, rather than triggering off an absolute per-stock RSI threshold.
+    """
+
+    def __init__(
+        self,
+        lookback_days: int = 5,
+        bottom_percentile_cutoff: float = 0.10,
+        trend_ma: int = 200,
+        atr_stop_mult: float = 2.0,
+        max_holding_days: int = 10,
+    ):
+        self.lookback_days = lookback_days
+        self.bottom_percentile_cutoff = bottom_percentile_cutoff
+        self.trend_ma = trend_ma
+        self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
+
+    @property
+    def strategy_id(self) -> str:
+        return "strat_cross_sectional_reversal_v1"
+
+    @property
+    def name(self) -> str:
+        return "Cross-Sectional Short Reversal V1 Strategy"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return "ALPHA-019"
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            "HYPOTHESIS ALPHA-019: Stocks in a long-term uptrend (Close > SMA200) ranking in "
+            "the bottom 10th percentile of 5-session cross-sectional return across the "
+            "tradeable universe are exhibiting temporary, non-fundamental overreaction that "
+            "mean-reverts as liquidity providers absorb the imbalance. Cross-sectional ranking "
+            "against the rest of the universe, not an absolute per-stock oscillator threshold."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            "Not a revision - a new hypothesis pre-registered 2026-08-08 (PROJECT_STATUS.md "
+            "section 8.7), selected after the VALIDATION_SPLIT run of the regime-filtered "
+            "volatility squeeze (section 8.6) showed a ~200-trade strategy can have its result "
+            "decided by one event landing mid-hold; this hypothesis targets materially more, "
+            "shorter trades (registry: 3-10 session holds, Very High turnover) to dilute that "
+            "structurally rather than filter it after the fact."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        return {
+            "lookback_days": self.lookback_days,
+            "bottom_percentile_cutoff": self.bottom_percentile_cutoff,
+            "trend_ma": self.trend_ma,
+            "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
+        }
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            ParameterOrigin(
+                "lookback_days", self.lookback_days, "MARKET_CONVENTION",
+                "Lehmann (1990)'s weekly reversal horizon, one of this hypothesis's own "
+                "foundational literature references.",
+            ),
+            ParameterOrigin(
+                "bottom_percentile_cutoff", self.bottom_percentile_cutoff,
+                "SIGNAL_VIABILITY_CALIBRATION",
+                "Bottom decile of 5-day cross-sectional returns - tight enough that reversal "
+                "effects (concentrated in the most extreme losers per the literature) are not "
+                "diluted, matching the non-degenerate-sample-size rationale already used for "
+                "MomentumRSV2Strategy's own percentile cutoff.",
+            ),
+            ParameterOrigin(
+                "trend_ma", self.trend_ma, "MARKET_CONVENTION",
+                "Long-term uptrend filter guarding against this hypothesis's own registry-"
+                "stated 'falling knife' risk; matches the breadth filter's SMA period in "
+                "section 8.5.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult", self.atr_stop_mult, "MARKET_CONVENTION",
+                "Same stop convention used throughout this project.",
+            ),
+            ParameterOrigin(
+                "max_holding_days", self.max_holding_days, "MARKET_CONVENTION",
+                "Upper bound of the registry's own stated 3-10 session holding period, taken "
+                "from the pre-registration content itself.",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return self.trend_ma + 20
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        universe_members = data_portal.get_universe_members(current_date)
+        signals: list[SignalIntent] = []
+
+        # Collect 5-day returns for all stocks that are in a long-term uptrend (falling-knife
+        # guard) and have enough history for both the trend filter and the ATR stop.
+        candidates: list[tuple[Any, float, list[dict[str, Any]]]] = []
+        for inst in universe_members:
+            bars = data_portal.get_history(inst.id, current_date, count=self.required_history)
+            if len(bars) < self.trend_ma:
+                continue
+            closes = [float(b["close"]) for b in bars]
+            sma_trend = sum(closes[-self.trend_ma :]) / self.trend_ma
+            if closes[-1] <= sma_trend:
+                continue
+            ret_lookback = (closes[-1] - closes[-1 - self.lookback_days]) / max(
+                1.0, closes[-1 - self.lookback_days]
+            )
+            candidates.append((inst.id, ret_lookback, bars))
+
+        if not candidates:
+            return []
+
+        # Rank ascending (worst 5-day performers first) and take the bottom decile.
+        candidates.sort(key=lambda x: x[1])
+        bottom_count = max(1, int(len(candidates) * self.bottom_percentile_cutoff))
+        bottom_group = candidates[:bottom_count]
+
+        for inst_id, ret, bars in bottom_group:
+            closes = [float(b["close"]) for b in bars]
+            highs = [float(b["high"]) for b in bars]
+            lows = [float(b["low"]) for b in bars]
+
+            c_curr = closes[-1]
+            tr_list = [
+                max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+                for i in range(-14, 0)
+            ]
+            atr14 = sum(tr_list) / 14.0
+
+            stop_price = Decimal(str(round(c_curr - (atr14 * self.atr_stop_mult), 2)))
+            signals.append(
+                SignalIntent(
+                    instrument_id=inst_id,
+                    direction="BUY",
+                    order_type="MARKET",
+                    stop_loss_level=stop_price,
+                    max_holding_days=self.max_holding_days,
+                    metadata={
+                        "strategy_name": self.name,
+                        "strategy_version": self.version,
+                        "signal_date": current_date.isoformat(),
+                        "ret_lookback": ret,
+                        "rank_cutoff": bottom_count,
+                        "config_hash": self.config_hash,
+                    },
+                )
+            )
+
+        return signals
+
+
+def _atr(highs: list[float], lows: list[float], closes: list[float]) -> float:
+    """Mean true range over the whole window given (needs one extra bar before the window
+    for the first prior-close reference).
+    """
+    tr = [
+        max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+        for i in range(1, len(highs))
+    ]
+    return sum(tr) / len(tr) if tr else 0.0
+
+
+class VolatilityContractionV1Strategy(BaseV2Strategy):
+    """ALPHA-020: Volatility Contraction Pattern (Minervini 2013; O'Neil 1988).
+
+    Pre-registered 2026-08-08, PROJECT_STATUS.md section 8.8, BEFORE this class was written.
+    Last remaining OHLCV-feasible candidate with real content in the ALPHA-014-048 backlog.
+
+    Operationalizes a discretionary chart pattern (successively shallower, lower-volume
+    pullbacks, then a high-volume breakout) as: three consecutive sub-windows with strictly
+    decreasing ATR (contraction) AND strictly decreasing average volume (drying) immediately
+    before today, followed by a breakout above the whole pattern's high on above-average
+    volume, in a long-term uptrend. See section 8.8 for the honest gap between the source
+    material's discretionary pattern-reading and this precise, backtestable rule.
+    """
+
+    def __init__(
+        self,
+        sub_window_days: int = 15,
+        trend_ma: int = 150,
+        rvol_min: float = 1.5,
+        atr_stop_mult: float = 2.0,
+        max_holding_days: int = 50,
+    ):
+        self.sub_window_days = sub_window_days
+        self.trend_ma = trend_ma
+        self.rvol_min = rvol_min
+        self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
+
+    @property
+    def strategy_id(self) -> str:
+        return "strat_vol_contraction_v1"
+
+    @property
+    def name(self) -> str:
+        return "Volatility Contraction Pattern V1 Strategy"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return "ALPHA-020"
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            "HYPOTHESIS ALPHA-020: Stocks in a long-term uptrend (Close > SMA150) that "
+            "undergo three consecutive sub-periods of strictly decreasing volatility (ATR) "
+            "and strictly decreasing average volume - supply drying up - then break out above "
+            "the pattern's high on volume >= rvol_min times the recent average, exhibit "
+            "continuation edge as institutional accumulation completes."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            "Not a revision - a new hypothesis pre-registered 2026-08-08 (PROJECT_STATUS.md "
+            "section 8.8), the last remaining OHLCV-feasible candidate with real content in "
+            "the ALPHA-014-048 backlog after ALPHA-018 (validation-inconclusive) and ALPHA-019 "
+            "(failed outright on DEVELOPMENT)."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        return {
+            "sub_window_days": self.sub_window_days,
+            "trend_ma": self.trend_ma,
+            "rvol_min": self.rvol_min,
+            "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
+        }
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            ParameterOrigin(
+                "sub_window_days", self.sub_window_days, "STRUCTURAL_REQUIREMENT",
+                "Three 15-day contraction stages give a 45-session pattern lookback, in the "
+                "middle of the registry's own 20-50 session expected holding-period range.",
+            ),
+            ParameterOrigin(
+                "trend_ma", self.trend_ma, "MARKET_CONVENTION",
+                "Minervini's own commonly-cited trend-template moving average.",
+            ),
+            ParameterOrigin(
+                "rvol_min", self.rvol_min, "ECONOMIC_RATIONALE",
+                "A step above BreakoutConfirmV2Strategy's 1.2, since VCP explicitly emphasizes "
+                "pronounced ('institutional markup') volume expansion on the breakout, not "
+                "merely moderate expansion.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult", self.atr_stop_mult, "MARKET_CONVENTION",
+                "Same stop convention used throughout this project.",
+            ),
+            ParameterOrigin(
+                "max_holding_days", self.max_holding_days, "MARKET_CONVENTION",
+                "Upper bound of the registry's own stated 20-50 session holding period.",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return self.trend_ma + 20
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        universe_members = data_portal.get_universe_members(current_date)
+        signals: list[SignalIntent] = []
+        w = self.sub_window_days
+        pattern_len = 3 * w
+
+        for inst in universe_members:
+            bars = data_portal.get_history(inst.id, current_date, count=self.required_history)
+            if len(bars) < self.trend_ma:
+                continue
+
+            closes = [float(b["close"]) for b in bars]
+            highs = [float(b["high"]) for b in bars]
+            lows = [float(b["low"]) for b in bars]
+            volumes = [float(b["volume"]) for b in bars]
+
+            if len(closes) < pattern_len + 2:
+                continue
+
+            c_curr = closes[-1]
+            sma_trend = sum(closes[-self.trend_ma :]) / self.trend_ma
+            if c_curr <= sma_trend:
+                continue
+
+            # Pattern window: the `pattern_len` sessions ending YESTERDAY (excludes today, so
+            # the breakout bar's own volume/range can't contaminate the contraction/drying
+            # measurement it is supposed to be confirming). Each stage's ATR needs one extra
+            # LEADING bar (for the first bar's prior-close reference) - stageN_full is 16
+            # bar-aligned elements: [one bar before the stage, then the stage's own w=15 bars].
+            # Verified by hand (scratchpad) before writing this: stage boundaries and their
+            # leading-bar offsets line up exactly at each stage's shared edge.
+            pattern_highs = highs[-pattern_len - 1 : -1]
+
+            stage0_highs, stage0_lows, stage0_closes = (
+                highs[-(pattern_len + 2) : -(pattern_len + 1 - w)],
+                lows[-(pattern_len + 2) : -(pattern_len + 1 - w)],
+                closes[-(pattern_len + 2) : -(pattern_len + 1 - w)],
+            )
+            stage1_highs, stage1_lows, stage1_closes = (
+                highs[-(pattern_len + 2 - w) : -(pattern_len + 1 - 2 * w)],
+                lows[-(pattern_len + 2 - w) : -(pattern_len + 1 - 2 * w)],
+                closes[-(pattern_len + 2 - w) : -(pattern_len + 1 - 2 * w)],
+            )
+            stage2_highs, stage2_lows, stage2_closes = (
+                highs[-(pattern_len + 2 - 2 * w) : -1],
+                lows[-(pattern_len + 2 - 2 * w) : -1],
+                closes[-(pattern_len + 2 - 2 * w) : -1],
+            )
+
+            atr1 = _atr(stage0_highs, stage0_lows, stage0_closes)
+            atr2 = _atr(stage1_highs, stage1_lows, stage1_closes)
+            atr3 = _atr(stage2_highs, stage2_lows, stage2_closes)
+
+            vol1 = sum(volumes[-(pattern_len + 1) : -(pattern_len + 1 - w)]) / w
+            vol2 = sum(volumes[-(pattern_len + 1 - w) : -(pattern_len + 1 - 2 * w)]) / w
+            vol3 = sum(volumes[-(pattern_len + 1 - 2 * w) : -1]) / w
+
+            is_contracting = atr1 > atr2 > atr3
+            is_drying = vol1 > vol2 > vol3
+            if not (is_contracting and is_drying):
+                continue
+
+            pattern_high = max(pattern_highs)
+            is_breakout = c_curr > pattern_high
+            is_volume_confirmed = volumes[-1] >= self.rvol_min * max(1.0, vol3)
+            if not (is_breakout and is_volume_confirmed):
+                continue
+
+            atr14 = _atr(highs[-15:], lows[-15:], closes[-15:])
+            stop_price = Decimal(str(round(c_curr - (atr14 * self.atr_stop_mult), 2)))
+            signals.append(
+                SignalIntent(
+                    instrument_id=inst.id,
+                    direction="BUY",
+                    order_type="MARKET",
+                    stop_loss_level=stop_price,
+                    max_holding_days=self.max_holding_days,
+                    metadata={
+                        "strategy_name": self.name,
+                        "strategy_version": self.version,
+                        "signal_date": current_date.isoformat(),
+                        "atr_stages": [atr1, atr2, atr3],
+                        "vol_stages": [vol1, vol2, vol3],
+                        "pattern_high": pattern_high,
+                        "config_hash": self.config_hash,
+                    },
+                )
+            )
+
+        return signals
+
+
+class MarketBreadthRegimeFilter(BaseV2Strategy):
+    """Generic market-breadth regime overlay: wraps ANY BaseV2Strategy and only passes its
+    entries through when more than `breadth_threshold` of the tradeable universe is itself in
+    a long-term uptrend (Close > its own `sma_period`-session SMA), same rule already
+    pre-registered and validated for ALPHA-018 (PROJECT_STATUS.md section 8.5).
+
+    Generalized 2026-08-08 after ALPHA-020 (Volatility Contraction Pattern) showed the same
+    "fails 2016-2019, thrives 2019-2021" regime fingerprint as TrendPullbackV2 and unfiltered
+    ALPHA-018 - a third, independent strategy design with the identical failure pattern is
+    strong evidence this is a structural property of breakout/continuation-style strategies on
+    this universe and period, not something to re-solve per hypothesis.
+    `VolatilitySqueezeV1RegimeFilteredStrategy` (section 8.5) is kept as-is rather than
+    refactored onto this class, since its exact strategy_id/config_hash is already baked into
+    documented, reported results (sections 8.5/8.6) and must not silently change.
+    """
+
+    def __init__(
+        self,
+        inner: BaseV2Strategy,
+        sma_period: int = 200,
+        breadth_threshold: float = 0.5,
+    ):
+        self.inner = inner
+        self.sma_period = sma_period
+        self.breadth_threshold = breadth_threshold
+
+    @property
+    def strategy_id(self) -> str:
+        return f"{self.inner.strategy_id}_regime_filtered"
+
+    @property
+    def name(self) -> str:
+        return f"{self.inner.name} (Regime-Filtered)"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return self.inner.strategy_id
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            self.inner.hypothesis_statement + " OVERLAY: new entries are only taken when "
+            "market breadth (percentage of the tradeable universe with Close > its own "
+            f"{self.sma_period}-session SMA) is >= {self.breadth_threshold:.0%} - the same "
+            "predeclared rule validated for ALPHA-018 (PROJECT_STATUS.md section 8.5). "
+            "Existing open positions continue to be managed by their normal exits regardless "
+            "of regime; the overlay only gates new risk-taking."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            f"Generic regime overlay applied to {self.inner.strategy_id} after it showed the "
+            "same regime-dependent failure pattern (fails 2016-2019, thrives 2019-2021) "
+            "already seen in TrendPullbackV2 and unfiltered ALPHA-018 - see PROJECT_STATUS.md "
+            "for the specific date this was applied."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        params = dict(self.inner.parameters)
+        params["sma_period"] = self.sma_period
+        params["breadth_threshold"] = self.breadth_threshold
+        return params
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            *self.inner.parameter_origins,
+            ParameterOrigin(
+                "sma_period", self.sma_period, "MARKET_CONVENTION",
+                "Same regime-timing SMA period validated for ALPHA-018, PROJECT_STATUS.md "
+                "section 8.5 (Faber 2007).",
+            ),
+            ParameterOrigin(
+                "breadth_threshold", self.breadth_threshold, "MARKET_CONVENTION",
+                "Same natural symmetric majority threshold validated for ALPHA-018, not tuned "
+                "per-strategy.",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return max(self.inner.required_history, self.sma_period + 5)
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        universe_members = data_portal.get_universe_members(current_date)
+        above = 0
+        counted = 0
+        for inst in universe_members:
+            bars = data_portal.get_history(inst.id, current_date, count=self.sma_period)
+            if len(bars) < self.sma_period:
+                continue
+            closes = [float(b["close"]) for b in bars]
+            sma = sum(closes[-self.sma_period :]) / self.sma_period
+            counted += 1
+            if closes[-1] > sma:
+                above += 1
+
+        regime_on = counted > 0 and (above / counted) >= self.breadth_threshold
+        if not regime_on:
+            return []
+
+        return self.inner.evaluate(current_date, data_portal, active_positions)
+
+
+class DeliveryVolumeBreakoutV1Strategy(BaseV2Strategy):
+    """ALPHA-017: Institutional Volume Breakout & Delivery Accumulation.
+
+    Pre-registered 2026-08-08, PROJECT_STATUS.md section 9.1, BEFORE this class was written -
+    the first hypothesis this cycle to use a genuinely new data type (NSE delivery-position
+    data, section 9) rather than a new combination of OHLCV.
+
+    A Donchian breakout (same 20-day channel convention as BreakoutConfirmV2Strategy, already
+    tested and failed on volume confirmation alone) is required to ALSO show delivery volume
+    elevated above the instrument's own recent norm - high traded volume with ordinary
+    delivery is more consistent with intraday churn than genuine accumulation.
+    """
+
+    def __init__(
+        self,
+        channel_period: int = 20,
+        rvol_min: float = 1.5,
+        delivery_lookback: int = 20,
+        delivery_ratio_min: float = 1.2,
+        trend_ma: int = 50,
+        atr_stop_mult: float = 2.0,
+        max_holding_days: int = 30,
+    ):
+        self.channel_period = channel_period
+        self.rvol_min = rvol_min
+        self.delivery_lookback = delivery_lookback
+        self.delivery_ratio_min = delivery_ratio_min
+        self.trend_ma = trend_ma
+        self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
+
+    @property
+    def strategy_id(self) -> str:
+        return "strat_delivery_volume_breakout_v1"
+
+    @property
+    def name(self) -> str:
+        return "Delivery Volume Breakout V1 Strategy"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return "ALPHA-017"
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            "HYPOTHESIS ALPHA-017: A 20-day Donchian channel breakout, on volume >= rvol_min "
+            "times the recent average AND today's delivery percentage >= delivery_ratio_min "
+            "times its own trailing 20-day average, in a long-term uptrend (Close > SMA50), "
+            "reflects informed institutional accumulation rather than intraday-only churn, "
+            "and exhibits continuation edge."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            "Not a revision - a new hypothesis pre-registered 2026-08-08 (PROJECT_STATUS.md "
+            "section 9.1), the first this cycle built on genuinely new data (NSE delivery "
+            "position, ingested section 9) rather than a new OHLCV combination. Distinct from "
+            "BreakoutConfirmV2Strategy (volume confirmation alone, already tested and failed, "
+            "net_expectancy_r -0.1249) by requiring delivery confirmation in addition to RVOL."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        return {
+            "channel_period": self.channel_period,
+            "rvol_min": self.rvol_min,
+            "delivery_lookback": self.delivery_lookback,
+            "delivery_ratio_min": self.delivery_ratio_min,
+            "trend_ma": self.trend_ma,
+            "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
+        }
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            ParameterOrigin(
+                "channel_period", self.channel_period, "MARKET_CONVENTION",
+                "Same Donchian breakout period as BreakoutConfirmV2Strategy, for direct "
+                "comparability.",
+            ),
+            ParameterOrigin(
+                "rvol_min", self.rvol_min, "ECONOMIC_RATIONALE",
+                "A step above BreakoutConfirmV2Strategy's 1.2, matching ALPHA-020's reasoning: "
+                "'abnormal' volume expansion implies more pronounced than merely moderate.",
+            ),
+            ParameterOrigin(
+                "delivery_lookback", self.delivery_lookback, "STRUCTURAL_REQUIREMENT",
+                "Matches channel_period, for a consistent baseline window.",
+            ),
+            ParameterOrigin(
+                "delivery_ratio_min", self.delivery_ratio_min, "SIGNAL_VIABILITY_CALIBRATION",
+                "Today's delivery % must be >= 1.2x the instrument's own trailing 20-day "
+                "average - self-relative rather than a fixed cross-sectional threshold, since "
+                "baseline delivery % varies structurally by instrument.",
+            ),
+            ParameterOrigin(
+                "trend_ma", self.trend_ma, "MARKET_CONVENTION",
+                "Same baseline trend filter used by TrendPullbackV2Strategy/"
+                "BreakoutConfirmV2Strategy.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult", self.atr_stop_mult, "MARKET_CONVENTION",
+                "Same stop convention used throughout this project.",
+            ),
+            ParameterOrigin(
+                "max_holding_days", self.max_holding_days, "MARKET_CONVENTION",
+                "Upper bound of the registry's own stated 15-30 session holding period.",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return max(self.trend_ma, self.channel_period + 15) + 5
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        universe_members = data_portal.get_universe_members(current_date)
+        signals: list[SignalIntent] = []
+
+        for inst in universe_members:
+            bars = data_portal.get_history(inst.id, current_date, count=self.required_history)
+            if len(bars) < max(self.trend_ma, self.channel_period + 15):
+                continue
+
+            closes = [float(b["close"]) for b in bars]
+            highs = [float(b["high"]) for b in bars]
+            lows = [float(b["low"]) for b in bars]
+            volumes = [float(b["volume"]) for b in bars]
+
+            c_curr = closes[-1]
+            sma_trend = sum(closes[-self.trend_ma :]) / self.trend_ma
+            if c_curr <= sma_trend:
+                continue
+
+            donchian_high_prev = max(highs[-self.channel_period - 1 : -1])
+            is_breakout = highs[-1] >= donchian_high_prev
+            if not is_breakout:
+                continue
+
+            avg_vol = sum(volumes[-self.channel_period - 1 : -1]) / self.channel_period
+            rvol = volumes[-1] / max(1.0, avg_vol)
+            if rvol < self.rvol_min:
+                continue
+
+            # Delivery confirmation - requires today's own delivery row to actually be
+            # present (NSE's delivery report has its own coverage gaps, distinct from
+            # MarketBar's) and a full trailing baseline window; missing data is excluded,
+            # not treated as a failed (or passed) condition.
+            delivery_bars = data_portal.get_delivery_history(
+                inst.id, current_date, count=self.delivery_lookback + 1
+            )
+            if len(delivery_bars) < self.delivery_lookback + 1:
+                continue
+            if delivery_bars[-1]["trading_date"] != current_date:
+                continue
+
+            today_delivery_pct = float(delivery_bars[-1]["delivery_pct"])
+            baseline_delivery_pct = sum(
+                float(d["delivery_pct"]) for d in delivery_bars[:-1]
+            ) / self.delivery_lookback
+            if baseline_delivery_pct <= 0.0:
+                continue
+            delivery_ratio = today_delivery_pct / baseline_delivery_pct
+            if delivery_ratio < self.delivery_ratio_min:
+                continue
+
+            tr_list = [
+                max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+                for i in range(-14, 0)
+            ]
+            atr14 = sum(tr_list) / 14.0
+
+            stop_price = Decimal(str(round(c_curr - (atr14 * self.atr_stop_mult), 2)))
+            signals.append(
+                SignalIntent(
+                    instrument_id=inst.id,
+                    direction="BUY",
+                    order_type="MARKET",
+                    stop_loss_level=stop_price,
+                    max_holding_days=self.max_holding_days,
+                    metadata={
+                        "strategy_name": self.name,
+                        "strategy_version": self.version,
+                        "signal_date": current_date.isoformat(),
+                        "rvol": rvol,
+                        "delivery_ratio": delivery_ratio,
+                        "config_hash": self.config_hash,
+                    },
+                )
+            )
+
+        return signals

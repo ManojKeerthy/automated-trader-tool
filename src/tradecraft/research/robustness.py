@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING, Any
 
 from tradecraft.backtesting.costs import IndianEquityDeliveryCostModel
 from tradecraft.backtesting.engine import BacktestConfig, BacktestEngine
+from tradecraft.backtesting.metrics import MetricsEngine
 from tradecraft.backtesting.slippage import FixedBasisPointSlippage
 from tradecraft.market_data.calendar import TradingCalendar
 from tradecraft.research.diagnostics import DevelopmentOnlyGuard
@@ -25,6 +26,7 @@ from tradecraft.strategy.v2_strategies import (
     MeanReversionV2Strategy,
     MomentumRSV2Strategy,
     TrendPullbackV2Strategy,
+    VolatilitySqueezeV1Strategy,
 )
 
 if TYPE_CHECKING:
@@ -107,18 +109,17 @@ class LimitedRobustnessAnalyzer:
             cnt = len(trades)
             net_pnl = sum((t.net_pnl for t in trades), Decimal("0.0"))
 
-            # Calculate Expectancy_R
-            r_mults: list[float] = []
-            for t in trades:
-                init_risk = abs(
-                    t.entry_price - (t.stop_loss_level or (t.entry_price * Decimal("0.95")))
-                ) * Decimal(str(t.quantity))
-                if init_risk > Decimal("0"):
-                    r_mults.append(float(t.net_pnl / init_risk))
-                else:
-                    r_mults.append(0.0)
-
-            v_exp_r = round(sum(r_mults) / max(1, cnt), 4) if cnt > 0 else 0.0
+            # Expectancy_R: use TradeRecord.r_multiple (the engine's F2/F2b-fixed value)
+            # directly rather than reimplementing the calculation here. A local
+            # reimplementation previously fabricated a fake 5%-of-entry-price stop when
+            # stop_loss_level was None and scored degenerate risk distances as 0.0 instead
+            # of excluding them - precisely the defect class fixed in v2_development_gate.py
+            # (docs/PROJECT_STATUS.md section 3.3, "Unmeasurable is not zero"). Fixed
+            # 2026-08-07 for the same reason.
+            r_mults: list[float] = [
+                float(t.r_multiple) for t in trades if t.r_multiple is not None
+            ]
+            v_exp_r = round(sum(r_mults) / len(r_mults), 4) if r_mults else 0.0
 
             wins = [t for t in trades if t.net_pnl > Decimal("0")]
             losses = [t for t in trades if t.net_pnl <= Decimal("0")]
@@ -134,6 +135,17 @@ class LimitedRobustnessAnalyzer:
             if v_exp_r < 0.0 or delta_pct < -50.0:
                 cliff_flagged = True
 
+            # Real max drawdown from the variant's own equity curve, via MetricsEngine -
+            # this previously hardcoded -18.0/-30.0 keyed to the sign of v_exp_r, the same
+            # fabricated-metric defect (F6) fixed in v2_development_gate.py. Fixed 2026-08-07.
+            variant_metrics = MetricsEngine().calculate(
+                res.equity_curve, trades, config.initial_capital, config.start_date, config.end_date
+            )
+            mdd_metric = variant_metrics.metrics.get("max_drawdown_pct")
+            variant_max_dd = (
+                -float(mdd_metric.value) if mdd_metric and mdd_metric.value is not None else 0.0
+            )
+
             variant_results.append(
                 RobustnessVariantResult(
                     config_hash=v_strat.config_hash,
@@ -142,7 +154,7 @@ class LimitedRobustnessAnalyzer:
                     net_pnl_inr=net_pnl,
                     net_expectancy_r=v_exp_r,
                     profit_factor=v_pf,
-                    max_drawdown_pct=-18.0 if v_exp_r > 0 else -30.0,
+                    max_drawdown_pct=variant_max_dd,
                     performance_delta_pct=delta_pct,
                 )
             )
@@ -234,6 +246,26 @@ class LimitedRobustnessAnalyzer:
                 variants.append(
                     MeanReversionV2Strategy(
                         rsi_oversold=40.0, displacement_atr=d, max_holding_days=5, atr_stop_mult=1.5
+                    )
+                )
+
+        elif strategy_id == "strat_vol_squeeze_v1":
+            # Predeclared 2026-08-07 alongside the hypothesis itself (PROJECT_STATUS.md
+            # section 8.3), before any DEVELOPMENT-split run of this strategy.
+            bb_stds = delta_map.get("bb_std", [1.8, 2.2])
+            stops = delta_map.get("atr_stop_mult", [1.8, 2.2])
+            for b in bb_stds:
+                variants.append(
+                    VolatilitySqueezeV1Strategy(
+                        bb_period=20, bb_std=b, kc_period=20, kc_atr_mult=1.5,
+                        trend_ma=50, atr_stop_mult=2.0, max_holding_days=25,
+                    )
+                )
+            for s in stops:
+                variants.append(
+                    VolatilitySqueezeV1Strategy(
+                        bb_period=20, bb_std=2.0, kc_period=20, kc_atr_mult=1.5,
+                        trend_ma=50, atr_stop_mult=s, max_holding_days=25,
                     )
                 )
 
