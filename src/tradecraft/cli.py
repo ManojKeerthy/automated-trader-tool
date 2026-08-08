@@ -605,7 +605,7 @@ def main() -> None:
         "--universe",
         type=str,
         default="NIFTY100",
-        help="Index universe to seed and backfill: NIFTY50 | NIFTY100 (default: NIFTY100)",
+        help="Index universe to seed and backfill: NIFTY50 | NIFTY100 | NIFTY500 (default: NIFTY100)",
     )
     backfill_parser.add_argument(
         "--symbol", type=str, help="Specific instrument symbol to backfill (optional)"

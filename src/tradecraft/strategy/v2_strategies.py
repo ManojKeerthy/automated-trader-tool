@@ -10,7 +10,7 @@ import hashlib
 import json
 import logging
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 from decimal import Decimal
 from typing import Any
@@ -1771,6 +1771,343 @@ class DeliveryVolumeBreakoutV1Strategy(BaseV2Strategy):
                         "signal_date": current_date.isoformat(),
                         "rvol": rvol,
                         "delivery_ratio": delivery_ratio,
+                        "config_hash": self.config_hash,
+                    },
+                )
+            )
+
+        return signals
+
+
+class ProfitCapOverlay(BaseV2Strategy):
+    """Generic concentration overlay: wraps ANY BaseV2Strategy and caps every entry's maximum
+    gain at `max_r_multiple_cap` times its own initial risk, via `SignalIntent.target_level` -
+    an exit mechanism that already exists in the engine (checked alongside the stop-loss every
+    session, with fill logic already covered by test_m2_backtest_engine.py's gap/intraday
+    target scenarios) but that no strategy in this project has ever set.
+
+    Pre-registered 2026-08-08, PROJECT_STATUS.md section 10, BEFORE this class was written -
+    built after MomentumRSV2Strategy, DeliveryVolumeBreakoutV1Strategy, and the VALIDATION_SPLIT
+    run of the regime-filtered squeeze strategy all failed or were made untrustworthy by one
+    dominant trade. Deliberately does NOT split positions to take partial profit (which would
+    require new, unverified changes to the position/trade-ledger accounting this project has
+    repeatedly found real defects in - F2/F2b/F7); a full-position exit at a capped gain reuses
+    exit machinery already proven correct instead.
+    """
+
+    def __init__(self, inner: BaseV2Strategy, max_r_multiple_cap: float = 5.0):
+        self.inner = inner
+        self.max_r_multiple_cap = max_r_multiple_cap
+
+    @property
+    def strategy_id(self) -> str:
+        return f"{self.inner.strategy_id}_profit_capped"
+
+    @property
+    def name(self) -> str:
+        return f"{self.inner.name} (Profit-Capped)"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return self.inner.strategy_id
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            self.inner.hypothesis_statement + " OVERLAY: every entry's maximum gain is capped "
+            f"at {self.max_r_multiple_cap}x its own initial risk (target_level = signal-day "
+            "close + risk_per_share * max_r_multiple_cap), so no single trade's outcome can "
+            "dominate the portfolio's total result regardless of how far the underlying price "
+            "subsequently moves."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            f"Generic profit-cap overlay applied to {self.inner.strategy_id} after it (or a "
+            "sibling result) failed specifically on single-trade profit-share concentration - "
+            "see PROJECT_STATUS.md section 10 for the specific date this was applied and why."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        params = dict(self.inner.parameters)
+        params["max_r_multiple_cap"] = self.max_r_multiple_cap
+        return params
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            *self.inner.parameter_origins,
+            ParameterOrigin(
+                "max_r_multiple_cap", self.max_r_multiple_cap, "MARKET_CONVENTION",
+                "A commonly-cited 'let a swing winner run, but not indefinitely' cap in "
+                "retail/practitioner risk management - not fitted to any specific trade "
+                "already observed in this project's own results (see PROJECT_STATUS.md "
+                "section 10 for the explicit disclaimer against exactly that).",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return self.inner.required_history
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        raw_signals = self.inner.evaluate(current_date, data_portal, active_positions)
+        capped_signals: list[SignalIntent] = []
+
+        for sig in raw_signals:
+            if sig.stop_loss_level is None:
+                # No risk basis to cap a gain against - pass through unchanged rather than
+                # inventing one.
+                capped_signals.append(sig)
+                continue
+
+            close = data_portal.get_close(sig.instrument_id, current_date)
+            if close is None:
+                capped_signals.append(sig)
+                continue
+
+            risk_per_share = close - sig.stop_loss_level
+            if risk_per_share <= Decimal("0"):
+                capped_signals.append(sig)
+                continue
+
+            target = close + (risk_per_share * Decimal(str(self.max_r_multiple_cap)))
+            # If the inner strategy already set its own (tighter) target, keep whichever is
+            # more conservative rather than silently overriding a deliberate choice.
+            if sig.target_level is not None:
+                target = min(target, sig.target_level)
+
+            capped_signals.append(replace(sig, target_level=target))
+
+        return capped_signals
+
+
+def _percentile_ranks(values: list[float]) -> list[float]:
+    """Percentile rank in [0, 1] for each value, in the ORIGINAL input order (0 = lowest,
+    1 = highest). Ties broken by original list position (stable sort) - acceptable for
+    continuous financial data where exact ties are rare.
+    """
+    n = len(values)
+    if n <= 1:
+        return [0.5] * n
+    order = sorted(range(n), key=lambda i: values[i])
+    ranks = [0.0] * n
+    for rank_pos, idx in enumerate(order):
+        ranks[idx] = rank_pos / (n - 1)
+    return ranks
+
+
+class CompositeRankingV1Strategy(BaseV2Strategy):
+    """Composite ranking strategy synthesizing MomentumRSV2Strategy's momentum signal and
+    DeliveryVolumeBreakoutV1Strategy's delivery-elevation signal into one continuous
+    cross-sectional score, replacing both strategies' hard threshold gates with ranking.
+
+    Pre-registered 2026-08-08, PROJECT_STATUS.md section 12, BEFORE this class was written.
+    Motivated directly by this project's own findings: three unrelated strategies
+    (TrendPullbackV2, unfiltered ALPHA-018, ALPHA-017 on NIFTY500) failed specifically to a
+    parameter cliff, and in every case the fragile parameter gated a hard yes/no threshold
+    (a Donchian breakout, an RVOL minimum, a delivery-ratio minimum). MomentumRSV2Strategy is
+    the one strategy this cycle that has never shown a parameter cliff - its ranking-based
+    selection only ever shifts marginal candidates at the boundary, never flips the whole
+    result. This strategy keeps that architecture and adds the delivery dimension as a
+    second continuous rank rather than a third hard gate.
+    """
+
+    def __init__(
+        self,
+        momentum_lookback: int = 63,
+        delivery_lookback: int = 20,
+        top_percentile_cutoff: float = 0.25,
+        momentum_weight: float = 0.5,
+        trend_ma: int = 50,
+        atr_stop_mult: float = 2.0,
+        max_holding_days: int = 63,
+    ):
+        self.momentum_lookback = momentum_lookback
+        self.delivery_lookback = delivery_lookback
+        self.top_percentile_cutoff = top_percentile_cutoff
+        self.momentum_weight = momentum_weight
+        self.trend_ma = trend_ma
+        self.atr_stop_mult = atr_stop_mult
+        self.max_holding_days = max_holding_days
+
+    @property
+    def strategy_id(self) -> str:
+        return "strat_composite_ranking_v1"
+
+    @property
+    def name(self) -> str:
+        return "Composite Ranking V1 Strategy"
+
+    @property
+    def parent_strategy_id(self) -> str:
+        return "strat_momentum_rs_v2+strat_delivery_volume_breakout_v1"
+
+    @property
+    def hypothesis_statement(self) -> str:
+        return (
+            "HYPOTHESIS: Stocks in a long-term uptrend (Close > SMA50) ranking highly on a "
+            "composite of (a) 63-session momentum and (b) delivery percentage elevated above "
+            "its own trailing 20-session average - both expressed as continuous cross-"
+            "sectional percentile ranks, averaged, no hard threshold gate on either - exhibit "
+            "continuation edge, and the ranking architecture avoids the parameter-cliff "
+            "fragility hard-threshold versions of these same two signals showed independently."
+        )
+
+    @property
+    def revision_rationale(self) -> str:
+        return (
+            "Not a revision of either parent - a synthesis pre-registered 2026-08-08 "
+            "(PROJECT_STATUS.md section 12) combining MomentumRSV2Strategy's cliff-resistant "
+            "ranking architecture with DeliveryVolumeBreakoutV1Strategy's delivery signal, "
+            "after ALPHA-017's hard delivery-ratio threshold was found to be a parameter "
+            "cliff on the NIFTY500 universe (section 11.2)."
+        )
+
+    @property
+    def parameters(self) -> dict[str, Any]:
+        return {
+            "momentum_lookback": self.momentum_lookback,
+            "delivery_lookback": self.delivery_lookback,
+            "top_percentile_cutoff": self.top_percentile_cutoff,
+            "momentum_weight": self.momentum_weight,
+            "trend_ma": self.trend_ma,
+            "atr_stop_mult": self.atr_stop_mult,
+            "max_holding_days": self.max_holding_days,
+        }
+
+    @property
+    def parameter_origins(self) -> list[ParameterOrigin]:
+        return [
+            ParameterOrigin(
+                "momentum_lookback", self.momentum_lookback, "PRIOR_CANONICAL",
+                "MomentumRSV2Strategy's own lookback (Jegadeesh & Titman 1993).",
+            ),
+            ParameterOrigin(
+                "delivery_lookback", self.delivery_lookback, "PRIOR_CANONICAL",
+                "DeliveryVolumeBreakoutV1Strategy's own baseline window.",
+            ),
+            ParameterOrigin(
+                "top_percentile_cutoff", self.top_percentile_cutoff, "PRIOR_CANONICAL",
+                "MomentumRSV2Strategy's own cutoff - the architecture this design is built on.",
+            ),
+            ParameterOrigin(
+                "momentum_weight", self.momentum_weight, "STRUCTURAL_REQUIREMENT",
+                "Unweighted 0.5/0.5 average - a non-uniform split would be an unjustified "
+                "extra tunable with no independent motivation.",
+            ),
+            ParameterOrigin(
+                "trend_ma", self.trend_ma, "MARKET_CONVENTION",
+                "Same trend filter used throughout this project.",
+            ),
+            ParameterOrigin(
+                "atr_stop_mult", self.atr_stop_mult, "MARKET_CONVENTION",
+                "Same stop convention used throughout this project.",
+            ),
+            ParameterOrigin(
+                "max_holding_days", self.max_holding_days, "PRIOR_CANONICAL",
+                "Matches momentum_lookback, MomentumRSV2Strategy's own matched-holding "
+                "convention.",
+            ),
+        ]
+
+    @property
+    def required_history(self) -> int:
+        return max(self.momentum_lookback, self.trend_ma) + 15
+
+    def evaluate(
+        self,
+        current_date: date,
+        data_portal: DataPortal,
+        active_positions: list[uuid.UUID] | None = None,
+    ) -> list[SignalIntent]:
+        universe_members = data_portal.get_universe_members(current_date)
+        signals: list[SignalIntent] = []
+
+        candidates: list[tuple[Any, float, float, list[dict[str, Any]]]] = []
+        for inst in universe_members:
+            bars = data_portal.get_history(inst.id, current_date, count=self.required_history)
+            if len(bars) < max(self.momentum_lookback + 1, self.trend_ma):
+                continue
+
+            closes = [float(b["close"]) for b in bars]
+            c_curr = closes[-1]
+            sma_trend = sum(closes[-self.trend_ma :]) / self.trend_ma
+            if c_curr <= sma_trend:
+                continue
+
+            momentum = (closes[-1] - closes[-1 - self.momentum_lookback]) / max(
+                1.0, closes[-1 - self.momentum_lookback]
+            )
+
+            delivery_bars = data_portal.get_delivery_history(
+                inst.id, current_date, count=self.delivery_lookback + 1
+            )
+            if len(delivery_bars) < self.delivery_lookback + 1:
+                continue
+            if delivery_bars[-1]["trading_date"] != current_date:
+                continue
+            today_delivery_pct = float(delivery_bars[-1]["delivery_pct"])
+            baseline_delivery_pct = sum(
+                float(d["delivery_pct"]) for d in delivery_bars[:-1]
+            ) / self.delivery_lookback
+            if baseline_delivery_pct <= 0.0:
+                continue
+            delivery_ratio = today_delivery_pct / baseline_delivery_pct
+
+            candidates.append((inst.id, momentum, delivery_ratio, bars))
+
+        if not candidates:
+            return []
+
+        momentum_ranks = _percentile_ranks([c[1] for c in candidates])
+        delivery_ranks = _percentile_ranks([c[2] for c in candidates])
+        delivery_weight = 1.0 - self.momentum_weight
+
+        scored = [
+            (
+                candidates[i][0],
+                self.momentum_weight * momentum_ranks[i] + delivery_weight * delivery_ranks[i],
+                candidates[i][3],
+            )
+            for i in range(len(candidates))
+        ]
+        scored.sort(key=lambda x: x[1], reverse=True)
+        top_count = max(1, int(len(scored) * self.top_percentile_cutoff))
+        top_group = scored[:top_count]
+
+        for inst_id, score, bars in top_group:
+            closes = [float(b["close"]) for b in bars]
+            highs = [float(b["high"]) for b in bars]
+            lows = [float(b["low"]) for b in bars]
+            c_curr = closes[-1]
+
+            tr_list = [
+                max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
+                for i in range(-14, 0)
+            ]
+            atr14 = sum(tr_list) / 14.0
+
+            stop_price = Decimal(str(round(c_curr - (atr14 * self.atr_stop_mult), 2)))
+            signals.append(
+                SignalIntent(
+                    instrument_id=inst_id,
+                    direction="BUY",
+                    order_type="MARKET",
+                    stop_loss_level=stop_price,
+                    max_holding_days=self.max_holding_days,
+                    metadata={
+                        "strategy_name": self.name,
+                        "strategy_version": self.version,
+                        "signal_date": current_date.isoformat(),
+                        "composite_score": score,
                         "config_hash": self.config_hash,
                     },
                 )

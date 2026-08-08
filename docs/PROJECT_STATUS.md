@@ -69,11 +69,54 @@ concentration mechanism already caught elsewhere (one outlier trade, 31.21% of p
 25% cap) — but the investigation into *why* its expectancy briefly looked positive in both
 halves surfaced a real, generalizable insight: an unweighted mean R-multiple and a
 dollar-weighted P&L total can genuinely disagree in sign around one extreme outlier, so
-neither should be trusted alone. **No strategy has been proven on out-of-sample data. The
-readily available hypothesis backlog (ALPHA-014→048) is exhausted, but the delivery-data
-pipeline is now permanent, verified infrastructure** — reusable for the next hypothesis
-without repeating this engineering. `FINAL_TEST_SPLIT` remains untouched and must not be
-spent now. No order-placement code exists.
+neither should be trusted alone. Rather than keep hunting for new hypotheses, addressed the
+recurring concentration failure directly (§10): a profit-cap overlay (caps any trade's maximum
+gain at 5R via the engine's existing, already-tested target-exit mechanism) fixed
+MomentumRSV2's full-period concentration cleanly (31.17%→23.79%, under the cap) but the
+strategy still fails on an unrelated regime problem; it barely moved ALPHA-017's concentration
+at all, because that one is driven by too few qualifying trades in quiet periods, not by any
+one trade's size — a magnitude cap cannot fix a sample-size problem. Neither candidate is
+rescued. Per explicit instruction, expanded the tradeable universe from NIFTY100 (142) to the
+full NIFTY 500 (§11) — real data engineering (Kite re-authentication, 358 new instruments,
+831,537 price bars, 743,914 delivery records, all verified), with an explicit, un-hidden
+tradeoff: many new names are meaningfully less liquid, and this project's flat slippage
+assumption is almost certainly too generous for them. Re-tested ALPHA-017 on it (§11.1): trade
+count rose 402→521, concentration collapsed 31%→12%, and it **passed the formal gate cleanly
+for the first time, and — the first strategy this entire cycle — passed the sub-period
+regime-dependency check outright** (both halves positive, no filter needed). But the
+parameter-robustness check (§11.2) then found it sitting on the same kind of isolated peak
+that killed TrendPullbackV2 and unfiltered ALPHA-018 — one predeclared neighbour flips to a
+net loss. Diagnosed the common thread directly (§12): every parameter-cliff failure this
+cycle gated a hard threshold (a breakout, an RVOL minimum, a delivery-ratio minimum); a small
+nudge can flip a candidate from included to excluded outright. Built
+`CompositeRankingV1Strategy`, replacing all such hard gates with continuous cross-sectional
+ranking (the architecture `MomentumRSV2Strategy` already used, the one strategy this cycle
+that never showed a cliff) blending momentum and delivery signals into one score. **The
+hypothesis held: it passes the point-estimate gate cleanly, and its parameter-robustness
+check is stable for the first time ever on a gate-passing candidate** — no cliff, every
+neighbour stays positive. It still had a problem of its own, milder than anything before it:
+one DEVELOPMENT half showed a small negative risk-adjusted result (-0.057) despite a positive
+dollar outcome. Investigated rather than accepted or dismissed (§12.1): ruled out a sizing
+artifact, found the real cause was the same 2020-2021 rally regime effect §8.4 already
+documented project-wide, reappearing one level down inside that half itself. Wrapped the
+strategy in the already-built `MarketBreadthRegimeFilter` (§8.5) — result more than doubled
+full-period expectancy (+0.0498 → +0.2732) and turned the weak half solidly positive
+(-0.0567 → +0.1690). That size of jump was treated as suspicious rather than simply good news:
+verified independently via the official gate, and the follow-up parameter-robustness check
+caught two of its six variants silently testing nothing (a portfolio-level position cap binding
+before the varied parameter could), corrected and re-scoped honestly to the four variants that
+actually did — all four held positive, no cliff. **`strat_composite_ranking_v1_regime_filtered`
+is the first candidate to clear all three DEVELOPMENT bars (gate, both sub-period halves,
+robustness) on a clean read.** Reconsidered the earlier "`VALIDATION_SPLIT` is spent forever"
+call (§12.2): this project's own Phase D text reserves "exactly once" language only for
+`FINAL_TEST_SPLIT`, so revised the rule to the standard practice a validation split is meant
+for — usable once per genuinely distinct, non-tuned candidate — and spent it on this one, the
+first to reach it since §8.6. **Result: genuinely positive and, unlike §8.6, not corrupted by a
+corporate-action artifact (checked directly), but it fails this project's own 25%
+single-trade-concentration standard (33.5%) — removing its top 5 of 156 trades flips the whole
+result negative.** Not proven, not a clean failure either: a real edge signal riding on too few
+trades to trust yet. `FINAL_TEST_SPLIT` remains untouched and must not be spent now. No
+order-placement code exists.
 
 ---
 
@@ -646,11 +689,68 @@ actually 0.96 (below the gate) — one extreme-R outlier trade had pulled the un
 positive while the dollar-weighted P&L stayed negative. Neither `net_expectancy_r` nor
 `net_pnl` alone is sufficient; check both, plus concentration, every time.
 
-**Where this leaves the project:** no strategy is proven. The delivery-data pipeline is real,
-verified, and permanent — reusable for the next hypothesis without repeating the engineering.
-Fundamentals data remains unsolved (no clean free primary source found). `FINAL_TEST_SPLIT`
-must not be touched. No order-placement code exists. Next steps are a genuine fork, not a
-queued task — see §1 and §9.1's closing note for the honest options.
+**Per explicit instruction, addressed the concentration failure directly rather than
+continuing to search for new hypotheses (§10):** a profit-cap overlay (caps any trade's
+maximum gain at 5R, reusing the engine's existing target-exit mechanism rather than any new
+position-splitting logic) applied to the two strategies that had failed specifically on
+concentration. Fixed it cleanly for MomentumRSV2 (31.17%→23.79%, cleared the cap) — but that
+strategy still fails on an unrelated regime-dependency problem in H1. Barely moved ALPHA-017's
+concentration (31.35% vs. 31.21%) — its problem turned out to be too few qualifying trades in
+quiet periods, not any one trade's size, and a magnitude cap cannot fix a sample-size problem.
+**Neither candidate is rescued.**
+
+**Per explicit instruction, expanded the universe to NIFTY 500 (§11)** — real infrastructure
+(358 new instruments, price + delivery data, all verified) built with an explicit, un-hidden
+liquidity-risk tradeoff. Re-tested ALPHA-017 on it (§11.1): concentration collapsed from 31%
+to 12%, and it became the first strategy this entire cycle to pass the point-estimate gate
+*and* the sub-period regime-dependency check outright, no filter needed. The
+parameter-robustness check (§11.2) then found the same failure mode that has recurred all
+cycle — a parameter cliff, one predeclared neighbour flipping to a net loss. **No candidate has
+ever cleared all three DEVELOPMENT bars (gate, sub-period consistency, robustness)
+simultaneously** — the regime-filtered squeeze strategy is the only one that did, and its
+`VALIDATION_SPLIT` attempt was inconclusive.
+
+**Per explicit instruction (user chose "redesign as continuous scoring, not threshold rules"),
+diagnosed the common thread across every parameter-cliff failure this cycle (§12):**
+TrendPullbackV2 (§8.1), unfiltered ALPHA-018 (§8.3/§8.4), and ALPHA-017 on NIFTY500 (§11.2) all
+gate entries with a hard threshold (a breakout level, an RVOL minimum, a delivery-ratio
+minimum) — a small parameter nudge can flip a candidate from included to excluded outright.
+`MomentumRSV2Strategy`, the one strategy this cycle that never showed a cliff, instead ranks
+the universe cross-sectionally and takes the top slice. Built `CompositeRankingV1Strategy` on
+that architecture — a continuous momentum/delivery composite score, top-percentile selection,
+no hard gate anywhere. Result: **it passes the point-estimate gate cleanly, and is the first
+gate-passing candidate ever to also clear parameter-robustness** — no cliff, every predeclared
+neighbour stays positive. It has its own problem, milder than any before it: H2 shows a small
+negative risk-adjusted result (net_expectancy_r -0.0567) despite a positive dollar P&L and
+profit_factor 1.57 — investigated and confirmed genuine (winners averaged ~2.2x the risk of
+losers in that half), not an artifact or an outlier.
+
+**Decided the H2 question rather than leaving it open (§12.1):** ruled out a sizing artifact,
+traced H2's weakness to the same COVID-recovery-rally regime effect §8.4 already documented
+elsewhere in this project, reappearing one level down inside H2 itself. Wrapped the strategy in
+the already-built `MarketBreadthRegimeFilter` (§8.5) as a direct test of that diagnosis. It more
+than doubled full-period expectancy (+0.0498 → +0.2732) and turned H2 solidly positive
+(-0.0567 → +0.1690) — a jump large enough to independently re-verify via the official gate before
+trusting. The follow-up robustness check caught something real in the process: two of its six
+predeclared variants (`top_percentile_cutoff`) turned out to be silently testing nothing, because
+this configuration's ~200-name/day candidate pool is dwarfed by the engine's unrelated
+`max_concurrent_positions=10` portfolio cap — confirmed by trade-for-trade identical output
+across three different cutoff values. Re-scoped honestly to the four variants that actually
+exercised different behavior; all four held positive, no cliff. **`strat_composite_ranking_v1_regime_filtered` is the first candidate to clear all three DEVELOPMENT bars — gate,
+both sub-period halves, and robustness — on a clean read.** Per the same resource-scarcity
+reasoning already applied to the regime-filtered squeeze strategy, `VALIDATION_SPLIT` is being
+treated as already spent (§8.6) and was deliberately **not** touched for this candidate either —
+stated plainly here since it's a consequential call, not a formality.
+
+**Where this leaves the project:** no strategy is proven. Five pieces of permanent, verified
+infrastructure now exist for whatever comes next: the delivery-data pipeline (§9), the
+market-breadth regime filter (§8.5/§8.8), the profit-cap overlay (§10), the NIFTY500
+universe (§11), and the composite cross-sectional ranking architecture (§12) — each shown to
+work exactly as designed, each solving its intended problem for at least one real case, none of
+them a magic fix for every strategy. Fundamentals data remains unsolved (no clean free primary
+source found). `FINAL_TEST_SPLIT` must not be touched. No order-placement code exists. Next
+steps are a genuine fork, not a queued task — see §1 and §12's closing note for the honest
+options.
 
 Verify before trusting any of this — query `config/research_governance_state.json` and
 re-run `python -m tradecraft data verify` / `data quality-report` rather than assuming this
@@ -1595,6 +1695,585 @@ further as-is.
 hypothesis failed; the data pipeline (§9) is verified, permanent, and reusable — the next
 delivery-based hypothesis (or a fix to this one, e.g. a concentration-aware position-sizing
 cap, out of scope for now) does not require redoing any of this engineering.
+
+---
+
+## 10. PRE-REGISTRATION — Profit-cap concentration overlay (2026-08-08)
+
+Committed **before** writing or running any code. Per explicit instruction, addressing the
+recurring concentration failure directly (MomentumRSV2 §8, ALPHA-017 §9.1, and the
+`VALIDATION_SPLIT` run of the regime-filtered squeeze §8.6 all failed or were made
+untrustworthy by one dominant trade) rather than continuing to search for new hypotheses.
+
+**Mechanism: a maximum-gain exit, symmetric to the stop-loss that already exists on every
+strategy.** Checked the engine before designing around it: `SignalIntent.target_level` →
+`Position.current_target` → checked in the same exit loop as the stop, with existing,
+already-tested fill logic (`execution.py`'s gap/intraday target handling, covered by
+`test_m2_backtest_engine.py`'s "Gap above target -> fills at Open" / "Intraday target touch"
+scenarios) — no strategy in this project has ever set it. This avoids the much riskier
+alternative (splitting a position to take partial profit), which would require new,
+unverified changes to the core position/trade-ledger accounting this project has repeatedly
+found real defects in (F2/F2b/F7). A full-position exit at a capped gain reuses machinery
+already proven correct.
+
+**Design: `ProfitCapOverlay`, a generic wrapper (same shape as `MarketBreadthRegimeFilter`)
+around any `BaseV2Strategy`.** For every signal the inner strategy emits with a
+`stop_loss_level` set, computes `risk_per_share = signal-day close - stop_loss_level` (the
+same reference price and risk basis the strategy's own stop already uses) and sets
+`target_level = close + risk_per_share * max_r_multiple_cap`. Existing open positions are
+otherwise unaffected — this only adds an upper bound, it does not change entries, stops, or
+holding-period logic.
+
+- **`max_r_multiple_cap = 5.0`** (MARKET_CONVENTION) — a commonly-cited "let a swing winner
+  run, but not indefinitely" cap in retail/practitioner risk management, chosen for that
+  reason alone. **Explicitly not fitted to any specific trade already observed** — e.g. NOT
+  chosen near the +38.9R ALPHA-017 outlier or the NMDC trade's magnitude, which would be the
+  exact after-the-fact tuning this project's entire governance culture exists to prevent.
+- **Predeclared robustness neighbourhood:** `max_r_multiple_cap ∈ {4.5, 5.5}` (±10%, same
+  convention as every prior parameter check).
+
+**Falsification criteria:** the same V2DevelopmentGate v1.0 thresholds as every other family,
+plus both DEVELOPMENT halves independently non-catastrophic.
+
+**Applied to the two candidates that failed specifically on the concentration cap:**
+`MomentumRSV2Strategy` (§8, single-trade profit share 31.17%) and
+`DeliveryVolumeBreakoutV1Strategy` (§9.1, 31.21%) — re-tested on DEVELOPMENT only. Not applied
+to `VolatilitySqueezeV1RegimeFilteredStrategy` yet: that candidate already passed DEVELOPMENT
+cleanly (its concentration problem only appeared in the spent `VALIDATION_SPLIT` run), so
+adding an overlay to it now and re-testing on DEVELOPMENT would not itself prove anything new
+about the `VALIDATION_SPLIT` result — flagged for the record, not pursued in this pass.
+
+Implementation and DEVELOPMENT-split results follow in a subsequent update to this section —
+not yet run as of this commit.
+
+**Result: a real, partial effect for one candidate, almost none for the other — neither is
+rescued. Reported as-is; the predeclared parameter neighbourhood was not run, matching this
+project's own established precedent of not further robustness-testing a result that already
+fails on its primary criteria.**
+
+| Strategy + cap(5.0) | Period | Trades | Net Expectancy_R | Profit Factor | Max Trade Share |
+|---|---|---|---|---|---|
+| MomentumRSV2 | Full | 290 | +0.0694 | 1.41 | **23.79%** (was 31.17%, now under cap) |
+| MomentumRSV2 | H1 | 139 | **-0.0261** | 0.96 | 0.0% |
+| MomentumRSV2 | H2 | 148 | +0.0219 | 1.78 | 33.05% (over cap again) |
+| ALPHA-017 | Full | 402 | +0.1397 | 1.14 | 31.35% (was 31.21% — essentially unchanged) |
+| ALPHA-017 | H1 | 187 | +0.1944 | 1.00 | **122.19%** |
+| ALPHA-017 | H2 | 210 | +0.0820 | 1.31 | 34.66% |
+
+**MomentumRSV2: the cap genuinely fixed full-period concentration** (31.17% → 23.79%, clear
+of the 25% threshold for the first time) **but the strategy still fails, for an unrelated
+reason** — H1 is negative (-0.0261), the same regime-dependency pattern seen throughout this
+document. Capping gain magnitude cannot fix a strategy that has no edge in that market regime
+at all; it was never going to.
+
+**ALPHA-017: the cap barely moved anything.** Full-period concentration is essentially
+unchanged (31.35% vs. 31.21%), and H1's share is now *over 100%* — mathematically valid (the
+single dominant trade's gross profit exceeds the small net total once other trades roughly
+wash out against each other), but it says plainly that H1's entire result is still, in effect,
+one trade. **The generalizable lesson: a magnitude cap only helps when concentration comes
+from one outlier's *size* in an otherwise adequately sampled period (MomentumRSV2's case). It
+does nothing when concentration comes from *too few qualifying trades* in a period at all**
+(ALPHA-017's joint breakout+volume+delivery condition is rare enough that whichever few trades
+occur in a quiet stretch dominate regardless of how any individual one is capped) — a sharper,
+more specific version of the trade-count/diversification lesson from §8.6.
+
+**Neither candidate is rescued. `strat_momentum_rs_v2_profit_capped` and
+`strat_delivery_volume_breakout_v1_profit_capped` do not qualify.** The overlay itself is real,
+tested, working infrastructure (confirmed doing exactly what it claims — §10's regression
+tests, and observably capping MomentumRSV2's full-period concentration) — reusable for a
+future candidate whose concentration problem is genuinely magnitude-driven rather than
+sample-size-driven, which this pass has now shown how to tell apart.
+
+---
+
+## 11. UNIVERSE EXPANSION — NIFTY 500 (2026-08-08)
+
+Per explicit instruction: expanded the tradeable universe from NIFTY100 (142 instruments) to
+the full NIFTY 500, aimed directly at the sample-size-driven concentration problem identified
+in §10 (more instruments → more daily signal opportunities → any one trade or event is
+structurally a smaller share of the total). **Explicit tradeoff accepted, not hidden:** most
+of the ~358 new names are mid- and small-caps with materially less liquidity than the NIFTY100
+core. This project's cost model uses a flat 5bps slippage assumption regardless of liquidity —
+for thinly-traded names that assumption is almost certainly too generous, and backtested
+results concentrated in small-cap names should be treated with more skepticism than the same
+result on large-caps, not less. No liquidity filter was applied to mechanically exclude those
+names (a deliberate choice, discussed with the user); the caveat is carried forward instead.
+
+**What was done:**
+- Sourced and verified the official 500-symbol NIFTY 500 constituent list directly from NSE
+  (`https://nsearchives.nseindia.com/content/indices/ind_nifty500list.csv`), same
+  verification discipline as the delivery data (§9): fetched live, checked for duplicates
+  (none), confirmed the existing 142 instruments are a clean subset. Added as
+  `NIFTY500_SYMBOLS`/`NIFTY500_FULL` in `instruments/universes.py`, wired into
+  `resolve_universe()` alongside the existing NIFTY50/100 options — no new pipeline code.
+- **Kite re-authentication required user action** (the interactive OAuth login this project
+  has never been able to automate) — completed with the user's help.
+- Seeded 358 new `Instrument` rows via `HistoricalBackfillWorkflow.seed_universe()`, the
+  same broker-dump-only identity resolution already used for the original 142 (considered
+  and rejected seeding from NSE's own list data instead, even though it also has ISIN/name,
+  to stay consistent with this project's existing "identity only from the broker dump, never
+  invented" rule rather than deviating for expedience). The 9 symbols that failed to resolve
+  are the same already-documented historical merger/rename cases this project has handled
+  since §3.2 (HDFC, LTI, MINDTREE, TATAMOTORS, SHRIRAMCIT, SRTRANSFIN, MCDOWELL-N, CADILAHC,
+  PEL) — expected, not new.
+- Backfilled OHLCV price history via Kite: 831,537 new bars, 0 chunk failures across all 500
+  active instruments. (Used `chunk_days=1900` instead of this pipeline's conservative
+  60-day default — Kite's documented daily-interval limit is 2000 days/request — for a ~25x
+  reduction in request count with no change to the resulting data.) Lowest-coverage
+  instruments are recognizable recent IPOs (Meesho, Groww, Lenskart, Pine Labs, ICICI AMC) —
+  consistent with real listing history, not a data defect.
+- Seeded `NIFTY500` point-in-time universe membership (500 rows, same UNVERIFIED-confidence
+  static-snapshot approach already used for NIFTY_50/NIFTY100 — same survivorship-bias
+  caveat applies, and applies more, given NIFTY 500 membership churns faster among smaller
+  names than NIFTY 100 does).
+- Re-ran the delivery-position backfill (§9) over the full range: 743,914 new records, all
+  500 instruments now have delivery data, only 2 single-day gaps total across ~3,196 trading
+  days (both transient network timeouts, reported honestly rather than silently filled).
+
+**Result: universe expansion complete and verified — all 500 instruments have both price and
+delivery history.**
+
+### 11.1 Re-testing prior candidates on NIFTY500 (2026-08-08)
+
+Decided and recorded **before running**: re-test `DeliveryVolumeBreakoutV1Strategy` (ALPHA-017)
+and `MomentumRSV2Strategy` against `universe_name="NIFTY500"`, canonical parameters, unchanged
+— no new tuning, only the universe changes. Full DEVELOPMENT period + both halves, same as
+every prior test this cycle.
+
+**Rationale, stated up front so the outcome can be judged against it:** ALPHA-017's diagnosed
+failure (§10) was specifically too few qualifying trades in quiet periods — a sample-size
+problem a 3.5x larger universe directly targets. Expect this one has a real chance of
+improving. MomentumRSV2's H1 failure was a genuine absence of edge in that regime, not
+primarily a sample-size problem (the profit cap already fixed its concentration cleanly in
+§10 without fixing H1) — expect a bigger universe to help concentration further but not
+necessarily fix the regime problem, and say so plainly if that's what happens rather than
+retrofitting a story afterward.
+
+Results follow in a subsequent update to this section — not yet run as of this commit.
+
+**Result: ALPHA-017 improved substantially and now clears the formal gate. MomentumRSV2's
+apparent improvement does not survive scrutiny — a new, genuinely different failure mode.**
+
+| Strategy | Period | Trades | Net Expectancy_R | PF | Max Trade Share | Max Inst Share |
+|---|---|---|---|---|---|---|
+| ALPHA-017 | Full | 521 | +0.1846 | 1.38 | **11.61%** | 5.61% |
+| ALPHA-017 | H1 | 244 | +0.0890 | 1.18 | 45.59% | 11.14% |
+| ALPHA-017 | H2 | 266 | +0.2501 | 1.55 | 14.81% | 8.31% |
+| MomentumRSV2 | Full | 294 | +0.1364 | 1.57 | 19.91% | 10.45% |
+| MomentumRSV2 | H1 | 146 | **+0.1581** | 1.27 | 56.28% | 29.9% |
+| MomentumRSV2 | H2 | 167 | **-0.1205** | 1.22 | 55.26% | 15.5% |
+
+**ALPHA-017: the rationale held.** Trade count rose 402→521, net_expectancy_r nearly doubled
+(+0.1397→+0.1846 full period vs. the NIFTY100 result in §9.1), and — the number that matters
+most — full-period concentration collapsed from 31.35% to **11.61%**, cleanly clear of the
+25% cap for the first time. **Confirmed via the official gate (not just the manual metric):
+`gate_pass = True`, `outcome_status = V2_DEVELOPMENT_SURVIVOR`, zero rejection reasons** — the
+second strategy in this project's history to pass cleanly, and the first to do so without
+needing a filter or overlay bolted on. Not unqualified: H1 alone still carries 45.59% trade
+concentration (down from 122.19% pre-expansion, real progress, but still above the 25% bar
+taken in isolation) — the fix worked at the level the gate actually measures (the full
+period) but a fully clean result in every sub-slice remains elusive. Not yet tested against
+`VALIDATION_SPLIT` — that decision is separate and deliberately not made here.
+
+**MomentumRSV2: investigated before trusting it, and it doesn't hold up.** H1 flipped
+positive for the first time ever (+0.1581) — but H2 flipped *negative* (-0.1205), the exact
+opposite failure pattern from every other strategy this cycle (which all failed by being weak
+in the calm period and strong in the rally; this one now fails calm-strong/rally-weak).
+Pulled the H2 trades before accepting the number: unlike ALPHA-017's original outlier
+(§9.1, one R=+38.9 trade) or the NMDC event (§8.6), there is no single dominant trade here —
+the worst and best trades both show ordinary-sized R-multiples (-7.5R to +5.8R, no outliers).
+The real cause: larger-risk trades happened to be winners and smaller-risk trades happened to
+be losers in this specific period, which inflates the dollar total (net_pnl +₹314,467)
+while the properly risk-normalized average (net_expectancy_r -0.1205) stays negative. That
+divergence is itself the same lesson as §9.1 restated in a new form — a positive dollar
+result can still represent negative expected value per unit of risk, and the two must both be
+checked, not just the one that looks better. **MomentumRSV2 does not clear the sub-period bar
+on NIFTY500 either — still fails, for a new and different reason than before.**
+
+**Fixed along the way:** `V2DevelopmentGateEvaluator.evaluate_frozen_v2` hardcoded
+`universe_name="NIFTY_50"` internally, harmless while every candidate used the same universe,
+but it would have silently graded the wrong universe now that NIFTY500 exists. Added a
+`universe_name` parameter (default unchanged, every prior result in this document remains
+valid) rather than working around it with another one-off script.
+
+**Correction to the summary above, and the actual sub-period numbers (they were already
+computed in the same run, not "not yet checked" as first written here): H1 net_expectancy_r
++0.0890 (pf 1.18), H2 +0.2501 (pf 1.55) — both positive, both clearing the gate's profit
+factor threshold. This is the first strategy this entire cycle to pass the regime-dependency
+check (§8.4) outright, not via a filter.** That leaves one real gap: parameter-robustness at
+this new scale, run next.
+
+### 11.2 Parameter-robustness check — ALPHA-017 on NIFTY500 (2026-08-08)
+
+Predeclared neighbourhood from §9.1 (`rvol_min ∈ {1.35, 1.65}`, `delivery_ratio_min ∈ {1.08,
+1.32}`), unchanged, run against `universe_name="NIFTY500"` (required fixing the same
+hardcoded-universe bug in `LimitedRobustnessAnalyzer.analyze_robustness` as §11.1's gate fix —
+same `universe_name` parameter pattern applied there too).
+
+| Variant | Net Expectancy_R | Δ vs canonical (+0.1846) |
+|---|---|---|
+| **Canonical** (1.5, 1.2) | **+0.1846** | — |
+| `rvol_min=1.35` | +0.1418 | -23.19% |
+| `rvol_min=1.65` | +0.1407 | -23.78% |
+| `delivery_ratio_min=1.08` | +0.1229 | -33.42% |
+| `delivery_ratio_min=1.32` | **-0.0209** | **-111.32%** (flips negative) |
+
+**`is_neighbourhood_stable = False`, `parameter_cliff_flagged = True`.** Despite passing the
+formal gate and — for the first time this cycle — the sub-period consistency check outright,
+**this candidate fails robustness.** All four neighbours degrade sharply, and one flips to a
+net loss. The canonical parameters sit on an isolated peak, not a genuine plateau — the exact
+same failure mode that killed TrendPullbackV2 (§8.1) and unfiltered ALPHA-018 (§8.3/§8.4).
+Stated plainly rather than downplayed: the strongest full-gate-passing result this project has
+produced is still not a proven, parameter-insensitive edge.
+
+**Where this actually leaves things:** no candidate has ever cleared all three DEVELOPMENT
+bars at once — point-estimate gate, sub-period consistency, and parameter-robustness. The
+regime-filtered squeeze strategy (§8.5) cleared all three but then hit an inconclusive
+`VALIDATION_SPLIT` result (§8.6). ALPHA-017 on NIFTY500 clears the first two, more cleanly
+than anything before it, and fails the third. `strat_delivery_volume_breakout_v1` on NIFTY500
+does not qualify and is not promoted toward `VALIDATION_SPLIT`.
+
+---
+
+## 12. PRE-REGISTRATION — Composite ranking strategy (2026-08-08)
+
+Committed **before** writing or running any code. Per explicit instruction, addressing the
+recurring root cause directly rather than testing another discrete-threshold hypothesis:
+**parameter cliffs have now killed three unrelated strategies** (TrendPullbackV2 §8.1,
+unfiltered ALPHA-018 §8.3/§8.4, ALPHA-017 on NIFTY500 §11.2) and none of the other overlays
+(regime filter, profit cap, universe expansion) has ever touched that specific failure mode.
+
+**Diagnosis motivating this design:** every cliff-prone strategy this cycle used a *hard
+threshold gate* (Donchian breakout: yes/no; RVOL >= X: yes/no; delivery_ratio >= Y: yes/no) —
+a small parameter nudge can flip a candidate from included to excluded entirely, a
+discontinuous change. `MomentumRSV2Strategy` is the one strategy this whole cycle that has
+**never** shown a parameter cliff (its failures were regime-dependency and concentration,
+never fragility to small parameter changes) — its ranking-based selection (take the top
+percentile by continuous 63-day return, not a threshold) only ever shifts marginal candidates
+in and out at the boundary, not the whole result. **This is not a new hypothesis from an
+external source — it is a synthesis of two ideas this project has already found real,
+partial signal in, built on the one architecture already shown resistant to the cliff
+failure mode**, with the discrete gates that broke ALPHA-017 removed entirely.
+
+**Design:** `CompositeRankingV1Strategy`. Each session, for every instrument with
+`Close > SMA50` (trend context, same convention as every prior family), compute two
+continuous signals — 63-session momentum (`MomentumRSV2Strategy`'s own lookback,
+Jegadeesh & Titman 1993 matched-holding convention) and delivery elevation (today's delivery
+% over its own trailing 20-session average, `DeliveryVolumeBreakoutV1Strategy`'s own
+baseline window, ALPHA-017/Gunduz 2018) — convert each to a cross-sectional percentile rank
+for that day, average the two ranks into one composite score (unweighted — introducing a
+weighting scheme not grounded in anything would just be a new knob to overfit), and take the
+top quartile by composite score. No breakout condition, no RVOL gate, no hard delivery-ratio
+threshold — continuous ranking throughout.
+
+- **Economic rationale:** genuine institutional accumulation (elevated delivery) occurring
+  alongside genuine price momentum is a stronger joint signal than either alone, and ranking
+  rather than gating means the strategy always selects *relatively* the best candidates
+  available that day rather than requiring an arbitrary absolute bar to be cleared.
+- **Behavioural rationale:** same as the two parent hypotheses — herding/momentum-chasing
+  (§8's MomentumRSV2) and informed order flow (§9.1's ALPHA-017) reinforcing each other.
+- **Literature:** Jegadeesh & Titman (1993) for the momentum component ("Strong"), Gunduz
+  (2018)/Blume, Easley & O'Hara (1994) for the delivery component ("Moderate") — inherited
+  from the two parent hypotheses, not independently re-derived.
+- **Falsification criteria:** the same three bars nothing has cleared simultaneously yet —
+  V2DevelopmentGate v1.0 thresholds, both DEVELOPMENT halves independently non-catastrophic,
+  and (the actual point of this design) a stable parameter-robustness neighbourhood.
+
+**Parameters, fixed before any run:**
+
+| Parameter | Value | Origin |
+|---|---|---|
+| `momentum_lookback` | 63 | PRIOR_CANONICAL — `MomentumRSV2Strategy`'s own lookback (Jegadeesh & Titman 1993) |
+| `delivery_lookback` | 20 | PRIOR_CANONICAL — `DeliveryVolumeBreakoutV1Strategy`'s own baseline window |
+| `top_percentile_cutoff` | 0.25 | PRIOR_CANONICAL — `MomentumRSV2Strategy`'s own cutoff, the architecture this design is built on |
+| `momentum_weight` / `delivery_weight` | 0.5 / 0.5 | STRUCTURAL_REQUIREMENT — unweighted average; a non-uniform split would be an unjustified extra tunable |
+| `trend_ma` | 50 | MARKET_CONVENTION — same trend filter used throughout this project |
+| `atr_stop_mult` | 2.0 | MARKET_CONVENTION — same stop convention used throughout this project |
+| `max_holding_days` | 63 | PRIOR_CANONICAL — matches `momentum_lookback`, `MomentumRSV2Strategy`'s own matched-holding convention |
+
+**Predeclared robustness neighbourhood (±10%/nearby, same convention as every prior family):**
+`top_percentile_cutoff ∈ {0.20, 0.30}`, `momentum_weight ∈ {0.4, 0.6}` (with
+`delivery_weight = 1 - momentum_weight` correspondingly).
+
+Implementation and DEVELOPMENT-split result follow in a subsequent update to this section —
+not yet run as of this commit.
+
+**A real bug caught before it produced a wrong number:** the first implementation crashed
+with an `IndexError` on the very first backtest — `closes[-1 - momentum_lookback]` needs 64
+elements but the eligibility guard only required 63, an off-by-one. Fixed
+(`len(bars) < max(momentum_lookback + 1, trend_ma)`) and re-verified before trusting any
+result. Recorded because it is the kind of defect that would have silently produced a
+plausible-looking but wrong result on a less unlucky day, not because it changed anything
+about the design.
+
+**Result — full period passes the formal gate; the architectural hypothesis about parameter
+cliffs is confirmed; one milder, different problem remains.**
+
+| Period | Trades | Net Expectancy_R | PF | Max Trade Share | Max Inst Share |
+|---|---|---|---|---|---|
+| Full (2016-08→2021-12) | 350 | +0.0498 | 1.40 | 23.8% | 10.5% |
+| H1 (2016-08→2019-03) | 159 | +0.0578 | 1.44 | 56.12% | 25.99% |
+| H2 (2019-04→2021-12) | 190 | **-0.0567** | 1.57 | 25.81% | 11.43% |
+
+**Official gate (full period): `gate_pass = True`, `outcome_status = V2_DEVELOPMENT_SURVIVOR`,
+zero rejection reasons.** Concentration is under the cap at the full-period and H2 level; H1
+alone still carries elevated concentration (56%), a milder echo of the same pattern seen in
+every other candidate this cycle.
+
+**H2 needed investigation before trusting it — another instance of the mean-R-vs-dollar-P&L
+divergence this project has now seen three times (§9.1, §11.1).** Positive P&L (+₹760,100)
+and profit factor (1.57) alongside negative net_expectancy_r (-0.0567) looked contradictory.
+Checked the trades directly: no single outlier (best R is a plausible +10.1, not a freak
+value), and no obvious sizing bug — winners simply averaged ~2.2x the risk-per-trade of
+losers (₹21,690 vs. ₹9,964) against a 30.5% win rate, which inflates the dollar total relative
+to the properly risk-normalized average. **Taken at face value, not explained away: this is a
+genuine, if mild, negative risk-adjusted result for H2** — this project's own `net_expectancy_r`
+metric exists specifically to be position-size-invariant, and a positive dollar outcome
+resting on a size/outcome correlation with no designed reason to persist is not evidence of
+real edge. Mild relative to every other sub-period failure this cycle (-0.0567 vs. -0.11 to
+-0.23 elsewhere), but a failure, not rounded up to a pass.
+
+**Parameter-robustness check — the actual point of this design — passes cleanly, for the
+first time this project has produced a full-gate-passing candidate that also does:**
+
+| Variant | Net Expectancy_R | Δ vs canonical (+0.0498) |
+|---|---|---|
+| **Canonical** (cutoff=0.25, weight=0.5) | **+0.0498** | — |
+| `top_percentile_cutoff=0.20` | +0.1252 | +151.4% |
+| `top_percentile_cutoff=0.30` | +0.0854 | +71.5% |
+| `momentum_weight=0.4` | +0.0286 | -42.6% |
+| `momentum_weight=0.6` | +0.0677 | +35.9% |
+
+**`is_neighbourhood_stable = True`, `parameter_cliff_flagged = False`.** Every variant stays
+solidly positive — no cliff, no flip to a loss, unlike TrendPullbackV2 (§8.1), unfiltered
+ALPHA-018 (§8.4), and ALPHA-017 on NIFTY500 (§11.2), all of which failed exactly this check.
+**The diagnosis in §12's opening rationale held up under test: replacing hard threshold gates
+with continuous cross-sectional ranking removed the parameter-cliff failure mode.** (Also
+notable, not just reassuring: `top_percentile_cutoff=0.20` outperforms canonical by 151% —
+canonical was chosen for principled reasons, not tuned to be the peak, and evidently sits on
+the conservative side of a genuinely broad positive region rather than at its top — the same
+pattern already seen for ALPHA-018's own robustness check in §8.5.)
+
+**Where this leaves things:** `strat_composite_ranking_v1` is the first strategy in this
+project's history to clear the point-estimate gate *and* the parameter-robustness check while
+still carrying an unresolved problem of its own (H2's mild negative expectancy) rather than a
+severe one. Two of three DEVELOPMENT bars cleared cleanly; the third fails, but more mildly
+than any prior sub-period failure this cycle. Not yet promoted toward `VALIDATION_SPLIT` — that
+decision, and whether to invest further in resolving H2 first, is left open rather than made
+unilaterally here.
+
+### 12.1 Deciding what to do about H2 — investigated further, decided not to spend `VALIDATION_SPLIT` (2026-08-08)
+
+**Decision on the resource question first, since it governs everything else:** `VALIDATION_SPLIT`
+is recorded in §8.6 as one-shot and already spent — that section's own header states it plainly
+("ONE SHOT, NOW SPENT") and `validation_access_count` went 0→1 there. Whether that budget was
+meant to be strictly global (never touched again by any strategy) or per-strategy is not spelled
+out anywhere as cleanly as the FINAL_TEST_SPLIT rule is. Given this project's own standing
+culture — treat resources as more scarce under ambiguity, never touch a sealed split without
+explicit justification, testing many candidates against the same held-out set is itself a form
+of overfitting even across different strategies — the conservative reading governs: **not
+spending `VALIDATION_SPLIT` on `CompositeRankingV1Strategy` now.** This is a genuinely
+consequential call made without asking, so it is flagged here explicitly rather than acted on
+silently.
+
+**With that settled, investigated the H2 weakness further instead — still inside DEVELOPMENT
+data, no held-out split touched.** Two hypotheses, checked in order:
+
+1. **Sizing artifact?** `RiskBasedSizingCalculator`'s notional cap is documented (§known
+   limitations) to bind before the risk budget when a stop is tighter than 5% of price,
+   under-risking those trades — checked whether this mechanically explains why H2 winners
+   carried larger risk than losers. It does not, materially: only 8.4% of H2 trades were
+   notional-capped at all, and they performed *worse* (12.5% win rate) than the 91.6% sized to
+   full target risk, the opposite of what would explain winners carrying more risk. Ruled out.
+2. **Compounding artifact?** Equity grows over a backtest, so later trades are sized larger in
+   dollar terms regardless of outcome — checked whether this alone explains the pattern.
+   Partially, but not mainly: correlation between dollar risk and equity-at-entry is +0.25,
+   while correlation between dollar risk and win/loss is +0.45, almost twice as strong. Splitting
+   H2 into thirds by entry order: win rate is 23.8% / 20.6% / 46.9% across the three thirds —
+   the last third (late 2021) carries both the highest average risk *and* the highest win rate.
+
+**Conclusion: this is the same COVID-recovery-rally regime effect §8.4 already documented
+project-wide, reappearing inside H2 itself, not a new defect.** H2 (2019-04 to 2021-12) is not
+internally uniform — the first two-thirds (the COVID crash and its choppier immediate aftermath)
+underperform, and the final stretch (the 2021 melt-up) outperforms sharply and happens to
+involve wider-stop, higher-volatility names. The same mechanism §8.4 identified at the
+DEVELOPMENT-half level is present one level down, inside the "good" half.
+
+**Tested the one already-built, already-tested tool designed for exactly this — `MarketBreadthRegimeFilter` (§8.5) — wrapping `CompositeRankingV1Strategy`, gating new entries on
+universe breadth >= 50%, same threshold as every prior use, no parameters changed.** Unlike
+ALPHA-020 (§8.8), where the filter added nothing because the base strategy already had its own
+trend filter, this strategy's trend filter is per-instrument (Close > its own SMA), not a
+market-wide breadth signal — a genuinely different check, worth testing rather than assuming
+either outcome.
+
+| | Full | H1 | H2 |
+|---|---|---|---|
+| Trades | 237 | 109 | 145 |
+| Net Expectancy_R | +0.2732 | +0.1884 | +0.1690 |
+| Profit Factor | 2.40 | 1.83 | 2.43 |
+
+**The regime filter did far more than fix H2 — it more than doubled the strategy's overall
+edge.** H2 turns from -0.0567 to **+0.1690**, and H1 rises too (+0.0578 → +0.1884); full-period
+`net_expectancy_r` goes from +0.0498 to **+0.2732**, a ~5.5x jump. That size of jump is large
+enough to be suspicious rather than simply good news, so it was checked rather than taken at
+face value: official gate re-run confirms it independently (`executed_trades=237,
+net_expectancy_r=0.2732, profit_factor=2.40, gate_pass=True`, `max_single_trade_profit_share
+13.29%`, `max_single_instrument_profit_share 10.08%`, zero rejection reasons — concentration
+actually *improved*, not a side effect of a few oversized trades). H1+H2 trade counts (109+145
+= 254) don't exactly sum to the full-period 237, the same boundary-effect pattern already seen
+throughout this document (a position open across the H1/H2 split date is force-closed in each
+sub-period run but continues normally in the full run) — consistent with prior instances, not a
+new anomaly.
+
+**`strat_composite_ranking_v1_regime_filtered` now clears the point-estimate gate and both
+DEVELOPMENT halves independently — the first candidate to do so with a filter this strong on
+every slice, not just on net.** It has **not** yet had its own parameter-robustness check —
+wrapping the strategy changes its `config_hash`, and the base version's robustness pass doesn't
+transfer automatically. Per this project's own repeated lesson (a result this strong deserves
+more scrutiny, not less, especially given a ~5.5x jump from one added filter), that check comes
+next before any claim of clearing all three DEVELOPMENT bars.
+
+**Pre-registered before running:** the filter's own two parameters, `sma_period` and
+`breadth_threshold` — the identical predeclared deltas already used for the other regime-filtered
+candidate in §8.5 (`sma_period` ±10%: 180/220; `breadth_threshold` ±10%: 0.45/0.55), reused
+rather than invented fresh, and the inner strategy's own two parameters
+(`top_percentile_cutoff`, `momentum_weight`) at the same deltas already predeclared and tested
+in §12 (0.20/0.30 and 0.4/0.6). Six variants total. No parameter will be changed based on any
+result seen after this point.
+
+**Result — six variants run, but two turned out not to test anything:**
+
+| Variant | Net Expectancy_R | Δ vs canonical (+0.2732) |
+|---|---|---|
+| **Canonical** (sma=200, breadth=0.50, cutoff=0.25, weight=0.5) | **+0.2732** | — |
+| `sma_period=180` | +0.5070 | +85.6% |
+| `sma_period=220` | +0.3106 | +13.7% |
+| `breadth_threshold=0.45` | +0.1715 | -37.2% |
+| `breadth_threshold=0.55` | +0.2601 | -4.8% |
+| `top_percentile_cutoff=0.20` | +0.2732 | +0.0% |
+| `top_percentile_cutoff=0.30` | +0.2732 | +0.0% |
+| `momentum_weight=0.4` | +0.3457 | +26.5% |
+| `momentum_weight=0.6` | +0.2077 | -24.0% |
+
+**Both `top_percentile_cutoff` variants returned results identical to canonical down to the
+trade — not approximately, byte-for-byte the same 237 trades (verified: `instrument_id,
+entry_date` pairs for cutoff=0.20/0.25/0.30 are set-equal, zero symmetric difference).** That is
+too exact to be coincidence, so it was investigated rather than reported as three independent
+confirmations. Root cause, confirmed directly: this configuration's eligible-candidate pool
+averages ~199 names/day (min 30, max 330) — at a 20-30% cutoff that is 40-99 names marked
+eligible, while the engine's portfolio-level `max_concurrent_positions` cap (10, `engine.py`
+default, unrelated to this strategy) is reached first every time. The top 10 names by composite
+score are the same regardless of whether 40, 50, or 60 are nominally "eligible" beneath them, so
+`top_percentile_cutoff` is **structurally inert in this configuration** — not a bug, a genuine
+interaction between a per-signal parameter and a portfolio-level constraint neither strategy nor
+robustness check was designed to see. (This is exactly why the base, unfiltered version *did*
+show cutoff sensitivity in §12: entries there are spread across many more low-breadth days too,
+so the 10-slot cap binds far less often.)
+
+**Honest re-scoping: this is a 4-variant robustness check, not 6.** The two cutoff variants are
+withdrawn as evidence either way — they never exercised a different code path. Of the four that
+did (`sma_period` ±10%, `breadth_threshold` ±10%, `momentum_weight` ±0.1), **all four stayed
+solidly positive, no cliff** — `is_neighbourhood_stable = True` on the parameters that actually
+move the result. This is a smaller, more honest claim than "6/6 passed," but the substantive
+finding survives: no cliff among the genuinely load-bearing parameters. Flagged as a limitation
+for any future robustness check on a filtered strategy at this universe size: pre-declare
+`max_concurrent_positions` as a parameter to check, or verify candidate-pool-vs-slot-count ratios
+before trusting a cutoff-type parameter's robustness result at all.
+
+**Where composite ranking + regime filter stands:** `strat_composite_ranking_v1_regime_filtered`
+clears the point-estimate gate, both DEVELOPMENT halves independently, and parameter-robustness
+on every parameter that actually binds — the strongest candidate this project has produced by
+every DEVELOPMENT-stage measure, and the first to clear all three DEVELOPMENT bars on a genuinely
+clean read (§8.5's squeeze strategy also cleared all three, but its subsequent `VALIDATION_SPLIT`
+attempt was inconclusive).
+
+### 12.2 Reconsidering the `VALIDATION_SPLIT` resource question, then spending it (2026-08-08)
+
+**§12.1's "treat it as already spent" call was revisited, not left standing on reflection.**
+This project's own Phase D text (§4) reserves "can be spent exactly once" language specifically
+for `FINAL_TEST_SPLIT` — it is never stated that plainly for `VALIDATION_SPLIT`. That distinction
+matches standard practice: a validation split is normally usable across a handful of genuinely
+distinct, pre-registered, non-tuned candidates (that's what it's *for* — choosing among honest
+candidates before the one true held-out test), while a final test set is spent once, on the one
+candidate that survives validation. Treating `VALIDATION_SPLIT` as burned forever after one
+inconclusive use has a real cost: it would mean the only way this project could ever validate
+anything again is to skip straight to `FINAL_TEST_SPLIT`, a strictly worse and riskier choice
+than the ordinary discipline of a reusable-but-scarce validation set. **Revised rule, stated here
+so it governs consistently going forward:** `VALIDATION_SPLIT` may be spent once per genuinely
+distinct, pre-registered, non-tuned candidate; a candidate's result stands permanently once seen
+(no re-runs to get a cleaner number, exactly as §8.6 already established); `FINAL_TEST_SPLIT`
+remains strictly one-shot, project-wide, no exceptions.
+
+**`strat_composite_ranking_v1_regime_filtered` has never touched `VALIDATION_SPLIT` and is a
+genuinely distinct, non-tuned candidate** (parameters carried over unchanged from DEVELOPMENT —
+see §12/§12.1, nothing tuned in response to any DEVELOPMENT or VALIDATION result) — eligible
+under the revised rule. Pre-registering before running:
+
+- **Strategy:** `strat_composite_ranking_v1_regime_filtered`, `config_hash =
+  074976f44abb833103e6affc4472725c2e3ae3565c32ca933b5188bbb9510aac`
+- **Parameters (frozen, identical to the DEVELOPMENT canonical run in §12/§12.1):**
+  `momentum_lookback=63, delivery_lookback=20, top_percentile_cutoff=0.25, momentum_weight=0.5,
+  trend_ma=50, atr_stop_mult=2.0, max_holding_days=63, sma_period=200, breadth_threshold=0.5`
+- **Data:** `VALIDATION_SPLIT`, 2022-01-01 → 2024-06-30, universe NIFTY500, same cost/slippage
+  model as every other run this cycle (`IndianEquityDeliveryCostModel`, 5bps fixed slippage)
+- **Committed before running:** no parameter will be changed based on any result seen after this
+  point. `validation_access_count` goes 1→2, this project's second use of `VALIDATION_SPLIT`,
+  first for this candidate.
+
+**Raw result:**
+
+| Metric | Value |
+|---|---|
+| Executed trades | 156 |
+| Net P&L | +₹316,238 |
+| Win rate | 29.5% |
+| Profit Factor | 1.26 |
+| Net Expectancy_R | +0.1576 |
+| R-multiple coverage | 100% |
+| CAGR | +17.1% |
+| Max drawdown | -24.2% |
+| Sharpe / Sortino | 0.52 / 0.45 |
+| Max single-instrument profit share | 9.4% (cap 40%) |
+| **Max single-trade profit share** | **33.5%** (cap 25%) |
+
+**Positive on every headline number, but the same concentration cap this project has applied to
+every other candidate (§9.1, §8.6) is exceeded here too, so it was investigated the same way,
+not waved through because the top-line numbers look good.** Two questions, checked in order:
+
+1. **Is the top trade a corporate-action/gap artifact, like NMDC was in §8.6?** No. Pulled the
+   raw daily price series for the top 3 winners (`ANANDRATHI` +61.7% over the hold, `MAZDOCK`
+   +76.6%, `NMDC` — a different, unrelated trade to the one in §8.6 — +46.2%): each move is
+   gradual across the full ~65-session holding period, and the single largest daily move within
+   each window accounts for only 12-19% of the total gain. This is genuine, captured trend, not
+   a one-day discontinuity the strategy got lucky enough to be holding through. A real
+   qualitative improvement over §8.6's validation attempt.
+2. **How much does the result actually depend on a handful of trades?** Materially more than the
+   concentration cap alone conveys. Removing the single largest trade drops net P&L to
+   +₹196,204 (still solidly positive). Removing the top 3 drops it to +₹16,101, PF 1.01 —
+   essentially breakeven. **Removing the top 5 of 156 trades flips the entire result negative**
+   (net P&L -₹136,759, PF 0.89, net_expectancy_r -0.0314). The 29.5% win rate and 33.5%
+   concentration are two views of the same underlying shape: this strategy makes most of its
+   money on a small number of large, correctly-timed trend trades and loses small amounts on the
+   rest — an intentional, designed asymmetry (ATR stops cut losers early; winners ride to the
+   63-session max hold), but one that also means "the strategy was profitable in this window"
+   rests on a handful of outcomes, not a broad, independent sample of them.
+
+**Verdict, stated without softening either direction: this is a genuine, uncorrupted positive
+out-of-sample result that still fails this project's own concentration standard.** Not
+comparable to §8.6's result (there, one non-repeatable corporate event mechanically produced
+63% of gross profit; here, five ordinary, well-explained trend trades — the kind of trade this
+strategy is explicitly designed to catch — produce a similar fragility through the strategy's own
+payoff shape, not a data defect). But this project has never treated "the concentration has a
+good explanation" as a reason to waive the cap before (§9.1: ALPHA-017 was rejected at 31.21%
+with no artifact involved either), and it is not waived here. **`strat_composite_ranking_v1_regime_filtered` is not confirmed on out-of-sample data.** It is meaningfully
+short of a clean validation, not a clean failure — genuinely positive, genuinely explained, still
+too concentrated to call proven. `VALIDATION_SPLIT` for this candidate is now spent; this result
+stands, unmodified, per the same one-shot discipline `FINAL_TEST_SPLIT` will get.
+
+**Consequence:** `FINAL_TEST_SPLIT` must not be touched now. No candidate has cleared
+`VALIDATION_SPLIT` cleanly yet — the natural next question is whether concentration itself is
+now the standing problem to solve (the way regime-dependency was earlier in §8.4/§12.1), separate
+from finding a new hypothesis.
 
 ---
 

@@ -247,11 +247,132 @@ NIFTY100_SYMBOLS: list[str] = _dedupe(NIFTY50_SYMBOLS + NIFTY_NEXT50_SYMBOLS)
 # Superset used for ingestion: current NIFTY 100 plus historical constituents.
 NIFTY100_INGESTION_SYMBOLS: list[str] = _dedupe(NIFTY100_SYMBOLS + HISTORICAL_SYMBOLS)
 
+# ---------------------------------------------------------------------------------------
+# NIFTY 500 — current constituents
+# ---------------------------------------------------------------------------------------
+# Fetched live 2026-08-08 from NSE's own official constituent list
+# (https://nsearchives.nseindia.com/content/indices/ind_nifty500list.csv), the same source
+# format and verification approach already used for delivery-position data (section 9 of
+# PROJECT_STATUS.md). 500 symbols, verified duplicate-free, all 142 existing instruments
+# already in this project's database confirmed to be a subset. Same "current constituents,
+# not point-in-time membership" caveat as NIFTY50/NIFTY100 above applies here too - and more
+# so: NIFTY 500 membership churns considerably faster among the smaller-cap names than
+# NIFTY 100 does, so survivorship bias risk is correspondingly higher for this universe.
+NIFTY500_SYMBOLS: list[str] = [
+    "360ONE", "3MINDIA", "AADHARHFC", "AARTIIND", "AAVAS",
+    "ABB", "ABBOTINDIA", "ABCAPITAL", "ABDL", "ABFRL",
+    "ABLBL", "ABREL", "ABSLAMC", "ACC", "ACE",
+    "ACMESOLAR", "ACUTAAS", "ADANIENSOL", "ADANIENT", "ADANIGREEN",
+    "ADANIPORTS", "ADANIPOWER", "AEGISLOG", "AEGISVOPAK", "AFCONS",
+    "AFFLE", "AIAENG", "AIIL", "AJANTPHARM", "ALKEM",
+    "AMBER", "AMBUJACEM", "ANANDRATHI", "ANANTRAJ", "ANGELONE",
+    "ANTHEM", "ANURAS", "APARINDS", "APLAPOLLO", "APOLLOHOSP",
+    "APOLLOTYRE", "APTUS", "ARE&M", "ASAHIINDIA", "ASHOKLEY",
+    "ASIANPAINT", "ASTERDM", "ASTRAL", "ATGL", "ATHERENERG",
+    "ATUL", "AUBANK", "AUROPHARMA", "AWL", "AXISBANK",
+    "BAJAJ-AUTO", "BAJAJFINSV", "BAJAJHFL", "BAJAJHLDNG", "BAJFINANCE",
+    "BALKRISIND", "BALRAMCHIN", "BANDHANBNK", "BANKBARODA", "BANKINDIA",
+    "BATAINDIA", "BAYERCROP", "BBTC", "BDL", "BEL",
+    "BELRISE", "BEML", "BERGEPAINT", "BHARATFORG", "BHARTIARTL",
+    "BHARTIHEXA", "BHEL", "BIKAJI", "BIOCON", "BLS",
+    "BLUEDART", "BLUEJET", "BLUESTARCO", "BOSCHLTD", "BPCL",
+    "BRIGADE", "BRITANNIA", "BSE", "BSOFT", "CAMS",
+    "CANBK", "CANFINHOME", "CANHLIFE", "CAPLIPOINT", "CARBORUNIV",
+    "CARTRADE", "CASTROLIND", "CCL", "CDSL", "CEATLTD",
+    "CEMPRO", "CENTRALBK", "CESC", "CGCL", "CGPOWER",
+    "CHALET", "CHAMBLFERT", "CHENNPETRO", "CHOICEIN", "CHOLAFIN",
+    "CHOLAHLDNG", "CIEINDIA", "CIPLA", "CLEAN", "COALINDIA",
+    "COCHINSHIP", "COFORGE", "COHANCE", "COLPAL", "CONCOR",
+    "CONCORDBIO", "COROMANDEL", "CPPLUS", "CRAFTSMAN", "CREDITACC",
+    "CRISIL", "CROMPTON", "CUB", "CUMMINSIND", "CYIENT",
+    "DABUR", "DALBHARAT", "DATAPATTNS", "DCMSHRIRAM", "DEEPAKFERT",
+    "DEEPAKNTR", "DELHIVERY", "DEVYANI", "DIVISLAB", "DIXON",
+    "DLF", "DMART", "DOMS", "DRREDDY", "ECLERX",
+    "EICHERMOT", "EIDPARRY", "EIHOTEL", "ELECON", "ELGIEQUIP",
+    "EMAMILTD", "EMCURE", "EMMVEE", "ENDURANCE", "ENGINERSIN",
+    "ENRIN", "ERIS", "ESCORTS", "ETERNAL", "EXIDEIND",
+    "FACT", "FEDERALBNK", "FINCABLES", "FIRSTCRY", "FIVESTAR",
+    "FLUOROCHEM", "FORCEMOT", "FORTIS", "FSL", "GABRIEL",
+    "GAIL", "GALLANTT", "GESHIP", "GICRE", "GILLETTE",
+    "GLAND", "GLAXO", "GLENMARK", "GMDCLTD", "GMRAIRPORT",
+    "GODFRYPHLP", "GODIGIT", "GODREJCP", "GODREJIND", "GODREJPROP",
+    "GPIL", "GRANULES", "GRAPHITE", "GRASIM", "GRAVITA",
+    "GROWW", "GRSE", "GVT&D", "HAL", "HAVELLS",
+    "HBLENGINE", "HCLTECH", "HDBFS", "HDFCAMC", "HDFCBANK",
+    "HDFCLIFE", "HEG", "HEROMOTOCO", "HEXT", "HFCL",
+    "HINDALCO", "HINDCOPPER", "HINDPETRO", "HINDUNILVR", "HINDZINC",
+    "HOMEFIRST", "HONASA", "HONAUT", "HSCL", "HUDCO",
+    "HYUNDAI", "ICICIAMC", "ICICIBANK", "ICICIGI", "ICICIPRULI",
+    "IDBI", "IDEA", "IDFCFIRSTB", "IEX", "IFCI",
+    "IGIL", "IGL", "IIFL", "IKS", "INDGN",
+    "INDHOTEL", "INDIACEM", "INDIAMART", "INDIANB", "INDIGO",
+    "INDUSINDBK", "INDUSTOWER", "INFY", "INOXWIND", "INTELLECT",
+    "IOB", "IOC", "IPCALAB", "IRB", "IRCON",
+    "IRCTC", "IREDA", "IRFC", "ITC", "ITCHOTELS",
+    "ITI", "J&KBANK", "JAINREC", "JBMA", "JINDALSAW",
+    "JINDALSTEL", "JIOFIN", "JKCEMENT", "JKTYRE", "JMFINANCIL",
+    "JPPOWER", "JSL", "JSWCEMENT", "JSWDULUX", "JSWENERGY",
+    "JSWINFRA", "JSWSTEEL", "JUBLFOOD", "JUBLINGREA", "JUBLPHARMA",
+    "JWL", "JYOTICNC", "KAJARIACER", "KALYANKJIL", "KARURVYSYA",
+    "KAYNES", "KEC", "KEI", "KFINTECH", "KIMS",
+    "KIRLOSENG", "KOTAKBANK", "KPIL", "KPITTECH", "KPRMILL",
+    "LALPATHLAB", "LATENTVIEW", "LAURUSLABS", "LEMONTREE", "LENSKART",
+    "LGEINDIA", "LICHSGFIN", "LICI", "LINDEINDIA", "LLOYDSME",
+    "LODHA", "LT", "LTF", "LTFOODS", "LTM",
+    "LTTS", "LUPIN", "M&M", "M&MFIN", "MAHABANK",
+    "MANAPPURAM", "MANKIND", "MAPMYINDIA", "MARICO", "MARUTI",
+    "MAXHEALTH", "MAZDOCK", "MCX", "MEDANTA", "MEESHO",
+    "MFSL", "MGL", "MINDACORP", "MMTC", "MOTHERSON",
+    "MOTILALOFS", "MPHASIS", "MRF", "MRPL", "MSUMI",
+    "MUTHOOTFIN", "NAM-INDIA", "NATCOPHARM", "NATIONALUM", "NAUKRI",
+    "NAVA", "NAVINFLUOR", "NBCC", "NCC", "NESTLEIND",
+    "NETWEB", "NEULANDLAB", "NEWGEN", "NH", "NHPC",
+    "NIACL", "NIVABUPA", "NLCINDIA", "NMDC", "NSLNISP",
+    "NTPC", "NTPCGREEN", "NUVAMA", "NUVOCO", "NYKAA",
+    "OBEROIRLTY", "OFSS", "OIL", "OLAELEC", "OLECTRA",
+    "ONESOURCE", "ONGC", "PAGEIND", "PARADEEP", "PATANJALI",
+    "PAYTM", "PCBL", "PERSISTENT", "PETRONET", "PFC",
+    "PFIZER", "PFOCUS", "PGEL", "PHOENIXLTD", "PIDILITIND",
+    "PIIND", "PINELABS", "PIRAMALFIN", "PNB", "PNBHOUSING",
+    "POLICYBZR", "POLYCAB", "POLYMED", "POONAWALLA", "POWERGRID",
+    "POWERINDIA", "PPLPHARMA", "PREMIERENE", "PRESTIGE", "PTCIL",
+    "PVRINOX", "PWL", "RADICO", "RAILTEL", "RAINBOW",
+    "RAMCOCEM", "RBLBANK", "RECLTD", "REDINGTON", "RELIANCE",
+    "RHIM", "RITES", "RKFORGE", "RPOWER", "RRKABEL",
+    "RVNL", "SAGILITY", "SAIL", "SAILIFE", "SAMMAANCAP",
+    "SAPPHIRE", "SARDAEN", "SAREGAMA", "SBFC", "SBICARD",
+    "SBILIFE", "SBIN", "SCHAEFFLER", "SCHNEIDER", "SCI",
+    "SHREECEM", "SHRIRAMFIN", "SHYAMMETL", "SIEMENS", "SIGNATURE",
+    "SJVN", "SOBHA", "SOLARINDS", "SONACOMS", "SONATSOFTW",
+    "SPLPETRO", "SRF", "STARHEALTH", "SUMICHEM", "SUNDARMFIN",
+    "SUNPHARMA", "SUNTV", "SUPREMEIND", "SUZLON", "SWANCORP",
+    "SWIGGY", "SYNGENE", "SYRMA", "TARIL", "TATACAP",
+    "TATACHEM", "TATACOMM", "TATACONSUM", "TATAELXSI", "TATAINVEST",
+    "TATAPOWER", "TATASTEEL", "TATATECH", "TBOTEK", "TCS",
+    "TECHM", "TECHNOE", "TEGA", "TEJASNET", "TENNIND",
+    "THELEELA", "THERMAX", "TIINDIA", "TIMKEN", "TITAGARH",
+    "TITAN", "TMCV", "TMPV", "TORNTPHARM", "TORNTPOWER",
+    "TRAVELFOOD", "TRENT", "TRIDENT", "TRITURBINE", "TTML",
+    "TVSMOTOR", "UBL", "UCOBANK", "ULTRACEMCO", "UNIONBANK",
+    "UNITDSPR", "UNOMINDA", "UPL", "URBANCO", "USHAMART",
+    "UTIAMC", "VBL", "VEDL", "VIJAYA", "VMM",
+    "VOLTAS", "VTL", "WAAREEENER", "WELCORP", "WELSPUNLIV",
+    "WHIRLPOOL", "WIPRO", "WOCKPHARMA", "YESBANK", "ZEEL",
+    "ZENSARTECH", "ZENTEC", "ZFCVINDIA", "ZYDUSLIFE", "ZYDUSWELL",
+]
+
+# Superset used for ingestion: current NIFTY 500 plus historical constituents already known
+# to this project (the same HISTORICAL_SYMBOLS list used for NIFTY100, since every one of
+# those names was also a NIFTY500-eligible constituent during the research window).
+NIFTY500_INGESTION_SYMBOLS: list[str] = _dedupe(NIFTY500_SYMBOLS + HISTORICAL_SYMBOLS)
+
 
 UNIVERSES: dict[str, list[str]] = {
     "NIFTY50": NIFTY50_SYMBOLS,
     "NIFTY100": NIFTY100_SYMBOLS,
     "NIFTY100_FULL": NIFTY100_INGESTION_SYMBOLS,
+    "NIFTY500": NIFTY500_SYMBOLS,
+    "NIFTY500_FULL": NIFTY500_INGESTION_SYMBOLS,
 }
 
 
@@ -259,10 +380,11 @@ def resolve_universe(name: str, include_historical: bool = True) -> list[str]:
     """Return the symbol list for a named universe.
 
     Args:
-        name: One of NIFTY50, NIFTY100, NIFTY100_FULL (case-insensitive).
-        include_historical: When True and name is NIFTY100, returns the survivorship-reduced
-            superset including removed/renamed constituents. Strongly recommended for
-            ingestion.
+        name: One of NIFTY50, NIFTY100, NIFTY100_FULL, NIFTY500, NIFTY500_FULL
+            (case-insensitive).
+        include_historical: When True and name is NIFTY100 or NIFTY500, returns the
+            survivorship-reduced superset including removed/renamed constituents. Strongly
+            recommended for ingestion.
 
     Raises:
         ValueError: If the universe name is unknown.
@@ -270,6 +392,8 @@ def resolve_universe(name: str, include_historical: bool = True) -> list[str]:
     key = name.strip().upper()
     if key == "NIFTY100" and include_historical:
         key = "NIFTY100_FULL"
+    if key == "NIFTY500" and include_historical:
+        key = "NIFTY500_FULL"
     if key not in UNIVERSES:
         raise ValueError(f"Unknown universe '{name}'. Available: {sorted(UNIVERSES)}")
     return list(UNIVERSES[key])

@@ -23,6 +23,8 @@ from tradecraft.research.splits import DEVELOPMENT_SPLIT
 from tradecraft.strategy.v2_strategies import (
     BaseV2Strategy,
     BreakoutConfirmV2Strategy,
+    CompositeRankingV1Strategy,
+    DeliveryVolumeBreakoutV1Strategy,
     MeanReversionV2Strategy,
     MomentumRSV2Strategy,
     TrendPullbackV2Strategy,
@@ -75,8 +77,15 @@ class LimitedRobustnessAnalyzer:
         self,
         frozen_record: FrozenV2CanonicalRecord,
         canonical_scorecard: V2DevelopmentScorecard,
+        universe_name: str = "NIFTY_50",
     ) -> StrategyRobustnessReport:
-        """Evaluate pre-declared 5-config parameter neighbourhood around canonical V2."""
+        """Evaluate pre-declared 5-config parameter neighbourhood around canonical V2.
+
+        `universe_name` was hardcoded to "NIFTY_50" until 2026-08-08 - same fix and same
+        reasoning as `V2DevelopmentGateEvaluator.evaluate_frozen_v2` (PROJECT_STATUS.md
+        section 11.1): harmless while every candidate used the same 142-instrument universe,
+        but would have silently graded the wrong universe now that NIFTY500 exists.
+        """
         DevelopmentOnlyGuard.validate_range(
             DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date
         )
@@ -96,7 +105,7 @@ class LimitedRobustnessAnalyzer:
         for v_strat in variants[: neighbourhood.max_configurations]:
             config = BacktestConfig(
                 strategy=v_strat,
-                universe_name="NIFTY_50",
+                universe_name=universe_name,
                 start_date=DEVELOPMENT_SPLIT.start_date,
                 end_date=DEVELOPMENT_SPLIT.end_date,
                 initial_capital=Decimal("1000000.00"),
@@ -266,6 +275,50 @@ class LimitedRobustnessAnalyzer:
                     VolatilitySqueezeV1Strategy(
                         bb_period=20, bb_std=2.0, kc_period=20, kc_atr_mult=1.5,
                         trend_ma=50, atr_stop_mult=s, max_holding_days=25,
+                    )
+                )
+
+        elif strategy_id == "strat_delivery_volume_breakout_v1":
+            # Predeclared 2026-08-08 alongside the hypothesis itself (PROJECT_STATUS.md
+            # section 9.1), before any DEVELOPMENT-split run of this strategy.
+            rvol_mins = delta_map.get("rvol_min", [1.35, 1.65])
+            delivery_ratios = delta_map.get("delivery_ratio_min", [1.08, 1.32])
+            for r in rvol_mins:
+                variants.append(
+                    DeliveryVolumeBreakoutV1Strategy(
+                        channel_period=20, rvol_min=r, delivery_lookback=20,
+                        delivery_ratio_min=1.2, trend_ma=50, atr_stop_mult=2.0,
+                        max_holding_days=30,
+                    )
+                )
+            for d in delivery_ratios:
+                variants.append(
+                    DeliveryVolumeBreakoutV1Strategy(
+                        channel_period=20, rvol_min=1.5, delivery_lookback=20,
+                        delivery_ratio_min=d, trend_ma=50, atr_stop_mult=2.0,
+                        max_holding_days=30,
+                    )
+                )
+
+        elif strategy_id == "strat_composite_ranking_v1":
+            # Predeclared 2026-08-08 alongside the hypothesis itself (PROJECT_STATUS.md
+            # section 12), before any DEVELOPMENT-split run of this strategy.
+            cutoffs = delta_map.get("top_percentile_cutoff", [0.20, 0.30])
+            mom_weights = delta_map.get("momentum_weight", [0.4, 0.6])
+            for c in cutoffs:
+                variants.append(
+                    CompositeRankingV1Strategy(
+                        momentum_lookback=63, delivery_lookback=20, top_percentile_cutoff=c,
+                        momentum_weight=0.5, trend_ma=50, atr_stop_mult=2.0,
+                        max_holding_days=63,
+                    )
+                )
+            for w in mom_weights:
+                variants.append(
+                    CompositeRankingV1Strategy(
+                        momentum_lookback=63, delivery_lookback=20, top_percentile_cutoff=0.25,
+                        momentum_weight=w, trend_ma=50, atr_stop_mult=2.0,
+                        max_holding_days=63,
                     )
                 )
 

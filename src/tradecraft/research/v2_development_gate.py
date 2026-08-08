@@ -106,16 +106,26 @@ class V2DevelopmentGateEvaluator:
         self.engine = BacktestEngine(db_session, TradingCalendar())
 
     def evaluate_frozen_v2(
-        self, frozen_record: FrozenV2CanonicalRecord, strategy_instance: BaseV2Strategy
+        self,
+        frozen_record: FrozenV2CanonicalRecord,
+        strategy_instance: BaseV2Strategy,
+        universe_name: str = "NIFTY_50",
     ) -> tuple[V2DevelopmentScorecard, list[TradeRecord]]:
-        """Run DEVELOPMENT backtest on frozen V2 strategy and evaluate gate criteria."""
+        """Run DEVELOPMENT backtest on frozen V2 strategy and evaluate gate criteria.
+
+        `universe_name` was hardcoded to "NIFTY_50" until 2026-08-08 - harmless while every
+        candidate this cycle used the same 142-instrument universe, but it would have
+        silently tested the wrong universe once NIFTY500 (section 11) was ingested. Default
+        kept for backward compatibility with every prior result in this document, which was
+        genuinely evaluated against that universe.
+        """
         DevelopmentOnlyGuard.validate_range(
             DEVELOPMENT_SPLIT.start_date, DEVELOPMENT_SPLIT.end_date
         )
 
         config = BacktestConfig(
             strategy=strategy_instance,
-            universe_name="NIFTY_50",
+            universe_name=universe_name,
             start_date=DEVELOPMENT_SPLIT.start_date,
             end_date=DEVELOPMENT_SPLIT.end_date,
             initial_capital=Decimal("1000000.00"),
